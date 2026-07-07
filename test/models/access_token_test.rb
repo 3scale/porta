@@ -113,17 +113,6 @@ class AccessTokenTest < ActiveSupport::TestCase
     assert @token.reload.read_attribute(:value).start_with?(AccessToken::DIGEST_PREFIX)
   end
 
-  def test_find_from_value_finds_legacy_token
-    legacy_value = 'legacy_plaintext_token_value_64chars'
-    @token.update_columns(value: legacy_value)
-
-    found = AccessToken.find_from_value(legacy_value)
-
-    assert_equal @token.id, found&.id
-    # No migration: DB value remains unchanged
-    assert_equal legacy_value, @token.reload.read_attribute(:value)
-  end
-
   # compute_digest tests
 
   def test_compute_digest_returns_prefixed_sha384_hex
@@ -190,7 +179,8 @@ class AccessTokenTest < ActiveSupport::TestCase
     # Verify the DB value has our prefix
     assert stored_hash.start_with?(AccessToken::DIGEST_PREFIX)
 
-    # An attacker with access to the DB hash should NOT be able to authenticate
+    # An attacker with access to the DB hash should NOT be able to authenticate:
+    # compute_digest(stored_hash) produces a double-hash that won't match any row.
     found = AccessToken.find_from_value(stored_hash)
 
     assert_nil found, "Security vulnerability: leaked hash was accepted as a valid token"
@@ -310,6 +300,146 @@ class AccessTokenTest < ActiveSupport::TestCase
     access_token = FactoryBot.build(:access_token, expires_at: 1.year.from_now.utc.iso8601)
 
     assert access_token.valid?
+  end
+
+  # oidc_sync tests
+
+  class RefreshOidcSyncTest < ActiveSupport::TestCase
+    setup do
+      @original_cache = Rails.cache
+      Rails.cache = ActiveSupport::Cache::MemoryStore.new
+      @provider = FactoryBot.create(:simple_provider)
+      @user = FactoryBot.create(:admin, account: @provider)
+    end
+
+    teardown do
+      Rails.cache.clear
+      Rails.cache = @original_cache
+    end
+
+    test 'returns a plaintext string' do
+      result = @user.access_tokens.oidc_sync
+
+      assert_instance_of String, result
+      assert_equal 96, result.length
+      assert_match(/\A[0-9a-f]+\z/, result)
+    end
+
+    test 'creates an OIDC sync token in DB whose digest matches the returned plaintext' do
+      plaintext = @user.access_tokens.oidc_sync
+
+      token = @user.access_tokens.find_by!(name: AccessToken::OIDC_SYNC_TOKEN)
+      assert_equal AccessToken.compute_digest(plaintext), token.read_attribute(:value)
+    end
+
+    test 'second call returns same plaintext from cache without rotating' do
+      first = @user.access_tokens.oidc_sync
+      second = @user.access_tokens.oidc_sync
+
+      assert_equal first, second
+      assert_equal 1, @user.access_tokens.where(name: AccessToken::OIDC_SYNC_TOKEN).count
+    end
+
+    test 'returns a new plaintext after cache expires and does not modify old tokens' do
+      first = @user.access_tokens.oidc_sync
+      old_token = @user.access_tokens.find_by!(name: AccessToken::OIDC_SYNC_TOKEN)
+      old_expires_at = old_token.expires_at
+
+      travel_to(1.hour.from_now + 1.second) do
+        second = @user.access_tokens.oidc_sync
+
+        assert_not_equal first, second
+        assert_equal old_expires_at, old_token.reload.expires_at, "Old token should not be modified"
+        assert_equal 2, @user.access_tokens.where(name: AccessToken::OIDC_SYNC_TOKEN).count
+      end
+    end
+
+    test 'new tokens are created with a 1-day expiration' do
+      @user.access_tokens.oidc_sync
+
+      token = @user.access_tokens.find_by!(name: AccessToken::OIDC_SYNC_TOKEN)
+      assert token.expires_at.present?
+      assert token.expires_at > Time.now.utc, "Token should not be expired yet"
+      assert token.expires_at < Time.now.utc + 1.day + 1.minute, "Token should expire within ~1 day"
+    end
+
+    test 'expired tokens remain valid for authentication' do
+      plaintext = @user.access_tokens.oidc_sync
+
+      travel_to(1.hour.from_now + 1.second) do
+        @user.access_tokens.oidc_sync
+
+        old_token = AccessToken.find_from_value(plaintext)
+        assert_not_nil old_token, "Old token should still be findable by plaintext"
+        assert_not old_token.expired?, "Old token should not be expired yet (expires in ~1 day)"
+      end
+    end
+
+    test 'works on first call with no existing tokens' do
+      assert_equal 0, @user.access_tokens.where(name: AccessToken::OIDC_SYNC_TOKEN).count
+
+      result = @user.access_tokens.oidc_sync
+
+      assert_instance_of String, result
+      assert_equal 1, @user.access_tokens.where(name: AccessToken::OIDC_SYNC_TOKEN).count
+    end
+
+    test 'tokens from different users are independent' do
+      other_provider = FactoryBot.create(:simple_provider)
+      other_user = FactoryBot.create(:admin, account: other_provider)
+
+      plaintext_a = @user.access_tokens.oidc_sync
+      plaintext_b = other_user.access_tokens.oidc_sync
+
+      assert_not_equal plaintext_a, plaintext_b
+      assert_equal 1, @user.access_tokens.where(name: AccessToken::OIDC_SYNC_TOKEN).count
+      assert_equal 1, other_user.access_tokens.where(name: AccessToken::OIDC_SYNC_TOKEN).count
+    end
+
+    test 'returns cached value without DB queries on cache hit' do
+      @user.access_tokens.oidc_sync
+
+      assert_number_of_queries(0) { @user.access_tokens.oidc_sync }
+    end
+  end
+
+  # stale scope tests
+
+  test 'stale scope returns only expired OIDC sync tokens' do
+    provider = FactoryBot.create(:simple_provider)
+    user = FactoryBot.create(:admin, account: provider)
+
+    expired_token = FactoryBot.create(:access_token, owner: user, name: AccessToken::OIDC_SYNC_TOKEN,
+                                      scopes: %w[account_management], permission: 'ro')
+    expired_token.update_columns(expires_at: 1.hour.ago)
+
+    active_token = FactoryBot.create(:access_token, owner: user, name: "#{AccessToken::OIDC_SYNC_TOKEN} 2",
+                                     scopes: %w[account_management], permission: 'ro')
+    active_token.update_columns(expires_at: 1.day.from_now)
+
+    other_token = FactoryBot.create(:access_token, owner: user)
+    other_token.update_columns(expires_at: 1.hour.ago)
+
+    scope_ids = AccessToken.stale.pluck(:id)
+    assert_includes scope_ids, expired_token.id
+    assert_not_includes scope_ids, active_token.id
+    assert_not_includes scope_ids, other_token.id
+  end
+
+  test 'stale scope includes OIDC sync tokens with nil expires_at (legacy tokens)' do
+    provider = FactoryBot.create(:simple_provider)
+    user = FactoryBot.create(:admin, account: provider)
+
+    legacy_token = FactoryBot.create(:access_token, owner: user, name: AccessToken::OIDC_SYNC_TOKEN,
+                                     scopes: %w[account_management], permission: 'ro')
+    legacy_token.update_columns(expires_at: nil)
+
+    other_legacy_token = FactoryBot.create(:access_token, owner: user)
+    other_legacy_token.update_columns(expires_at: nil)
+
+    scope_ids = AccessToken.stale.pluck(:id)
+    assert_includes scope_ids, legacy_token.id
+    assert_not_includes scope_ids, other_legacy_token.id
   end
 
   private

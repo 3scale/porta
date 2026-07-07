@@ -38,7 +38,7 @@ module Signup
 
     def prepare_account_attributes(attributes)
       attributes ||= {}
-      attributes.delete('name') if attributes['org_name'].present?
+      attributes.delete('name') if attributes.key?('org_name')
       attributes
     end
   end

@@ -3,6 +3,7 @@
   = stylesheet_link_tag 'provider/admin/dashboard'
 
 - content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_grid'
   = javascript_packs_with_chunks_tag 'dashboard'
 
 - if Features::QuickstartsConfig.enabled?

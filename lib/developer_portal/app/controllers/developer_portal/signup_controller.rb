@@ -93,7 +93,7 @@ module DeveloperPortal
     end
 
     def user_params
-      allowed_attrs = site_account.defined_fields_names_for(User) + %w[password]
+      allowed_attrs = site_account.defined_fields_names_for(User) + %w[password password_confirmation]
       filter_readonly_params(params.fetch(:account, {})[:user], User).permit(*allowed_attrs)
     end
 

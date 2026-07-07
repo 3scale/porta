@@ -45,7 +45,7 @@ class AccessToken < ApplicationRecord
   class Scopes
     extend Forwardable
 
-    delegate %i(each count select any? map) => :scopes
+    delegate %i[each empty? count select any? map] => :scopes
 
     def initialize(scopes)
       @scopes = scopes
@@ -119,15 +119,7 @@ class AccessToken < ApplicationRecord
     scrubbed = plaintext_value.to_s.scrub
     digest = compute_digest(scrubbed)
 
-    # Fast path: find by digest (new tokens)
-    token = find_by(value: digest)
-    return token if token
-
-    # Reject if the input looks like a stored hash (has our prefix)
-    return nil if scrubbed.start_with?(DIGEST_PREFIX)
-
-    # Slow path: find by plaintext (legacy tokens, no migration)
-    find_by(value: scrubbed)
+    find_by(value: digest)
   rescue ActiveRecord::StatementInvalid, ArgumentError # utf-8 issues
     nil
   end
@@ -143,8 +135,25 @@ class AccessToken < ApplicationRecord
   # This can't change or it will create new tokens for everyone
   OIDC_SYNC_TOKEN = 'OIDC Synchronization Token'.freeze
 
+  # nil covers legacy tokens created before expiration was added; can be removed after a release
+  scope :stale, -> { where(name: OIDC_SYNC_TOKEN, expires_at: [...Time.now.utc, nil]) }
+
   def self.oidc_sync
-    create_with(scopes: %w[account_management], permission: 'ro').find_or_create_by!(name: OIDC_SYNC_TOKEN)
+    user_id = scope_attributes["owner_id"]
+    cache_key = "access_tokens/user:#{user_id}/oidc"
+
+    # Hot path: skip the transaction entirely on cache hit (zero DB queries).
+    cached = Rails.cache.read(cache_key)
+    return cached if cached
+
+    transaction do
+      # Lock to serialize concurrent cache misses (e.g. full resync).
+      lock.where(name: OIDC_SYNC_TOKEN).load
+
+      Rails.cache.fetch(cache_key, expires_in: 1.hour) do
+        create!(name: OIDC_SYNC_TOKEN, scopes: %w[account_management], permission: 'ro', expires_at: 1.day.from_now.utc.iso8601).plaintext_value
+      end
+    end
   end
 
   def scopes=(values)

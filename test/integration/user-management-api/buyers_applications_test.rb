@@ -218,15 +218,18 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   test 'create' do
-    post admin_api_account_applications_path(@buyer, format: :xml), params: { plan_id: @hidden_app_plan.id, name: "chucky", description: "rocks awesome", provider_key: @provider.api_key }
+    post admin_api_account_applications_path(@buyer, format: :xml), params: {
+      plan_id: @hidden_app_plan.id,
+      provider_key: @provider.api_key
+    }.merge(app_params)
 
     assert_response :success
-    assert_application(response.body, { name: "chucky", description: "rocks awesome" })
+    assert_application(response.body, { name: app_params[:name], description: app_params[:description] })
 
     created_app = @buyer.bought_cinstances.last
-    assert_equal "chucky",        created_app.name
-    assert_equal "rocks awesome", created_app.description
-    assert_equal 'api',           created_app.create_origin
+    app_params.each do |k, v|
+      assert_equal v, created_app.public_send(k).to_s, "field '#{k}' should equal '#{v}'"
+    end
   end
 
   test 'create forces the subscription to service' do
@@ -296,14 +299,17 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
 
   test 'update' do
     app = @buyer.bought_cinstances.last
-    put admin_api_account_application_path(@buyer, id: app.id, format: :xml), params: { name: "descriptive", provider_key: @provider.api_key, redirect_url: 'http://example.com' }
+
+    put admin_api_account_application_path(@buyer, id: app.id, format: :xml), params: { provider_key: @provider.api_key }.merge(app_params)
 
     assert_response :success
-    assert_application response.body, { name: "descriptive" }
+    assert_application response.body, { id: app.id }
 
     app.reload
-    assert_equal 'descriptive', app.name
-    assert_equal 'http://example.com', app.redirect_url
+    app_params.except(:application_id).each do |k, v|
+      assert_equal v, app.public_send(k).to_s, "field '#{k}' should equal '#{v}'"
+    end
+    assert_not_equal app_params[:application_id], app.application_id
   end
 
   test 'update with long user_key' do
@@ -525,4 +531,20 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   pending_test 'nothing happens on already resumed one'
+
+  private
+
+  def app_params
+    {
+      name: 'name_value',
+      description: 'description_value',
+      redirect_url: 'http://example.com',
+      create_origin: 'create_origin_value',
+      user_key: 'user_key_value',
+      application_id: 'application_id_value',
+      accepted_at: Time.utc(2020,01,01).to_s,
+      first_traffic_at: Time.utc(2020,02,02).to_s,
+      first_daily_traffic_at: Time.utc(2020,03,03).to_s
+    }
+  end
 end

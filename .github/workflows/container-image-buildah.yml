@@ -55,7 +55,7 @@ jobs:
             type=ref,event=tag
             type=ref,event=pr
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Build image
         id: build-image

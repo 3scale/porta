@@ -395,6 +395,18 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
     chuck.reload
     assert_response :success
     assert chuck.authenticate('updated-password')
+
+    # Password not updated if password confirmation is not correct
+    put admin_api_account_user_path(account_id: @buyer.id,
+                                    format: :xml, id: chuck.id,
+                                    password: "updated-password",
+                                    password_confirmation: "not-matching-password"),
+        params: { provider_key: @provider.api_key }
+    assert_response :unprocessable_entity
+
+    xml = Nokogiri::XML::Document.parse @response.body
+    assert_match "Password confirmation doesn't match Password", xml.xpath('.//errors/error').text
+    assert chuck.reload.authenticate('updated-password')
   end
 
   test 'update also updates extra fields' do

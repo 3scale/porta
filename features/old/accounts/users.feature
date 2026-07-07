@@ -14,7 +14,7 @@ Feature: User management
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
     And I go to the provider users page
-    And I follow "Edit" for user "alice"
+    And I follow "alice"
     Then I should see "Edit user"
     And I fill in "Email" with "alice@foo.3scale.localhost"
     And I press "Update User"
@@ -25,7 +25,7 @@ Feature: User management
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
     And I go to the provider users page
-    And I follow "Edit" for user "alice"
+    And I follow "alice"
     And I fill in "Email" with ""
     And I press "Update User"
     Then I should see "should look like an email address"
@@ -36,7 +36,7 @@ Feature: User management
     When I log in as provider "foo.3scale.localhost"
     And I go to the provider users page
     Then I should see "member" that belongs to user "bob"
-    When I follow "Edit" for user "bob"
+    When I follow "bob"
     And I choose "Admin" in the user role field
     And I press "Update User"
     Then user "bob" should have role "admin"

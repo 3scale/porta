@@ -22,7 +22,7 @@
     "node": "24"
   },
   "devDependencies": {
-    "@babel/core": "7.21.8",
+    "@babel/core": "7.29.6",
     "@babel/preset-env": "^7.24.8",
     "@babel/preset-react": "^7.24.7",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
@@ -44,7 +44,7 @@
     "ts-jest": "29.4.6",
     "typescript": "5.0.4",
     "webpack": "5.104.1",
-    "webpack-dev-server": "5.2.4"
+    "webpack-dev-server": "5.2.5"
   },
   "dependencies": {
     "@patternfly/patternfly": "4.224.2",
@@ -106,6 +106,7 @@
     "showdown": "2.1.0",
     "swagger-client": "^3.36.1",
     "swagger-ui": "5.27.1",
+    "tslib": "2.8.1",
     "validate.js": "^0.13.1",
     "virtual-dom": "^2.1.1",
     "webpack-assets-manifest": "5.2.1",

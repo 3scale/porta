@@ -22,10 +22,10 @@ class BaseEventStoreEvent < RailsEventStore::Event
 
   class << self
 
-    def create_and_publish!(*args)
-      return unless valid?(*args)
+    def create_and_publish!(...)
+      return unless valid?(...)
 
-      event = create(*args)
+      event = create(...)
 
       PUBLISHER.call(event) && event
     end
