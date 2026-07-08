@@ -20,18 +20,24 @@ module Backend
 
       def update_backend_application
         if plan && service
-          state = self.state
-          state = :active if live?
-
-          ThreeScale::Core::Application.save( :service_id => service.backend_id,
-                                              :id         => application_id,
-                                              :state      => state,
-                                              :plan_id    => plan.id,
-                                              :plan_name  => plan.name,
-                                              :redirect_url => redirect_url )
+          ThreeScale::Core::Application.save(backend_application_attributes)
         end
 
         true
+      end
+
+      def backend_application_attributes
+        state = self.state
+        state = :active if live?
+
+        {
+          :service_id   => service.backend_id,
+          :id           => application_id,
+          :state        => state,
+          :plan_id      => plan.id,
+          :plan_name    => plan.name,
+          :redirect_url => redirect_url
+        }
       end
 
       def delete_backend_application
