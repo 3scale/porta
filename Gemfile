@@ -79,6 +79,7 @@ gem 'mysql2', '~> 0.5.3'
 gem '3scale_client', '~> 2.11', require: false
 gem 'analytics-ruby', require: false
 
+gem 'connection_pool', '~> 2.2', '< 3'
 gem 'dalli'
 gem 'faraday', '~> 2.0', '>= 2.14.3'
 gem 'mimemagic', '~> 0.3.10'
