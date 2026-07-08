@@ -39,7 +39,7 @@ class BackendUpdateApplicationPlanWorkerTest < ActiveSupport::TestCase
   test 'no n+1 queries' do
     ThreeScale::Core::Application.stubs(:save_batch)
 
-    populate = ->(n) { FactoryBot.create_list(:simple_cinstance, n, plan: plan) }
+    populate = ->(count) { FactoryBot.create_list(:simple_cinstance, count, plan: plan) }
 
     assert_perform_constant_number_of_queries(populate: populate) do
       BackendUpdateApplicationPlanWorker.new.perform(plan.id)
