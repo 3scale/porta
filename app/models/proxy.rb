@@ -29,7 +29,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded, presence: true
 
-  uri_pattern = URI::RFC2396_Parser.new.pattern
+  uri_pattern = URI::DEFAULT_PARSER.pattern
 
   URI_OR_LOCALHOST  = /\A(https?:\/\/([a-zA-Z0-9._:\/?-])+|.*localhost.*)\Z/
   OPTIONAL_QUERY_FORMAT = "(?:\\?(#{uri_pattern.fetch(:QUERY)}))?"
