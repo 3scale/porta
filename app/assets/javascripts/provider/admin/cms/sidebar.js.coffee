@@ -64,8 +64,8 @@ class Sidebar
   fetch_sidebar: ->
     @ajax.abort() if @ajax
     @ajax = $.ajax('/p/admin/cms/templates/sidebar.json')
-      .success (json) => @update(json)
-      .error (xhr, status, error) ->
+      .done (json) => @update(json)
+      .fail (xhr, status, error) ->
         console.error("#{xhr.status} #{error}")
         console.error(xhr.responseText)
 
@@ -480,7 +480,7 @@ class SidebarToggle
       ids.splice(i, 1) if i >= 0
       @el.trigger('toggle:unpack')
 
-    sets_are_equal = new Set(SidebarToggle.load()).difference(new Set(ids)).size == 0
+    sets_are_equal = new Set(SidebarToggle.load()).symmetricDifference(new Set(ids)).size == 0
     unless sets_are_equal
       SidebarToggle.save(ids)
 

@@ -1,12 +1,12 @@
 <% if flash[:success].present? %>
-  jQuery.colorbox.close();
+  colorbox.close();
   void function () {
     const html = "<%= escape_javascript(render partial: 'feature', locals: { feature: @feature }) %>";
     const id = "#<%= dom_id(@feature) %>";
     jQuery(id).replaceWith(html);
   }();
 <% else %>
-  jQuery.colorbox.resize();
+  colorbox.resize();
   jQuery('#warning').show();
 <% end %>
 

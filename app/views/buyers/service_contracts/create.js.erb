@@ -1,6 +1,6 @@
 <% if flash[:success].present? %>
   window.location.reload();
 <% else %>
-  $.colorbox.close();
+  colorbox.close();
   <%= render 'shared/flash_alerts' %>
 <% end %>

@@ -1,4 +1,3 @@
-import $ from 'jquery'
 
 import type { AJAXCompleteEvent } from 'Types/rails-ujs'
 
@@ -9,7 +8,7 @@ import type { AJAXCompleteEvent } from 'Types/rails-ujs'
 $(document).on('ajax:complete', 'form.colorbox[data-remote]', (event) => {
   const [xhr] = (event.originalEvent as AJAXCompleteEvent).detail
 
-  window.$.colorbox({
+  window.colorbox({
     open: true,
     html: xhr.responseText,
     maxWidth: '85%',
