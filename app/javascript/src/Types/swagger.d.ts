@@ -30,8 +30,7 @@ declare module 'swagger-ui-utils' {
   import type { Component } from 'react'
 
   export interface ReactType {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    createElement: (Original: Component, props: any) => Component;
+    createElement: (Original: Component, props: ParameterIncludeEmptyProperties) => Component;
   }
 
   export interface SwaggerUIContext {
@@ -43,10 +42,5 @@ declare module 'swagger-ui-utils' {
     isIncludedOptions: {
       defaultValue: boolean;
     };
-  }
-
-  export interface JsonSchemaFormProperties {
-    [key: string]: unknown;
-    dispatchInitialValue: boolean;
   }
 }

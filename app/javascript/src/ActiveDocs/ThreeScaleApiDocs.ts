@@ -2,7 +2,6 @@ import SwaggerUI from 'swagger-ui'
 // this is how SwaggerUI imports this function https://github.com/swagger-api/swagger-ui/pull/6208
 import { execute } from 'swagger-client/es/execute'
 
-import { ClearDefaultValuesPlugin } from 'ActiveDocs/ClearDefaultValuesPlugin'
 import { fetchData } from 'utilities/fetchData'
 import { safeFromJsonString } from 'utilities/json-utils'
 import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
@@ -17,13 +16,12 @@ const getApiSpecUrl = (baseUrl: string, specPath: string): string => {
   return `${baseUrl.replace(/\/$/, '')}${specPath}`
 }
 
-const appendSwaggerDiv = (container: HTMLElement, id: string): HTMLDivElement => {
+const appendSwaggerDiv = (container: HTMLElement, id: string): void => {
   const div = document.createElement('div')
   div.setAttribute('class',  'api-docs-wrap')
   div.setAttribute('id', id)
 
   container.appendChild(div)
-  return div
 }
 
 /**
@@ -139,17 +137,18 @@ export const renderSwaggerUI = async (container: HTMLElement, apiDocsPath: strin
 
   const accountData: AccountDataResponse = await fetchData<AccountDataResponse>(accountDataUrl)
 
-  apiSpecs.apis.forEach(api => {
+  apiSpecs.apis.forEach( api => {
     const domId = api.system_name.replace(/_/g, '-')
     const url = getApiSpecUrl(baseUrl, api.path)
-    const div = appendSwaggerDiv(container, domId)
+    appendSwaggerDiv(container, domId)
     SwaggerUI({
       url,
-      domNode: div,
+      // eslint-disable-next-line @typescript-eslint/naming-convention -- Swagger UI
+      dom_id: `#${domId}`,
       requestInterceptor: (request) => autocompleteRequestInterceptor(request, accountData, ''),
       tryItOutEnabled: true,
       plugins: [
-        RequestBodyTransformerPlugin, UncheckSendEmptyValuePlugin, ClearDefaultValuesPlugin
+        RequestBodyTransformerPlugin, UncheckSendEmptyValuePlugin
       ]
     })
   })
