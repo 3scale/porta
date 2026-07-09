@@ -2,8 +2,8 @@
 
 module ApiDocsServiceHelper
 
-  def spec_body_builder(swagger_version, spec_name: nil)
-    spec_name ||= swagger_version[:invalid] ? 'invalid' : 'echo-api'
+  def spec_body_builder(swagger_version)
+    spec_name = swagger_version[:invalid] ? 'invalid' : 'echo-api'
     file_fixture("swagger/#{spec_name}-#{swagger_version[:version]}.json").read
   end
 
