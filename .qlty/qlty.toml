@@ -96,7 +96,7 @@ name = "shellcheck"
 name = "eslint"
 version = "7.32.0"
 package_file = "package.json"
-package_filters = ["eslint"]
+package_filters = ["eslint", "@typescript-eslint/eslint-plugin", "@typescript-eslint/parser", "typescript"]
 
 [[plugin]]
 name = "stylelint"
