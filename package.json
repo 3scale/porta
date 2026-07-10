@@ -107,6 +107,7 @@
     "yaml-loader": "^0.6.0"
   },
   "resolutions": {
+    "axios": "1.18.1",
     "jquery-ui/jquery": "3.7.0",
     "lodash": "4.18.1",
     "lodash-es": "4.18.1"
