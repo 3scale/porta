@@ -108,6 +108,7 @@
   },
   "resolutions": {
     "axios": "1.18.1",
+    "decode-uri-component": "^0.4.1",
     "jquery-ui/jquery": "3.7.0",
     "lodash": "4.18.1",
     "lodash-es": "4.18.1"
