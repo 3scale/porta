@@ -114,6 +114,7 @@
     "yaml-loader": "^0.6.0"
   },
   "resolutions": {
+    "axios": "1.18.1",
     "body-parser": "1.20.3",
     "express": "4.21.2",
     "jquery-ui/jquery": "3.7.0"
