@@ -2,7 +2,6 @@ import SwaggerUI from 'swagger-ui'
 // this is how SwaggerUI imports this function https://github.com/swagger-api/swagger-ui/pull/6208
 import { execute } from 'swagger-client/es/execute'
 
-import { ClearDefaultValuesPlugin } from 'ActiveDocs/ClearDefaultValuesPlugin'
 import { fetchData } from 'utilities/fetchData'
 import { safeFromJsonString } from 'utilities/json-utils'
 import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
@@ -149,7 +148,7 @@ export const renderSwaggerUI = async (container: HTMLElement, apiDocsPath: strin
       requestInterceptor: (request) => autocompleteRequestInterceptor(request, accountData, ''),
       tryItOutEnabled: true,
       plugins: [
-        RequestBodyTransformerPlugin, UncheckSendEmptyValuePlugin, ClearDefaultValuesPlugin
+        RequestBodyTransformerPlugin, UncheckSendEmptyValuePlugin
       ]
     })
   })
