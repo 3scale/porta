@@ -2,7 +2,7 @@
   = render 'menu'
 
 - content_for :javascripts do
-  = stylesheet_packs_chunks_tag 'pf_form'
+  = stylesheet_packs_chunks_tag 'pf_form', 'pf_addons', 'pf_grid', 'pf_description_list', 'pf_table'
 
 - content_for :custom_page_header do
   section class="pf-c-page__main-section pf-m-light"
@@ -11,9 +11,6 @@
         => @cinstance.display_name
         = link_to 'Edit', edit_provider_admin_application_path(@cinstance),
                              class: 'action edit'
-
-- content_for :javascripts do
-  = javascript_packs_with_chunks_tag 'applications_show'
 
 div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
   / Left column

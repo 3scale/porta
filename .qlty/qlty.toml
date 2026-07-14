@@ -100,5 +100,7 @@ package_filters = ["eslint", "@typescript-eslint/eslint-plugin", "@typescript-es
 
 [[plugin]]
 name = "stylelint"
-package_file = "package.json"
-package_filters = ["stylelint"]
+# package_file = "package.json"
+# package_filters = ["stylelint"]
+version = "15.11.0"
+extra_packages = ["stylelint-config-standard-scss@latest"]

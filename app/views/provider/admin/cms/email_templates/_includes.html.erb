@@ -1,2 +1,4 @@
-<%= javascript_packs_with_chunks_tag 'codemirror' %>
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'codemirror' %>
+<% end %>
 <%= javascript_include_tag 'codemirror/modes/liquid' %>

@@ -15,7 +15,7 @@ export class StatsCSVLink extends StatsUI {
     let csvString = this.csvString
 
     return (
-      <a className="StatsCSVLink" href={`data:attachment/csv,${csvString}`} target="_blank" download="data.csv">Download CSV</a>
+      <a className="pf-c-button pf-m-primary pf-m-align-right" href={`data:attachment/csv,${csvString}`} target="_blank" download="data.csv">Download CSV</a>
     )
   }
 

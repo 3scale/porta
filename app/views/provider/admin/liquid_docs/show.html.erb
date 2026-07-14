@@ -1,4 +1,6 @@
-<%= javascript_packs_with_chunks_tag 'liquid_docs' %>
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'liquid_docs' %>
+<% end %>
 
 <% content_for :title do %>
 Liquid Reference

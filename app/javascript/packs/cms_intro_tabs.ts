@@ -9,7 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
   createGlower('#layouts-glow', '#cms-sidebar-filter-type li[data-filter-type="layout"]')
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Imported on top
-  $('#cms-intro-tabs').tabs!()
+  $('#cms-intro-tabs').tabs!({
+    classes: {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      'ui-tabs-active': 'pf-m-current'
+    }
+  })
 })
 
 /**
