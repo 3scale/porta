@@ -146,6 +146,16 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     policies_config.find_by(name: name, version: version)
   end
 
+  def audience_mapper_client_id
+    policy = find_policy_config_by(name: 'token_introspection', version: 'builtin')
+    return unless policy&.enabled
+
+    config = policy.configuration&.with_indifferent_access || {}
+    return unless config[:auth_type] == 'use_3scale_oidc_issuer_endpoint' || config[:auth_type].blank?
+
+    URI.parse(oidc_issuer_endpoint).user rescue nil
+  end
+
   def oidc_configuration
     super || build_oidc_configuration(standard_flow_enabled: true)
   end

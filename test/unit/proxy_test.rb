@@ -843,6 +843,67 @@ class ProxyTest < ActiveSupport::TestCase
     end
   end
 
+  class AudienceMapperClientIdTest < ActiveSupport::TestCase
+    ISSUER_URL = 'https://introspection-client:s3cr3t@sso.example.com/auth/realms/master'
+    TOKEN_INTROSPECTION_POLICY = { name: 'token_introspection', version: 'builtin' }.freeze
+
+    def proxy_with_policy(config)
+      proxy = FactoryBot.build(:simple_proxy)
+      proxy.policies_config = [TOKEN_INTROSPECTION_POLICY.merge(configuration: config, enabled: true)]
+      proxy
+    end
+
+    test 'returns user from oidc_issuer_endpoint when auth_type is use_3scale_oidc_issuer_endpoint' do
+      proxy = proxy_with_policy('auth_type' => 'use_3scale_oidc_issuer_endpoint')
+      proxy.oidc_issuer_endpoint = ISSUER_URL
+      assert_equal 'introspection-client', proxy.audience_mapper_client_id
+    end
+
+    test 'returns user from oidc_issuer_endpoint when auth_type is blank' do
+      proxy = proxy_with_policy({})
+      proxy.oidc_issuer_endpoint = ISSUER_URL
+      assert_equal 'introspection-client', proxy.audience_mapper_client_id
+    end
+
+    test 'returns nil when auth_type is client_id+client_secret' do
+      proxy = proxy_with_policy('auth_type' => 'client_id+client_secret', 'client_id' => 'my-introspection-client')
+      assert_nil proxy.audience_mapper_client_id
+    end
+
+    test 'returns nil when auth_type is client_secret_jwt' do
+      proxy = proxy_with_policy('auth_type' => 'client_secret_jwt', 'client_id' => 'my-introspection-client')
+      assert_nil proxy.audience_mapper_client_id
+    end
+
+    test 'returns nil when auth_type is private_key_jwt' do
+      proxy = proxy_with_policy('auth_type' => 'private_key_jwt', 'client_id' => 'my-introspection-client')
+      assert_nil proxy.audience_mapper_client_id
+    end
+
+    test 'returns nil when policy is disabled' do
+      proxy = FactoryBot.build(:simple_proxy)
+      proxy.policies_config = [TOKEN_INTROSPECTION_POLICY.merge(configuration: { 'auth_type' => 'use_3scale_oidc_issuer_endpoint' }, enabled: false)]
+      assert_nil proxy.audience_mapper_client_id
+    end
+
+    test 'returns nil when token introspection policy is absent' do
+      proxy = FactoryBot.build(:simple_proxy)
+      assert_nil proxy.audience_mapper_client_id
+    end
+
+    test 'returns nil when oidc_issuer_endpoint has no user' do
+      proxy = proxy_with_policy('auth_type' => 'use_3scale_oidc_issuer_endpoint')
+      proxy.oidc_issuer_endpoint = 'https://sso.example.com/auth/realms/master'
+      assert_nil proxy.audience_mapper_client_id
+    end
+
+    test 'returns nil when oidc_issuer_endpoint is blank' do
+      proxy = proxy_with_policy('auth_type' => 'use_3scale_oidc_issuer_endpoint')
+      proxy.oidc_issuer_endpoint = nil
+      assert_nil proxy.audience_mapper_client_id
+    end
+  end
+
   class StaleObjectErrorTest < ActiveSupport::TestCase
     test 'proxy does not raise stale object error on concurrent touch' do
       class ProxyWithFiber < ::Proxy

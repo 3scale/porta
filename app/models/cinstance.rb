@@ -5,7 +5,7 @@ class Cinstance < Contract
 
   self.background_deletion = %i[referrer_filters application_keys alerts]
 
-  delegate :backend_version, to: :service, allow_nil: true
+  delegate :backend_version, :audience_mapper_client_id, to: :service, allow_nil: true
 
   belongs_to :plan, class_name: 'ApplicationPlan', foreign_key: :plan_id, inverse_of: :cinstances
   alias application_plan plan
