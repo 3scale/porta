@@ -5,8 +5,7 @@ class BackendUpdateApplicationPlanWorker < ApplicationJob
 
   # :reek:UtilityFunction
   def perform(plan_id)
-    plan = ApplicationPlan.find_by(id: plan_id)
-    return unless plan
+    return unless (plan = ApplicationPlan.find_by(id: plan_id))
 
     plan.update_backend_plan
   end
