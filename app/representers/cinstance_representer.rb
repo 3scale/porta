@@ -38,9 +38,9 @@ module CinstanceRepresenter
     oauth.property :client_secret
   end
 
-  with_options(if: ->(*) { service.oidc? }, render_nil: true) do |oidc|
-    oidc.property :oidc_configuration, decorator: OIDCConfigurationRepresenter, wrap: false
-    oidc.property :audience_mapper_client_id
+  with_options(if: ->(*) { service.oidc? }, render_nil: true) do
+    property :oidc_configuration, decorator: OIDCConfigurationRepresenter, wrap: false
+    property :audience_mapper_client_id
   end
 
   def provider_verification_key

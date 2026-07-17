@@ -151,9 +151,10 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return unless policy&.enabled
 
     config = policy.configuration&.with_indifferent_access || {}
-    return unless config[:auth_type] == 'use_3scale_oidc_issuer_endpoint' || config[:auth_type].blank?
+    auth_type = config[:auth_type]
+    return unless auth_type == 'use_3scale_oidc_issuer_endpoint' || auth_type.blank?
 
-    URI.parse(oidc_issuer_endpoint).user rescue nil
+    issuer_endpoint_client_id
   end
 
   def oidc_configuration
@@ -478,6 +479,14 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def proxy
     self
+  end
+
+  private
+
+  def issuer_endpoint_client_id
+    URI.parse(oidc_issuer_endpoint).user
+  rescue URI::InvalidURIError
+    nil
   end
 
   protected

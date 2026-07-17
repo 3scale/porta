@@ -844,13 +844,16 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   class AudienceMapperClientIdTest < ActiveSupport::TestCase
-    ISSUER_URL = 'https://introspection-client:s3cr3t@sso.example.com/auth/realms/master'
+    ISSUER_URL = 'https://introspection-client:s3cr3t@sso.example.com/auth/realms/master'.freeze
     TOKEN_INTROSPECTION_POLICY = { name: 'token_introspection', version: 'builtin' }.freeze
 
+    def setup
+      @proxy = FactoryBot.build(:simple_proxy)
+    end
+
     def proxy_with_policy(config)
-      proxy = FactoryBot.build(:simple_proxy)
-      proxy.policies_config = [TOKEN_INTROSPECTION_POLICY.merge(configuration: config, enabled: true)]
-      proxy
+      @proxy.policies_config = [TOKEN_INTROSPECTION_POLICY.merge(configuration: config, enabled: true)]
+      @proxy
     end
 
     test 'returns user from oidc_issuer_endpoint when auth_type is use_3scale_oidc_issuer_endpoint' do
