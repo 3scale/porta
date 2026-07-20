@@ -43,19 +43,26 @@ class BackendUpdateApplicationPlanWorkerTest < ActiveSupport::TestCase
     end
   end
 
+  test 'each_iteration logs error and does not raise when save_batch fails' do
+    FactoryBot.create_list(:simple_cinstance, 2, plan: plan)
+    batch = plan.cinstances.to_a
+
+    ThreeScale::Core::Application.stubs(:save_batch).raises(StandardError, 'timeout')
+    Rails.logger.expects(:error).with(regexp_matches(/Failed to sync application plan #{plan.name}.*timeout/))
+
+    worker = BackendUpdateApplicationPlanWorker.new
+    worker.each_iteration(batch, plan.id)
+  end
+
   test 'does nothing when plan does not exist' do
     ThreeScale::Core::Application.expects(:save_batch).never
 
-    perform_enqueued_jobs(only: BackendUpdateApplicationPlanWorker) do
-      BackendUpdateApplicationPlanWorker.perform_later(0)
-    end
+    BackendUpdateApplicationPlanWorker.new.perform(0)
   end
 
   test 'does nothing when plan has no cinstances' do
     ThreeScale::Core::Application.expects(:save_batch).never
 
-    perform_enqueued_jobs(only: BackendUpdateApplicationPlanWorker) do
-      BackendUpdateApplicationPlanWorker.perform_later(plan.id)
-    end
+    BackendUpdateApplicationPlanWorker.new.perform(plan.id)
   end
 end
