@@ -25,9 +25,6 @@ module Liquid
         - font-awesome/4.3.0/css/font-awesome.css
         - font-awesome/4.3.0/css/font-awesome.min.css
 
-        jQuery 1.7.1:
-        - jquery/1.7.1/jquery.min.js
-
         jQuery 3.5.0:
         - jquery/3.5.0/jquery.min.js
 

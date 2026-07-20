@@ -185,22 +185,6 @@ class ServiceTest < ActiveSupport::TestCase
     assert_contains service.cinstances, cinstance
   end
 
-  test '#has_traffic?' do
-    service = FactoryBot.create(:simple_service)
-    plan = FactoryBot.create(:application_plan, issuer: service)
-
-    buyer1 = FactoryBot.create(:simple_buyer)
-    buyer2 = FactoryBot.create(:simple_buyer)
-
-    app1 = buyer1.buy!(plan)
-    buyer2.buy!(plan)
-
-    assert_equal false, service.has_traffic?
-
-    app1.update(first_traffic_at: Time.zone.now)
-    assert_equal true, service.has_traffic?
-  end
-
   test '#mode_type' do
     assert_nil Service.new.mode_type
 

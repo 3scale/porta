@@ -14,8 +14,8 @@ module ApiDocs
     end
 
     def service_tokens
-      tokens = @user.accessible_service_tokens.map do |service_token|
-        { name: service_token.service.name, value: service_token.value }
+      tokens = @user.decorate.accessible_services_with_token.map do |service|
+        { name: service.name, value: service.active_service_token.value }
       end
       tokens.presence || [{ name: "You don't have access to any services, contact an administrator of this account.", value: '' }]
     end

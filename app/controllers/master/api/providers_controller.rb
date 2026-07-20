@@ -122,7 +122,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
 
   def user_params
     defined_fields_names = current_account.defined_fields_names_for(User)
-    params.permit(*defined_fields_names, :password)
+    params.permit(*defined_fields_names, :password, :password_confirmation)
   end
 
   def permitted_account_attrs

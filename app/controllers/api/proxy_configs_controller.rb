@@ -26,11 +26,11 @@ class Api::ProxyConfigsController < Api::BaseController
   attr_reader :service
 
   def proxy_configs
-    service.proxy.proxy_configs.newest_first
+    service.proxy.proxy_configs.includes(:user).newest_first
   end
 
   def proxy_config
-    proxy_configs.find(params[:id])
+    service.proxy.proxy_configs.find(params[:id])
   end
 
   def paginate_params

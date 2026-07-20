@@ -120,7 +120,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
 
   def application_params
     allowed_attrs = current_account.defined_fields_names_for(Cinstance) +
-                    %w[user_key application_id redirect_url first_traffic_at first_daily_traffic_at]
+                    %w[user_key application_id redirect_url first_traffic_at first_daily_traffic_at accepted_at create_origin]
     params.permit(*allowed_attrs)
   end
 

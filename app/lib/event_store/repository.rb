@@ -159,7 +159,8 @@ module EventStore
                       OIDC::ProxyChangedEvent,
                       OIDC::ServiceChangedEvent,
                       Domains::ProviderDomainsChangedEvent,
-                      Domains::ProxyDomainsChangedEvent
+                      Domains::ProxyDomainsChangedEvent,
+                      ZyncResyncEvent
                      )
       subscribe_event(ServiceTokenEventSubscriber.new, ServiceTokenDeletedEvent)
       subscribe_event(ServiceDeletionSubscriber.new, Services::ServiceScheduledForDeletionEvent)

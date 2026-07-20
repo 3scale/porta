@@ -857,7 +857,6 @@ jobs:
 ##################################### CIRCLECI WORKFLOWS ############################################
 
 workflows:
-  version: 2
 
   mysql_build:
     jobs:

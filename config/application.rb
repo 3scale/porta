@@ -64,17 +64,6 @@ module System
     # Protect from open redirect attacks in `redirect_back_or_to` and `redirect_to`.
     config.action_controller.raise_on_open_redirects = false
 
-    # To migrate an existing application to the `:json` serializer, use the `:hybrid` option.
-    #
-    # Rails transparently deserializes existing (Marshal-serialized) cookies on read and
-    # re-writes them in the JSON format.
-    #
-    # It is fine to use `:hybrid` long term; you should do that until you're confident *all* your cookies
-    # have been converted to JSON. To keep using `:hybrid` long term, move this config to its own
-    # initializer or to `config/application.rb`.
-    # TODO: use the new default - THREESCALE-11545
-    config.action_dispatch.cookies_serializer = :hybrid
-
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
 
@@ -281,8 +270,6 @@ module System
     config.middleware.insert_before 0, ThreeScale::Middleware::Cors if config.three_scale.cors.enabled
 
     config.unicorn = ActiveSupport::OrderedOptions[after_fork: []]
-
-    config.action_dispatch.cookies_serializer = :hybrid
 
     initializer :load_configs, before: :load_config_initializers do
       config.backend_client = { max_tries: 5 }.merge(config_for(:backend))

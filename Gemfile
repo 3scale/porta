@@ -41,7 +41,7 @@ gem 'sorted_set', '~> 1.0'
 gem 'i18n'
 
 # Apisonator client
-gem 'pisoni', '~> 1.30'
+gem 'pisoni', '~> 1.31'
 
 gem '3scale_time_range', '0.0.6'
 
@@ -71,14 +71,26 @@ gem 'formtastic', '~> 5.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 gem 'json', '~> 2.7', '>= 2.7.1'
 gem 'responders', '~> 3.2' # For respond_with support
+# uri >= 1.0.0 switched the default parser from RFC2396 to RFC3986 (ruby/uri#107),
+# removed URI::DEFAULT_PARSER, dropped URI.decode, and the RFC3986 parser has no
+# `registry` component. We rely on all of these across models (Proxy, ProxyRule,
+# WebHook, AuthenticationProvider) and controllers. Upgrading is worthwhile but
+# requires careful inspection of every call-site and should be deployed/tested
+# separately from the Faraday update.
+gem 'uri', '< 1.0.0'
 
 gem 'mysql2', '~> 0.5.3'
 
 gem '3scale_client', '~> 2.11', require: false
 gem 'analytics-ruby', require: false
 
+# connection_pool 3.0 changed `#with` from positional to keyword-only args,
+# breaking redis-client 0.22.2 (pinned by hiredis-client). Upgrading
+# hiredis-client + redis-client to >= 0.26.3 would resolve this; until then
+# keep connection_pool on 2.x.
+gem 'connection_pool', '~> 2.2', '< 3'
 gem 'dalli'
-gem 'faraday', '~> 2.0', '<= 2.9'
+gem 'faraday', '~> 2.0', '>= 2.14.3'
 gem 'mimemagic', '~> 0.3.10'
 gem 'nokogiri', '~> 1.18.9', force_ruby_platform: true
 gem 'secure_headers', '~> 6.3.0'

@@ -561,6 +561,7 @@ en:
           index:
             authorization_exists: yes
             authorization_exists_not: not yet
+            delete_user_title: Delete user %{name}
             delete_user_confirm: Are you sure you want to delete this user?
             edit: Edit
             invite_new_user: Invite a new user
@@ -888,55 +889,75 @@ en:
 
       user:
         access_tokens:
+          show:
+            body:
+              Make sure to copy your new personal access token now. You won't be able to see it
+              again as it isn't stored for security reasons.
+            confirm: I have copied the token
+            title: Copy the new token and store it somewhere safe
+            name: Name
+            scopes: Scopes
+            permissions: Permissions
+            expires_at: Expires at
+            token: Token
+
           create:
             success: Access token was successfully created
+
           destroy:
             success: Access token was successfully deleted
             error: Access token could not be deleted
+
           edit:
+            delete_confirm: The token will be permanently deleted. Do you want to continue?
+            delete_title: Delete this access token
             page_header_title: Edit Access Token
             submit_button_label: Update Access Token
+
           index:
-            page_header_title: Tokens
-            api_docs_link: 3scale API docs
-            access_tokens:
-              title: Access Tokens
-              description_html: "Access tokens are personal tokens that let you authenticate against the Account Management API, the Analytics API and the Billing API through HTTP Basic Auth. You can create multiple access tokens with custom scopes and permissions. We suggest you create tokens with the minimal scopes & permissions needed for the task at hand. Use Access Tokens from within the %{link}"
-              table_aria_label: Access tokens table
-              add_button: Add Access Token
-              edit_button: Edit
-              empty: No access tokens yet…
-              no_scopes: "You can't create access tokens because you don't have access to the Account Management API, the Analytics API, and/or the Billing API. Please contact an administrator of this account."
-              columns:
-                name: Name
-                scopes: Scopes
-                expiration: Expiration
-                permission: Permission
             service_tokens:
-              title: Service Tokens
-              description_html: "Service tokens let you authenticate against the Service Management API. Service tokens are auto generated, unique per service and shared between the users of this account. Use Service Tokens from within the %{link}"
-              table_aria_label: Service tokens table
-              scope_value: Service management API
-              permission_value: Read & Write
+              body_html:
+                Service tokens let you authenticate against the Service Management API. Service
+                tokens are auto generated, unique per service and shared between the users of this
+                account. Use Service Tokens from within the <a href="%{href}">3scale API docs</a>.
               empty: You don't have access to any service. Contact an admin of this account to request access if needed.
-              columns:
-                service_name: Service name
-                scope: Scope
-                permission: Permission
-                token: Token
+              name: Service name
+              permission_col: Permission
+              permission_value: Read & Write
+              scope_col: Scope
+              scope_value: Service management API
+              title: Service Tokens
+              token: Token
+
+            access_tokens:
+              add: Add Access Token
+              body_html:
+                Access tokens are personal tokens that let you authenticate against the Account
+                Management API, the Analytics API and the Billing API through HTTP Basic Auth. You
+                can create multiple access tokens with custom scopes and permissions. We suggest you
+                create tokens with the minimal scopes & permissions needed for the task at hand. Use
+                Access Tokens from within the <a href="%{href}">3scale API docs</a>.
+              delete_confirm: Token "%{name}" will be permanently deleted. Do you want to continue?
+              delete: Delete token %{name}
+              edit: Edit token %{name}
+              empty_body: There aren't any access tokens yet
+              empty: No access tokens
+              expiration: Expiration
+              missing_permission:
+                You can't create access tokens because you don't have access to the Account Management
+                API, the Analytics API, and/or the Billing API. Please contact an administrator of
+                this account.
+              name: Name
+              permission: Permission
+              scopes: Scopes
+              title: Access Tokens
+
+            title: Tokens
+
           new:
             page_header_title: New Access Token
             submit_button_label: Create Access Token
-          show:
-            page_header_title: Copy the new token and store it somewhere safe
-            copy_warning: Make sure to copy your new personal access token now. You won't be able to see it again as it isn't stored for security reasons.
-            copied_button: I have copied the token
-            fields:
-              name: Name
-              scopes: Scopes
-              permission: Permission
-              expires_at: Expires at
-              token: Token
+
           update:
             success: Access token was successfully updated
         notification_preferences:
@@ -1517,9 +1538,64 @@ en:
       forms:
         definition_settings:
           delete_confirmation: Are you sure you want to delete the service '%{name}'?
-          refresh_confirmation:
-            This action will overwrite the API's Private URL and automatically created ActiveDocs.
-            Are you sure you want to proceed?
+          refresh:
+            confirmation:
+              This action will overwrite the API's Private URL and automatically created ActiveDocs.
+              Are you sure you want to proceed?
+            label: Refresh
+      cards:
+        analytics:
+          title: Analytics
+          view_more: View more stats for this service
+        application_plans:
+          title: Published application plans
+          footer_html: 'You have %{plans} with a total of %{apps}.'
+          create_first_plan: Create your first application plan
+        details:
+          title: Details
+          edit: Edit
+        latest_alerts:
+          title: Latest alerts
+          no_alerts: There are no alerts
+          view_more: View all limit alerts for this service
+        latest_apps:
+          create: Create an application
+          title: Latest applications
+          view_more: View all applications for this service
+        service_plans:
+          title: Published service plans
+          footer_html: You have %{plans} (%{published} published) with a total of %{contracts}.
+          create_first_plan: Create your first service plan
+          contracts:
+            one: '%{count} subscription'
+            other: '%{count} subscriptions'
+        settings:
+          configuration: Edit integration settings for this service
+          methods: Manage metrics and method for this service
+          settings: Edit settings for this service
+          title: Configuration and settings
+          friendly_service_setting:
+            buyers_manage_keys:
+              enabled: "Users <strong>can</strong> manage application keys"
+              disabled: "Users <strong>cannot</strong> manage application keys"
+            buyer_can_select_plan:
+              enabled: "Users <strong>can select a plan</strong> when creating an application"
+              disabled: "Users <strong>cannot select a plan</strong> when creating an application"
+            buyer_plan_change_permission:
+              request: "Users can <strong>request plan change</strong>"
+              direct: "Users can <strong>directly change plans</strong>"
+              none: "Users can <strong>not change plans</strong>"
+            buyers_manage_apps:
+              enabled: "Users <strong>can</strong> manage applications"
+              disabled: "Users <strong>can't</strong> manage applications"
+          view_more_html: View all %{integration_link}, %{metrics_link} and %{settings_link} options.
+      show:
+        create_service_plan: Create service plan
+        page_header_title: Product %{name}
+      support_email:
+        remove_success: Custom support email removed from product
+        update_success: Support email updated successfully
+        error: Couldn't update support email
       update:
         success: Product information updated
         error: Couldn't update Product
@@ -1527,10 +1603,6 @@ en:
         plans_info:
           When 'Request plan change' is selected you will be informed about users' requests by
           email - you can then execute it in administration interface.
-      support_email:
-        remove_success: Custom support email removed from product
-        update_success: Support email updated successfully
-        error: Couldn't update support email
     supports:
       update:
         success: Support information was updated
@@ -2481,6 +2553,9 @@ en:
     annotations:
       managed_title: Managed by %{value}
       managed_description: This resource is managed externally and any modifications may be overwritten.
+    cancel_button: Cancel
+    delete_button_confirm: It will be permanently deleted. Are you sure?
+    delete_button_title: Delete
     empty_search_state:
       title: No results
       body: There are no items matching your search criteria.
@@ -2499,3 +2574,4 @@ en:
     nav:
       earnings: Earnings by month
     plugins_deprecation: This product currently uses a plugin as the deployment option. Your integration will keep on working but we no longer support plugins.
+    view_more: View more

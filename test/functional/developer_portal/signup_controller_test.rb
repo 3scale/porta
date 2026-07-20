@@ -93,6 +93,20 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
       post :create, params: valid_buyer_params(plans: [1, 2])
       assert_response :not_found
     end
+
+    test 'signup with non-matching password fails' do
+      assert_no_difference Account.method(:count) do
+        params = valid_buyer_params
+        params[:account][:user][:password_confirmation] = 'non-matching-password'
+
+        post :create, params: params
+
+        assert_response :success
+        signup_result = assigns(:signup_result)
+
+        assert_equal ["Password confirmation doesn't match Password"], signup_result.errors[:user]
+      end
+    end
   end
 
   class WithoutAnyDefaultPlanTest < DeveloperPortal::SignupControllerTest

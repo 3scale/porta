@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_26_134251) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_19_102359) do
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
     t.text "scopes"

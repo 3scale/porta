@@ -52,4 +52,26 @@ class UserDecoratorTest < Draper::TestCase
     user.username = 'Baz'
     assert_equal 'Baz', decorator.informal_name
   end
+
+  test 'accessible_services_with_token without plans permission' do
+    provider = FactoryBot.create(:simple_provider)
+    user = FactoryBot.create(:member, account: provider)
+    FactoryBot.create(:service, account: provider)
+
+    decorator = user.decorate
+
+    assert_equal 0, decorator.accessible_services_with_token.count
+  end
+
+  test 'accessible_services_with_token returns services with tokens' do
+    provider = FactoryBot.create(:simple_provider)
+    user = FactoryBot.create(:member, :with_plans_permission, account: provider)
+
+    service = FactoryBot.create(:service, account: provider)
+    service.service_tokens.create!(value: 'token-value')
+
+    decorator = user.decorate
+
+    assert_equal 1, decorator.accessible_services_with_token.count
+  end
 end

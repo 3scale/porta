@@ -14,14 +14,6 @@ Given "{product} has a {spec_version} spec {string}" do |product, version, name|
                                                            body: spec_body_builder(version))
 end
 
-Given "the product has a(n) {spec_version} spec {string} from fixture {string}" do |version, name, fixture|
-  @api_docs_service = FactoryBot.create(:api_docs_service, account: @product.provider,
-                                                           name: name,
-                                                           service: @product,
-                                                           published: true,
-                                                           body: spec_body_builder(version, spec_name: fixture))
-end
-
 Given "{product} has no specs" do |product|
   product.api_docs_services.delete_all
 end
@@ -44,16 +36,6 @@ Then "{spec_version} should escape properly the curl string" do |swagger_version
   page.click_button 'Try it out!'
   curl_commmand = find_all('div', text: /curl/i).last
   assert curl_commmand.has_text?(swagger_version[:version] == '1.2' ? 'Authorization: Oauth:\"test\"' : 'Authorization: Oauth:"test"')
-end
-
-Then "the request body field {string} should have value {string}" do |field_name, expected_value|
-  row = find("tr.parameters[data-property-name='#{field_name}']")
-  field = if row.has_css?('input[type="text"]', wait: 0)
-            row.find('input[type="text"]')
-          else
-            row.find('select')
-          end
-  assert_equal expected_value, field.value
 end
 
 When "the ActiveDocs form is submitted with:" do |table|

@@ -105,6 +105,18 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_contains JSON.parse(response.body).dig('errors', 'user'), 'Email should look like an email address'
   end
 
+  test 'signup with non-matching password fails' do
+    assert_no_difference Account.method(:count) do
+      post master_api_providers_path(format: :json), params: signup_params.merge({ password_confirmation: 'non-matching-password' })
+
+      assert_response :unprocessable_entity
+  
+      errors = response.parsed_body[:errors]
+      assert_equal ["Users invalid"], errors[:account]
+      assert_equal ["Password confirmation doesn't match Password"], errors[:user]
+    end
+  end
+
   test '#create returns the right errors when user validation fails for xml' do
     post master_api_providers_path(format: :xml), params: signup_params({ email: '' })
     assert_response :unprocessable_entity
