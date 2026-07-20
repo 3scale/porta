@@ -2,14 +2,14 @@
 
 #DEPRECATED: replace with <<there should( not| n't)? be a link to ([^"]*)>>
 Then "(I )(they )should see (a )(the )link to {}" do |page_name|
-  ActiveSupport::Deprecation.warn 'replace with <<there should( not| n\'t)? be a link to ([^"]*)>>'
+  ActiveSupport.deprecator.warn 'replace with <<there should( not| n\'t)? be a link to ([^"]*)>>'
   path = path_to(page_name)
   assert page.all('a').any? { |node| matches_path?(node[:href], path) }
 end
 
 #DEPRECATED: replace with <<there should( not| n't)? be a link to ([^"]*)>>
 Then /^I should not see link to (.+)$/ do |page_name|
-  ActiveSupport::Deprecation.warn 'replace with <<there should( not| n\'t)? be a link to ([^"]*)>>'
+  ActiveSupport.deprecator.warn 'replace with <<there should( not| n\'t)? be a link to ([^"]*)>>'
   path = path_to(page_name)
   assert page.all('a').none? { |node| matches_path?(node[:href], path) }
 end
@@ -21,7 +21,7 @@ end
 
 #DEPRECATED: replace with <<there should( not| n't)? be a link to ([^"]*)>>
 Then /^I should see (?:|the )link "([^"]*)" containing "([^"]*)" in the URL$/ do |label, params|
-  ActiveSupport::Deprecation.warn 'replace with <<there should( not| n\'t)? be a link to ([^"]*)>>'
+  ActiveSupport.deprecator.warn 'replace with <<there should( not| n\'t)? be a link to ([^"]*)>>'
   params = params.split
   href_contain_params = proc do |selector|
     params.each do |param|
@@ -33,13 +33,13 @@ end
 
 #DEPRECATED: replace with "there {should} be a link to {string}"
 Then /^(?:I )?should see (the |)link "([^"]*)"$/ do |_, label|
-  ActiveSupport::Deprecation.warn 'replace with "there {should} be a link to {string}"'
+  ActiveSupport.deprecator.warn 'replace with "there {should} be a link to {string}"'
   assert page.has_css?('a', :text => label)
 end
 
 #DEPRECATED: replace with "there {should} be a link to {string}"
 Then /^I should not see (?:the )?link "([^"]*)"$/ do |label|
-  ActiveSupport::Deprecation.warn 'replace with "there {should} be a link to {string}"'
+  ActiveSupport.deprecator.warn 'replace with "there {should} be a link to {string}"'
   assert page.has_no_xpath? ".//a[text()='#{label}']"
 end
 

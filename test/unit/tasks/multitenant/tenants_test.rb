@@ -167,6 +167,8 @@ module Tasks
         setup do
           @provider1 = FactoryBot.create(:simple_provider, state: "scheduled_for_deletion", state_changed_at: 7.months.ago)
           @provider2 = FactoryBot.create(:simple_provider, state: "scheduled_for_deletion", state_changed_at: 5.months.ago)
+
+          ActiveJob::Base.queue_adapter = :sidekiq
           Sidekiq::Testing.disable!
         end
 
@@ -174,7 +176,9 @@ module Tasks
           Sidekiq::ScheduledSet.new.each(&:delete)
           Sidekiq::Queue.new.each(&:delete)
           assert_empty Sidekiq::Workers.new.to_a
+
           Sidekiq::Testing.fake!
+          ActiveJob::Base.queue_adapter = Rails.configuration.active_job.queue_adapter
         end
 
         test "do not schedule more than target concurrency number of jobs" do

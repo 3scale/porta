@@ -75,6 +75,14 @@ class ActiveSupport::TestCase
   def assert_cannot(ability, *args)
     assert ability.cannot?(*args), "User can #{args.join(' ')} but should not"
   end
+
+  # audited 5.6+ uses ActiveSupport::CurrentAttributes which resets between
+  # tests, wiping per-class auditing flags. Re-disable after each reset.
+  setup do
+    Audited.audit_class.audited_class_names.each do |name|
+      name.safe_constantize&.disable_auditing
+    end
+  end
 end
 
 # Load test helpers

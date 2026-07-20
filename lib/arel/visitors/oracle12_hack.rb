@@ -33,7 +33,7 @@ module Arel
       end
 
       # can remove both after upgrade to a version with (8.1.4+ perhaps)
-      # https://github.com/rsim/oracle-enhanced/pull/2654
+      # https://github.com/rsim/oracle-enhanced/pull/2664
       def visit_Arel_Nodes_In(o, collector)
         attr, values = o.left, o.right
         return super unless values.is_a?(Array)
@@ -45,7 +45,7 @@ module Arel
         in_nodes = values.each_slice(in_clause_length).map do |slice|
           Arel::Nodes::In.new(attr, slice)
         end
-        or_node = in_nodes.reduce { |left, right| Arel::Nodes::Or.new(left, right) }
+        or_node = Arel::Nodes::Or.new(in_nodes)
         visit(Arel::Nodes::Grouping.new(or_node), collector)
       end
 

@@ -29,7 +29,7 @@ end
 
 # DEPRECATED: remove and use "the table is filtered with:"
 When "I/they search for:" do |table|
-  ActiveSupport::Deprecation.warn 'remove and use "the table is filtered with:"'
+  ActiveSupport.deprecator.warn 'remove and use "the table is filtered with:"'
   within ".search" do
     parameterize_headers(table)
 

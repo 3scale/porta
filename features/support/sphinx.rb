@@ -6,7 +6,8 @@ BeforeAll do
 end
 
 Before '@search' do
-  Sidekiq::Job.clear_all
+  ActiveJob::Base.queue_adapter = :inline
+
   ::ThinkingSphinx::Test.stop
   ::ThinkingSphinx::Test.clear
   ::ThinkingSphinx::Test.init
@@ -19,4 +20,6 @@ end
 After '@search' do
   ::ThinkingSphinx::Test.disable_search_jobs!
   ::ThinkingSphinx::Test.stop
+
+  ActiveJob::Base.queue_adapter = Rails.configuration.active_job.queue_adapter
 end

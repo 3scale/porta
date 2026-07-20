@@ -29,6 +29,7 @@ Feature: Buyer password reset
       And the current domain is foo.3scale.localhost
       And they go to the login page
 
+    @emails
     Scenario: Reset password of an existing user
       Given they follow "Forgot password?"
       And they fill in "Email" with "zed@3scale.localhost"
@@ -46,6 +47,7 @@ Feature: Buyer password reset
       And they press "Sign in"
       Then they should be logged in as "zed"
 
+    @emails
     Scenario: Invalid email
       Given no user exists with an email of "bob@3scale.localhost"
       And they follow "Forgot password?"
@@ -54,6 +56,7 @@ Feature: Buyer password reset
       Then they should see "A password reset link will be sent to bob@3scale.localhost if a user exists with this email"
       And "bob@3scale.localhost" should receive no emails
 
+    @emails
     Scenario: Wrong confirmation
       Given they follow "Forgot password?"
       And they fill in "Email" with "zed@3scale.localhost"
@@ -65,6 +68,7 @@ Feature: Buyer password reset
       Then they should see the password confirmation error
       And the password of user "zed" should not be "new_password_123"
 
+    @emails
     Scenario: Blank passwords
       When they follow "Forgot password?"
       And they fill in "Email" with "zed@3scale.localhost"
