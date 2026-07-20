@@ -20,13 +20,13 @@ module Backend
 
       def update_backend_application
         if plan && service
-          ThreeScale::Core::Application.save(backend_application_attributes)
+          ThreeScale::Core::Application.save(backend_application_attributes(service, plan))
         end
 
         true
       end
 
-      def backend_application_attributes
+      def backend_application_attributes(service, plan)
         state = self.state
         state = :active if live?
 
