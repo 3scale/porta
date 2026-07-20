@@ -3,8 +3,6 @@
 require 'test_helper'
 
 class Backend::ModelExtensions::ApplicationPlanTest < ActiveSupport::TestCase
-  include ActiveJob::TestHelper
-
   def setup
     @plan = FactoryBot.create(:application_plan)
   end
@@ -12,20 +10,21 @@ class Backend::ModelExtensions::ApplicationPlanTest < ActiveSupport::TestCase
   attr_reader :plan
 
   test 'enqueues worker when plan name is updated' do
-    assert_enqueued_with(job: BackendUpdateApplicationPlanWorker, args: [plan.id]) do
-      plan.update!(name: 'New Plan Name')
-    end
+    BackendUpdateApplicationPlanWorker.jobs.clear
+    plan.update!(name: 'New Plan Name')
+    assert_equal 1, BackendUpdateApplicationPlanWorker.jobs.size
+    assert_equal [plan.id], BackendUpdateApplicationPlanWorker.jobs.first['args']
   end
 
   test 'does not enqueue worker when other attributes are updated' do
-    assert_no_enqueued_jobs(only: BackendUpdateApplicationPlanWorker) do
-      plan.update!(description: 'Updated description')
-    end
+    BackendUpdateApplicationPlanWorker.jobs.clear
+    plan.update!(description: 'Updated description')
+    assert_equal 0, BackendUpdateApplicationPlanWorker.jobs.size
   end
 
   test 'does not enqueue worker when plan is created' do
-    assert_no_enqueued_jobs(only: BackendUpdateApplicationPlanWorker) do
-      FactoryBot.create(:application_plan)
-    end
+    BackendUpdateApplicationPlanWorker.jobs.clear
+    FactoryBot.create(:application_plan)
+    assert_equal 0, BackendUpdateApplicationPlanWorker.jobs.size
   end
 end

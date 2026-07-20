@@ -85,7 +85,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
       ThreeScale::Core::Application.expects(:save_batch)
         .with(service.backend_id, expected_backend_applications(cinstances, application_plan, 'new name'))
 
-      perform_enqueued_jobs(only: BackendUpdateApplicationPlanWorker) do
+      Sidekiq::Testing.inline! do
         put admin_api_service_application_plan_path(application_plan, service_id: service.id, format: :json, access_token: @token,
                                                     application_plan: { name: 'new name' })
         assert_response :success

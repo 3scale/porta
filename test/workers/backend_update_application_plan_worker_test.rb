@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class BackendUpdateApplicationPlanWorkerTest < ActiveSupport::TestCase
-  include ActiveJob::TestHelper
   include NPlusOneControl::MinitestHelper
 
   def setup
@@ -31,9 +30,7 @@ class BackendUpdateApplicationPlanWorkerTest < ActiveSupport::TestCase
 
     ThreeScale::Core::Application.expects(:save_batch).with(plan.service.backend_id, expected_applications)
 
-    perform_enqueued_jobs(only: BackendUpdateApplicationPlanWorker) do
-      BackendUpdateApplicationPlanWorker.perform_later(plan.id)
-    end
+    BackendUpdateApplicationPlanWorker.new.perform(plan.id)
   end
 
   test 'no n+1 queries' do
