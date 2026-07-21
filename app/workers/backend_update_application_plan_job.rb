@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BackendUpdateApplicationPlanWorker
+class BackendUpdateApplicationPlanJob
   include Sidekiq::IterableJob
   include Sidekiq::Throttled::Job
 

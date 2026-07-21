@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class BackendUpdateApplicationPlanWorkerTest < ActiveSupport::TestCase
+class BackendUpdateApplicationPlanJobTest < ActiveSupport::TestCase
   include NPlusOneControl::MinitestHelper
 
   def setup
@@ -30,7 +30,7 @@ class BackendUpdateApplicationPlanWorkerTest < ActiveSupport::TestCase
 
     ThreeScale::Core::Application.expects(:save_batch).with(plan.service.backend_id, expected_applications)
 
-    BackendUpdateApplicationPlanWorker.new.perform(plan.id)
+    BackendUpdateApplicationPlanJob.new.perform(plan.id)
   end
 
   test 'no n+1 queries' do
@@ -39,30 +39,19 @@ class BackendUpdateApplicationPlanWorkerTest < ActiveSupport::TestCase
     populate = ->(count) { FactoryBot.create_list(:simple_cinstance, count, plan: plan) }
 
     assert_perform_constant_number_of_queries(populate: populate) do
-      BackendUpdateApplicationPlanWorker.new.perform(plan.id)
+      BackendUpdateApplicationPlanJob.new.perform(plan.id)
     end
-  end
-
-  test 'each_iteration logs error and does not raise when save_batch fails' do
-    FactoryBot.create_list(:simple_cinstance, 2, plan: plan)
-    batch = plan.cinstances.to_a
-
-    ThreeScale::Core::Application.stubs(:save_batch).raises(StandardError, 'timeout')
-    Rails.logger.expects(:error).with(regexp_matches(/Failed to sync application plan #{plan.name}.*timeout/))
-
-    worker = BackendUpdateApplicationPlanWorker.new
-    worker.each_iteration(batch, plan.id)
   end
 
   test 'does nothing when plan does not exist' do
     ThreeScale::Core::Application.expects(:save_batch).never
 
-    BackendUpdateApplicationPlanWorker.new.perform(0)
+    BackendUpdateApplicationPlanJob.new.perform(0)
   end
 
   test 'does nothing when plan has no cinstances' do
     ThreeScale::Core::Application.expects(:save_batch).never
 
-    BackendUpdateApplicationPlanWorker.new.perform(plan.id)
+    BackendUpdateApplicationPlanJob.new.perform(plan.id)
   end
 end

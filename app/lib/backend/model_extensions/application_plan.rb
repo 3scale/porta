@@ -12,7 +12,7 @@ module Backend
       private
 
       def sync_backend_application_plan_name
-        BackendUpdateApplicationPlanWorker.perform_async(id)
+        BackendUpdateApplicationPlanJob.perform_async(id)
       end
     end
   end
