@@ -33,7 +33,5 @@ class BackendUpdateApplicationPlanJob
     service = plan.service
     applications = batch.map { |app| app.backend_application_attributes(service, plan) }
     ThreeScale::Core::Application.save_batch(service.backend_id, applications)
-  rescue StandardError => exception
-    Rails.logger.error("Failed to sync application plan #{plan.name} to backend: #{exception.message}")
   end
 end
