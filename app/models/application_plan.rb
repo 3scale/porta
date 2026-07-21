@@ -1,5 +1,6 @@
 
 class ApplicationPlan < Plan
+  include Backend::ModelExtensions::ApplicationPlan
 
   #TODO: is the dependent :destroy working?
   has_many :cinstances, :foreign_key => :plan_id, :dependent => :destroy, :inverse_of => :plan
