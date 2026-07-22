@@ -180,6 +180,7 @@ module Pdf
 
     def traffic_graph_style(svg)
       xml = Nokogiri::XML(svg)
+      xml.css('a').each { |a| a.replace(a.children) }
       style = xml.at_css("style")
       css = CssParser::Parser.new
       css.load_string!(style.text.gsub(/ff0000/i, "9273ED"))
