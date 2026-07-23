@@ -80,7 +80,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
     end
   end
 
-  UPDATE_PARAMS = [:from_email, :support_email, :finance_support_email, :site_access_code, :state_event, {annotations: {}}].freeze
+  UPDATE_PARAMS = [:from_email, :support_email, :finance_support_email, :site_access_code, :state_event, :self_domain, {annotations: {}}].freeze
   private_constant :UPDATE_PARAMS
 
   private

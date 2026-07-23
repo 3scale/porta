@@ -213,6 +213,80 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_equal 'suspended',                                     provider.state
   end
 
+  test '#update self_domain successfully' do
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    new_domain = "new-admin.#{ThreeScale.config.superdomain}"
+
+    put master_api_provider_path(provider, format: :json), params: {
+      account: { self_domain: new_domain },
+      access_token: token.plaintext_value
+    }
+    assert_response :ok
+
+    assert_equal new_domain, provider.reload.internal_admin_domain
+    assert_equal new_domain, JSON.parse(response.body).dig('signup', 'account', 'admin_domain')
+  end
+
+  test '#update self_domain fails with duplicate domain' do
+    provider_one = FactoryBot.create(:provider_account, provider_account: master_account)
+    provider_two = FactoryBot.create(:provider_account, provider_account: master_account)
+    user  = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+
+    put master_api_provider_path(provider_two, format: :json), params: {
+      account: { self_domain: provider_one.internal_admin_domain },
+      access_token: token.plaintext_value
+    }
+    assert_response :unprocessable_entity
+    assert_not_equal provider_one.internal_admin_domain, provider_two.reload.internal_admin_domain
+  end
+
+  test '#update self_domain fails with uppercase domain' do
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    original_domain = provider.internal_admin_domain
+
+    put master_api_provider_path(provider, format: :json), params: {
+      account: { self_domain: 'UPPERCASE-ADMIN.example.com' },
+      access_token: token.plaintext_value
+    }
+    assert_response :unprocessable_entity
+    assert_equal original_domain, provider.reload.internal_admin_domain
+  end
+
+  test '#update self_domain is blocked when provider is scheduled_for_deletion' do
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    original_domain = provider.internal_admin_domain
+    provider.schedule_for_deletion!
+
+    put master_api_provider_path(provider, format: :json), params: {
+      account: { self_domain: "new-admin.#{ThreeScale.config.superdomain}", state_event: 'resume' },
+      access_token: token.plaintext_value
+    }
+    assert_response :ok
+    assert_equal original_domain, provider.reload.internal_admin_domain
+  end
+
+  test '#update self_domain publishes domain change event' do
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    new_domain = "new-admin.#{ThreeScale.config.superdomain}"
+
+    Domains::ProviderDomainsChangedEvent.expects(:create_and_publish!).once
+
+    put master_api_provider_path(provider, format: :json), params: {
+      account: { self_domain: new_domain },
+      access_token: token.plaintext_value
+    }
+    assert_response :ok
+  end
+
   test '#update can only resume when the account is scheduled_for_deletion' do
     provider = FactoryBot.create(:provider_account, provider_account: master_account)
     user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])

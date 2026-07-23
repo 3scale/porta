@@ -294,6 +294,10 @@
               "suspend",
               "resume"
             ]
+          },
+          "self_domain": {
+            "type": "string",
+            "description": "Admin portal domain of the tenant account."
           }
         },
         "additionalProperties": {
