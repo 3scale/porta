@@ -26,7 +26,6 @@ Font Awesome:
 - font-awesome/4.3.0/css/font-awesome.min.css
 
 jQuery:
-- jquery/3.5.0/jquery.min.js
 - jquery/3.7.1/jquery.min.js
 
 jQuery UI 1.11.4:
