@@ -9,8 +9,8 @@ Feature: ActiveDocs
     And a buyer "Jane"
     And the buyer logs in
 
-  Scenario: Loading ActiveDocs 1.0
-    Given the product has a Swagger 1.2 spec "Echo"
+  Scenario: Loading ActiveDocs 1.0 (V10 format)
+    Given the product has a ActiveDocs 1.0 spec "Echo"
     And the provider has cms page "/version-10" with:
       """
       {% active_docs version: "1.0" %}
@@ -27,6 +27,26 @@ Feature: ActiveDocs
       """
     And the cms page "/version-10" has main layout
     When they visit "/version-10"
+    Then they should see "Echo"
+
+  Scenario: Loading ActiveDocs 1.0 with Swagger 1.2 spec
+    Given the product has a Swagger 1.2 spec "Echo"
+    And the provider has cms page "/version-12" with:
+      """
+      {% active_docs version: "1.2" %}
+
+      <h3>ActiveDocs version 1.2</h3>
+
+      <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+
+      <script type="text/javascript">
+        $(function () {
+          window.swaggerUi.load();
+        });
+      </script>
+      """
+    And the cms page "/version-12" has main layout
+    When they visit "/version-12"
     Then they should see "Echo"
 
   Scenario: Loading Swagger UI v2

@@ -9,7 +9,7 @@
    *
    */
 
-  Operation.template = $.template(null, global.templates.operationTemplate);
+  Operation.template = Handlebars.compile(global.templates.operationTemplate);
   function Operation(options, endpoint, resource){
     if(!this.guid){
        this.guid = global.IDGenerator.guid();
@@ -18,15 +18,15 @@
     $.extend(this, options);
 
     if(options.group){
-      var inArray = $.inArray(options.group, Operation.groups);
+      var groupIndex = Operation.groups.indexOf(options.group);
 
-      if(inArray == -1){
+      if(groupIndex == -1){
         Operation.groups.push(options.group);
-        inArray = $.inArray(options.group, Operation.groups);
+        groupIndex = Operation.groups.indexOf(options.group);
       }
 
-      inArray = inArray % Operation.colours.length;
-      this.groupColour = Operation.colours[inArray];
+      groupIndex = groupIndex % Operation.colours.length;
+      this.groupColour = Operation.colours[groupIndex];
     }
 
     this.resource = resource;
@@ -61,7 +61,7 @@
 
     toTemplate: function(){
       var that = this;
-      $.tmpl(Operation.template, this).appendTo($('#' + this.resource.config.name + '_endpoint_operations'));
+      $('#' + this.resource.config.name + '_endpoint_operations').append(Operation.template(this));
 
       $.each(this.parameters || [], function(i, param){
         new global.Param(param, that).toTemplate();
