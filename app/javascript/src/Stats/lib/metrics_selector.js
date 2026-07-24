@@ -1,6 +1,5 @@
 /** @jsx StatsUI.dom */
 import 'core-js/fn/array/find'
-import $ from 'jquery'
 import numeral from 'numeral'
 
 import { StatsUI } from 'Stats/lib/ui'

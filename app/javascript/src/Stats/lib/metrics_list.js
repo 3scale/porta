@@ -1,5 +1,3 @@
-import $ from 'jquery'
-
 import { StatsMetric } from 'Stats/lib/metric'
 
 export class StatsMetrics {

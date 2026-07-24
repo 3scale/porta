@@ -1,5 +1,3 @@
-import $ from 'jquery'
-
 import { StatsSeries } from 'Stats/lib/series'
 
 export class StatsChartManager {

@@ -39,8 +39,8 @@
       $(codemirror).on('change', {content_type: content_type, liquid_enabled: liquid_enabled}, function(event, content_type, liquid_enabled){
         var liquid = "application/x-liquid-template";
 
-        if($.type(content_type) === "undefined") { content_type = event.data.content_type; }
-        if($.type(liquid_enabled) === "undefined") { liquid_enabled = event.data.liquid_enabled; }
+        if(typeof content_type === "undefined") { content_type = event.data.content_type; }
+        if(typeof liquid_enabled === "undefined") { liquid_enabled = event.data.liquid_enabled; }
 
         var mode = content_type;
 

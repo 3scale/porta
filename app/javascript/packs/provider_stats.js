@@ -1,4 +1,3 @@
-import $ from 'jquery'
 
 import { statsUsage } from 'Stats/provider/stats_usage'
 import { statsDaysOfWeek } from 'Stats/provider/stats_days_of_week'
@@ -8,7 +7,6 @@ import { statsApplication } from 'Stats/provider/stats_application'
 import { statsResponseCodes } from 'Stats/provider/stats_response_codes'
 
 document.addEventListener('DOMContentLoaded', () => {
-  window.$ = $
   window.statsUsage = statsUsage
   window.statsDaysOfWeek = statsDaysOfWeek
   window.statsHoursOfDay = statsHoursOfDay

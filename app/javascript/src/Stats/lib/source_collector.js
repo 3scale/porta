@@ -1,5 +1,4 @@
 import 'core-js/fn/array/find'
-import $ from 'jquery'
 
 import { StatsMetrics } from 'Stats/lib/metrics_list'
 

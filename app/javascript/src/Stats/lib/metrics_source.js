@@ -1,5 +1,3 @@
-import $ from 'jquery'
-
 import { HITS_METRIC } from 'Stats/lib/metric'
 import { StatsSource } from 'Stats/lib/source'
 

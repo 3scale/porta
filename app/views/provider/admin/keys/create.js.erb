@@ -2,7 +2,7 @@
   var container = $("#application_keys");
 
   <% if @key.persisted? %>
-    $.colorbox.close();
+    colorbox.close();
     var keys = container.find("table#keys tbody");
     var key = <%= render_to_js_string('key', :cinstance => @cinstance, :key => @key) %>;
     $(key).hide().appendTo(keys.<%= @cinstance.backend_version.oauth? ? 'empty' : 'slice' %>()).fadeIn();
@@ -17,7 +17,7 @@
       input.insertAdjacentHTML('afterend', '<%= j render partial: "shared/pf_error_helper_text", locals: { error: @error } %>')
       input.setAttribute('aria-invalid', 'true')
 
-      $.colorbox.resize();
+      colorbox.resize();
     <% end %>
   <% end %>
 
