@@ -4,7 +4,7 @@ class WebHook < ApplicationRecord
   alias provider account
 
   validates :account_id, presence: true
-  validates :url, format: { :with => URI::DEFAULT_PARSER.make_regexp(%w[http https]), :if => :active }, length: { maximum: 255 }
+  validates :url, format: { :with => URI::RFC2396_PARSER.make_regexp(%w[http https]), :if => :active }, length: { maximum: 255 }
 
   #TODO: limit association only to providers?
   #TODO validate url as url?

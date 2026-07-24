@@ -24,9 +24,9 @@ class Provider::Admin::ServiceDiscovery::AuthController < Provider::AdminControl
   protected
 
   def referrer_url
-    url = params[:referrer]
+    url = params.permit(:referrer)[:referrer]
     if url
-      URI.decode(url)
+      URI::RFC2396_PARSER.unescape(url)
     else
       new_admin_service_path
     end
