@@ -27,7 +27,11 @@ Feature: ActiveDocs
       """
     And the cms page "/version-10" has main layout
     When they visit "/version-10"
-    Then they should see "Echo"
+    Then they should see "ActiveDocs version 1.0"
+    And they should see "Operations"
+    And they should see "Echo"
+    And they should see "Say Hello!"
+    And they should see "/hello"
 
   Scenario: Loading ActiveDocs 1.0 with Swagger 1.2 spec
     Given the product has a Swagger 1.2 spec "Echo"

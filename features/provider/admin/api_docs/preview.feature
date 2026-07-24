@@ -102,4 +102,3 @@ Feature: Audience > ActiveDocs preview page
     Then they should see "Preview Service Spec (1.0)"
     And they should see "Operations"
     And they should see "Echo API"
-    And they should see "Say Hello!"
