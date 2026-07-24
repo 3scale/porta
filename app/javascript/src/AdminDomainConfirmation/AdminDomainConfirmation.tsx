@@ -3,9 +3,9 @@ import { Button, List, ListItem, Modal, ModalVariant, Text, TextContent } from '
 import type { FunctionComponent } from 'react'
 
 interface Props {
-  isOpen: boolean;
-  onConfirm: () => void;
-  onCancel: () => void;
+  readonly isOpen: boolean;
+  readonly onConfirm: () => void;
+  readonly onCancel: () => void;
 }
 
 const AdminDomainConfirmation: FunctionComponent<Props> = ({ isOpen, onConfirm, onCancel }) => (

@@ -1,5 +1,5 @@
 import { createElement } from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import { AdminDomainConfirmation } from 'AdminDomainConfirmation/AdminDomainConfirmation'
 
@@ -15,9 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!form || !domainInput) return
 
   const initialDomain = domainInput.value
+  const root = createRoot(container)
 
   const mountModal = (isOpen: boolean) => {
-    render(
+    root.render(
       createElement(AdminDomainConfirmation, {
         isOpen,
         onCancel: () => { mountModal(false) },
@@ -25,8 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
           mountModal(false)
           form.submit()
         }
-      }),
-      container
+      })
     )
   }
 
