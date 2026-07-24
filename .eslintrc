@@ -140,5 +140,8 @@
     "*.config.js",
     "spec/javascripts/setupTests.ts",
     "spec/javascripts/__mocks__/"
-  ]
+  ],
+  "globals": {
+    "$": "readonly"
+  }
 }

@@ -1,5 +1,3 @@
-import $ from 'jquery'
-
 import { StatsChart } from 'Stats/lib/chart'
 import { StatsChartManager } from 'Stats/lib/chart_manager'
 import { StatsMenu } from 'Stats/lib/menu'

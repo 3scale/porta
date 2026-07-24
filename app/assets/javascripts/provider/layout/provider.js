@@ -1,3 +1,3 @@
-//= require jquery
+//= require vendor/colorbox
+//= require jquery3
 //= require rails-ujs
-//= require vendor/jquery.colorbox-min.js

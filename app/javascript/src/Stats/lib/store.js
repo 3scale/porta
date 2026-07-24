@@ -1,5 +1,3 @@
-import $ from 'jquery'
-
 export class StatsStore {
   constructor (window) {
     this.window = window

@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
-import $ from 'jquery'
-
 import { StatsStore } from 'Stats/lib/store'
 
 describe('StatsStore', () => {
@@ -47,12 +45,16 @@ describe('StatsStore', () => {
     })
   })
 
-  // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
   it('should call triggerNavigationEvent method when popstate event is triggered', () => {
-    const spyOnNavigation = jest.spyOn(store, 'triggerNavigationEvent')
+    const onSpy = jest.spyOn($(window), 'on')
+    const newStore = new StatsStore(window)
+    const spyOnNavigation = jest.spyOn(newStore, 'triggerNavigationEvent')
 
-    $(store.window).triggerHandler('popstate')
+    const popstateCallback = onSpy.mock.calls.find(([event]) => event === 'popstate')?.[1]
+    popstateCallback()
 
     expect(spyOnNavigation).toHaveBeenCalled()
+
+    onSpy.mockRestore()
   })
 })

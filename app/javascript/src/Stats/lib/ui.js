@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import createElement from 'virtual-dom/create-element'
 import diff from 'virtual-dom/diff'
 import h from 'virtual-dom/h'

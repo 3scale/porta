@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import 'jquery-ui/ui/widgets/tabs'
 
 document.addEventListener('DOMContentLoaded', () => {

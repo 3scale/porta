@@ -1,4 +1,3 @@
-import $ from 'jquery'
 
 import { render } from 'Dashboard/chart'
 import { toast, hideToast } from 'utilities/toast'

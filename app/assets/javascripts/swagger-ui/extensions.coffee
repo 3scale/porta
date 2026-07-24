@@ -22,7 +22,7 @@ class ThreeScaleAutoComplete
     $(document).on "focus","input[data-threescale-name]", (event)=>
       @currentField = $(event.currentTarget)
       type = @currentField.attr("data-threescale-name")
-      return false if $.trim(type) is ""
+      return false if type.trim() is ""
       @currentTip = if +ThreeScaleAutoComplete.DataStatus is 401 then $(".apidocs-param-tips.apidocs-signin-message") else $(".apidocs-param-tips."+type)
       pos = @getPosition()
       @currentTip.css({top:pos[0], left:pos[1]}).fadeIn("fast")

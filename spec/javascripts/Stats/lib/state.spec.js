@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import $ from 'jquery'
 import MockDate from 'mockdate'
 
 import { CustomRangeDate, PeriodRangeDate, StatsState } from 'Stats/lib/state'
@@ -38,19 +37,17 @@ describe('StatsState', () => {
     expect(JSON.stringify(statsState.state)).toBe(JSON.stringify(state))
   })
 
-  // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
-  it('should trigger the right events when setting the state', () => {
+  it('should trigger the given topics when setting the state', () => {
     const statsState = new StatsState(fakeStore)
-    const state = { jesus: 'you dont fu*ck with the jaysus!' }
-    const topics = ['jesus']
+    const triggerHandler = jest.spyOn($(statsState), 'triggerHandler')
 
-    const fakeFunction = jest.fn()
-    statsState.fakeFunction = fakeFunction
-    $(statsState).on('jesus', statsState.fakeFunction)
+    statsState.setState({ foo: 'bar' }, ['refresh', 'redraw'])
 
-    statsState.setState(state, topics)
+    expect(triggerHandler).toHaveBeenCalledWith('refresh')
+    expect(triggerHandler).toHaveBeenCalledWith('redraw')
+    expect(triggerHandler).toHaveBeenCalledTimes(2)
 
-    expect(fakeFunction).toHaveBeenCalled()
+    triggerHandler.mockRestore()
   })
 
   it('should return the right state when loading from store', () => {
@@ -66,16 +63,28 @@ describe('StatsState', () => {
     expect(statsState.state).toEqual({ dateRange: dataRange })
   })
 
-  // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
-  it('should call setState when navigation event was triggered with the rigth params', () => {
+  it('should call setState when navigation event was triggered with the right params', () => {
+    const onSpy = jest.spyOn($(fakeStore), 'on')
     const statsState = new StatsState(fakeStore)
     const stubbedState = { milonga: true }
     jest.spyOn(statsState, 'setState')
     jest.spyOn(statsState, 'getStoredState').mockReturnValue(stubbedState)
 
-    $(statsState.store).triggerHandler('navigation')
+    const navigationCallback = onSpy.mock.calls.find(([event]) => event === 'navigation')?.[1]
+    navigationCallback()
 
     expect(statsState.setState).toHaveBeenCalledWith(stubbedState, ['refresh'], false)
+
+    onSpy.mockRestore()
+  })
+
+  it('should not save to store when store param is false', () => {
+    const statsState = new StatsState(fakeStore)
+    save.mockClear()
+
+    statsState.setState({ dateRange: { period: { number: 1, unit: 'day' } } }, ['refresh'], false)
+
+    expect(save).not.toHaveBeenCalled()
   })
 
   describe('State Date', () => {
