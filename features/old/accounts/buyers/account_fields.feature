@@ -46,6 +46,18 @@ Feature: Buyer side, account fields
        And I press "Update"
      Then I should see "The account information was updated."
 
+  Scenario: Read-only extra fields are ignored on update
+    Given I log in as "bob" on foo.3scale.localhost
+    And provider "foo.3scale.localhost" has the field "non_editable" for accounts as editable
+    Then I go to the account edit page
+    And provider "foo.3scale.localhost" has the field "non_editable" for accounts as read only
+    And the form is submitted with:
+      | Required field | value  |
+      | False field    |        |
+      | Choices field  |      3 |
+      | Non editable   | edited |
+    Then I should see "The account information was updated."
+    Then I should not see "Non editable"
 
   Scenario: Viewing account with extra fields
     #TODO ugly table change this

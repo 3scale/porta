@@ -35,7 +35,7 @@ class DeveloperPortal::Admin::AccountsController < DeveloperPortal::BaseControll
   private
 
   def account_params
-    params.require(:account)
+    filter_readonly_params(params.require(:account), Account)
   end
 
   def find_countries
