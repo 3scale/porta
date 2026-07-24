@@ -71,13 +71,7 @@ gem 'formtastic', '~> 5.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 gem 'json', '~> 2.7', '>= 2.7.1'
 gem 'responders', '~> 3.2' # For respond_with support
-# uri >= 1.0.0 switched the default parser from RFC2396 to RFC3986 (ruby/uri#107),
-# removed URI::DEFAULT_PARSER, dropped URI.decode, and the RFC3986 parser has no
-# `registry` component. We rely on all of these across models (Proxy, ProxyRule,
-# WebHook, AuthenticationProvider) and controllers. Upgrading is worthwhile but
-# requires careful inspection of every call-site and should be deployed/tested
-# separately from the Faraday update.
-gem 'uri', '< 1.0.0'
+gem 'uri', '~> 1.0'
 
 gem 'mysql2', '~> 0.5.3'
 
