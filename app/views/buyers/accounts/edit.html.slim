@@ -7,6 +7,7 @@
 
 - content_for :javascripts do
   = stylesheet_packs_chunks_tag 'pf_form'
+  = javascript_packs_with_chunks_tag 'admin_domain_confirmation'
 
 div class="pf-c-card"
   div class="pf-c-card__body"
@@ -14,6 +15,10 @@ div class="pf-c-card"
                         url: admin_buyers_account_path(@account),
                         html: { class: 'pf-c-form pf-m-limit-width' } do |form|
       = form.user_defined_form
+
+      - if current_account.master? && @account.provider?
+        = form.input :self_domain, as: :patternfly_input, label: 'Admin domain'
+        div#admin-domain-confirmation-container
 
       = form.actions do
         = form.commit_button 'Update Account'

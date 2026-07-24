@@ -34,7 +34,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     end
 
     # returns the right data
-    json_response = JSON.parse(response.body)
+    json_response = response.parsed_body
     assert_equal account.id, json_response.dig('signup', 'account', 'id')
 
     # creates the main user with its right attributes
@@ -96,13 +96,13 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
   test '#create returns the right errors when account validation fails' do
     post master_api_providers_path, params: signup_params({ org_name: '' })
     assert_response :unprocessable_entity
-    assert_contains JSON.parse(response.body).dig('errors', 'account'), 'Domain can\'t be blank'
+    assert_contains response.parsed_body.dig('errors', 'account'), 'Domain can\'t be blank'
   end
 
   test '#create returns the right errors when user validation fails for json' do
     post master_api_providers_path, params: signup_params({ email: '' })
     assert_response :unprocessable_entity
-    assert_contains JSON.parse(response.body).dig('errors', 'user'), 'Email should look like an email address'
+    assert_contains response.parsed_body.dig('errors', 'user'), 'Email should look like an email address'
   end
 
   test 'signup with non-matching password fails' do
@@ -110,7 +110,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
       post master_api_providers_path(format: :json), params: signup_params.merge({ password_confirmation: 'non-matching-password' })
 
       assert_response :unprocessable_entity
-  
+
       errors = response.parsed_body[:errors]
       assert_equal ["Users invalid"], errors[:account]
       assert_equal ["Password confirmation doesn't match Password"], errors[:user]
@@ -149,7 +149,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
       token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
       post master_api_providers_path, params: signup_params({ access_token: token.plaintext_value }).except(:api_key)
       assert_response :forbidden
-      assert_equal 'Your access token does not have the correct permissions', JSON.parse(response.body)['error']
+      assert_equal 'Your access token does not have the correct permissions', response.parsed_body['error']
     end
   end
 
@@ -213,6 +213,80 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_equal 'suspended',                                     provider.state
   end
 
+  test '#update self_domain successfully' do
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    new_domain = "new-admin.#{ThreeScale.config.superdomain}"
+
+    put master_api_provider_path(provider, format: :json), params: {
+      account: { self_domain: new_domain },
+      access_token: token.plaintext_value
+    }
+    assert_response :ok
+
+    assert_equal new_domain, provider.reload.internal_admin_domain
+    assert_equal new_domain, response.parsed_body.dig('signup', 'account', 'admin_domain')
+  end
+
+  test '#update self_domain fails with duplicate domain' do
+    provider_one = FactoryBot.create(:provider_account, provider_account: master_account)
+    provider_two = FactoryBot.create(:provider_account, provider_account: master_account)
+    user  = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+
+    put master_api_provider_path(provider_two, format: :json), params: {
+      account: { self_domain: provider_one.internal_admin_domain },
+      access_token: token.plaintext_value
+    }
+    assert_response :unprocessable_entity
+    assert_not_equal provider_one.internal_admin_domain, provider_two.reload.internal_admin_domain
+  end
+
+  test '#update self_domain fails with uppercase domain' do
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    original_domain = provider.internal_admin_domain
+
+    put master_api_provider_path(provider, format: :json), params: {
+      account: { self_domain: 'UPPERCASE-ADMIN.example.com' },
+      access_token: token.plaintext_value
+    }
+    assert_response :unprocessable_entity
+    assert_equal original_domain, provider.reload.internal_admin_domain
+  end
+
+  test '#update self_domain is blocked when provider is scheduled_for_deletion' do
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    original_domain = provider.internal_admin_domain
+    provider.schedule_for_deletion!
+
+    put master_api_provider_path(provider, format: :json), params: {
+      account: { self_domain: "new-admin.#{ThreeScale.config.superdomain}", state_event: 'resume' },
+      access_token: token.plaintext_value
+    }
+    assert_response :ok
+    assert_equal original_domain, provider.reload.internal_admin_domain
+  end
+
+  test '#update self_domain publishes domain change event' do
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    new_domain = "new-admin.#{ThreeScale.config.superdomain}"
+
+    Domains::ProviderDomainsChangedEvent.expects(:create_and_publish!).once
+
+    put master_api_provider_path(provider, format: :json), params: {
+      account: { self_domain: new_domain },
+      access_token: token.plaintext_value
+    }
+    assert_response :ok
+  end
+
   test '#update can only resume when the account is scheduled_for_deletion' do
     provider = FactoryBot.create(:provider_account, provider_account: master_account)
     user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
@@ -270,7 +344,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     delete master_api_provider_path(provider, access_token: token.plaintext_value, format: :json)
     assert_response :forbidden
-    assert_equal 'Your access token does not have the correct permissions', JSON.parse(response.body)['error']
+    assert_equal 'Your access token does not have the correct permissions', response.parsed_body['error']
   end
 
   test '#show' do
@@ -280,7 +354,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     get master_api_provider_path(provider, access_token: token.plaintext_value, format: :json)
 
     assert_response :ok
-    assert_equal provider.reload.id, JSON.parse(response.body).dig('signup', 'account', 'id')
+    assert_equal provider.reload.id, response.parsed_body.dig('signup', 'account', 'id')
   end
 
   private

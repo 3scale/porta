@@ -110,6 +110,7 @@ class Buyers::AccountsController < Buyers::BaseController
     defined_builtin_fields_names = current_account.defined_builtin_fields_names_for(Account)
     defined_extra_fields_names = current_account.defined_extra_fields_names_for(Account)
     allowed_attrs = defined_builtin_fields_names - %w[billing_address country] + %w[country_id]
+    allowed_attrs << %w[self_domain] if current_account.master? && account.provider?
     params.require(:account).permit(*allowed_attrs, extra_fields: defined_extra_fields_names)
   end
 

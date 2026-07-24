@@ -384,6 +384,35 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       refute_xpath( './/div[@id="applications_widget"]//table[@class="list"]//tr', /plan/i )
     end
 
+    test 'master can update self_domain of a provider account' do
+      new_domain = "new-admin.#{ThreeScale.config.superdomain}"
+      put admin_buyers_account_path(@provider), params: { account: { self_domain: new_domain } }
+      assert_redirected_to admin_buyers_account_path(@provider)
+      assert_equal new_domain, @provider.reload.internal_admin_domain
+    end
+
+    test 'master sees self_domain field on provider edit page' do
+      get edit_admin_buyers_account_path(@provider)
+      assert_response :success
+      assert_select 'input[name="account[self_domain]"]'
+    end
+
+    test 'self_domain field is not shown for non-provider buyer accounts' do
+      provider = FactoryBot.create(:provider_account)
+      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      login! provider
+      get edit_admin_buyers_account_path(buyer)
+      assert_response :success
+      assert_select 'input[name="account[self_domain]"]', false
+    end
+
+    test 'self_domain update with invalid value re-renders edit form' do
+      original_domain = @provider.internal_admin_domain
+      put admin_buyers_account_path(@provider), params: { account: { self_domain: 'INVALID-UPPERCASE.example.com' } }
+      assert_response :success
+      assert_equal original_domain, @provider.reload.internal_admin_domain
+    end
+
     test 'suspend button is displayed only when account is not deleted or marked for deletion' do
       ThreeScale.config.stubs(onpremises: false)
       get admin_buyers_account_path(@provider)

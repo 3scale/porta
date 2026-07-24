@@ -129,6 +129,15 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     assert_equal "master.#{ThreeScale.config.superdomain}", account.internal_admin_domain
   end
 
+  test '#self_domain can be updated on an existing provider' do
+    provider = FactoryBot.create(:simple_provider)
+    new_domain = "new-admin.#{ThreeScale.config.superdomain}"
+
+    provider.self_domain = new_domain
+    assert provider.save
+    assert_equal new_domain, provider.reload.internal_admin_domain
+  end
+
   test '#publish_domain_events when domain changes' do
     provider = FactoryBot.create(:simple_provider)
     provider.expects(:publish_domain_events).once
