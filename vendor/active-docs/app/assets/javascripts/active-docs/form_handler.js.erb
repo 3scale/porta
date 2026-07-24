@@ -313,10 +313,9 @@
   */
   function getPath(){
     var params = $form.find('[data-param-type=path]').serializeObject(),
-        template_text = $form.attr('data-path').split("{").join("${"),
-        urlTemplate = $.template(null, template_text),
+        template_text = $form.attr('data-path').split("{").join("{{").split("}").join("}}"),
         root = pathname(),
-        path = $.tmpl(urlTemplate, params)[0].data;
+        path = Handlebars.compile(template_text)(params);
 
     //  last char of root and first char of path are a slash
     if( root.charAt(root.length - 1) === '/' && path.charAt(0) === '/') {
