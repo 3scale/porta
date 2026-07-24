@@ -9,8 +9,8 @@ module DeveloperPortal
 
       test 'filters out read-only fields' do
         account = FactoryBot.create(:simple_provider)
-        ro_fields = FactoryBot.create_list(:fields_definition, 2, account:, read_only: true)
-        FactoryBot.create_list(:fields_definition, 3, account:)
+        ro_fields = FactoryBot.create_list(:fields_definition, 2, account: account, read_only: true)
+        FactoryBot.create_list(:fields_definition, 3, account: account)
         params = account.fields_definitions.each_with_object({}) { |fd, p| p[fd.name]=SecureRandom.hex }
         TestController.any_instance.expects(:site_account).returns(account)
 

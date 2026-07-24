@@ -16,8 +16,8 @@ module DeveloperPortal
 
       test 'filters out read-only fields' do
         account = FactoryBot.create(:simple_provider)
-        ro_fields = FactoryBot.create_list(:fields_definition, 2, account:, read_only: true)
-        editable_fields = FactoryBot.create_list(:fields_definition, 3, account:)
+        ro_fields = FactoryBot.create_list(:fields_definition, 2, account: account, read_only: true)
+        editable_fields = FactoryBot.create_list(:fields_definition, 3, account: account)
 
         ro_params = fields_to_hash(ro_fields)
         editable_params = fields_to_hash(editable_fields)
