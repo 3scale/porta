@@ -1110,6 +1110,14 @@ en:
       edit: &account_delete_msg
         schedule_for_deletion_confirmation: "Scheduling a tenant account for deletion means it will be permanently deleted in %{deletion_time_left}. At that time all its users, services, plans and developer accounts subscribed to it will be deleted too. Are you sure you want to schedule the account '%{name}' for deletion on %{deletion_date}?"
         delete_confirmation: Are you sure you want to delete '%{name}'?
+        admin_domain_confirm_title: Change admin portal domain?
+        admin_domain_confirm_intro: "Changing the admin domain has the following side effects:"
+        admin_domain_confirm_ssl_html: "<strong>SSL certificate</strong> — The new domain requires a valid certificate."
+        admin_domain_confirm_sessions_html: "<strong>Active sessions</strong> — All sessions on the old domain will be invalidated."
+        admin_domain_confirm_emails_html: "<strong>Email links</strong> — Already sent links will point to the old domain."
+        admin_domain_confirm_sso_html: "<strong>Provider Admin SSO</strong> — Callback URLs must be updated manually."
+        admin_domain_confirm_submit: Confirm
+        admin_domain_confirm_cancel: Cancel
         delete:
           admin_restricted: 'Only administrators can delete accounts. Contact your administrator %{admin}'
       search_results: *account_delete_msg

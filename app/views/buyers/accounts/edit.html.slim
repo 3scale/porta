@@ -7,7 +7,6 @@
 
 - content_for :javascripts do
   = stylesheet_packs_chunks_tag 'pf_form'
-  = javascript_packs_with_chunks_tag 'admin_domain_confirmation'
 
 div class="pf-c-card"
   div class="pf-c-card__body"
@@ -18,8 +17,34 @@ div class="pf-c-card"
 
       - if current_account.master? && @account.provider?
         = form.input :self_domain, as: :patternfly_input, label: 'Admin domain'
-        div#admin-domain-confirmation-container
 
       = form.actions do
         = form.commit_button 'Update Account'
         = delete_buyer_link(@account)
+
+- if current_account.master? && @account.provider?
+  javascript:
+    (function() {
+      var domainInput = document.getElementById('account_self_domain');
+      var form = domainInput && domainInput.closest('form');
+      if (!domainInput || !form) return;
+      var initialDomain = domainInput.value;
+      var domainChanged = false;
+      var confirmHtml = #{json render('admin_domain_confirm')};
+
+      domainInput.addEventListener('input', function() {
+        domainChanged = (domainInput.value !== initialDomain);
+      });
+
+      form.addEventListener('submit', function(e) {
+        if (!domainChanged) return;
+        e.preventDefault();
+        $.colorbox({ html: confirmHtml, title: #{json t('buyers.accounts.edit.admin_domain_confirm_title') }});
+      });
+
+      $(document).on('click', '#admin-domain-confirm-btn', function() {
+        $.colorbox.close();
+        domainChanged = false;
+        form.submit();
+      });
+    })()
