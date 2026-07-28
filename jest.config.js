@@ -90,6 +90,7 @@ module.exports = {
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
+    '^jquery-ui/.*$': '<rootDir>/spec/javascripts/__mocks__/jquery-ui.js',
     'c3': '<rootDir>/__mocks__/c3.js',
     '\\.(css|less|sass|scss)$': '<rootDir>/spec/javascripts/__mocks__/styleMock.js',
     '\\.(gif|ttf|eot|png|svg)$': '<rootDir>/spec/javascripts/__mocks__/fileMocks.js',

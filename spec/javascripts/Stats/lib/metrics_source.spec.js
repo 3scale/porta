@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable @typescript-eslint/no-invalid-this */
-import $ from 'jquery'
-
 import { StatsMetricsSource } from 'Stats/lib/metrics_source'
 
 const source = new StatsMetricsSource({ id: 42, details: { id: 8, system_name: 'slartibarfast' } })
