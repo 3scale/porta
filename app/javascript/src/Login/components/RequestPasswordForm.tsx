@@ -19,7 +19,7 @@ interface Props {
   alerts: IAlert[];
   providerLoginPath: string;
   providerPasswordPath: string;
-  recaptcha: {
+  readonly recaptcha: {
     enabled: boolean;
     siteKey: string;
     action: string;
