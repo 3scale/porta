@@ -7,6 +7,40 @@ Feature: Provider password reset
   Background:
     Given a provider
 
+  Rule: ReCAPTCHA protects from bots
+
+    @recaptcha
+    Scenario: Captcha is disabled
+      Given the provider has bot protection disabled
+      When they go to the provider reset password page
+      Then the captcha is not present
+
+    @recaptcha
+    Scenario: Captcha is enabled
+      Given the provider has bot protection enabled
+      When they go to the provider reset password page
+      Then the captcha is present
+
+    @recaptcha
+    Scenario: Bot protection rejects the request
+      Given the provider has bot protection enabled
+      And the client will be marked as a bot
+      And an active user "Pepe" of account "foo.3scale.localhost" with email "pepe@example.com"
+      When they go to the provider reset password page
+      And they fill in "Email" with "pepe@example.com"
+      And press "Reset password"
+      Then they should see "reCAPTCHA verification failed, please try again."
+
+    @recaptcha
+    Scenario: Bot protection allows the request
+      Given the provider has bot protection enabled
+      And the client will not be marked as a bot
+      And an active user "Pepe" of account "foo.3scale.localhost" with email "pepe@example.com"
+      When they go to the provider reset password page
+      And they fill in "Email" with "pepe@example.com"
+      And press "Reset password"
+      Then they should see "We sent an email with password reset instructions to: pepe@example.com"
+
   Rule: On master domain
 
     Background:
