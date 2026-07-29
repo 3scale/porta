@@ -52,6 +52,45 @@ class Provider::PasswordsControllerIntegrationTest < ActionDispatch::Integration
     end
   end
 
+  class WithBotProtectionTest < Provider::PasswordsControllerIntegrationTest
+    def setup
+      @user = FactoryBot.create(:simple_user)
+      host! @user.account.internal_admin_domain
+      Recaptcha.stubs(:captcha_configured?).returns(true)
+      Recaptcha.stubs(:skip_env?).returns(false)
+      Recaptcha.stubs(:invalid_response?).returns(false)
+    end
+
+    test 'destroy renders reset page with error when bot protection detects spam' do
+      @user.account.settings.update(admin_bot_protection_level: :captcha)
+      Recaptcha.stubs(:verify_via_api_call).returns([false, {}])
+
+      delete provider_password_path(email: @user.email)
+
+      assert_response :success
+      assert_match 'reCAPTCHA verification failed, please try again.', response.body
+    end
+
+    test 'destroy sends password reset when bot check passes' do
+      @user.account.settings.update(admin_bot_protection_level: :captcha)
+      Recaptcha.stubs(:verify_via_api_call).returns([true, {}])
+
+      delete provider_password_path(email: @user.email)
+
+      assert_match "We sent an email with password reset instructions to: #{@user.email}", flash[:success]
+      assert_redirected_to provider_login_path
+    end
+
+    test 'destroy works normally when bot protection is disabled' do
+      @user.account.settings.update(admin_bot_protection_level: :none)
+
+      delete provider_password_path(email: @user.email)
+
+      assert_match "We sent an email with password reset instructions to: #{@user.email}", flash[:success]
+      assert_redirected_to provider_login_path
+    end
+  end
+
   class WithMasterUserTest < Provider::PasswordsControllerIntegrationTest
     test '#destroy does not work for master account' do
       login_provider master_account
