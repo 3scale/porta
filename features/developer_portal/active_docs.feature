@@ -33,7 +33,7 @@ Feature: ActiveDocs
     And they should see "Say Hello!"
     And they should see "/hello"
 
-  Scenario: Loading ActiveDocs 1.0 with Swagger 1.2 spec
+  Scenario: Loading Swagger 1.2
     Given the product has a Swagger 1.2 spec "Echo"
     And the provider has cms page "/version-12" with:
       """
