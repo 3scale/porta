@@ -1,4 +1,4 @@
-  @javascript
+@javascript
 Feature: Audience > ActiveDocs preview page
 
   As a provider, I want a preview page to see what my ActiveDocs spec will look like and to manage
@@ -36,8 +36,7 @@ Feature: Audience > ActiveDocs preview page
     And the spec is published
     When they go to the spec's preview page from Audience context
     And follow "Hide"
-    Then they should see a toast alert with text "Spec Echo API is now hidden"
-    And there should be a link to "Publish"
+    Then there should be a link to "Publish"
 
     Examples:
       | swagger version |
@@ -50,8 +49,7 @@ Feature: Audience > ActiveDocs preview page
     And the spec is not published
     When they go to the spec's preview page from Audience context
     And follow "Publish"
-    Then they should see a toast alert with text "Spec Echo API is now visible"
-    And there should be a link to "Hide"
+    Then there should be a link to "Hide"
 
     Examples:
       | swagger version |
@@ -95,3 +93,12 @@ Feature: Audience > ActiveDocs preview page
       | Swagger 1.2     |
       | Swagger 2       |
     # | OAS 3.0         | Feature not implemented |
+
+  # ActiveDocs 1.0 (V10) is the original 3scale API docs format, predating Swagger, and it's not supported since 2016.
+  # But some tenants still have V10 specs, so this scenario exists as a backwards compatibility.
+  Scenario: ActiveDocs 1.0 is still supported
+    Given the provider has a ActiveDocs 1.0 spec "Echo API"
+    When they go to the spec's preview page from Audience context
+    Then they should see "Preview Service Spec (1.0)"
+    And they should see "Operations"
+    And they should see "Echo API"

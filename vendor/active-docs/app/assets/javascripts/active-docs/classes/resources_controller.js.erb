@@ -69,7 +69,7 @@
 
       function toLoad(api){
         if(apis.length === 0) return true;
-        return $.inArray(api.system_name, apis) == -1 ? false : true;
+        return apis.indexOf(api.system_name) !== -1;
       }
 
       /**
