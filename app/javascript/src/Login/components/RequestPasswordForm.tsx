@@ -10,6 +10,7 @@ import {
 import { validateRequestPassword } from 'Login/utils/validations'
 import { CSRFToken } from 'utilities/CSRFToken'
 import { LoginAlert } from 'Login/components/LoginAlert'
+import { ReCaptchaV3 } from 'utilities/ReCaptchaV3'
 
 import type { IAlert } from 'Types'
 import type { FunctionComponent } from 'react'
@@ -18,12 +19,18 @@ interface Props {
   alerts: IAlert[];
   providerLoginPath: string;
   providerPasswordPath: string;
+  recaptcha: {
+    enabled: boolean;
+    siteKey: string;
+    action: string;
+  };
 }
 
 const RequestPasswordForm: FunctionComponent<Props> = ({
   alerts,
   providerLoginPath,
-  providerPasswordPath
+  providerPasswordPath,
+  recaptcha
 }) => {
   const [email, setEmail] = useState('')
   const [validationVisibility, setValidationVisibility] = useState(false)
@@ -77,6 +84,7 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
           onChange={handleOnChange}
         />
       </FormGroup>
+      {recaptcha.enabled && <ReCaptchaV3 action={recaptcha.action} siteKey={recaptcha.siteKey} /> }
 
       <ActionGroup>
         <Button

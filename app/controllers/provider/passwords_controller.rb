@@ -1,4 +1,5 @@
 class Provider::PasswordsController < FrontendController
+  include ThreeScale::BotProtection::Controller
 
   skip_before_action :login_required, only: %i[destroy show update reset]
   before_action :find_provider
@@ -15,6 +16,12 @@ class Provider::PasswordsController < FrontendController
   end
 
   def destroy
+    unless bot_check
+      @bot_protection_enabled = bot_protection_enabled?
+      render :action => 'reset'
+      return
+    end
+
     reset_session_password_token
     if (user = @provider.users.find_by(email: email))
       user.generate_lost_password_token!
@@ -42,6 +49,7 @@ class Provider::PasswordsController < FrontendController
   end
 
   def reset
+    @bot_protection_enabled = bot_protection_enabled?
     redirect_to provider_admin_dashboard_url if logged_in?
   end
 
@@ -89,5 +97,9 @@ class Provider::PasswordsController < FrontendController
 
   def password_params
     params.permit(:password_reset_token, user: %i[password password_confirmation])
+  end
+
+  def bot_protection_level
+    domain_account.settings.admin_bot_protection_level
   end
 end
