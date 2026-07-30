@@ -3,6 +3,7 @@
 
 - content_for :javascripts do
   = javascript_packs_with_chunks_tag 'site_emails_edit'
+  = stylesheet_packs_chunks_tag 'pf_spacing'
 
 - if readonly_dns_domains?
   - content_for :page_header_alert do

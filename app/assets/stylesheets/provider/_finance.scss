@@ -1,8 +1,8 @@
-@use 'provider/layouts/main' as *;
 @use 'provider/typography' as *;
+@use 'utils';
 
 ul#actions li form.button-to {
-  @include white-box-shadow;
+  @include utils.white-box-shadow;
 
   display: block;
   padding: line-height-times(1);

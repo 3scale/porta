@@ -1,8 +1,8 @@
-@use 'provider/layouts/main' as *;
 @use 'provider/typography' as *;
+@use 'utils';
 
 div.dashboard_card {
-  @include white-box-shadow;
+  @include utils.white-box-shadow;
 
   border: 0;
   padding: line-height-times(1);

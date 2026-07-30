@@ -45,11 +45,6 @@ table.contract_table {
     }
   }
 
-  td.selected strong {
-    background: $light-background-color;
-    padding: line-height-times(0.125);
-  }
-
   table.usage_table {
     th,
     td {
@@ -82,7 +77,7 @@ table.contract_table {
     &.selected {
       color: $font-color;
       font-weight: $font-weight-bold;
-      border-bottom: $border-width solid $background-color-base;
+      border-bottom: $border-width solid $body-background;
       border-left: $border-width solid $border-color;
       border-right: $border-width solid $border-color;
     }
@@ -122,7 +117,7 @@ table.contract_table {
   tbody tr td {
     /* stylelint-disable-next-line no-descending-specificity -- FIXME */
     &:last-child {
-      border-top: 1px solid $altoGray;
+      border-top: 1px solid var(--pf-global--BorderColor--100);
       padding-right: line-height-times(1);
     }
 

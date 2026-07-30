@@ -5,5 +5,5 @@ div class="pf-c-card"
     = render 'stats/inlinechart', metrics: service.top_metrics
   div class="pf-c-card__footer"
     = pf_link_to t('shared.view_more'), admin_service_stats_usage_path(service),
-                                        class: 'pf-m-inline',
+                                        inline: true,
                                         title: t('.view_more')

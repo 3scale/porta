@@ -3,7 +3,7 @@
   = link_to @authentication_provider.human_kind,
       provider_admin_authentication_provider_path(@authentication_provider)
 
-- content_for :javascripts
+- content_for :javascripts do
   = stylesheet_packs_chunks_tag 'pf_form'
 
 div class="pf-c-card"

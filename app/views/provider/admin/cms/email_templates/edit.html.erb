@@ -2,7 +2,10 @@
 
 <% content_for :page_header_title, "Edit template #{@page.name}" %>
 
-<%= javascript_packs_with_chunks_tag 'cms', 'pf_spacing' %>
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'cms' %>
+  <%= stylesheet_packs_chunks_tag 'pf_spacing' %>
+<% end %>
 
 <%= cms_form_for(@page) do |f| %>
   <%= render 'form', :f => f %>
@@ -16,7 +19,7 @@
       </li>
     </ul>
 
-    <%= f.input :draft, :as => :codemirror, :value => f.object.current %>
+    <%= f.input :draft, as: :codemirror, label: false, value: f.object.current %>
   </div>
 
   <%= render 'buttons', f: f %>

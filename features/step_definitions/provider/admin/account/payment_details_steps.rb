@@ -46,7 +46,7 @@ Given "an admin has already set the provider's payment details" do
 end
 
 Then "the provider's payment details {can} be added" do |will_be_added|
-  click_on 'Add Payment Details'
+  click_on 'Add payment details'
 
   if will_be_added
     fill_in_braintree_form
@@ -60,7 +60,7 @@ Then "the provider's payment details {can} be added" do |will_be_added|
 end
 
 Then "the provider's payment details can be added only after completing account information" do
-  click_on 'Add Payment Details'
+  click_on 'Add payment details'
 
   assert_text 'Edit Account Details'
   assert_match 'next_step=credit_card', current_url
@@ -100,7 +100,7 @@ But "there is a customer id mismatch" do
 end
 
 Then "the provider's payment details can't be stored because the card number is invalid" do
-  click_on 'Add Payment Details'
+  click_on 'Add payment details'
   fill_in_braintree_form
   click_on 'Save credit card'
 
@@ -110,7 +110,7 @@ Then "the provider's payment details can't be stored because the card number is 
 end
 
 Then "the provider's payment details can't be stored because something went wrong" do
-  click_on 'Add Payment Details'
+  click_on 'Add payment details'
   fill_in_braintree_form
   click_on 'Save credit card'
 
@@ -124,8 +124,8 @@ Then "an admin can remove the provider's payment details" do
   accept_confirm('Are you sure?')
   assert_flash 'Your credit card was successfully removed'
 
-  within '.SettingsBox' do
-    assert_content 'Add Payment Details'
+  within '.pf-c-empty-state' do
+    assert_content 'Add payment details'
   end
 end
 

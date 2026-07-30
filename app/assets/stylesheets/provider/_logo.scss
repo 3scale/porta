@@ -1,6 +1,6 @@
-@use 'provider/layouts/main' as *;
 @use 'provider/typography' as *;
 @use 'sass:math';
+@use 'utils';
 
 .logo-3scale {
   position: relative;
@@ -43,7 +43,7 @@
 }
 
 #logo_container {
-  @include white-box-shadow;
+  @include utils.white-box-shadow;
 
   padding: line-height-times(1);
 

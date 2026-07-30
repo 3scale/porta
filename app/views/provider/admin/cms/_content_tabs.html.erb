@@ -18,11 +18,11 @@
   </ul>
 
   <div id="cms-template-draft" class="cms-template-content-tab" >
-    <%= f.input :draft, :as => :codemirror, :input_html => { :value => f.object.current } %>
+    <%= f.input :draft, as: :codemirror, label: false, input_html: { value: f.object.current } %>
   </div>
 
   <div id="cms-template-live" class="cms-template-content-tab">
-    <%= f.input :published, :as => :codemirror, :options => {:readOnly => true} %>
+    <%= f.input :published, as: :codemirror, label: false, options: { readOnly: true } %>
   </div>
 </div>
 

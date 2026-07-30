@@ -115,12 +115,6 @@ module ButtonsHelper
     end
   end
 
-  def pf_link_to(label, url, options = {})
-    variant = options.delete(:variant) || :link
-    options[:class] = join_dom_classes("pf-c-button pf-m-#{variant}", options[:class])
-    link_to label, url, options
-  end
-
   protected
 
   def javascript_alert_url(text)

@@ -1,14 +1,22 @@
 <%= cms_new_button_dropdown(CMS::Page) %>
 
-<%= javascript_packs_with_chunks_tag 'cms_intro_tabs' %>
+<% content_for :javascripts do %>
+  <%= stylesheet_link_tag 'provider/admin/cms/templates' %>
+  <%= javascript_packs_with_chunks_tag 'cms_intro_tabs' %>
+<% end %>
 
 <div id='cms-intro-tabs'>
-  <ul>
-    <li><a href='#quick-links'>Quick Links</a></li>
-    <li><a href='#tips-and-tricks'>Snippets</a></li>
-  </ul>
+  <div class='pf-c-tabs'>
+    <ul class='pf-c-tabs__list'>
+      <li class='pf-c-tabs__item'>
+        <a class='pf-c-tabs__link' href='#quick-links'>Quick Links</a>
+      </li>
+      <li class='pf-c-tabs__item'>
+        <a class="pf-c-tabs__link" href='#tips-and-tricks'>Snippets</a>
+      </li>
+    </ul>
+  </div>
 
   <%= render 'quick_links' %>
   <%= render 'snippets' %>
-
 </div>
