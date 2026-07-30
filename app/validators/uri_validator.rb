@@ -49,6 +49,7 @@ class UriValidator < ActiveModel::EachValidator
     end
 
     attr_reader :uri, :permissions_parts, :accepted_scheme
+
     delegate :host, :scheme, to: :uri
 
     def errors

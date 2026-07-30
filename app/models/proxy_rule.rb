@@ -37,7 +37,7 @@ class ProxyRule < ApplicationRecord
     RESERVED   = ";/?:@&=+$,\\[\\]"
 
     # pchar = unreserved / pct-encoded / ":" / "@" / "&" / "=" / "+" / "," ($ excluded intentionally)
-    param = /
+    PARAM = /
       (?:
         [#{UNRESERVED}:@&=+,] # note that $ is in the RFC but is removed for our purpposes
         |
@@ -47,16 +47,16 @@ class ProxyRule < ApplicationRecord
       )*
     /x
 
-    segment = /
-      #{param}
-      (?:;#{param})*
+    SEGMENT = /
+      #{PARAM}
+      (?:;#{PARAM})*
     /x
 
     REGEX_PATH = %r{
-      /#{segment}(?:/#{segment})* # normal URI path segments like /foo/bar
+      /#{SEGMENT}(?:/#{SEGMENT})* # normal URI path segments like /foo/bar
     }x
 
-    query = /
+    QUERY = /
       (?:
         [#{UNRESERVED}#{RESERVED}]
         |
@@ -69,7 +69,7 @@ class ProxyRule < ApplicationRecord
     ABSOLUTE_PATH = /\A
       #{REGEX_PATH} # absolute path
       [$]? # optionally forcing to match the end of path
-      (?:\?(?:#{query}))? # optionally followed by a query string
+      (?:\?(?:#{QUERY}))? # optionally followed by a query string
     \Z/x
 
     def initialize
