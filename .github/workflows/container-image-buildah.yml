@@ -35,7 +35,7 @@ jobs:
       #    platforms: ${{ inputs.platforms }}
 
       - name: Log in to Red Hat Registry
-        uses: redhat-actions/podman-login@v1
+        uses: redhat-actions/podman-login@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.QUAY_USER_NAME }}
