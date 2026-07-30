@@ -39,11 +39,11 @@ div class="pf-c-card"
       form.addEventListener('submit', function(e) {
         if (!domainChanged) return;
         e.preventDefault();
-        $.colorbox({ html: confirmHtml, title: #{json t('buyers.accounts.edit.admin_domain_confirm_title') }});
+        colorbox({ html: confirmHtml, title: #{json t('buyers.accounts.edit.admin_domain_confirm_title') }});
       });
 
       $(document).on('click', '#admin-domain-confirm-btn', function() {
-        $.colorbox.close();
+        colorbox.close();
         domainChanged = false;
         form.submit();
       });
