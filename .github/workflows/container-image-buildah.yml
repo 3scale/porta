@@ -59,7 +59,7 @@ jobs:
 
       - name: Build image
         id: build-image
-        uses: redhat-actions/buildah-build@v2
+        uses: redhat-actions/buildah-build@v3
         with:
           tags: ${{ steps.meta.outputs.tags }}
           # enable platforms once base image has them
