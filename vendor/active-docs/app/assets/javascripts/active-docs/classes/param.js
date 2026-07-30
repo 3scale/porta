@@ -68,11 +68,11 @@
     toTemplate: function(){
       var that = this, tmpl, $container;
 
-      tmpl = $.template(null, global.templates[this.templateName()]);
+      var compiled = Handlebars.compile(global.templates[this.templateName()]);
       if(this.hasParent()) $container = $('tbody[data-guid='+this.parent.guid+']');
       else $container = $('#' + this.container_id);
 
-      $.tmpl(tmpl, this).appendTo($container);
+      $container.append(compiled(this));
 
       // Array param types contain nested params!
       if(this.dataType == 'array' || this.dataType == 'hash'){

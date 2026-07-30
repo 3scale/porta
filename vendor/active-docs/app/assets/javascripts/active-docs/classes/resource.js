@@ -12,11 +12,8 @@
 
   Resource.prototype = {
     toTemplate: function(){
-      var tmpl = $.template(null, global.templates.resourceTemplate);
-      $.tmpl(tmpl, this.config).appendTo($('#apidocs-resources'));
-
-      tmpl = $.template(null, global.templates.apiTemplate);
-      $.tmpl(tmpl, this.config).appendTo($('#'+this.config.name+'_endpoint_list'));
+      $('#apidocs-resources').append(Handlebars.compile(global.templates.resourceTemplate)(this.config));
+      $('#'+this.config.name+'_endpoint_list').append(Handlebars.compile(global.templates.apiTemplate)(this.config));
 
       this.getEndpoints();
     },

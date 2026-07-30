@@ -20,6 +20,7 @@ module ApiDocsServiceHelper
 
   def numbered_swagger_version(version)
     {
+      'ActiveDocs 1.0' => '1.0',
       'Swagger 1.2' => '1.2',
       'Swagger 2' => '2.0',
       'OAS 3.0' => '3.0',
