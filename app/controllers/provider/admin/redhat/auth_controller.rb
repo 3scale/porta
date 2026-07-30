@@ -31,7 +31,7 @@ class Provider::Admin::Redhat::AuthController < Provider::AdminController
   def referrer_url
     url = params.permit(:referrer)[:referrer]
     if url
-      URI::RFC2396_PARSER.unescape(url)
+      CGI.unescapeURIComponent(url)
     else
       provider_admin_account_path
     end

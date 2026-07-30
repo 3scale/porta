@@ -269,6 +269,9 @@ class ProxyTest < ActiveSupport::TestCase
 
     @proxy.hostname_rewrite = 'my-own.api.example.net::80'
     refute @proxy.valid?
+
+    @proxy.hostname_rewrite = 'my_proxy.internal'
+    assert @proxy.valid?
   end
 
   test 'backend' do
@@ -342,7 +345,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'api_test_path formats valid' do
-    [  '/', '/i/m/a/lumberjack/42', '/~stuff', '/!not_-here']. each do |path|
+    [  '/', '/i/m/a/lumberjack/42', '/~stuff', '/!not_-here', '/path?key=value&other=123']. each do |path|
       @proxy.api_test_path = path
       @proxy.valid?
       assert_empty @proxy.errors[:api_test_path], "errors found on - #{path}"

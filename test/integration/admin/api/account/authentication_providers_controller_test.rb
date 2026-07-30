@@ -61,10 +61,10 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
     assert_equal ["can't be blank"], JSON.parse(response.body).dig('errors', 'site')
 
     post admin_api_account_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: 'invalid'}))
-    assert_equal ['Invalid URL format'], JSON.parse(response.body).dig('errors', 'site')
+    assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'site')
 
     post admin_api_account_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: '  http://example.com  '}))
-    assert_equal ["can't contain whitespaces"], JSON.parse(response.body).dig('errors', 'site')
+    assert_equal ["invalid", "can't contain whitespaces"], JSON.parse(response.body).dig('errors', 'site')
   end
 
   test '#create ensures provider can use provider_sso' do
