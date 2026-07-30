@@ -33,7 +33,6 @@ exclude_patterns = [
   "**/node_modules/**",
   "**/vendor/**",
   "app/assets/images/**/*",
-  "app/javascript",
   "assets/bundles/*.js",
   "lib/developer_portal/app/assets/stylesheets/**/*",
   "lib/developer_portal/app/views/developer_portal/css/*",
@@ -96,9 +95,52 @@ name = "shellcheck"
 name = "eslint"
 version = "7.32.0"
 package_file = "package.json"
-package_filters = ["eslint", "@typescript-eslint/eslint-plugin", "@typescript-eslint/parser", "typescript"]
 
 [[plugin]]
 name = "stylelint"
 package_file = "package.json"
 package_filters = ["stylelint"]
+
+# WORKAROUND: Install project dependencies before type-aware ESLint rules run.
+#
+# Problem: Qlty Cloud doesn't run `yarn install` in the project root. It installs ESLint and its
+# own plugins into an isolated sandbox (~/.qlty/cache/tools/...), which is enough for basic linting.
+# But TypeScript's type-aware ESLint rules (e.g. @typescript-eslint/no-unsafe-*) use the TypeScript
+# compiler under the hood, and the TS compiler resolves types by walking up from each source file
+# looking for node_modules/. Since there is no node_modules/ in the source tree on Cloud,
+# @types/jquery and other type packages can't be found, which causes hundreds of false positives
+# (every untyped expression cascades into no-unsafe-* errors).
+#
+# Solution: This custom plugin runs `yarn install` via a prepare_script before any linting happens,
+# populating node_modules/ in the project root so the TS compiler can resolve types normally.
+#
+# Why it looks like this:
+# - Qlty has no built-in "run a command before linting" feature. The only mechanism is
+#   prepare_script, which is only available inside a custom plugin definition.
+# - The plugin itself is a no-op (runs `yarn --version`, always passes). Its only purpose is to
+#   trigger the prepare_script.
+# - --frozen-lockfile: don't modify yarn.lock.
+# - --ignore-scripts: skip post-install builds (not needed for type resolution).
+# - --ignore-engines: the sandbox node version may not match the project's engines field, but that
+#   doesn't matter for installing type definitions.
+#
+# If Qlty ever adds native support for pre-linting dependency installation, this entire block can
+# be removed.
+#
+# See: https://qlty.sh/d/qlty-toml (plugin definitions)
+[[plugin]]
+name = "install_node_modules"
+version = "1.22.22"
+
+[plugins.definitions.install_node_modules]
+runtime = "node"
+package = "yarn"
+version_command = "yarn --version"
+file_types = ["javascript", "typescript", "jsx", "tsx"]
+description = "Installs project dependencies before type-aware linting"
+drivers.prepare.script = "yarn --version"
+drivers.prepare.output = "pass_fail"
+drivers.prepare.success_codes = [0]
+drivers.prepare.batch = true
+drivers.prepare.max_batch = 512
+drivers.prepare.prepare_script = "yarn install --frozen-lockfile --ignore-scripts --ignore-engines"
