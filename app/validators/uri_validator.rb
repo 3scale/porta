@@ -5,9 +5,7 @@ class UriValidator < ActiveModel::EachValidator
   DEFAULT_PERMISSIONS_OF_PARTS = {
     port:     true,
     userinfo: false,
-    registry: false,
     path:     false,
-    opaque:   false,
     query:    false,
     fragment: false
   }.freeze
@@ -50,11 +48,11 @@ class UriValidator < ActiveModel::EachValidator
       @accepted_scheme = accepted_scheme
     end
 
-    attr_reader :uri, :permissions_parts, :accepted_scheme, :generic_error_message
+    attr_reader :uri, :permissions_parts, :accepted_scheme
     delegate :host, :scheme, to: :uri
 
     def errors
-      return [generic_error_message] if uri.blank?
+      return [:invalid] if uri.blank?
 
       errors_scheme | errors_host | errors_forbidden_parts
     end

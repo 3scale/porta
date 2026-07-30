@@ -24,9 +24,8 @@ module MessagesHelper
   def hyperlink_urls(text)
     text = h(text)
 
-    text.scan(URI::RFC2396_PARSER.make_regexp(%w(http https))) do
-      #$& contains the whole match of the regural expression
-      url = $&.sub(/\.$/, '').sub(/\:$/,'')
+    text.scan(%r{https?://[^\s)\]>]+}) do
+      url = $&.sub(/[.:]+\z/, '')
       text = text.sub(url, link_to(url, url))
     end
 

@@ -32,13 +32,16 @@ class ProxyRule < ApplicationRecord
     REGEX_LITERAL = /[_\w]+/i
     REGEX_VARIABLE = /\{#{REGEX_LITERAL}\}/
 
-    # pchar         = unreserved | escaped |
-    #                 ":" | "@" | "&" | "=" | "+" | "$" | ","
+    UNRESERVED = "\\-_.!~*'()a-zA-Z\\d"
+    ESCAPED    = "%[a-fA-F\\d]{2}"
+    RESERVED   = ";/?:@&=+$,\\[\\]"
+
+    # pchar = unreserved / pct-encoded / ":" / "@" / "&" / "=" / "+" / "," ($ excluded intentionally)
     param = /
       (?:
-        [#{URI::RFC2396_REGEXP::PATTERN::UNRESERVED}:@&=+,] # note that $ is in the RFC but is removed for our purpposes
+        [#{UNRESERVED}:@&=+,] # note that $ is in the RFC but is removed for our purpposes
         |
-        #{URI::RFC2396_REGEXP::PATTERN::ESCAPED}
+        #{ESCAPED}
         |
         #{REGEX_VARIABLE}
       )*
@@ -55,9 +58,9 @@ class ProxyRule < ApplicationRecord
 
     query = /
       (?:
-        [#{URI::RFC2396_REGEXP::PATTERN::UNRESERVED}#{URI::RFC2396_REGEXP::PATTERN::RESERVED}]
+        [#{UNRESERVED}#{RESERVED}]
         |
-        #{URI::RFC2396_REGEXP::PATTERN::ESCAPED}
+        #{ESCAPED}
         |
         #{REGEX_LITERAL}=#{REGEX_VARIABLE}
       )*
@@ -91,7 +94,7 @@ class ProxyRule < ApplicationRecord
   validates :http_method, inclusion: { in: ALLOWED_HTTP_METHODS }
   validate :non_repeated_parameters
   validate :no_vars_in_keys
-  validates :redirect_url, format: URI::RFC2396_PARSER.make_regexp(%w[http https]), allow_blank: true, length: { maximum: 10000 }
+  validates :redirect_url, uri: { path: true, query: true, fragment: true }, allow_blank: true, length: { maximum: 10000 }
 
   def parameters
     Addressable::Template.new(path_pattern).variables
