@@ -6,7 +6,7 @@
   form.find('input[type=text]').val('');
 
   var table = container.find('table');
-  var rowCount = table.find("tr").size();
+  var rowCount = table.find("tr").length;
 
   newRow = $(<%= render_to_js_string('provider/admin/referrer_filters/item', :cinstance => @cinstance, :referrer_filter => @referrer_filter) %>);
 

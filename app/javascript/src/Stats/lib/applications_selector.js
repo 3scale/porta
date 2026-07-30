@@ -1,5 +1,4 @@
 /** @jsx StatsUI.dom */
-import $ from 'jquery'
 
 import { StatsUI } from 'Stats/lib/ui'
 

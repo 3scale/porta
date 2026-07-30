@@ -2,5 +2,5 @@
   document.querySelector('#<%= dom_id(account) %> td[data-label="Plan"]')
     .innerText = '<%= account.bought_account_plan.name %>'
 <% end %>
-$.colorbox.close()
+colorbox.close()
 <%= render 'shared/flash_alerts' %>

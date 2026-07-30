@@ -12,7 +12,7 @@ void function () {
 
   document.getElementById('invoice_cost').innerHTML = '<%= price_tag(@invoice.cost) %>';
 
-  $.colorbox.close();
+  colorbox.close();
 }();
 
 <%= render 'shared/flash_alerts' %>

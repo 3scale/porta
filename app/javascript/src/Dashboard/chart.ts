@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // FIXME: we need to properly type this
-import $ from 'jquery'
 import moment, { utc } from 'moment'
 import numeral from 'numeral'
 import { generate } from 'c3'

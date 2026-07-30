@@ -13,8 +13,6 @@
  * Origin: app/assets/javascripts/ajax_events.js
  */
 
-import $ from 'jquery'
-
 import type { AJAXErrorEvent } from 'Types/rails-ujs'
 
 /**
@@ -44,7 +42,7 @@ $(document).on('ajax:error', 'form[data-remote]:not(.pf-c-form)', (event) => {
 
   // If EventTarget (modal's content) is replaced immediately, ajax:success and ajax:complete are not called and the spinner will stay
   setTimeout(() => {
-    window.$.colorbox({ html: xhr.responseText })
+    window.colorbox({ html: xhr.responseText })
   })
   event.stopPropagation()
 })

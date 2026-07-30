@@ -10,7 +10,7 @@
     "module": "ES6",
     "moduleResolution": "NodeNext",
     "typeRoots": ["app/javascript/src/Types"],
-    "types": ["@types/jest"],
+    "types": ["@types/jest", "@types/jquery"],
 
     // Emit
     "declaration": false,

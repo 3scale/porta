@@ -2,5 +2,5 @@
   document.querySelector('#<%= dom_id(account) %> td[data-label="State"]')
     .innerText = '<%= account.state.capitalize %>'
 <% end %>
-$.colorbox.close()
+colorbox.close()
 <%= render 'shared/flash_alerts' %>

@@ -1,5 +1,4 @@
 import c3 from 'c3'
-import $ from 'jquery'
 import moment from 'moment'
 import numeral from 'numeral'
 

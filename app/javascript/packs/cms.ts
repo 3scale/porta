@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import 'jquery-ui/ui/widgets/droppable'
 import 'jquery-ui/ui/widgets/draggable'
 import 'jquery-ui/ui/widgets/tabs'
@@ -8,21 +7,19 @@ import { toast } from 'utilities/toast'
 
 import type { EditorFromTextArea } from 'codemirror'
 
-const jQuery1 = window.$
-
 /**
  * Called every time a CMS section is selected in the sidebar, including first render.
  */
-jQuery1(document).on('cms-template:init', () => {
+$(document).on('cms-template:init', () => {
   advanceOptionsToggle()
   setUpSectionDrop()
   setUpEditorTabs()
   setUpPjax()
 
-  jQuery1('#cms_template_content_type, #cms_template_liquid_enabled').trigger('change')
+  $('#cms_template_content_type, #cms_template_liquid_enabled').trigger('change')
 })
 
-jQuery1(document).on('cms-sidebar:update', () => {
+$(document).on('cms-sidebar:update', () => {
   setUpSidebarDrag()
   setUpDropdownButtonOpen()
 })
@@ -34,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setUpDropdownButtonClose()
   setUpPreviewButton()
 
-  jQuery1('#tab-content').trigger('cms-template:init')
+  $('#tab-content').trigger('cms-template:init')
 })
 
 /**
@@ -58,7 +55,7 @@ function advanceOptionsToggle () {
   /* eslint-disable @typescript-eslint/no-non-null-assertion -- It's all there */
   const icon = fieldset.querySelector('legend i')!
   const list = fieldset.querySelector('ol')!
-  const cookie = jQuery1.cookie(cookieName)!
+  const cookie = $.cookie(cookieName)!
   const legend = fieldset.querySelector('legend')!
   /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
@@ -80,7 +77,7 @@ function advanceOptionsToggle () {
     icon.classList.toggle('fa-caret-down')
 
     const isNowExpanded = icon.classList.contains('fa-caret-down')
-    jQuery1.cookie(cookieName, String(isNowExpanded), { expires: 30, path: cookiePath })
+    $.cookie(cookieName, String(isNowExpanded), { expires: 30, path: cookiePath })
   })
 }
 
@@ -182,7 +179,7 @@ function setUpEditorTabs () {
  * accordingly. Codemirror's own listener here: app/views/provider/admin/cms/_codemirror.html.erb
  */
 function setUpContentTypeLiquidEnabledListener () {
-  jQuery1(document).on('change', '#cms_template_content_type, #cms_template_liquid_enabled', () => {
+  $(document).on('change', '#cms_template_content_type, #cms_template_liquid_enabled', () => {
     const contentTypeInput = document.querySelector<HTMLInputElement>('#cms_template_content_type')
     const liquidEnabledInput = document.querySelector<HTMLInputElement>('#cms_template_liquid_enabled')
 
@@ -193,17 +190,17 @@ function setUpContentTypeLiquidEnabledListener () {
     const contentType = contentTypeInput.value
     const liquidEnabled = liquidEnabledInput.checked
 
-    const codemirror = jQuery1('#cms_template_draft').data('codemirror') as EditorFromTextArea
+    const codemirror = $('#cms_template_draft').data('codemirror') as EditorFromTextArea
 
-    jQuery1(codemirror).trigger('change', [contentType, liquidEnabled])
+    $(codemirror).trigger('change', [contentType, liquidEnabled])
   })
 
-  jQuery1(document).on('click', 'a[href^="#cms-set-content-type-"]', (event) => {
+  $(document).on('click', 'a[href^="#cms-set-content-type-"]', (event) => {
     event.stopImmediatePropagation()
     event.preventDefault()
 
     const { mimeType } = (event.target as HTMLAnchorElement).dataset as { mimeType: string }
-    const input = jQuery1('#cms_template_content_type')
+    const input = $('#cms_template_content_type')
 
     if (input.val() !== mimeType) {
       input.val(mimeType).trigger('change')
@@ -218,8 +215,8 @@ function setUpRevertButton () {
         event.stopImmediatePropagation()
         event.preventDefault()
 
-        const draft = jQuery1('#cms_template_draft').data('codemirror') as EditorFromTextArea
-        const published = jQuery1('#cms_template_published').data('codemirror') as EditorFromTextArea
+        const draft = $('#cms_template_draft').data('codemirror') as EditorFromTextArea
+        const published = $('#cms_template_published').data('codemirror') as EditorFromTextArea
 
         draft.setValue(published.getValue())
         toast('Reverted draft to a currently published version', 'success')
@@ -255,9 +252,10 @@ function setUpRemoveFromSectionAction () {
  * PJAX automatically extends window.$, that is 1.12.4 (JQueryStaticV1Plugins)
  */
 function setUpPjax () {
-  jQuery1(document).pjax('#cms-sidebar .cms-sidebar-listing a', '#tab-content', { timeout: 3000 })
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Imported on top
+  $(document).pjax!('#cms-sidebar .cms-sidebar-listing a', '#tab-content', { timeout: 3000 })
 
-  jQuery1(document)
+  $(document)
     .on('pjax:send', () => {
       const spinner = document.createElement('img')
       spinner.src = '/assets/ajax-loader.gif'
@@ -268,7 +266,7 @@ function setUpPjax () {
       window.ThreeScale.hideSpinner()
     })
     .on('pjax:end', (event) => {
-      jQuery1(event.target).trigger('cms-template:init')
+      $(event.target).trigger('cms-template:init')
     })
 }
 

@@ -1,7 +1,5 @@
 /** @jsx StatsUI.dom */
 
-import $ from 'jquery'
-
 import { StatsApplicationMetricsSource } from 'Stats/lib/application_metrics_source'
 import { StatsCSVLink } from 'Stats/lib/csv_link'
 import { StatsMethodsTable } from 'Stats/lib/methods_table'
