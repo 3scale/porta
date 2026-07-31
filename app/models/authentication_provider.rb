@@ -32,7 +32,8 @@ class AuthenticationProvider < ApplicationRecord
   validates :client_id, :client_secret, presence: true, if: :oauth_config_required?
 
   with_options uri: { path: true, query: true, fragment: true }, allow_blank: true do |ops|
-    ops.validates :site
+    # Skip uri: for whitespace URLs — keycloak/auth0 whitespace validator handles these
+    ops.validates :site, unless: -> { site.to_s.match?(/\s/) }
     ops.validates :token_url
     ops.validates :authorize_url
     ops.validates :user_info_url

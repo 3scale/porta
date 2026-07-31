@@ -79,10 +79,10 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
     assert_equal ["can't be blank"], JSON.parse(response.body).dig('errors', 'site')
 
     post admin_api_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: 'invalid'}))
-    assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'site')
+    assert_equal ['Invalid URL format'], JSON.parse(response.body).dig('errors', 'site')
 
     post admin_api_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: '  http://example.com  '}))
-    assert_equal ["invalid", "can't contain whitespaces"], JSON.parse(response.body).dig('errors', 'site')
+    assert_equal ["can't contain whitespaces"], JSON.parse(response.body).dig('errors', 'site')
   end
 
   test '#update saves the new attributes values' do
