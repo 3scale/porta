@@ -53,7 +53,7 @@ class UriValidator < ActiveModel::EachValidator
     delegate :host, :scheme, to: :uri
 
     def errors
-      return [:invalid] if uri.blank?
+      return [:invalid_url] if uri.blank?
 
       errors_scheme | errors_host | errors_forbidden_parts
     end
@@ -68,11 +68,11 @@ class UriValidator < ActiveModel::EachValidator
                 [*accepted_scheme].include?(scheme)
       end
 
-      valid ? [] : [:invalid]
+      valid ? [] : [:invalid_url]
     end
 
     def errors_host
-      return [:invalid] if host.blank?
+      return [:invalid_url] if host.blank?
 
       errors = []
       errors << I18n.t('errors.messages.too_long', count: MAX_HOST_SIZE) unless valid_host_size?
@@ -89,7 +89,7 @@ class UriValidator < ActiveModel::EachValidator
     end
 
     def errors_forbidden_parts
-      contains_forbidden_parts? ? [:invalid] : []
+      contains_forbidden_parts? ? [:invalid_url] : []
     end
 
     def contains_forbidden_parts?

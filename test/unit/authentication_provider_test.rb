@@ -42,7 +42,7 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
     errors = authentication_provider.errors
 
     assert_equal %i[authorize_url site token_url user_info_url], errors.map(&:attribute).sort
-    assert_equal ['invalid'], errors.map(&:message).uniq
+    assert_equal ['Invalid URL format'], errors.map(&:message).uniq
 
     authentication_provider.site = 'https://example.org'
     authentication_provider.token_url = 'http://example.org'

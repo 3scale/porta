@@ -40,7 +40,7 @@ class UriValidatorTest < ActiveSupport::TestCase
     record = ModelWithURIValidation.new
     record.uri = "http://domain.test/path"
     refute record.valid?
-    assert_equal 'is invalid', record.errors[:uri].to_sentence
+    assert_equal 'Invalid URL format', record.errors[:uri].to_sentence
 
     with_clean_validators ModelWithURIValidation do
       [true, false].each do |valid_path|
