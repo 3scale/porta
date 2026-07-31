@@ -167,137 +167,71 @@ module Tasks
         setup do
           @provider1 = FactoryBot.create(:simple_provider, state: "scheduled_for_deletion", state_changed_at: 7.months.ago)
           @provider2 = FactoryBot.create(:simple_provider, state: "scheduled_for_deletion", state_changed_at: 5.months.ago)
-
-          ActiveJob::Base.queue_adapter = :sidekiq
-          Sidekiq::Testing.disable!
+          Sidekiq.redis { |c| c.del(DeleteAccountHierarchyWorker::CONCURRENCY_LIMIT_KEY) }
         end
 
         teardown do
-          Sidekiq::ScheduledSet.new.each(&:delete)
-          Sidekiq::Queue.new.each(&:delete)
-          assert_empty Sidekiq::Workers.new.to_a
-
-          Sidekiq::Testing.fake!
-          ActiveJob::Base.queue_adapter = Rails.configuration.active_job.queue_adapter
-        end
-
-        test "do not schedule more than target concurrency number of jobs" do
-          exec_task concurrency: 2, since: 1000, wait: 0 # make sure the task file is loaded
-
-          Object.any_instance.stubs(:provider_being_deleted)
-
-          expect_one_more_deletion = proc do
-            DeleteObjectHierarchyWorker.expects(:delete_later)
-          end
-          expect_one_more_deletion.singleton_class.alias_method :activate, :call
-
-          # Note: Couldn't register on one line. Matching seems to happen in reverse order of definition.
-          # by the first iteration we don't allow any jobs to be scheduled
-          #   by the second iteration we allow one to be scheduled
-          #   and by the third iteration we allow 2 jobs but we have only one provider left
-          Object.any_instance.expects(:scheduled_or_running_background_deletions).returns([]).then(expect_one_more_deletion)
-          Object.any_instance.expects(:scheduled_or_running_background_deletions).returns([:x]).then(expect_one_more_deletion)
-          Object.any_instance.expects(:scheduled_or_running_background_deletions).returns([:x, :x])
-
-          exec_task concurrency: 2, since: 0, wait: 0
-        end
-
-        test "we don't schedule accounts already being deleted" do
-          DeleteObjectHierarchyWorker.delete_later(@provider1)
-          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider2)
-          exec_task concurrency: 3, since: 0, wait: 0
-        end
-
-        test "schedules account deletions ignoring jobs in any queues but deletion" do
-          DeleteObjectHierarchyWorker.set(queue: "default").perform_later("Plain-Account-#{@provider1.id}")
-
-          assert_equal 1, Sidekiq::Queue.new("default").size
-
-          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1)
-          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider2)
-
-          exec_task concurrency: 3, since: 15
+          Sidekiq.redis { |c| c.del(DeleteAccountHierarchyWorker::CONCURRENCY_LIMIT_KEY) }
+          ENV.delete("DRY_RUN")
         end
 
         test "by default only tenants marked more than 6 months ago are deleted" do
-          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1)
+          DeleteAccountHierarchyWorker.expects(:delete_later).with(@provider1)
+          DeleteAccountHierarchyWorker.expects(:delete_later).with(@provider2).never
 
           exec_task
         end
 
-        test "tenants already in the deletion queue are not scheduled anymore" do
-          DeleteObjectHierarchyWorker.delete_later(@provider1)
-          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider2)
-
-          exec_task concurrency: 3, since: 15
-        end
-
-        # this test is not very good because we emulate the API and upstream can potentially break it
-        test "tenants already being processed are not scheduled anymore" do
-          DeleteObjectHierarchyWorker.delete_later(@provider1)
-
-          job = Sidekiq::Queue.new("deletion").to_a.first
-          job_wrapper = OpenStruct.new(job:)
-
-          job.delete
-          assert_equal 0, Sidekiq::Queue.new("deletion").size
-
-          Sidekiq::Workers.stubs(:new).returns([[nil, nil, job_wrapper]])
-          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider2)
-
-          exec_task concurrency: 3, since: 15
-
-          Sidekiq::Workers.unstub(:new)
-        end
-
-        test "tenant scheduling deduplication is graceful with other job types" do
-          service = FactoryBot.create(:simple_service, account: @provider2)
-
-          # Background deletion of another model
-          DeleteObjectHierarchyWorker.perform_later("Plain-User-#{@provider1.id}")
-          # Other kinds of ActiveJob jobs
-          CreateDefaultProxyWorker.set(queue: "deletion").perform_later(service)
-          # Other kinds of Sidekiq native jobs
-          BackendProviderSyncWorker.set(queue: "deletion").perform_async(@provider1.id)
-
-          # Emulate Mocha StateMachine::State to clear the extra deletion job from the queue
-          clear_deletion_queue = proc { Sidekiq::Queue.new("deletion").each(&:delete) }
-          clear_deletion_queue.singleton_class.alias_method :activate, :call
-
-          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1)
-          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider2)
-
-          exec_task concurrency: 4, since: 15, wait: 0
-        end
-
-        test "jobs scheduled but not yet queued are not taken into account" do
-          DeleteObjectHierarchyWorker.set(wait: 2.days).perform_later("Plain-Account-#{@provider1.id}")
-          assert_equal 1, Sidekiq::ScheduledSet.new.to_a.size
-
-          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1)
+        test "enqueues via DeleteAccountHierarchyWorker, not DeleteObjectHierarchyWorker" do
+          DeleteObjectHierarchyWorker.expects(:delete_later).never
+          DeleteAccountHierarchyWorker.expects(:delete_later).with(@provider1)
 
           exec_task
         end
 
         test "only marked for deletion accounts are deleted" do
-          Account::States::STATES.reject { _1 == :scheduled_for_deletion }.each do |state|
+          non_eligible = Account::States::STATES.reject { _1 == :scheduled_for_deletion }.map do |state|
             FactoryBot.create(:simple_provider, state: state, state_changed_at: 7.months.ago)
           end
 
-          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1)
+          DeleteAccountHierarchyWorker.expects(:delete_later).with(@provider1)
+          non_eligible.each { |provider| DeleteAccountHierarchyWorker.expects(:delete_later).with(provider).never }
 
           exec_task
         end
 
-        test "no infinite loop on failure to delete providers" do
-          DeleteObjectHierarchyWorker.expects(:delete_later).times(2)
-          exec_task(concurrency: 1, since: 1, wait: 0)
+        test "custom days_since_disabled includes more accounts" do
+          DeleteAccountHierarchyWorker.expects(:delete_later).with(@provider1)
+          DeleteAccountHierarchyWorker.expects(:delete_later).with(@provider2)
+
+          exec_task(since: 1)
         end
 
-        def exec_task(concurrency: 3, since: nil, wait: nil)
-          raise ArgumentError if wait && !since
+        test "sets the concurrency limit in Redis" do
+          DeleteAccountHierarchyWorker.stubs(:delete_later)
 
-          args = [concurrency, since, wait].compact.map(&:to_s)
+          exec_task(concurrency: 5)
+
+          assert_equal 5, DeleteAccountHierarchyWorker.concurrency_limit
+        end
+
+        test "dry run does not enqueue any jobs" do
+          ENV["DRY_RUN"] = "1"
+          DeleteAccountHierarchyWorker.expects(:delete_later).never
+
+          exec_task
+        end
+
+        test "dry run does not set the concurrency limit" do
+          ENV["DRY_RUN"] = "1"
+
+          exec_task(concurrency: 7)
+
+          assert_equal DeleteAccountHierarchyWorker::DEFAULT_CONCURRENCY_LIMIT, DeleteAccountHierarchyWorker.concurrency_limit
+        end
+
+        def exec_task(concurrency: 3, since: nil)
+          args = [concurrency, since].compact.map(&:to_s)
           execute_rake_task 'multitenant/tenants.rake', 'multitenant:tenants:stale_throttled_delete', *args
         end
       end
