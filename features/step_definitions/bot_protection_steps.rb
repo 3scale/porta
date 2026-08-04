@@ -3,6 +3,8 @@
 RECAPTCHA_INPUT = 'input[name^="g-recaptcha-response-data"]'
 
 Given "the client {will} be marked as a bot" do |bot|
+  # Stubbing gem internal calls instead of our :verify_recaptcha method.
+  # We need the flash message to be set by the gem
   Recaptcha.stubs(:skip_env?).returns(false)
   Recaptcha.stubs(:invalid_response?).returns(false)
   Recaptcha.stubs(:verify_via_api_call).returns([!bot, {}])
