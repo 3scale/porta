@@ -1,7 +1,12 @@
 = javascript_packs_with_chunks_tag 'request_password_page'
 - authentication_providers = (@authentication_providers || []).map { |ap| {authorizeURL: ap.authorize_url, humanKind: ap.human_kind} }
 - alerts = (flash || []).map { |f| {type: f[0], message: f[1]}}
+- recaptcha_enabled = !!@bot_protection_enabled
+- recaptcha_site_key = Rails.configuration.three_scale.recaptcha_public_key
+- recaptcha_action = controller_path
 
 div#pf-request-page-container data-request-props={alerts: alerts,
   providerLoginPath: provider_login_path,
-  providerPasswordPath: provider_password_path }.to_json
+  providerPasswordPath: provider_password_path,
+  recaptcha: { enabled: recaptcha_enabled, siteKey: recaptcha_site_key, action: recaptcha_action },
+  }.to_json

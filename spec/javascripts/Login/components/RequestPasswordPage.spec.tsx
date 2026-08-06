@@ -7,7 +7,12 @@ import type { Props } from 'Login/components/RequestPasswordPage'
 const defaultProps: Props = {
   alerts: [],
   providerLoginPath: 'login-path',
-  providerPasswordPath: 'password-path'
+  providerPasswordPath: 'password-path',
+  recaptcha: {
+    enabled: false,
+    siteKey: '',
+    action: ''
+  }
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<RequestPasswordPage {...{ ...defaultProps, ...props }} />)

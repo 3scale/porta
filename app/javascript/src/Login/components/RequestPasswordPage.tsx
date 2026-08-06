@@ -12,12 +12,18 @@ interface Props {
   alerts: IAlert[];
   providerLoginPath: string;
   providerPasswordPath: string;
+  readonly recaptcha: {
+    enabled: boolean;
+    siteKey: string;
+    action: string;
+  };
 }
 
 const RequestPasswordPage: FunctionComponent<Props> = ({
   alerts,
   providerLoginPath,
-  providerPasswordPath
+  providerPasswordPath,
+  recaptcha
 }) => (
   <LoginPage
     backgroundImgAlt="Red Hat 3scale API Management"
@@ -30,6 +36,7 @@ const RequestPasswordPage: FunctionComponent<Props> = ({
       alerts={alerts}
       providerLoginPath={providerLoginPath}
       providerPasswordPath={providerPasswordPath}
+      recaptcha={recaptcha}
     />
   </LoginPage>
 )
