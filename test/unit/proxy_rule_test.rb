@@ -210,23 +210,28 @@ class ProxyRuleTest < ActiveSupport::TestCase
     private
 
     def assert_concurrent_deletes_do_not_deadlock(rules)
-      barrier = Concurrent::CyclicBarrier.new(rules.size)
+      inject_barrier_seam(rules.size)
+      threads = rules.map { |rule| spawn_destroy_thread(rule) }
+      threads.each(&:join)
+      assert_empty ProxyRule.where(id: rules.map(&:id))
+    end
+
+    def inject_barrier_seam(size)
+      barrier = Concurrent::CyclicBarrier.new(size)
       original = @original_method
 
       ProxyRule.define_method(:lock_owner_for_position_update) do
         raise "not all threads synchronized" unless barrier.wait(5)
+
         original.bind_call(self)
       end
+    end
 
-      threads = rules.map do |rule|
-        Thread.new do
-          Thread.current.report_on_exception = false
-          rule.destroy!
-        end
+    def spawn_destroy_thread(rule)
+      Thread.new do
+        Thread.current.report_on_exception = false
+        rule.destroy!
       end
-
-      threads.each(&:join)
-      assert_empty ProxyRule.where(id: rules.map(&:id))
     end
   end
 
