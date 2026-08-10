@@ -258,6 +258,7 @@ class Authentication::Strategy::ProviderOAuth2Test < ActiveSupport::TestCase
           assert_equal result.username, user_data[:username]
           assert result.active?
           assert authentication_strategy.error_message.blank?
+          assert invitation.reload.accepted?
         end
       end
     end

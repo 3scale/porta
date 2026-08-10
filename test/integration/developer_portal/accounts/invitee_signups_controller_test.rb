@@ -46,6 +46,7 @@ class DeveloperPortal::Accounts::InviteeSignupsControllerTest < ActionDispatch::
 
     assert_equal I18n.t('developer_portal.accounts.invitee_signups.create.success'), flash[:notice]
     assert_redirected_to login_path
+    assert invitation.reload.accepted?
   end
 
   test 'create pushes webhook' do

@@ -26,6 +26,7 @@ class Provider::InviteeSignupsControllerIntegrationTest < ActionDispatch::Integr
 
     assert_equal I18n.t('provider.invitee_signups.create.success'), flash[:success]
     assert_redirected_to provider_login_path
+    assert invitation.reload.accepted?
   end
 
   test 'do not set unpermitted attributes' do
