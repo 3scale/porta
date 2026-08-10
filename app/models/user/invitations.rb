@@ -4,10 +4,7 @@ module User::Invitations
   included do
     after_commit :accept_invitation, :on => :create
 
-    attr_accessor :invitation
-
-    # TODO: refactor to make this work removing above attribute.
-    # has_one :invitation
+    has_one :invitation
 
     before_destroy :destroy_invitation
   end
@@ -18,7 +15,7 @@ module User::Invitations
 
   def destroy_invitation
     if account # some tests fail because of account being nil
-      invit = account.invitations.find_by_email(email) || account.invitations.find_by_user_id(id) # || eventually invitation
+      invit = account.invitations.find_by_email(email) || account.invitations.find_by_user_id(id)
       # halt the destruction if the destruction of invitation failed
       throw :abort if invit && invit.destroy == false
     end

@@ -24,7 +24,7 @@ class Invitation < ApplicationRecord
 
   # Build new user on information in this invitation.
   def make_user(params = {})
-    self.user = account.users.build_with_fields params.reverse_merge(email: email, invitation: self, signup_type: :new_signup)
+    self.user = account.users.build_with_fields params.reverse_merge(email: email, signup_type: :new_signup)
   end
 
   def accepted?
