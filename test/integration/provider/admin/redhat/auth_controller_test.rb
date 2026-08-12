@@ -49,6 +49,9 @@ class Provider::Admin::Redhat::AuthControllerTest < ActionDispatch::IntegrationT
 
     get @callback_url, params: { referrer: '/p/admin/search?q=hello+world' }
     assert_redirected_to '/p/admin/search?q=hello+world'
+
+    get @callback_url, params: { referrer: '/p/admin/hello+world' }
+    assert_redirected_to '/p/admin/hello+world'
   end
 
   test 'Red Hat Customer Portal disabled' do
