@@ -2032,20 +2032,16 @@ en:
             base:
               cannot_be_destroyed_with_products: cannot be deleted because it is used by at least one Product
             private_endpoint:
-              invalid: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
               invalid_url: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
         proxy:
           attributes:
             api_backend:
-              invalid: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
               invalid_url: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
             api_test_path:
               invalid: "only URI characters allowed"
             endpoint:
-              invalid: "the accepted format is 'protocol://address(:port)'"
               invalid_url: "the accepted format is 'protocol://address(:port)'"
             sandbox_endpoint:
-              invalid: "the accepted format is 'protocol://address(:port)'"
               invalid_url: "the accepted format is 'protocol://address(:port)'"
             oauth_login_url:
               invalid: "invalid auth login url. (hint: make sure it uses https scheme)"
@@ -2114,7 +2110,6 @@ en:
         web_hook:
           attributes:
             url:
-              invalid: Must be a valid URL such as http://example.com
               invalid_url: Must be a valid URL such as http://example.com
 
         cms/partial:
