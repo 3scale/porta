@@ -30,9 +30,7 @@ Given "{provider} has a webhook with endpoint {string}" do |provider, url|
     url: url
   }
 
-  hook = provider.web_hook || provider.build_web_hook
-  hook.assign_attributes(attrs)
-  hook.save!(validate: false)
+  (provider.web_hook || provider.build_web_hook).update!(attrs)
 end
 
 Then /^there should be no webhooks enqueued$/ do
