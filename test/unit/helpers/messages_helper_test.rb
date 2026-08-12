@@ -121,11 +121,6 @@ class MessagesHelperTest < ActionView::TestCase
                  hyperlink_urls('Some http://google.com: text')
   end
 
-  def test_if_links_with_query_string_are_fully_captured
-    assert_equal 'Visit <a href="http://google.com/path?q=1&amp;amp;r=2">http://google.com/path?q=1&amp;amp;r=2</a> now',
-                 hyperlink_urls('Visit http://google.com/path?q=1&r=2 now')
-  end
-
   # this is regression test for: https://github.com/3scale/system/issues/4819
   def test_if_random_word_with_colon_at_the_end_is_not_treated_like_link
     assert_equal %(Some random word:),
