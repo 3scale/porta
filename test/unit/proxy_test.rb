@@ -271,7 +271,7 @@ class ProxyTest < ActiveSupport::TestCase
     refute @proxy.valid?
 
     @proxy.hostname_rewrite = 'my_proxy.internal'
-    assert @proxy.valid?
+    refute @proxy.valid?
   end
 
   test 'backend' do

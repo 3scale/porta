@@ -35,7 +35,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   query = "(?:[\\-_.!~*'()a-zA-Z\\d;/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*"
   optional_query = "(?:\\?(#{query}))?"
   URI_PATH_PART = Regexp.new('\A' + abs_path + optional_query + '\z')
-  HOST = /\A(?:[a-zA-Z0-9\-._]|%\h\h)+(?::\d+)?\z/
+  HOST = /\A(?:[a-zA-Z0-9\-.]|%\h\h)+(?::\d+)?\z/
 
   URI_OR_LOCALHOST  = /\A(https?:\/\/([a-zA-Z0-9._:\/?-])+|.*localhost.*)\Z/
 
