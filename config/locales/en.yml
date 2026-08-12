@@ -780,6 +780,10 @@ en:
           success: Referrer filter has been deleted
 
       service_discovery:
+        auth:
+          show:
+            success: Service discovery authentication was successful
+            error: Service discovery authentication failed
         services:
           create:
             error: Cannot create product
