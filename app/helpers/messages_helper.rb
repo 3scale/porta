@@ -25,7 +25,7 @@ module MessagesHelper
     text = h(text)
 
     text.scan(%r{https?://[^\s)\]>]+}) do
-      url = Regexp.last_match(0).sub(/\.$/, '').sub(/\:$/, '')
+      url = Regexp.last_match(0).sub(/\.$/, '').sub(/:$/, '')
       text = text.sub(url, link_to(url, url))
     end
 
