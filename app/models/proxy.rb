@@ -29,13 +29,10 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded, presence: true
 
-  pchar = "(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})"
-  segment = "#{pchar}*(?:;#{pchar}*)*"
-  abs_path = "/#{segment}(?:/#{segment})*"
-  query = "(?:[\\-_.!~*'()a-zA-Z\\d;/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*"
-  optional_query = "(?:\\?(#{query}))?"
-  URI_PATH_PART = Regexp.new('\A' + abs_path + optional_query + '\z')
-  HOST = /\A(?:[a-zA-Z0-9\-.]|%\h\h)+(?::\d+)?\z/
+  uri_pattern = URI::RFC2396_PARSER.pattern
+  OPTIONAL_QUERY_FORMAT = "(?:\\?(#{uri_pattern.fetch(:QUERY)}))?"
+  URI_PATH_PART = Regexp.new('\A' + uri_pattern.fetch(:ABS_PATH) + OPTIONAL_QUERY_FORMAT + '\z')
+  HOST = Regexp.new('\A' + uri_pattern.fetch(:HOSTNAME) + '(:\d+)?' + '\z')
 
   URI_OR_LOCALHOST  = /\A(https?:\/\/([a-zA-Z0-9._:\/?-])+|.*localhost.*)\Z/
 
