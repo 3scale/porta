@@ -1,6 +1,8 @@
 class AuthenticationProvider::GitHub < AuthenticationProvider
   self.authorization_scope = :branding
 
+  validates :site, format: { without: /\s/, message: :contains_whitespace }, allow_blank: true
+
   after_initialize :set_defaults, unless: :persisted?
 
   state_machine :branding_state, initial: :initial_state.to_proc do
