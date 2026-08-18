@@ -30,9 +30,9 @@ class ProxyRule < ApplicationRecord
     REGEX_LITERAL = /[_\w]+/i
     REGEX_VARIABLE = /\{#{REGEX_LITERAL}\}/
 
-    UNRESERVED = URI::RFC2396_REGEXP::PATTERN::UNRESERVED
-    ESCAPED    = URI::RFC2396_REGEXP::PATTERN::ESCAPED
-    RESERVED   = URI::RFC2396_REGEXP::PATTERN::RESERVED
+    UNRESERVED = UriPatterns::UNRESERVED
+    ESCAPED    = UriPatterns::ESCAPED
+    RESERVED   = UriPatterns::RESERVED
 
     # pchar = unreserved / pct-encoded / ":" / "@" / "&" / "=" / "+" / "," ($ excluded intentionally)
     PARAM = /
