@@ -81,6 +81,18 @@ class UriValidatorTest < ActiveSupport::TestCase
     end
   end
 
+  test 'sub-delimiter characters are valid' do
+    with_clean_validators ModelWithURIValidation do
+      klass = Class.new(ModelWithURIValidation) { validates :uri, uri: { path: true } }
+      record = klass.new
+
+      %w[! ' ( ) *].each do |char|
+        record.uri = "http://domain.test/path#{char}"
+        assert record.valid?, "Expected URI with '#{char}' to be valid"
+      end
+    end
+  end
+
   test 'hostname with label longer than 63 chars' do
     record = ModelWithURIValidation.new
     record.uri = "http://#{long_hostname_label}.#{short_hostname_label}.test"
