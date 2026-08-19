@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 # The uri gem's RFC3986_PARSER does not provide composable string-pattern
-# constants. RFC3986 also defines different character sets (e.g. UNRESERVED
-# excludes !*'(), QUERY rejects []) which would change validation behavior.
+# constants (.pattern only exists on RFC2396_PARSER).
 # These RFC2396 patterns are used intentionally to preserve compatibility.
 module UriPatterns
   UNRESERVED = URI::RFC2396_REGEXP::PATTERN::UNRESERVED
