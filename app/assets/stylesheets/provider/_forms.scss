@@ -120,7 +120,7 @@ select:not(.pf-c-form-control) {
   appearance: none;
   background-image: url("data:image/svg+xml;charset=utf-8, \
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
-        <polygon points='0,0 60,0 30,40' style='fill:#{$border-color};'/> \
+        <polygon points='0,0 60,0 30,40' style='fill:%23d2d2d2;'/> \
       </svg>");
   background-position: right line-height-times(.25) center;
   background-repeat: no-repeat;
@@ -134,7 +134,7 @@ select:not(.pf-c-form-control) {
   &:focus {
     background-image: url("data:image/svg+xml;charset=utf-8, \
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
-        <polygon points='0,0 60,0 30,40' style='fill:#{$link-color};'/> \
+        <polygon points='0,0 60,0 30,40' style='fill:%230066cc;'/> \
       </svg>");
   }
 }
