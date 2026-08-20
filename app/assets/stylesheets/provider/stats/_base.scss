@@ -116,7 +116,6 @@ $stats-menu-help-color: $label-color;
 }
 
 $stats-chart-border-color: $border-color;
-$stats-chart-tooltip-shadow: var(--pf-global--palette--black-800);
 $stats-chart-tooltip-color: $label-color;
 
 .StatsChart-container {
@@ -153,8 +152,8 @@ $stats-chart-tooltip-color: $label-color;
   .c3-tooltip-container {
     border: $border-width solid $stats-chart-border-color;
     border-radius: $border-radius;
-    box-shadow: 0 0 line-height-times(.5) $stats-chart-tooltip-shadow;
-    background: rgba(#f0f0f0, .99); /* TODO: remove rgba */
+    box-shadow: var(--pf-global--BoxShadow--md);
+    background: var(--pf-global--BackgroundColor--200);
   }
 
   .c3-tooltip {
