@@ -17,7 +17,6 @@
 @forward 'provider/tables';
 @forward 'provider/utilization';
 @forward 'provider/forms';
-@forward 'provider/upgrade_notice';
 @forward 'provider/admin/account';
 @forward 'provider/service_access';
 @forward 'vendor/c3';
@@ -26,7 +25,6 @@
 @forward 'provider/finance';
 @forward 'provider/metrics';
 @forward 'provider/section';
-@forward 'provider/liquid_docs';
 @forward 'provider/logo';
 
 // view specific stylesheets placed in the controller paths
