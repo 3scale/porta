@@ -122,9 +122,7 @@ module PatternflyComponentsHelper
 
   def pf_link_to(body, url, html_options = {})
     variant = html_options.delete(:variant) || :link
-    html_options[:class] = "pf-c-button pf-m-#{variant} #{html_options.delete(:class)}"
-    html_options[:type] = :button
-
+    html_options[:class] = "pf-c-button pf-m-#{variant} #{html_options.delete(:class)}".strip
     html_options[:class] << ' pf-m-inline' if html_options.delete(:inline)
 
     link_to(body, url, html_options)
