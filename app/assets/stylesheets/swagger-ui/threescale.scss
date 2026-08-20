@@ -32,6 +32,7 @@
 
 .apidocs-param-tips {
   position: absolute;
+  z-index: var(--pf-global--ZIndex--xl);
   padding: 10px;
   top: 0;
   left: 0;
