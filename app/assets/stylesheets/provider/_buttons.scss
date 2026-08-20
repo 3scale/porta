@@ -9,44 +9,6 @@ a {
   }
 }
 
-// TODO: remove this class
-.button-bar {
-  position: relative;
-
-  fieldset {
-    margin: 0;
-  }
-
-  & > fieldset {
-    & > ol > li {
-      display: inline-block;
-    }
-
-    &.actions:first-child {
-      float: left;
-      margin: line-height-times(.5) 0 0;
-      padding: 0;
-      text-align: left !important;
-
-      & > ol > li {
-        margin-right: var(--pf-global--spacer--sm);
-      }
-    }
-
-    &.actions:last-child:not(:first-child) {
-      float: right;
-      margin: line-height-times(.5) 0 0;
-      padding: 0;
-
-      & > ol > li {
-        margin-left: var(--pf-global--spacer--sm);
-      }
-    }
-  }
-
-  display: flow-root;
-}
-
 // TODO: remove outline-button
 @mixin outline-button($color: $font-color, $border-color: $border-color) {
   color: $color;
@@ -65,10 +27,6 @@ a {
     color: $link-color;
     border-color: $link-color;
   }
-}
-
-.outline-button {
-  @include outline-button;
 }
 
 .outline-button-thin {

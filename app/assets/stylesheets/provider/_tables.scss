@@ -52,20 +52,6 @@ table:not(.pf-c-table) button.action {
   display: inline-block;
 }
 
-.u-fiveEqualColumns {
-  td,
-  th {
-    width: 20%;
-  }
-}
-
-.u-sixEqualColumns {
-  td,
-  th {
-    width: 16.67%;
-  }
-}
-
 table.list {
   td,
   th {
@@ -118,8 +104,7 @@ table.mini td {
   padding-right: line-height-times(1);
 }
 
-table.mini,
-table#configs {
+table.mini {
   width: auto;
 }
 
@@ -129,33 +114,8 @@ td.right {
   text-align: right;
 }
 
-table.payment_breakdown tr.total_cost th,
-table.payment_breakdown tr.total_cost td {
-  border-bottom: $border-width-lg solid $border-color;
-  border-top: $border-width-lg solid $border-color;
-  padding-bottom: line-height-times(.25);
-  padding-top: line-height-times(.25);
-}
-
-table.payment_breakdown tr th {
-  border-color: $border-color;
-  border-width: $border-width;
-}
-
 table .select {
   min-width: line-height-times(1);
-}
-
-table.horizontal th {
-  border-bottom: $border-width solid $border-color;
-}
-
-table.inverted th {
-  font-weight: $font-weight-normal;
-}
-
-table.inverted td {
-  font-weight: $font-weight-bold;
 }
 
 table#mapping_rules {

@@ -132,10 +132,6 @@ p + ul:not(.pf-c-list) {
 .u-dl {
   @extend %dl;
 
-  &--skinny {
-    margin: 0;
-    padding: 0;
-  }
 }
 
 .u-dl-term {
@@ -151,8 +147,7 @@ p + ul:not(.pf-c-list) {
   word-break: break-word;
 }
 
-.u-dl-definition,
-.u-dl-description {
+.u-dl-definition {
   @extend %dd;
 
   .action {
@@ -185,14 +180,6 @@ pre code:not(.pf-c-code-block__code) {
 .u-divider {
   height: line-height-times(1);
   margin: line-height-times(.5) 0;
-}
-
-.u-subtle {
-  color: $label-color;
-}
-
-.u-right {
-  text-align: right;
 }
 
 .u-hr,

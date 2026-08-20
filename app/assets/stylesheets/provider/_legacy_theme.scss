@@ -36,11 +36,3 @@ div.dashboard_card {
   width: calc(50% - #{line-height-times(1)});
 }
 
-.self_clear {
-  clear: both;
-}
-
-.clearfix {
-  display: inline-table;
-  width: 100%;
-}

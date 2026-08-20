@@ -91,16 +91,10 @@ td.delta input[type='text'] {
 }
 
 table tr.search {
-
   th input[type='text'],
   th select,
   td input[type='text'],
   td select {
-
-    &#search_month_number,
-    &#search_year {
-      width: 45%;
-    }
   }
 }
 
@@ -158,7 +152,6 @@ form.formtastic:not(.pf-c-form) fieldset.inputs > ol > li.select select {
 }
 
 form.formtastic:not(.pf-c-form) fieldset.actions ol {
-
   li {
     padding: 0;
     margin: 0;
@@ -172,14 +165,6 @@ form.formtastic:not(.pf-c-form) fieldset.actions ol {
     margin-top: line-height-times(.25);
     float: left;
   }
-}
-
-form + form .action.delete {
-  display: inline-block;
-  left: line-height-times(1);
-  position: relative;
-  top: line-height-times(-3.5);
-  z-index: 1000;
 }
 
 form.formtastic:not(.pf-c-form) {
@@ -343,10 +328,6 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label {
   padding: 0;
 }
 
-form#new_post.formtastic fieldset > ol > li.boolean label {
-  padding: 0;
-}
-
 form.formtastic:not(.pf-c-form) fieldset > ol > li.text textarea {
   border: $border-width solid $border-color;
   color: $font-color;
@@ -402,10 +383,6 @@ form.formtastic:not(.pf-c-form) .radio fieldset {
   margin: 0 0 line-height-times(.25);
 }
 
-.dashboard_card form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label {
-  padding-left: 0;
-}
-
 form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-hints,
 form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {
   padding: 0;
@@ -434,7 +411,6 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {
 }
 
 /*** FancyBox Adjustments ***/
-
 #fancybox-inner form.formtastic:not(.pf-c-form) fieldset > ol > li label {
   float: none;
   text-align: left;
@@ -446,10 +422,6 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {
 
 #fancybox-inner form.formtastic:not(.pf-c-form) fieldset.actions {
   padding: 0;
-}
-
-form.formtastic:not(.pf-c-form) fieldset > ol li.text > textarea.source_code {
-  width: 80em;
 }
 
 form.formtastic:not(.pf-c-form) strong small {
@@ -515,12 +487,6 @@ li.hidden {
   form.formtastic:not(.pf-c-form) {
     box-shadow: none;
   }
-}
-
-.dashboard_card form.formtastic:not(.pf-c-form) {
-  box-shadow: none;
-  margin: 0;
-  padding: line-height-times(1) 0 0;
 }
 
 form#liquid-settings > fieldset {
