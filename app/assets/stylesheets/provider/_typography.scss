@@ -45,9 +45,6 @@ $caption-font-size: math.div(7,8) * $fontSize;
 $font-size-base: 1 * $fontSize;
 $font-size-lg: $font-size-base * math.div(5,4);
 $font-size-sm: $font-size-base * math.div(7,8);
-$font-size-base: 1 * $fontSize;
-$font-size-lg: $font-size-base * math.div(5,4);
-$font-size-sm: $font-size-base * math.div(7,8);
 
 // line-heights
 $lineHeight: 1.5;
