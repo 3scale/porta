@@ -79,7 +79,7 @@
 
   &--is-promoted::after {
     border-left: $border-width-lg solid $border-color;
-    bottom: -100%;
+    bottom: -90%;
     content: '';
     left: 50%;
     position: absolute;

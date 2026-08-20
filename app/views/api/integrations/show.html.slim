@@ -1,11 +1,6 @@
 - content_for :page_header_title, 'Configuration'
 
-- content_for :stylesheets do
-  = stylesheet_link_tag 'provider/admin/apiconfig/services/integration'
-
 #integration-tabs
-  .SettingsBox
-
   .integration data-state="open"
     - case @service.deployment_option
     - when /^plugin_/
