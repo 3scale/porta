@@ -77,9 +77,10 @@ class InvitationTest < ActiveSupport::TestCase
 
     assert_not_nil user
     assert user.new_record?
-    assert_equal @provider, user.account
+    assert_same @provider, user.account
     assert_equal 'bob@example.net', user.email
     assert_equal 'bobby', user.username
+    assert_same invitation, user.invitation
   end
 
   test 'Invitation#accept! accepts the invitation' do
