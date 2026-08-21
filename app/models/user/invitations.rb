@@ -4,7 +4,7 @@ module User::Invitations
   included do
     after_commit :accept_invitation, :on => :create
 
-    has_one :invitation # rubocop:disable Rails/HasManyOrHasOneDependent -- before_destroy :destroy_invitation handles it
+    has_one :invitation, dependent: nil
 
     before_destroy :destroy_invitation
   end
