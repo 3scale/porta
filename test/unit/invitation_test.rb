@@ -80,6 +80,7 @@ class InvitationTest < ActiveSupport::TestCase
     assert_equal @provider, user.account
     assert_equal 'bob@example.net', user.email
     assert_equal 'bobby', user.username
+    assert_equal :new_signup, user.signup_type
   end
 
   test 'Invitation#accept! accepts the invitation' do
