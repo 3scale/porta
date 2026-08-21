@@ -30,44 +30,49 @@ class ProxyRule < ApplicationRecord
 
   class PatternParser
     REGEX_LITERAL = /[_\w]+/i
+    private_constant :REGEX_LITERAL
     REGEX_VARIABLE = /\{#{REGEX_LITERAL}\}/
 
-    # pchar         = unreserved | escaped |
-    #                 ":" | "@" | "&" | "=" | "+" | "$" | ","
-    param = /
+    # pchar = unreserved / pct-encoded / ":" / "@" / "&" / "=" / "+" / "," ($ excluded intentionally)
+    PARAM = /
       (?:
-        [#{URI::REGEXP::PATTERN::UNRESERVED}:@&=+,] # note that $ is in the RFC but is removed for our purpposes
+        [#{UriPatterns::UNRESERVED}:@&=+,] # note that $ is in the RFC but is removed for our purpposes
         |
-        #{URI::REGEXP::PATTERN::ESCAPED}
+        #{UriPatterns::ESCAPED}
         |
         #{REGEX_VARIABLE}
       )*
     /x
+    private_constant :PARAM
 
-    segment = /
-      #{param}
-      (?:;#{param})*
+    SEGMENT = /
+      #{PARAM}
+      (?:;#{PARAM})*
     /x
+    private_constant :SEGMENT
 
     REGEX_PATH = %r{
-      /#{segment}(?:/#{segment})* # normal URI path segments like /foo/bar
+      /#{SEGMENT}(?:/#{SEGMENT})* # normal URI path segments like /foo/bar
     }x
+    private_constant :REGEX_PATH
 
-    query = /
+    QUERY = /
       (?:
-        [#{URI::REGEXP::PATTERN::UNRESERVED}#{URI::REGEXP::PATTERN::RESERVED}]
+        [#{UriPatterns::UNRESERVED}#{UriPatterns::RESERVED}]
         |
-        #{URI::REGEXP::PATTERN::ESCAPED}
+        #{UriPatterns::ESCAPED}
         |
         #{REGEX_LITERAL}=#{REGEX_VARIABLE}
       )*
     /x
+    private_constant :QUERY
 
     ABSOLUTE_PATH = /\A
       #{REGEX_PATH} # absolute path
       [$]? # optionally forcing to match the end of path
-      (?:\?(?:#{query}))? # optionally followed by a query string
+      (?:\?(?:#{QUERY}))? # optionally followed by a query string
     \Z/x
+    private_constant :ABSOLUTE_PATH
 
     def initialize
       @pattern = ABSOLUTE_PATH
@@ -91,7 +96,7 @@ class ProxyRule < ApplicationRecord
   validates :http_method, inclusion: { in: ALLOWED_HTTP_METHODS }
   validate :non_repeated_parameters
   validate :no_vars_in_keys
-  validates :redirect_url, format: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true, length: { maximum: 10000 }
+  validates :redirect_url, uri: { path: true, query: true, fragment: true }, allow_blank: true, length: { maximum: 10000 }
 
   def parameters
     Addressable::Template.new(path_pattern).variables
