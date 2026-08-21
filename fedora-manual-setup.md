@@ -33,6 +33,18 @@ asdf install
 sudo dnf install chromedriver postgresql-devel gd-devel mysql-devel openssl-devel zlib-devel sqlite-devel readline-devel libyaml-devel libtool libffi-devel bison automake autoconf patch
 ```
 
+> **Note (GCC 15+ / Fedora 42+):** GCC 15 defaults to C23, which breaks several gems that use older C standards (`-std=c99`, `-std=c11`) with Ruby 3.3.x headers. If `bundle install` fails with `error: unknown type name 'bool'` during native extension compilation, run:
+>
+> ```sh
+> bundle config build.bootsnap "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.commonmarker "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.hiredis-client "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.ruby-prof "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.unf_ext "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> ```
+>
+> Then re-run `bundle install`.
+
 ### Database
 
 The application requires a database that can either be [PostgreSQL](https://www.postgresql.org), [MySQL](https://www.mysql.com) or [Oracle database](https://www.oracle.com/database/). MySQL will be used by default.
@@ -42,15 +54,17 @@ The application requires a database that can either be [PostgreSQL](https://www.
 We recommend running it in a [Podman](https://podman.io/) container:
 
 ```sh
-podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql80 mysql:8.0
+podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql80 docker.io/library/mysql:8.0
 ```
+
+> **Note:** On systems with Podman short-name resolution enforced (no TTY), use the fully-qualified image name `docker.io/library/mysql:8.0` as shown above.
 
 ### Redis
 
 [Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
-podman run -d -p 6379:6379 --name redis72 redis:7.2-alpine
+podman run -d -p 6379:6379 --name redis72 docker.io/library/redis:7.2-alpine
 ```
 
 Alternatively, Redis can be run directly on your machine with `dnf`:
@@ -65,7 +79,7 @@ sudo systemctl restart redis
 If available, Rails will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
-podman run -d -p 11211:11211 memcached
+podman run -d -p 11211:11211 docker.io/library/memcached
 ```
 
 Alternatively, Memcached can be run directly on your machine with `dnf`:
@@ -109,10 +123,18 @@ And install all gems:
 bundle install
 ```
 
-> It's possible that eventmachine installation fails. If so, try adding the following config:
+> It's possible that some native gem installations fail. Known workarounds:
 >
 > ```sh
+> # eventmachine SSL headers (all Fedora versions)
 > bundle config build.eventmachine --with-cppflags="-I/usr/include/openssl/"
+>
+> # GCC 15+ / Fedora 42+: bool type errors in C99/C11 gems (see Dependencies note above)
+> bundle config build.bootsnap "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.commonmarker "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.hiredis-client "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.ruby-prof "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.unf_ext "--with-cppflags=-DHAVE_STDBOOL_H=1"
 > ```
 
 ### Yarn (1.x)
@@ -138,3 +160,23 @@ Copy all the default config files to your project's config folder:
 ```
 cp config/examples/* config/
 ```
+
+### Setting up the test database
+
+The test database schema must be loaded separately. Due to a MySQL foreign key ordering issue, use:
+
+```sh
+RAILS_ENV=test bundle exec rails db:drop db:create
+RAILS_ENV=test bundle exec ruby -e "
+  require 'bundler/setup'
+  ENV['RAILS_ENV'] = 'test'
+  require_relative 'config/environment'
+  conn = ActiveRecord::Base.connection
+  conn.execute('SET foreign_key_checks=0')
+  load File.expand_path('db/schema.rb', '.')
+  conn.execute('SET foreign_key_checks=1')
+"
+RAILS_ENV=test bundle exec rake db:migrate
+```
+
+> **Note:** `RAILS_ENV=test bundle exec rake db:schema:load` will fail with FK constraint errors on MySQL 8. The workaround above disables FK checks for the duration of the schema load.
