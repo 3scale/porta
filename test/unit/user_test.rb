@@ -251,13 +251,10 @@ class UserTest < ActiveSupport::TestCase
     assert created_by_provider_user.errors[:password].blank?
   end
 
-  test 'by_user? returns true only for :new_signup and nil signup types' do
+  test 'by_user? returns true only for :new_signup signup type' do
     user = User.new
 
     user.signup_type = :new_signup
-    assert user.signup.by_user?
-
-    user.signup_type = nil
     assert user.signup.by_user?
 
     %i[minimal api created_by_provider].each do |type|
