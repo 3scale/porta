@@ -2299,6 +2299,7 @@ en:
         standard_flow_enabled: Authorization Code Flow
         implicit_flow_enabled: Implicit Flow
         direct_access_grants_enabled: Direct Access Grant Flow
+        token_exchange_enabled: Token Exchange Flow
 
   config:
     advanced_cms: Advanced CMS
