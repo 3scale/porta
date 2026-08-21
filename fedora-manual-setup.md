@@ -1,4 +1,4 @@
-# Manual setup on Fedora (42)
+# Manual setup on Fedora (43+)
 
 ### Language and runtime version management
 
@@ -26,6 +26,38 @@ asdf install
 > ```
 > dnf module install nodejs:16
 > ```
+
+> **GCC 15+ / Fedora 43+:** GCC 15 changed the default C standard to C23, which breaks several gems
+> that compile native extensions with `-std=c99` or `-std=c11` against Ruby 3.3.x headers
+> (`error: unknown type name 'bool'`). **The simplest fix is to use Ruby 3.4.x**, whose headers are
+> compatible with GCC 15 out of the box. Update `.tool-versions`:
+>
+> ```
+> ruby 3.4.10
+> ```
+>
+> If you must stay on Ruby 3.3.x, see the workaround in the [Bundler](#bundler) section below.
+
+### Podman short-name resolution
+
+Fedora 43 ships with Podman in `enforcing` short-name mode, which requires an interactive TTY to
+resolve unqualified image names (e.g. `mysql:8.0`). This breaks automated or non-interactive use.
+
+The cleanest fix is to switch to `permissive` mode in your **user-level** Podman config — no `sudo`
+required, and it doesn't affect other users:
+
+```sh
+mkdir -p ~/.config/containers
+cat >> ~/.config/containers/registries.conf << 'EOF'
+short-name-mode = "permissive"
+unqualified-search-registries = ["docker.io"]
+EOF
+```
+
+With this in place, `mysql:8.0`, `redis:7.2-alpine`, etc. all resolve to `docker.io` without prompting.
+
+> If you prefer not to change the Podman config, use fully-qualified image names in all `podman run`
+> commands, e.g. `docker.io/library/mysql:8.0`.
 
 ### Dependencies
 
@@ -109,11 +141,27 @@ And install all gems:
 bundle install
 ```
 
-> It's possible that eventmachine installation fails. If so, try adding the following config:
+> It's possible that some native gem installations fail. Known workarounds:
 >
 > ```sh
+> # eventmachine SSL headers (all Fedora versions)
 > bundle config build.eventmachine --with-cppflags="-I/usr/include/openssl/"
 > ```
+>
+> **GCC 15+ / Ruby 3.3.x only:** If you cannot upgrade to Ruby 3.4.x, apply the following config
+> before running `bundle install`. It patches each affected gem's C compiler preprocessor flags so
+> that Ruby's stdbool shim correctly includes `<stdbool.h>`:
+>
+> ```sh
+> bundle config build.bootsnap "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.commonmarker "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.hiredis-client "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.ruby-prof "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.unf_ext "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> ```
+>
+> Note: there is no global `bundle config build.all` equivalent — each gem must be listed.
+> Using Ruby 3.4.x avoids this entirely.
 
 ### Yarn (1.x)
 
@@ -137,4 +185,24 @@ Copy all the default config files to your project's config folder:
 
 ```
 cp config/examples/* config/
+```
+
+### Setting up the test database
+
+The test database schema must be loaded separately. Due to a MySQL foreign key constraint ordering
+issue, `db:schema:load` fails on a fresh database. Use this workaround which temporarily disables FK
+checks for the duration of the schema load:
+
+```sh
+RAILS_ENV=test bundle exec rails db:drop db:create
+RAILS_ENV=test bundle exec ruby -e "
+  require 'bundler/setup'
+  ENV['RAILS_ENV'] = 'test'
+  require_relative 'config/environment'
+  conn = ActiveRecord::Base.connection
+  conn.execute('SET foreign_key_checks=0')
+  load File.expand_path('db/schema.rb', '.')
+  conn.execute('SET foreign_key_checks=1')
+"
+RAILS_ENV=test bundle exec rake db:migrate
 ```
