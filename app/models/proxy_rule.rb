@@ -28,47 +28,49 @@ class ProxyRule < ApplicationRecord
 
   class PatternParser
     REGEX_LITERAL = /[_\w]+/i
+    private_constant :REGEX_LITERAL
     REGEX_VARIABLE = /\{#{REGEX_LITERAL}\}/
-
-    UNRESERVED = UriPatterns::UNRESERVED
-    ESCAPED    = UriPatterns::ESCAPED
-    RESERVED   = UriPatterns::RESERVED
 
     # pchar = unreserved / pct-encoded / ":" / "@" / "&" / "=" / "+" / "," ($ excluded intentionally)
     PARAM = /
       (?:
-        [#{UNRESERVED}:@&=+,] # note that $ is in the RFC but is removed for our purpposes
+        [#{UriPatterns::UNRESERVED}:@&=+,] # note that $ is in the RFC but is removed for our purpposes
         |
-        #{ESCAPED}
+        #{UriPatterns::ESCAPED}
         |
         #{REGEX_VARIABLE}
       )*
     /x
+    private_constant :PARAM
 
     SEGMENT = /
       #{PARAM}
       (?:;#{PARAM})*
     /x
+    private_constant :SEGMENT
 
     REGEX_PATH = %r{
       /#{SEGMENT}(?:/#{SEGMENT})* # normal URI path segments like /foo/bar
     }x
+    private_constant :REGEX_PATH
 
     QUERY = /
       (?:
-        [#{UNRESERVED}#{RESERVED}]
+        [#{UriPatterns::UNRESERVED}#{UriPatterns::RESERVED}]
         |
-        #{ESCAPED}
+        #{UriPatterns::ESCAPED}
         |
         #{REGEX_LITERAL}=#{REGEX_VARIABLE}
       )*
     /x
+    private_constant :QUERY
 
     ABSOLUTE_PATH = /\A
       #{REGEX_PATH} # absolute path
       [$]? # optionally forcing to match the end of path
       (?:\?(?:#{QUERY}))? # optionally followed by a query string
     \Z/x
+    private_constant :ABSOLUTE_PATH
 
     def initialize
       @pattern = ABSOLUTE_PATH
