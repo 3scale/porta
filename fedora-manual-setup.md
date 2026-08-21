@@ -1,4 +1,4 @@
-# Manual setup on Fedora (42)
+# Manual setup on Fedora (43+)
 
 ### Language and runtime version management
 
@@ -27,23 +27,43 @@ asdf install
 > dnf module install nodejs:16
 > ```
 
+> **GCC 15+ / Fedora 43+:** GCC 15 changed the default C standard to C23, which breaks several gems
+> that compile native extensions with `-std=c99` or `-std=c11` against Ruby 3.3.x headers
+> (`error: unknown type name 'bool'`). **The simplest fix is to use Ruby 3.4.x**, whose headers are
+> compatible with GCC 15 out of the box. Update `.tool-versions`:
+>
+> ```
+> ruby 3.4.10
+> ```
+>
+> If you must stay on Ruby 3.3.x, see the workaround in the [Bundler](#bundler) section below.
+
+### Podman short-name resolution
+
+Fedora 43 ships with Podman in `enforcing` short-name mode, which requires an interactive TTY to
+resolve unqualified image names (e.g. `mysql:8.0`). This breaks automated or non-interactive use.
+
+The cleanest fix is to switch to `permissive` mode in your **user-level** Podman config — no `sudo`
+required, and it doesn't affect other users:
+
+```sh
+mkdir -p ~/.config/containers
+cat >> ~/.config/containers/registries.conf << 'EOF'
+short-name-mode = "permissive"
+unqualified-search-registries = ["docker.io"]
+EOF
+```
+
+With this in place, `mysql:8.0`, `redis:7.2-alpine`, etc. all resolve to `docker.io` without prompting.
+
+> If you prefer not to change the Podman config, use fully-qualified image names in all `podman run`
+> commands, e.g. `docker.io/library/mysql:8.0`.
+
 ### Dependencies
 
 ```
 sudo dnf install chromedriver postgresql-devel gd-devel mysql-devel openssl-devel zlib-devel sqlite-devel readline-devel libyaml-devel libtool libffi-devel bison automake autoconf patch
 ```
-
-> **Note (GCC 15+ / Fedora 42+):** GCC 15 defaults to C23, which breaks several gems that use older C standards (`-std=c99`, `-std=c11`) with Ruby 3.3.x headers. If `bundle install` fails with `error: unknown type name 'bool'` during native extension compilation, run:
->
-> ```sh
-> bundle config build.bootsnap "--with-cppflags=-DHAVE_STDBOOL_H=1"
-> bundle config build.commonmarker "--with-cppflags=-DHAVE_STDBOOL_H=1"
-> bundle config build.hiredis-client "--with-cppflags=-DHAVE_STDBOOL_H=1"
-> bundle config build.ruby-prof "--with-cppflags=-DHAVE_STDBOOL_H=1"
-> bundle config build.unf_ext "--with-cppflags=-DHAVE_STDBOOL_H=1"
-> ```
->
-> Then re-run `bundle install`.
 
 ### Database
 
@@ -54,17 +74,15 @@ The application requires a database that can either be [PostgreSQL](https://www.
 We recommend running it in a [Podman](https://podman.io/) container:
 
 ```sh
-podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql80 docker.io/library/mysql:8.0
+podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql80 mysql:8.0
 ```
-
-> **Note:** On systems with Podman short-name resolution enforced (no TTY), use the fully-qualified image name `docker.io/library/mysql:8.0` as shown above.
 
 ### Redis
 
 [Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
-podman run -d -p 6379:6379 --name redis72 docker.io/library/redis:7.2-alpine
+podman run -d -p 6379:6379 --name redis72 redis:7.2-alpine
 ```
 
 Alternatively, Redis can be run directly on your machine with `dnf`:
@@ -79,7 +97,7 @@ sudo systemctl restart redis
 If available, Rails will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
-podman run -d -p 11211:11211 docker.io/library/memcached
+podman run -d -p 11211:11211 memcached
 ```
 
 Alternatively, Memcached can be run directly on your machine with `dnf`:
@@ -128,14 +146,22 @@ bundle install
 > ```sh
 > # eventmachine SSL headers (all Fedora versions)
 > bundle config build.eventmachine --with-cppflags="-I/usr/include/openssl/"
+> ```
 >
-> # GCC 15+ / Fedora 42+: bool type errors in C99/C11 gems (see Dependencies note above)
+> **GCC 15+ / Ruby 3.3.x only:** If you cannot upgrade to Ruby 3.4.x, apply the following config
+> before running `bundle install`. It patches each affected gem's C compiler preprocessor flags so
+> that Ruby's stdbool shim correctly includes `<stdbool.h>`:
+>
+> ```sh
 > bundle config build.bootsnap "--with-cppflags=-DHAVE_STDBOOL_H=1"
 > bundle config build.commonmarker "--with-cppflags=-DHAVE_STDBOOL_H=1"
 > bundle config build.hiredis-client "--with-cppflags=-DHAVE_STDBOOL_H=1"
 > bundle config build.ruby-prof "--with-cppflags=-DHAVE_STDBOOL_H=1"
 > bundle config build.unf_ext "--with-cppflags=-DHAVE_STDBOOL_H=1"
 > ```
+>
+> Note: there is no global `bundle config build.all` equivalent — each gem must be listed.
+> Using Ruby 3.4.x avoids this entirely.
 
 ### Yarn (1.x)
 
@@ -163,7 +189,9 @@ cp config/examples/* config/
 
 ### Setting up the test database
 
-The test database schema must be loaded separately. Due to a MySQL foreign key ordering issue, use:
+The test database schema must be loaded separately. Due to a MySQL foreign key constraint ordering
+issue, `db:schema:load` fails on a fresh database. Use this workaround which temporarily disables FK
+checks for the duration of the schema load:
 
 ```sh
 RAILS_ENV=test bundle exec rails db:drop db:create
@@ -178,5 +206,3 @@ RAILS_ENV=test bundle exec ruby -e "
 "
 RAILS_ENV=test bundle exec rake db:migrate
 ```
-
-> **Note:** `RAILS_ENV=test bundle exec rake db:schema:load` will fail with FK constraint errors on MySQL 8. The workaround above disables FK checks for the duration of the schema load.
