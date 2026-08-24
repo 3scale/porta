@@ -40,11 +40,6 @@
       border-top: 0;
     }
 
-    fieldset.actions {
-      margin-bottom: 0;
-      margin-left: 0 !important;
-    }
-
     table,
     tr,
     td {
@@ -76,6 +71,9 @@
 #cboxContent {
   position: relative;
   padding: line-height-times(2) line-height-times(1) line-height-times(1);
+  /* stylelint-disable-next-line declaration-no-important -- colorbox sets width via inline style
+   * but doesn't auto-resize to fit content. Proposed fix: pass { width: '90%' } or { innerWidth: ... }
+   * to colorbox() in application.ts instead of this override. */
   width: auto !important;
   min-width: line-height-times(20);
 }

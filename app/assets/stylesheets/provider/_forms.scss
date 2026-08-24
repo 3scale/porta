@@ -33,15 +33,12 @@ form.formtastic:not(.pf-c-form) fieldset.inputs input[type='password'] {
   line-height: $line-height-base;
 
   &:focus {
-    outline: none !important;
     border-color: $highlight-color;
-    box-shadow: 0;
     color: $highlight-color;
   }
 
   &:disabled,
   &[readonly="readonly"] {
-    outline: none !important;
     background: var(--pf-global--disabled-color--300);
     color: $disabled-color;
     border: $border-width solid $border-color;
@@ -103,7 +100,6 @@ fieldset ol li input[type='text'] + a {
 }
 
 select:not(.pf-c-form-control) {
-  appearance: none;
   background-image: url("data:image/svg+xml;charset=utf-8, \
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
         <polygon points='0,0 60,0 30,40' style='fill:%23d2d2d2;'/> \
@@ -111,13 +107,11 @@ select:not(.pf-c-form-control) {
   background-position: right line-height-times(.25) center;
   background-repeat: no-repeat;
   background-size: line-height-times(.25) auto;
-  box-shadow: 0 0 0 transparent;
   margin: 0 line-height-times(.25) 0 0;
-  max-width: calc(100% - #{$border-width}) !important;
   padding-right: line-height-times(.5);
 
-  &:hover,
-  &:focus {
+  &:hover:not(:disabled),
+  &:focus:not(:disabled) {
     background-image: url("data:image/svg+xml;charset=utf-8, \
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
         <polygon points='0,0 60,0 30,40' style='fill:%230066cc;'/> \
@@ -134,11 +128,9 @@ input[type='checkbox']:not(.pf-c-check__input, .pf-c-switch__input):active,
 form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label input,
 form.formtastic:not(.pf-c-form) fieldset > ol > li.radio fieldset ol li label input[type='radio'],
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type='checkbox'],
-form.formtastic:not(.pf-c-form) fieldset.inputs input[type='checkbox']:active,
-form.formtastic:not(.pf-c-form) fieldset.inputs > ol > li.select select {
+form.formtastic:not(.pf-c-form) fieldset.inputs input[type='checkbox']:active {
   position: relative;
-  top: -$border-width; // to make it more or less ok in chrome, firefox and safari
-  margin: 0 line-height-times(.25) 0 $border-width;
+  margin: 0 line-height-times(.25) 0 0;
   vertical-align: baseline;
   border-radius: $border-radius;
 }
@@ -252,7 +244,6 @@ form.formtastic:not(.pf-c-form) {
   }
 
   fieldset > ol > li label {
-    width: auto !important;
     padding: 0;
     margin: 0;
     display: block;
@@ -320,28 +311,8 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label {
   padding: 0;
 }
 
-form.formtastic:not(.pf-c-form) fieldset > ol > li.text textarea {
-  border: $border-width solid $border-color;
-  color: $font-color;
-
-  &:focus {
-    outline: none !important;
-    border-color: $highlight-color;
-    box-shadow: 0;
-    color: $highlight-color;
-  }
-}
-
 form.formtastic:not(.pf-c-form) fieldset.inputs label.disabled {
   color: $disabled-color;
-}
-
-select:disabled:not(.pf-c-form-control) {
-  outline: none !important;
-  background: var(--pf-global--palette--black-150) !important;
-  color: $disabled-color;
-  border: $border-width solid $border-color;
-  -webkit-text-fill-color: $disabled-color;
 }
 
 form.formtastic:not(.pf-c-form) fieldset.inputs input[readonly="readonly"] {
@@ -383,15 +354,6 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {
   font-size: $font-size-sm;
   max-width: line-height-times(36);
   display: inline-block;
-}
-
-form.formtastic:not(.pf-c-form) fieldset + p.inline-hints,
-form.formtastic:not(.pf-c-form) fieldset > ol > li.inline-hints > p.inline-hints {
-  margin-left: line-height-times(1) !important;
-}
-
-form.formtastic:not(.pf-c-form) fieldset > ol > li.inline-hints {
-  margin: 0;
 }
 
 form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {

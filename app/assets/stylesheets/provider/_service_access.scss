@@ -144,10 +144,12 @@ form.formtastic fieldset > ol > li fieldset {
 }
 
 .is-hidden {
+  /* stylelint-disable-next-line declaration-no-important -- JS-toggled utility, must override any display value */
   display: none !important;
 }
 
 .is-unavailable {
+  /* stylelint-disable-next-line declaration-no-important -- JS-toggled utility, must override any text-decoration */
   text-decoration: line-through !important;
   color: $light-color;
 }

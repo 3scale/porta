@@ -84,15 +84,6 @@ $spacer-2lh: line-height-times(2); // 32px;
   color: $body-background;
 }
 
-@mixin debug-vertical-rhythm {
-  background-image: linear-gradient(rgba(black, 0.04) 1px, transparent 1px);
-  background-size: 1px ($line-height-base * 1rem);
-
-  * {
-    background-color: transparent !important;
-  }
-}
-
 @mixin typography-base($inverted: false) {
   @include font-base;
 

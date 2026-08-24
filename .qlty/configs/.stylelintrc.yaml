@@ -14,6 +14,8 @@ rules:
     - '[a-z]+(-{1,2}[a-zA-z0-9]+)+$'
     - message: 'Expected custom property name "${name}" to follow PatternFly convention'
 
+  declaration-no-important: true
+
   font-family-no-missing-generic-family-keyword:
     - true
     - ignoreFontFamilies:

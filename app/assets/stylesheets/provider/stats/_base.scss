@@ -223,5 +223,8 @@ $stats-chart-tooltip-color: $label-color;
 }
 
 .ui-datepicker {
-  z-index: 9999 !important;
+  /* stylelint-disable-next-line declaration-no-important -- overrides jQuery UI inline z-index: 1,
+   * which lands below pf-c-page__main's z-index of 100 (--pf-global--ZIndex--xs).
+   * Uses PF4 DatePicker's z-index variable (--pf-c-date-picker__calendar--ZIndex) */
+  z-index: var(--pf-global--ZIndex--sm) !important;
 }

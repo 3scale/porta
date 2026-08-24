@@ -286,9 +286,4 @@ $tab-content-z-index: 0;
 
   border-bottom-left-radius: 0;
   padding: line-height-times(1);
-
-  &.sticked {
-    overflow-y: auto;
-    top: 24px !important;
-  }
 }

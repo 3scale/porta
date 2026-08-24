@@ -10,7 +10,6 @@
   &-toggle {
     color: $link-color;
     cursor: pointer;
-    display: block !important;
     float: right;
     font-size: $caption-font-size;
     margin-right: line-height-times(1);
@@ -110,10 +109,6 @@
 
   &-promote-button {
     border-top: $border-width solid $border-color;
-  }
-
-  &-title {
-    margin: 0 !important;
   }
 }
 
