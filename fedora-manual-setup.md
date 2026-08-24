@@ -182,12 +182,3 @@ The test database is set up with:
 ```sh
 RAILS_ENV=test bundle exec rake db:reset
 ```
-
-> **Why not `db:schema:load`?** When run against an existing database, `db:schema:load` issues
-> `DROP TABLE ... CASCADE` for each table. MySQL silently ignores the `CASCADE` keyword (it is a
-> PostgreSQL concept), so tables are dropped without removing dependent foreign key constraints
-> first. MySQL then refuses to drop a table that another table's FK still references, producing
-> `Cannot drop table 'X' referenced by a foreign key constraint`. `db:reset` instead drops and
-> recreates the entire database (`DROP DATABASE` / `CREATE DATABASE`), so there are no existing
-> tables or FK constraints when schema loading begins. The development database works fine with
-> `db:setup` for the same reason — it is always creating into an empty database.
