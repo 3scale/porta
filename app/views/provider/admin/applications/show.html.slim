@@ -1,6 +1,9 @@
 - content_for :menu do
   = render 'menu'
 
+- content_for :stylesheets do
+  = stylesheet_link_tag 'provider/utilization'
+
 - content_for :javascripts do
   = stylesheet_packs_chunks_tag 'pf_form', 'pf_addons', 'pf_grid', 'pf_description_list', 'pf_table'
 
