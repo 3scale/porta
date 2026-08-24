@@ -53,6 +53,33 @@ class Apicast::ProxyRulesSourceTest < ActiveSupport::TestCase
     assert_equal %w[/test/path/one /test/path/two /test/path/three], source.map { |rule| rule['pattern'] }
   end
 
+  test 'escapes PCRE metacharacters in proxy rule patterns' do
+    rule = FactoryBot.create(:proxy_rule, proxy: proxy, pattern: '/api.v2/search(*)')
+
+    source = Apicast::ProxyRulesSource.new(proxy).to_hash
+    rule_hash = find_by_id_in_hash(rule.id, source)
+
+    assert_equal '/api\\.v2/search\\(\\*\\)', rule_hash['pattern']
+  end
+
+  test 'escapes PCRE metacharacters in backend api rule patterns including backend path' do
+    rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/foo.bar')
+
+    source = Apicast::ProxyRulesSource.new(proxy).to_hash
+    rule_hash = find_by_id_in_hash(rule.id, source)
+
+    assert_equal '/test/path/foo\\.bar', rule_hash['pattern']
+  end
+
+  test 'preserves template variables and dollar anchor when escaping' do
+    rule = FactoryBot.create(:proxy_rule, proxy: proxy, pattern: '/api/{version}/resource$')
+
+    source = Apicast::ProxyRulesSource.new(proxy).to_hash
+    rule_hash = find_by_id_in_hash(rule.id, source)
+
+    assert_equal '/api/{version}/resource$', rule_hash['pattern']
+  end
+
   private
 
   def find_by_id_in_hash(id, hash)
