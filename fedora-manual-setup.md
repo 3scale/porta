@@ -27,11 +27,14 @@ asdf install
 > dnf module install nodejs:16
 > ```
 
-> **GCC 15+ / Fedora 43+:** GCC 15 changed the default C standard to C23, which breaks several gems
-> that compile native extensions with `-std=c99` or `-std=c11` against Ruby 3.3.x headers
-> (`error: unknown type name 'bool'`). This affects all Ruby 3.3.x releases. Ruby 3.4.x headers are
-> compatible with GCC 15 and do not require any workaround. If you are on Ruby 3.3.x, see the
-> [Bundler](#bundler) section below.
+> **Ruby 3.3.x / Fedora 43+:** Several gems compile their native extensions with `-std=c99` or
+> `-std=c11`. Under those standards `bool` is not a keyword — it requires `<stdbool.h>`. Ruby 3.3.x
+> headers contain a stdbool shim that is supposed to cover this, but it has a bug: it only includes
+> `<stdbool.h>` when `HAVE_STDBOOL_H` is defined in Ruby's build config, which it is not when Ruby
+> is built with a modern GCC. The result is `error: unknown type name 'bool'` for any gem that
+> explicitly requests `-std=c99` or `-std=c11`. This affects all Ruby 3.3.x releases (3.3.8 is the
+> latest). Ruby 3.4.x fixed the shim to unconditionally include `<stdbool.h>`. If you are on Ruby
+> 3.3.x, see the [Bundler](#bundler) section below.
 
 ### Podman short-name resolution
 
@@ -140,9 +143,10 @@ bundle install
 > bundle config build.eventmachine --with-cppflags="-I/usr/include/openssl/"
 > ```
 >
-> **GCC 15+ / Ruby 3.3.x:** Apply the following config before running `bundle install`. It patches
-> each affected gem's C compiler preprocessor flags so that Ruby's stdbool shim correctly includes
-> `<stdbool.h>`. Note there is no global catch-all — each gem must be listed individually:
+> **Ruby 3.3.x:** Apply the following config before running `bundle install`. It patches each
+> affected gem's C compiler preprocessor flags to define `HAVE_STDBOOL_H`, which causes Ruby's
+> stdbool shim to include `<stdbool.h>` as intended. Note there is no global catch-all — each gem
+> must be listed individually:
 >
 > ```sh
 > bundle config build.bootsnap "--with-cppflags=-DHAVE_STDBOOL_H=1"
