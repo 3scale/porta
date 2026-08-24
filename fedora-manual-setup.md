@@ -41,9 +41,6 @@ asdf install
 Fedora 43 ships with Podman in `enforcing` short-name mode, which requires an interactive TTY to
 resolve unqualified image names (e.g. `mysql:8.0`). This breaks automated or non-interactive use.
 
-Drop a single file into the user-level `registries.conf.d` directory — no `sudo` required, doesn't
-affect other users, and is fully supported by Podman's conf.d loading order:
-
 ```sh
 mkdir -p ~/.config/containers/registries.conf.d
 cat > ~/.config/containers/registries.conf.d/00-shortnames.conf << 'EOF'
