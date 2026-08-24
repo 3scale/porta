@@ -1,6 +1,9 @@
 - content_for :title, 'Charging & Gateway'.html_safe
 - content_for :page_header_title, 'Charging & Gateway'
 
+- content_for :stylesheets do
+  = stylesheet_link_tag 'finance/settings'
+
 - content_for :javascripts do
   = stylesheet_packs_chunks_tag 'pf_form'
 
