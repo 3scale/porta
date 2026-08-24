@@ -29,35 +29,27 @@ asdf install
 
 > **GCC 15+ / Fedora 43+:** GCC 15 changed the default C standard to C23, which breaks several gems
 > that compile native extensions with `-std=c99` or `-std=c11` against Ruby 3.3.x headers
-> (`error: unknown type name 'bool'`). **The simplest fix is to use Ruby 3.4.x**, whose headers are
-> compatible with GCC 15 out of the box. Update `.tool-versions`:
->
-> ```
-> ruby 3.4.10
-> ```
->
-> If you must stay on Ruby 3.3.x, see the workaround in the [Bundler](#bundler) section below.
+> (`error: unknown type name 'bool'`). This affects all Ruby 3.3.x releases. Ruby 3.4.x headers are
+> compatible with GCC 15 and do not require any workaround. If you are on Ruby 3.3.x, see the
+> [Bundler](#bundler) section below.
 
 ### Podman short-name resolution
 
 Fedora 43 ships with Podman in `enforcing` short-name mode, which requires an interactive TTY to
 resolve unqualified image names (e.g. `mysql:8.0`). This breaks automated or non-interactive use.
 
-The cleanest fix is to switch to `permissive` mode in your **user-level** Podman config — no `sudo`
-required, and it doesn't affect other users:
+Drop a single file into the user-level `registries.conf.d` directory — no `sudo` required, doesn't
+affect other users, and is fully supported by Podman's conf.d loading order:
 
 ```sh
-mkdir -p ~/.config/containers
-cat >> ~/.config/containers/registries.conf << 'EOF'
+mkdir -p ~/.config/containers/registries.conf.d
+cat > ~/.config/containers/registries.conf.d/00-shortnames.conf << 'EOF'
 short-name-mode = "permissive"
 unqualified-search-registries = ["docker.io"]
 EOF
 ```
 
 With this in place, `mysql:8.0`, `redis:7.2-alpine`, etc. all resolve to `docker.io` without prompting.
-
-> If you prefer not to change the Podman config, use fully-qualified image names in all `podman run`
-> commands, e.g. `docker.io/library/mysql:8.0`.
 
 ### Dependencies
 
@@ -148,9 +140,9 @@ bundle install
 > bundle config build.eventmachine --with-cppflags="-I/usr/include/openssl/"
 > ```
 >
-> **GCC 15+ / Ruby 3.3.x only:** If you cannot upgrade to Ruby 3.4.x, apply the following config
-> before running `bundle install`. It patches each affected gem's C compiler preprocessor flags so
-> that Ruby's stdbool shim correctly includes `<stdbool.h>`:
+> **GCC 15+ / Ruby 3.3.x:** Apply the following config before running `bundle install`. It patches
+> each affected gem's C compiler preprocessor flags so that Ruby's stdbool shim correctly includes
+> `<stdbool.h>`. Note there is no global catch-all — each gem must be listed individually:
 >
 > ```sh
 > bundle config build.bootsnap "--with-cppflags=-DHAVE_STDBOOL_H=1"
@@ -159,9 +151,6 @@ bundle install
 > bundle config build.ruby-prof "--with-cppflags=-DHAVE_STDBOOL_H=1"
 > bundle config build.unf_ext "--with-cppflags=-DHAVE_STDBOOL_H=1"
 > ```
->
-> Note: there is no global `bundle config build.all` equivalent — each gem must be listed.
-> Using Ruby 3.4.x avoids this entirely.
 
 ### Yarn (1.x)
 
