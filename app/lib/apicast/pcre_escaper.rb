@@ -11,10 +11,10 @@ module Apicast
       # ? is not valid in path segments, so splitting on the first ? is safe
       path_part, query_part = pattern.split('?', 2)
 
-      escaped_path = path_part.gsub(PATH_METACHARACTERS) { "\\#{Regexp.last_match(0)}" }
+      escaped_path = path_part.gsub(PATH_METACHARACTERS) { |c| "\\#{c}" }
 
       if query_part
-        "#{escaped_path}?#{query_part.gsub(QUERY_METACHARACTERS) { "\\#{Regexp.last_match(0)}" }}"
+        "#{escaped_path}?#{query_part.gsub(QUERY_METACHARACTERS) { |c| "\\#{c}" }}"
       else
         escaped_path
       end
