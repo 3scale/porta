@@ -177,7 +177,7 @@ cp config/examples/* config/
 
 ### Setting up the test database
 
-The test database is set up with:
+To recover from corrupt database use this (mostly for AI agents):
 
 ```sh
 RAILS_ENV=test bundle exec rake db:reset
