@@ -49,8 +49,6 @@ unqualified-search-registries = ["docker.io"]
 EOF
 ```
 
-With this in place, `mysql:8.0`, `redis:7.2-alpine`, etc. all resolve to `docker.io` without prompting.
-
 ### Dependencies
 
 ```
