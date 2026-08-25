@@ -176,8 +176,6 @@ cp config/examples/* config/
 
 ### Setting up the test database
 
-The test database is set up with:
-
 ```sh
-RAILS_ENV=test bundle exec rake db:reset
+RAILS_ENV=test bundle exec rake db:create db:schema:load
 ```
