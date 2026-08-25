@@ -27,14 +27,6 @@ asdf install
 > dnf module install nodejs:24
 > ```
 
-> **Ruby 3.3.x:** If you see `error: unknown type name 'bool'` when building native gems, your
-> Ruby was compiled without `HAVE_STDBOOL_H` in its build config. You can verify this with:
-> ```sh
-> grep HAVE_STDBOOL $(ruby -r rbconfig -e 'puts RbConfig::CONFIG["rubyarchhdrdir"]')/ruby/config.h
-> ```
-> If the define is missing, see the [Bundler](#bundler) section below for a per-gem workaround.
-> Ruby 3.4.x fixed the stdbool shim unconditionally, so upgrading is the cleaner long-term fix.
-
 ### Podman short-name resolution
 
 Fedora 43 ships with Podman in `enforcing` short-name mode, which requires an interactive TTY to
@@ -137,10 +129,7 @@ bundle install
 > bundle config build.eventmachine --with-cppflags="-I/usr/include/openssl/"
 > ```
 >
-> **Ruby 3.3.x (if `HAVE_STDBOOL_H` is missing from your build):** Apply the following config
-> before running `bundle install`. It defines `HAVE_STDBOOL_H` in each affected gem's preprocessor
-> flags so that Ruby's stdbool shim includes `<stdbool.h>` as intended. There is no global
-> catch-all — each gem must be listed individually:
+> **Ruby 3.3.x:** On some builds `HAVE_STDBOOL_H` is not set, causing `error: unknown type name 'bool'` when compiling native gems. Run these before `bundle install`:
 >
 > ```sh
 > bundle config build.bootsnap "--with-cppflags=-DHAVE_STDBOOL_H=1"
@@ -173,4 +162,3 @@ Copy all the default config files to your project's config folder:
 ```
 cp config/examples/* config/
 ```
-
