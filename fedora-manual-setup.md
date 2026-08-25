@@ -12,7 +12,7 @@ ln -s .tool-versions.sample .tool-versions
 
 ### Ruby and Node.js
 
-The project supports **[ruby 3.3.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 18](https://nodejs.org/download/release/v18.20.4/)**.
+The project supports **[ruby 3.3.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 24](https://nodejs.org/download/release/v24/)**.
 The recommended way to install them is with `asdf`:
 
 ```
@@ -24,17 +24,16 @@ asdf install
 
 > Alternatively, Node.js can be installed as a [Module](https://developer.fedoraproject.org/tech/languages/nodejs/nodejs.html):
 > ```
-> dnf module install nodejs:16
+> dnf module install nodejs:24
 > ```
 
-> **Ruby 3.3.x / Fedora 43+:** Several gems compile their native extensions with `-std=c99` or
-> `-std=c11`. Under those standards `bool` is not a keyword — it requires `<stdbool.h>`. Ruby 3.3.x
-> headers contain a stdbool shim that is supposed to cover this, but it has a bug: it only includes
-> `<stdbool.h>` when `HAVE_STDBOOL_H` is defined in Ruby's build config, which it is not when Ruby
-> is built with a modern GCC. The result is `error: unknown type name 'bool'` for any gem that
-> explicitly requests `-std=c99` or `-std=c11`. This affects all Ruby 3.3.x releases (3.3.8 is the
-> latest). Ruby 3.4.x fixed the shim to unconditionally include `<stdbool.h>`. If you are on Ruby
-> 3.3.x, see the [Bundler](#bundler) section below.
+> **Ruby 3.3.x:** If you see `error: unknown type name 'bool'` when building native gems, your
+> Ruby was compiled without `HAVE_STDBOOL_H` in its build config. You can verify this with:
+> ```sh
+> grep HAVE_STDBOOL $(ruby -r rbconfig -e 'puts RbConfig::CONFIG["rubyarchhdrdir"]')/ruby/config.h
+> ```
+> If the define is missing, see the [Bundler](#bundler) section below for a per-gem workaround.
+> Ruby 3.4.x fixed the stdbool shim unconditionally, so upgrading is the cleaner long-term fix.
 
 ### Podman short-name resolution
 
@@ -138,10 +137,10 @@ bundle install
 > bundle config build.eventmachine --with-cppflags="-I/usr/include/openssl/"
 > ```
 >
-> **Ruby 3.3.x:** Apply the following config before running `bundle install`. It patches each
-> affected gem's C compiler preprocessor flags to define `HAVE_STDBOOL_H`, which causes Ruby's
-> stdbool shim to include `<stdbool.h>` as intended. Note there is no global catch-all — each gem
-> must be listed individually:
+> **Ruby 3.3.x (if `HAVE_STDBOOL_H` is missing from your build):** Apply the following config
+> before running `bundle install`. It defines `HAVE_STDBOOL_H` in each affected gem's preprocessor
+> flags so that Ruby's stdbool shim includes `<stdbool.h>` as intended. There is no global
+> catch-all — each gem must be listed individually:
 >
 > ```sh
 > bundle config build.bootsnap "--with-cppflags=-DHAVE_STDBOOL_H=1"
@@ -177,7 +176,7 @@ cp config/examples/* config/
 
 ### Setting up the test database
 
-To recover from corrupt database use this (mostly for AI agents):
+The test database is set up with:
 
 ```sh
 RAILS_ENV=test bundle exec rake db:reset
