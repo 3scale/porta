@@ -174,8 +174,3 @@ Copy all the default config files to your project's config folder:
 cp config/examples/* config/
 ```
 
-### Setting up the test database
-
-```sh
-RAILS_ENV=test bundle exec rake db:create db:schema:load
-```
