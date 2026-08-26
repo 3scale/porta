@@ -117,8 +117,12 @@ form.formtastic fieldset > ol > li fieldset {
     &-item {
       position: relative;
 
-      &:last-of-type .ServiceAccessList-label {
+      &:last-of-type {
         margin-bottom: 0;
+
+        .ServiceAccessList-label {
+          margin-bottom: 0;
+        }
       }
     }
 
@@ -157,3 +161,12 @@ form.formtastic fieldset > ol > li.u-servicePermissionsDisabled fieldset {
   }
 }
 /* stylelint-enable no-descending-specificity */
+
+/* stylelint-disable-next-line selector-id-pattern */
+#user_member_permissions_input {
+  margin-bottom: 0;
+
+  fieldset:last-of-type {
+    margin-bottom: 0;
+  }
+}
