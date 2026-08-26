@@ -18,7 +18,6 @@
 @forward 'vendor/c3';
 @forward 'provider/stats/base';
 @forward 'provider/stats/selector';
-@forward 'provider/metrics';
 @forward 'provider/logo';
 
 // view specific stylesheets placed in the controller paths

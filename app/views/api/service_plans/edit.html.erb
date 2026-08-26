@@ -1,7 +1,11 @@
 <% content_for :page_header_title, "Edit Service Plan #{h @plan.name}"  %>
 
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag 'provider/plans_edit' %>
+<% end %>
+
 <% content_for :javascripts do %>
-  <%= stylesheet_packs_chunks_tag 'plans_edit' %>
+  <%= stylesheet_packs_chunks_tag 'pf_table' %>
 <% end %>
 
 <div>
