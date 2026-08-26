@@ -1,5 +1,8 @@
 - content_for :page_header_title, 'Overview'
 
+- content_for :stylesheets do
+  = stylesheet_link_tag 'provider/admin/account'
+
 - content_for :javascripts do
   = stylesheet_packs_chunks_tag 'pf_datalist'
 

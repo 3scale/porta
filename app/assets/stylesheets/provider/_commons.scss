@@ -196,3 +196,11 @@ hr {
   color: $success-color;
   cursor: move;
 }
+
+.included {
+  color: $success-color;
+}
+
+.excluded {
+  color: $error-color;
+}
