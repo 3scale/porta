@@ -8,7 +8,6 @@ class Account < ApplicationRecord
 
   # it has to be THE FIRST callback after create, so associations get the tenant id
   after_create :update_tenant_id, if: :provider?, prepend: true
-  after_create :generate_sso_key, if: :provider?
 
 
   include Fields::Fields
@@ -572,10 +571,6 @@ class Account < ApplicationRecord
     scope = persisted? ? scope.where.not(id: id) : scope
 
     errors.add :master, 'can be only one' if scope.exists?(master: true)
-  end
-
-  def generate_sso_key
-    settings.update_attribute(:sso_key, ThreeScale::SSO.generate_sso_key)
   end
 
   protected
