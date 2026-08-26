@@ -80,4 +80,16 @@ class BillingWorkerTest < ActiveSupport::TestCase
     assert_equal master_account.id, provider_id
     assert_equal @provider.id, buyer_id
   end
+
+  test 'all errors use standard retry delay to wait for lock release' do
+    regular_error = StandardError.new('Something went wrong')
+
+    retry_delay_rate_limit = BillingWorker.sidekiq_retry_in_block.call(1, mock_gateway_rate_limit_error)
+    retry_delay_regular = BillingWorker.sidekiq_retry_in_block.call(1, regular_error)
+
+    min_delay = 1.hour.to_i
+    max_delay = (1.hour + 30.minutes).to_i
+    assert_includes min_delay..max_delay, retry_delay_rate_limit, "Payment gateway rate limit errors should wait for lock release"
+    assert_includes min_delay..max_delay, retry_delay_regular, "Regular errors should wait for lock release"
+  end
 end

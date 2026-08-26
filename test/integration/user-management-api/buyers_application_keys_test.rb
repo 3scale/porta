@@ -31,10 +31,10 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
 
     post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'))
     assert_response :forbidden
-    post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), params: { access_token: token.value })
+    post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), params: { access_token: token.plaintext_value })
     assert_response :not_found
     user.update(member_permission_service_ids: [app.issuer.id])
-    post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), params: { access_token: token.value })
+    post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), params: { access_token: token.plaintext_value })
     assert_response :success
   end
 

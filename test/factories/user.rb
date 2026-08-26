@@ -2,7 +2,7 @@ FactoryBot.define do
   factory(:pending_user, :class => :user) do
     sequence(:email) { |n| "foo#{n}@example.net" }
     sequence(:username) { |n| "dude#{n}" }
-    password { 'supersecret' }
+    password { 'superSecret1234#' }
     signup_type { 'new_signup' } # means the user signed up for a plan
   end
 
@@ -35,5 +35,11 @@ FactoryBot.define do
 
   factory(:member, :parent => :user) do
     role { :member }
+
+    trait :with_plans_permission do
+      after(:create) do |user|
+        user.member_permission_ids = ['plans']
+      end
+    end
   end
 end

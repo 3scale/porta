@@ -1,9 +1,8 @@
 require 'builder'
-require 'active_support/proxy_object'
 
 module ThreeScale
   module XML
-    class Builder < ActiveSupport::ProxyObject
+    class Builder < ::BasicObject
       delegate :is_a?, :respond_to?, :to_xml, :to => :@builder
       delegate :as_json, :to_s, :to_str, :to => :to_xml
 

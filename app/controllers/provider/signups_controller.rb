@@ -7,7 +7,6 @@ class Provider::SignupsController < Provider::BaseController
   before_action :ensure_signup_possible
 
   skip_before_action :login_required
-  skip_before_action :enable_analytics, only: :test
 
   before_action :cors
   public :cors
@@ -19,19 +18,19 @@ class Provider::SignupsController < Provider::BaseController
 
   self.layoutless_rendering = false
 
-  def show # original iframe form
+  def show
     @provider = master.providers.build
     @user     = @provider.users.build_with_fields
     @plan     = plan
-    @signup_origin = default_params[:origin] || default_params[:signup_origin]
-    @fields = Fields::SignupForm.new(@provider, @user, default_params[:fields])
+    @signup_origin = params[:origin] || params[:signup_origin]
+    @fields = Fields::SignupForm.new(@provider, @user, params[:fields])
   end
 
   def create
     @plan = plan
     provider_account_manager = Signup::ProviderAccountManager.new(master)
     signup_result = provider_account_manager.create(signup_params, &method(:build_signup_result_custom_fields))
-    @fields = Fields::SignupForm.new(@provider, @user, default_params[:fields])
+    @fields = Fields::SignupForm.new(@provider, @user, params[:fields])
 
     return render :show unless signup_result.persisted?
 
@@ -52,20 +51,21 @@ class Provider::SignupsController < Provider::BaseController
   protected
 
   def signup_params
-    Signup::SignupParams.new(plans: [plan], user_attributes: user_params, account_attributes: account_params, validate_fields: true)
+    Signup::SignupParams.new(plans: [plan], user_attributes: user_params.merge(signup_type: :new_signup, username: :admin), account_attributes: account_params.merge(sample_data: true), validate_fields: true)
   end
 
   def account_params
-    params.require(:account).except(:user).merge(sample_data: true)
+    allowed_attrs = master.defined_builtin_fields_names_for(Account) + %w[name subdomain self_subdomain]
+    params.require(:account).permit(*allowed_attrs, extra_fields: master.defined_extra_fields_names_for(Account))
   end
 
   def user_params
-    params.require(:account).fetch(:user, {}).merge(signup_type: :new_signup, username: :admin)
+    params.require(:account).fetch(:user, {}).permit(:first_name, :last_name, :email, :password)
   end
 
   def handle_cache_response
     expires_in 1.hour, public: true
-    fresh_when etag: default_params, last_modified: System::Application.config.boot_time
+    fresh_when etag: params.permit!.to_h, last_modified: System::Application.config.boot_time
   end
 
   def set_analytics_page
@@ -101,12 +101,9 @@ class Provider::SignupsController < Provider::BaseController
   end
 
   def plan
-    plan_ids = default_params[:plan_id].presence
-    master.accessible_services.default.application_plans.published.find(plan_ids) if plan_ids
-  end
-
-  def default_params
-    # permit all since it can have multiple different and dynamic data
-    params.permit!.to_h
+    @plan ||= begin
+      plan_ids = params[:plan_id].presence
+      master.accessible_services.default.application_plans.published.find(plan_ids) if plan_ids
+    end
   end
 end

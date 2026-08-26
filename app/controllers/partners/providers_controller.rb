@@ -55,8 +55,8 @@ class Partners::ProvidersController < Partners::BaseController
 
   def user_params
     {
-      signup_type: partner.signup_type,
-      password: permitted_params[:password].presence || SecureRandom.hex,
+      signup_type: :created_by_provider,
+      password: permitted_params[:password].presence,
       email: permitted_params[:email],
       first_name: permitted_params[:first_name],
       last_name: permitted_params[:last_name],

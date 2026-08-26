@@ -28,8 +28,8 @@ module Finance
 
     def call!
       with_lock { call }
-    rescue LockBillingError, SpuriousBillingError => error
-      report_error(error)
+    rescue LockBillingError, SpuriousBillingError => exception
+      report_error(exception)
       nil
     end
 

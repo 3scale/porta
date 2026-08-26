@@ -235,7 +235,7 @@ module Signup
       end
 
       test 'create developer with account plan approval required and minimal signup' do
-        # The only difference is result.user_activate_on_minimal_signup? should return false, and it only happens if the contract_plans goes before this
+        # The only difference is result.user_activate_on_minimal? should return false, and it only happens if the contract_plans goes before this
         @account_plan.update_attribute(:approval_required, true)
         signup_result = signup_account_manager.create(signup_params(different_user_params: {signup_type: :minimal}))
         account = signup_result.account
@@ -301,7 +301,7 @@ module Signup
 
     def valid_user_params(different_user_params: {})
       { email: 'emailTest@email.com', username: 'john', first_name: 'John', last_name: 'Doe',
-        password: '123456', password_confirmation: '123456', signup_type: :minimal }.merge(different_user_params)
+        password: 'superSecret1234#', password_confirmation: 'superSecret1234#', signup_type: :minimal }.merge(different_user_params)
     end
   end
 end

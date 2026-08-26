@@ -55,6 +55,7 @@ Feature: Email templates management
     And field "Bcc" should be "bcc@3scale.localhost"
     And field "Cc" should be "cc@3scale.localhost"
 
+  @emails
   Scenario: New signup email template
     Given admin of account "foo.3scale.localhost" has email "foo@3scale.localhost"
       And all the rolling updates features are off

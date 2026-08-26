@@ -5,7 +5,7 @@ require 'test_helper'
 class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
   class MasterHostTest < Admin::Api::ServicesControllerTest
     setup do
-      @token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).value
+      @token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).plaintext_value
       host! master_account.internal_admin_domain
     end
 
@@ -125,7 +125,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'a member user cannot create a service' do
       member = FactoryBot.create(:member, account: provider)
-      member_access_token_value = FactoryBot.create(:access_token, owner: member, scopes: %w[account_management], permission: 'rw').value
+      member_access_token_value = FactoryBot.create(:access_token, owner: member, scopes: %w[account_management], permission: 'rw').plaintext_value
 
       assert_no_difference(provider_services.method(:count)) do
         post admin_api_services_path(access_token: member_access_token_value, format: :json), params: permitted_params
@@ -243,7 +243,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     def access_token_value
-      @access_token_value ||= FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management], permission: 'rw').value
+      @access_token_value ||= FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management], permission: 'rw').plaintext_value
     end
 
     def provider_services

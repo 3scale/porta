@@ -1,0 +1,9 @@
+div class="pf-c-card"
+  div class="pf-c-card__header"
+    div class="pf-c-card__title" = t('.title')
+  div class="pf-c-card__body"
+    = render 'stats/inlinechart', metrics: service.top_metrics
+  div class="pf-c-card__footer"
+    = pf_link_to t('shared.view_more'), admin_service_stats_usage_path(service),
+                                        class: 'pf-m-inline',
+                                        title: t('.view_more')

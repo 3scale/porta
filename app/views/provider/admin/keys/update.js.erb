@@ -1,6 +1,6 @@
 (function ($) {
   <% if @error.nil? %>
-    $.colorbox.close();
+    colorbox.close();
     const userKey = document.getElementById('cinstance-user-key')
     userKey.innerHTML = '<%= @cinstance.user_key %>'
     userKey.title = '<%= @cinstance.user_key %>'
@@ -15,7 +15,7 @@
 
     input.setAttribute('aria-invalid', 'true')
 
-    $.colorbox.resize();
+    colorbox.resize();
   <% end %>
 })(jQuery);
 

@@ -18,15 +18,13 @@ class Invitation < ApplicationRecord
   # so after first call it sets the sent_at attribute and breaks the infinite loop
   after_commit :notify_invitee, :on => :create, :unless => :sent?
 
-  attr_protected :accepted_at, :tenant_id
-
   default_scope -> { ordering { System::Database.oracle? ? sent_at.desc.op('', sql('NULLS LAST')) : sent_at.desc } }
 
   scope :pending, -> { where(accepted_at: nil) }
 
   # Build new user on information in this invitation.
   def make_user(params = {})
-    self.user= account.users.build_with_fields params.reverse_merge(:email => email, :invitation => self)
+    self.user = account.users.build_with_fields params.reverse_merge(email: email, invitation: self, signup_type: :new_signup)
   end
 
   def accepted?

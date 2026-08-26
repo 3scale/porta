@@ -19,14 +19,15 @@ table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Users table" data-
     - presenter.users.each do |user|
       tr role="row" id=(dom_id(user))
         td role="cell" data-label="Name"
+          - name = user.display_name
           - if current_user == user
-            = link_to user.display_name, edit_provider_admin_user_personal_details_path(origin: 'users'),
-                                         title: t('.personal_details')
+            = link_to name, edit_provider_admin_user_personal_details_path(origin: 'users'),
+                            title: t('.personal_details')
           - elsif can?(:edit, user)
-            = link_to user.display_name, edit_provider_admin_account_user_path(user),
-                                         title: t('.edit')
+            = link_to name, edit_provider_admin_account_user_path(user),
+                            title: t('.edit')
           - else
-            = user.display_name
+            = name
 
         td role="cell" data-label="Email"
           = user.email
@@ -55,10 +56,5 @@ table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Users table" data-
                 - else
                   - if can?(:destroy, user)
                     div class="pf-c-overflow-menu__item"
-                      = pf_delete_table_action provider_admin_account_user_path(user), confirm: t('.delete_user_confirm')
-                  - if can?(:edit, user)
-                    div class="pf-c-overflow-menu__item"
-                      a class="pf-c-button pf-m-link" href=edit_provider_admin_account_user_path(user)
-                        span class="pf-c-button__icon pf-m-start"
-                          i class="fas fa-pencil-alt" aria-hidden="true"
-                        = t('.edit')
+                      = pf_delete_table_action provider_admin_account_user_path(user), title: t('.delete_user_title', name:),
+                                                                                       confirm: t('.delete_user_confirm')

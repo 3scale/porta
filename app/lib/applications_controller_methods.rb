@@ -23,7 +23,7 @@ module ApplicationsControllerMethods
 
   # TODO: this should be done by buy! method
   def initialize_cinstance
-    @cinstance = current_account.provider_builds_application_for(@account, @application_plan, params[:cinstance], @service_plan)
+    @cinstance = current_account.provider_builds_application_for(@account, @application_plan, application_params, @service_plan)
     @cinstance.validate_human_edition!
   end
 
@@ -47,8 +47,7 @@ module ApplicationsControllerMethods
   end
 
   def find_cinstance
-    @cinstance = accessible_not_bought_cinstances.includes(plan: %i[service pricing_rules])
-                                                 .find(params[:id])
+    @cinstance = accessible_not_bought_cinstances.find(params[:id])
   end
 
   def find_buyer
@@ -81,12 +80,21 @@ module ApplicationsControllerMethods
                     end
   end
 
+  def cinstance_params
+    @cinstance_params ||= params.require(:cinstance)
+  end
+
+  def application_params
+    allowed_attrs = current_account.defined_builtin_fields_names_for(Cinstance)
+    cinstance_params.permit(*allowed_attrs, extra_fields: current_account.defined_extra_fields_names_for(Cinstance))
+  end
+
   def plan_id
-    @plan_id ||= params.require(:cinstance).permit(:plan_id).tap { |plan_params| plan_params.require(:plan_id) }[:plan_id]
+    @plan_id ||= cinstance_params.permit(:plan_id).require(:plan_id)
   end
 
   def accessible_services
-    @accessible_services ||= current_user.accessible_services.includes(:application_plans)
+    @accessible_services ||= current_user.accessible_services
   end
 
   def accessible_not_bought_cinstances

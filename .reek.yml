@@ -39,3 +39,10 @@ directories:
   "app/mailers":
     InstanceVariableAssumption:
       enabled: false
+  "test":
+    InstanceVariableAssumption:
+      enabled: false
+    DuplicateMethodCall:
+      enabled: false
+    UncommunicativeVariableName:
+      enabled: false

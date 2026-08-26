@@ -8,6 +8,6 @@ class Liquid::Drops::PostTest < ActiveSupport::TestCase
     drop = ::Liquid::Drops::Post.new(post)
 
     assert_equal 'very good point', drop.body
-    assert_equal "/forum/topics/important#post_#{post.id}", drop.url
+    assert_equal "", drop.url
   end
 end

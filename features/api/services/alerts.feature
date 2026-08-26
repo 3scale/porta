@@ -31,7 +31,7 @@ Feature: Product > Analytics > Alerts
   Scenario: Navigation via product overview
     Given the current page is the provider dashboard
     When follow "My Product" within the apis dashboard widget
-    And follow "Show all limit alerts for this service"
+    And follow "View all limit alerts for this service"
     Then the current page is the alerts of "My Product"
 
   Scenario: Listing alerts

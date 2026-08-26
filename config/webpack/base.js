@@ -40,6 +40,9 @@ const getModulePaths = () => {
 
 const sharedWebpackConfig = () => ({
   mode: 'production',
+  externals: {
+    jquery: 'jQuery', // Get jQuery from global scope (rails-jquery) instead of node_modules
+  },
   entry: getEntryObject(),
   optimization: {
     runtimeChunk: 'single',

@@ -19,8 +19,7 @@ module DeveloperPortal::Admin::Account
     end
 
     def hosted_success
-      customer_info      = params.require(:customer).permit!.to_h
-      braintree_response = braintree_blue_crypt.confirm(customer_info, params.require(:braintree).require(:nonce))
+      braintree_response = braintree_blue_crypt.confirm(customer_params.to_h, params.require(:braintree).require(:nonce))
       @payment_result    = braintree_response&.success?
       if @payment_result
         update_user_and_perform_action!(braintree_response)
@@ -50,6 +49,11 @@ module DeveloperPortal::Admin::Account
 
     def after_hosted_success_without_plan_changes_path
       admin_account_braintree_blue_url
+    end
+
+    def customer_params
+      billing_address_params = %i[company street_address postal_code locality region country_name]
+      params.require(:customer).permit(:first_name, :last_name, :phone, credit_card: { billing_address: billing_address_params })
     end
   end
 end

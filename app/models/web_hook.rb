@@ -3,8 +3,6 @@ class WebHook < ApplicationRecord
 
   alias provider account
 
-  attr_protected :account_id, :tenant_id
-
   validates :account_id, presence: true
   validates :url, format: { :with => URI::DEFAULT_PARSER.make_regexp(%w[http https]), :if => :active }, length: { maximum: 255 }
 

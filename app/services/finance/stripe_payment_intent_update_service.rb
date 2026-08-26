@@ -41,6 +41,6 @@ class Finance::StripePaymentIntentUpdateService
       params: source_object
     }
 
-    payment_transactions.create(attributes, without_protection: true)
+    payment_transactions.create(attributes)
   end
 end

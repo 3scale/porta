@@ -27,8 +27,6 @@ class Forum < ApplicationRecord
 
   scope :ordered, -> { order('position') }
 
-  attr_protected :topics_count, :posts_count, :account_id, :tenant_id
-
   def latest_posts
     posts.joins(:topic).order('posts.created_at DESC')
   end

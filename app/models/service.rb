@@ -69,8 +69,6 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   belongs_to :default_service_plan, class_name: 'ServicePlan'
   belongs_to :default_application_plan, class_name: 'ApplicationPlan'
 
-  attr_protected :account_id, :tenant_id, :audit_ids
-
   # LEGACY
   alias plans application_plans
 
@@ -249,14 +247,6 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def service_token
     active_service_token.try(:value)
-  end
-
-  def latest_applications
-    cinstances.latest
-  end
-
-  def has_traffic?
-    cinstances.where.not(first_traffic_at: nil).exists?
   end
 
   def proxiable?

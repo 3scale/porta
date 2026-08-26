@@ -40,7 +40,7 @@
     "/admin/api/accounts.xml": {
       "get": {
         "summary": "Account List",
-        "description": "Returns the list of buyer accounts (the accounts that consume your API). Filters by state are available and the results can be paginated.",
+        "description": "Returns the list of developer accounts (the accounts that consume your API). Filters by state are available and the results can be paginated.",
         "tags": [
           "Accounts"
         ],
@@ -97,7 +97,7 @@
     "/admin/api/accounts/{id}.xml": {
       "get": {
         "summary": "Account Read",
-        "description": "Returns a buyer account.",
+        "description": "Returns a developer account.",
         "tags": [
           "Accounts"
         ],
@@ -131,7 +131,7 @@
       },
       "put": {
         "summary": "Account Update",
-        "description": "Updates a buyer account by ID. You can modify all the fields on the account, including custom fields defined in the fields definition section of your admin portal. Additional fields have to be defined by name and value (i.e &name=value).",
+        "description": "Updates a developer account by ID. You can modify all the fields on the account, including custom fields defined in the fields definition section of your admin portal. Additional fields have to be defined by name and value (i.e &name=value).",
         "tags": [
           "Accounts"
         ],
@@ -139,7 +139,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the fields definition.",
+            "description": "ID of the account.",
             "required": true,
             "schema": {
               "type": "integer"
@@ -166,7 +166,7 @@
       },
       "delete": {
         "summary": "Account Delete",
-        "description": "Deletes a buyer account. Deleting an account removes all users, applications and service subscriptions to the account.",
+        "description": "Deletes a developer account. Deleting an account removes all users, applications and service subscriptions to the account.",
         "tags": [
           "Accounts"
         ],
@@ -1603,7 +1603,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the fields definition.",
+            "description": "ID of the account.",
             "required": true,
             "schema": {
               "type": "integer"
@@ -1640,7 +1640,7 @@
     "/admin/api/accounts/{id}/change_plan.xml": {
       "put": {
         "summary": "Account Change Plan",
-        "description": "Changes the account plan for the buyer account.",
+        "description": "Changes the account plan for the developer account.",
         "tags": [
           "Accounts"
         ],
@@ -1722,7 +1722,7 @@
                   },
                   "credit_card_token": {
                     "type": "string",
-                    "description": "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
+                    "description": "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`. For Stripe, `payment_method_id` must also be set."
                   },
                   "credit_card_authorize_net_payment_profile_token": {
                     "type": "string",
@@ -1767,11 +1767,14 @@
                   "credit_card_partial_number": {
                     "type": "string",
                     "description": "Last four digits on the credit card"
+                  },
+                  "payment_method_id": {
+                    "type": "string",
+                    "description": "The Payment Method ID from the payment gateway. Required for Stripe (e.g. pm_xxxxxxxxxxxxxxxx)."
                   }
                 },
                 "required": [
                   "access_token",
-                  "id",
                   "credit_card_token",
                   "credit_card_expiration_year",
                   "credit_card_expiration_month",
@@ -1883,7 +1886,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the fields definition.",
+            "description": "ID of the account.",
             "required": true,
             "schema": {
               "type": "integer"
@@ -6640,7 +6643,11 @@
                   },
                   "system_name": {
                     "type": "string",
-                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+                    "description": "System Name of the feature."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the feature."
                   }
                 },
                 "required": [
@@ -6724,11 +6731,18 @@
                   "name": {
                     "type": "string",
                     "description": "Name of the feature."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the feature."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the feature."
                   }
                 },
                 "required": [
-                  "access_token",
-                  "name"
+                  "access_token"
                 ]
               }
             }
@@ -9736,7 +9750,7 @@
                   },
                   "system_name": {
                     "type": "string",
-                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+                    "description": "System Name of the feature."
                   },
                   "description": {
                     "type": "string",
@@ -9851,6 +9865,10 @@
                   "name": {
                     "type": "string",
                     "description": "Name of the feature."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the feature."
                   },
                   "description": {
                     "type": "string",
@@ -9972,10 +9990,6 @@
                   "account_approval_required": {
                     "type": "boolean",
                     "description": "Approval is required by you before developer accounts are activated."
-                  },
-                  "strong_passwords_enabled": {
-                    "type": "boolean",
-                    "description": "Require strong passwords from your users: Password must be at least 8 characters long, and contain both upper and lowercase letters, a digit and one special character of -+=><_$#.:;!?@&*()~][}{|. Existing passwords will still work. "
                   },
                   "public_search": {
                     "type": "boolean",

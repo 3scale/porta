@@ -6,7 +6,10 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   # Account List
   # GET /admin/api/accounts.xml
   def index
-    accounts = buyer_accounts.includes(:users, :account_settings, :payment_detail, :country, :annotations, bought_plans: [:original]) # :issuer is polymorphic
+    accounts = buyer_accounts
+
+    # Only eager load for XML format which uses Account#to_xml that accesses these associations
+    accounts = accounts.includes(:users, :account_settings, :payment_detail, :country, :annotations, bought_plans: [:original]) if request.format.xml?
 
     if state = params[:state].presence
       accounts = accounts.where(:state => state.to_s)
@@ -40,9 +43,8 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
 
     preload_to_present(buyer_account)
 
-    buyer_account.vat_rate = params[:vat_rate].to_f if params[:vat_rate]
     buyer_account.settings.attributes = billing_params
-    buyer_account.update_with_flattened_attributes(flat_params)
+    buyer_account.update(account_params)
 
     respond_with(buyer_account)
   end
@@ -116,7 +118,9 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   end
 
   def preload_to_present(accounts)
-    ActiveRecord::Associations::Preloader.new(records: Array(accounts), associations: [:annotations, {bought_plans: %i[original]}]).call
+    # Only preload for XML format which uses Account#to_xml that accesses these associations
+    ActiveRecord::Associations::Preloader.new(records: Array(accounts), associations: [:annotations, bought_plans: [:original]]).call if request.format.xml?
+
     accounts
   end
 
@@ -149,9 +153,5 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
     else
       raise ActiveRecord::RecordNotFound
     end
-  end
-
-  def flat_params
-    super.except(:vat_rate, :id)
   end
 end

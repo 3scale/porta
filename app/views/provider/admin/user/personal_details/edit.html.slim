@@ -3,13 +3,6 @@
 - content_for :javascripts do
   = stylesheet_packs_chunks_tag 'pf_form'
 
-- if current_user.can_set_password? && !current_account.settings.enforce_sso?
-  - content_for :page_header_alert do
-      br
-      = pf_inline_alert t('.set_password_html', href: new_provider_password_path), variant: :info
-
-- using_password = current_user.using_password?
-
 div class="pf-c-card"
   div class="pf-c-card__body"
     = semantic_form_for current_user, builder: Fields::PatternflyFormBuilder,
@@ -20,13 +13,12 @@ div class="pf-c-card"
 
       = form.inputs 'User Information' do
         = form.user_defined_form
-        - if using_password
-          = form.input :password, as: :patternfly_input,
-                                  label: t('.new_password_label'),
-                                  required: current_user.password_required?,
-                                  input_html: { value: '', required: current_user.password_required? }
+        = form.input :password, as: :patternfly_input,
+                                label: t('.new_password_label'),
+                                required: false,
+                                input_html: { value: '', type: 'password', required: false }
 
-      - if using_password
+      - if current_user.already_using_password?
         = form.inputs "Provide your current password and update your personal details" do
           = form.input :current_password, as: :patternfly_input,
                                           required: true,

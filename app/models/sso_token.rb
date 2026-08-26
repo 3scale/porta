@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 class SSOToken
   include ActiveModel::Validations
-  include ActiveModel::MassAssignmentSecurity
+  include ActiveModel::ForbiddenAttributesProtection
   include ActiveModel::Serializers::Xml
 
   attr_accessor   :user_id, :username, :expires_in, :redirect_url, :protocol, :account
-  attr_accessible :user_id, :username, :expires_in, :redirect_url, :protocol
   attr_reader     :encrypted_token,    :expires_at
 
   validates :expires_in, :numericality => { :only_integer => true, :greater_than => 30.seconds, :less_than_or_equal_to => 1.day, :allow_nil => true }
@@ -15,9 +16,9 @@ class SSOToken
   validate :one_of_user_id_or_username_is_required
   validate :account_is_provider_and_user_of_provider, :if => Proc.new {|o| o.account && o.user_id || o.username }
 
-  def initialize(**attributes)
-    assign_attributes({:expires_in => 10.minutes, :protocol => 'https'}.merge(attributes))
-    @new_record= true
+  def initialize(attributes = {})
+    assign_attributes(attributes.reverse_merge(expires_in: 10.minutes, protocol: 'https'))
+    @new_record = true
   end
 
   def save
@@ -47,9 +48,9 @@ class SSOToken
     xml.to_xml
   end
 
-  def assign_attributes values
-    sanitize_for_mass_assignment(values, nil).each do |k, v|
-      send("#{k}=", v)
+  def assign_attributes(values)
+    sanitize_for_mass_assignment(values).each do |key, value|
+      send("#{key}=", value)
     end
   end
 
@@ -75,42 +76,42 @@ class SSOToken
 
   protected
 
-    def generate_token
-      @expires_at= Time.now.utc + expires_in.to_i
-      @encrypted_token= ThreeScale::SSO::Encryptor.new(account.settings.sso_key, expires_at.to_i).encrypt_token user_id, username
-      @new_record= false
-    end
+  def generate_token
+    @expires_at= Time.now.utc + expires_in.to_i
+    @encrypted_token= ThreeScale::SSO::Encryptor.new(account.settings.sso_key, expires_at.to_i).encrypt_token user_id, username
+    @new_record= false
+  end
 
   private
 
-    def parsable_redirect_url
-      Addressable::URI.parse redirect_url
-    rescue
-      errors.add :redirect_url, :invalid
+  def parsable_redirect_url
+    Addressable::URI.parse redirect_url
+  rescue
+    errors.add :redirect_url, :invalid
+  end
+
+  def one_of_user_id_or_username_is_required
+    if user_id.nil? && username.nil?
+      errors.add :base, :one_of_user_id_or_username_is_required
+    end
+  end
+
+  def account_is_provider_and_user_of_provider
+    unless account.is_a?(Account) && account.provider?
+      errors.add :account, :invalid
+      return
     end
 
-    def one_of_user_id_or_username_is_required
-      if user_id.nil? && username.nil?
-        errors.add :base, :one_of_user_id_or_username_is_required
+    # if we have a user-id and we can't find the user for this provider we fail to generate the token
+    unless user_id.blank?
+      if account.managed_users.find_by_id(user_id).nil?
+        errors.add :user_id, :invalid
       end
+      return
     end
 
-    def account_is_provider_and_user_of_provider
-      unless account.is_a?(Account) && account.provider?
-        errors.add :account, :invalid
-        return
-      end
-
-      # if we have a user-id and we can't find the user for this provider we fail to generate the token
-      unless user_id.blank?
-        if account.managed_users.find_by_id(user_id).nil?
-          errors.add :user_id, :invalid
-        end
-        return
-      end
-
-      if account.managed_users.find_by_username(username).nil?
-        errors.add :username, :invalid
-      end
+    if account.managed_users.find_by_username(username).nil?
+      errors.add :username, :invalid
     end
+  end
 end

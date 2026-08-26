@@ -3,6 +3,9 @@
 require 'test_helper'
 
 class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
+
+  include BillingResultsTestHelpers
+
   setup do
     provider_account = FactoryBot.create(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc' })
     buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
@@ -22,13 +25,13 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
   attr_reader :gateway, :invoice, :amount, :service
 
   test 'charge' do
-    service.expects(:create_payment_intent).with(amount).returns(true)
+    service.expects(:create_payment_intent).with(amount).returns(ActiveMerchant::Billing::Response.new(true, 'ok'))
     assert service.charge(amount)
   end
 
   test 'charge with existing payment intent' do
     payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, reference: 'some-payment-intent-id', state: 'pending')
-    service.expects(:confirm_payment_intent).with(payment_intent).returns(true)
+    service.expects(:confirm_payment_intent).with(payment_intent).returns(ActiveMerchant::Billing::Response.new(true, 'ok'))
     assert service.charge(amount)
   end
 
@@ -132,6 +135,14 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
     gateway.expects(:purchase).with(15_000, anything, has_entry(:description, "#{invoice.provider.name} API services #{friendly_id}")).returns(response)
     charge_service = build_charge_service(invoice: invoice)
     assert charge_service.charge(amount)
+  end
+
+  test 'exception is raised when rate limit error is detected' do
+    gateway.expects(:purchase).returns(mock_stripe_rate_limit_response)
+
+    assert_raises(Finance::Payment::GatewayRateLimitError) do
+      service.charge(amount)
+    end
   end
 
   private

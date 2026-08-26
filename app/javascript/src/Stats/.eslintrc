@@ -59,4 +59,7 @@
       "typescript": false
     }
   },
+  "globals": {
+    "$": "readonly"
+  }
 }

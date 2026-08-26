@@ -6,7 +6,7 @@ class MessagesTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create :provider_account
     @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
     host! @provider.external_admin_domain
-    provider_login_with @provider.admins.first, 'supersecret'
+    provider_login_with @provider.admins.first, 'superSecret1234#'
   end
 
   test "ensure buyer domain" do

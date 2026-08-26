@@ -24,7 +24,7 @@ module TestHelpers
           FactoryBot.create(:limit_alert, account: provider, cinstance: provider.application_contracts.take)
           app_plan = FactoryBot.create(:application_plan, issuer: service)
           app_plan.customize
-          FactoryBot.create(:application_plan, name: "somehow_broken", original_id: app_plan.id, issuer: service).update(issuer_id: service.id + 100)
+          FactoryBot.create(:application_plan, name: "somehow_broken", original_id: app_plan.id, issuer: service)
           metric = service.metrics.take
           FactoryBot.create(:usage_limit, plan: app_plan, metric:)
           FactoryBot.create(:plan_metric, plan: app_plan, metric:, visible: false, limits_only_text: false)
@@ -80,23 +80,33 @@ module TestHelpers
           FactoryBot.create(:keycloak_self_authentication_provider, account: provider)
           FactoryBot.create(:github_authentication_provider, account: provider)
           FactoryBot.create(:redhat_customer_portal_authentication_provider, account: provider)
-          provider.authentication_providers.create!({ type: "AuthenticationProvider::Custom", client_id: 'id', client_secret: 'secret', site: 'http://example.com', account: provider }, { without_protection: true })
-          provider.authentication_providers.create!({ type: "AuthenticationProvider::ServiceDiscoveryProvider", client_id: 'id', client_secret: 'secret', site: 'http://example.com', account: provider }, {without_protection: true })
+          provider.authentication_providers.create!(type: "AuthenticationProvider::Custom", client_id: 'id', client_secret: 'secret', site: 'http://example.com', account: provider)
+          provider.authentication_providers.create!(type: "AuthenticationProvider::ServiceDiscoveryProvider", client_id: 'id', client_secret: 'secret', site: 'http://example.com', account: provider)
 
           forum = FactoryBot.create(:forum, account: provider)
           topic = FactoryBot.create(:topic, user: provider.admin_user, forum:)
           FactoryBot.create(:topic_category, forum:)
           FactoryBot.create(:post, user: provider.admin_user, forum:, topic:)
-          UserTopic.create({user: provider.admin_user, topic:}, {without_protection: true})
-          Moderatorship.create({user: provider.admin_user, forum:}, {without_protection: true})
+          UserTopic.create(user: provider.admin_user, topic:)
+          Moderatorship.create(user: provider.admin_user, forum:)
 
           Configuration::Value.create(configurable: provider, name: "foo", value: "bar")
 
           FactoryBot.create(:cms_portlet, provider:)
+
+          AccountSetting::PermissionsPolicyHeaderAdmin.create!(account: provider, value: "picture-in-picture=(), geolocation=(self https://example.com/), camera=*")
+          AccountSetting::PermissionsPolicyHeaderDeveloper.create!(account: provider, value: "picture-in-picture=(), geolocation=(self https://example.com/), camera=*")
+
+          AccountSetting::CspHeaderAdmin.create!(account: provider, value: "default-src ''")
+          AccountSetting::CspHeaderDeveloper.create!(account: provider, value: "")
+
+          AccountSetting::CspReportOnlyHeaderAdmin.create!(account: provider, value: "default-src 'self'")
+          AccountSetting::CspReportOnlyHeaderDeveloper.create!(account: provider, value: "default-src 'self'")
+
           LatestForumPostsPortlet.create!(provider:, portlet_type: 'LatestForumPostsPortlet', system_name: 'name', posts: forum.posts.count)
           TableOfContentsPortlet.create!(provider:, portlet_type: 'TableOfContentsPortlet', system_name: 'name', section_id: provider.provided_sections.first.id)
           CMS::Redirect.new.tap do |redirect|
-            redirect.assign_attributes({source: "a", target: "b", provider:}, {without_protection: true})
+            redirect.assign_attributes(source: "a", target: "b", provider:)
           end.save!
 
           provider

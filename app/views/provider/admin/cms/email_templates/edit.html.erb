@@ -2,6 +2,8 @@
 
 <% content_for :page_header_title, "Edit template #{@page.name}" %>
 
+<%= javascript_packs_with_chunks_tag 'cms', 'pf_spacing' %>
+
 <%= cms_form_for(@page) do |f| %>
   <%= render 'form', :f => f %>
 

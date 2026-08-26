@@ -42,7 +42,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
     check_require_billing_information
     respond_to do |format|
       # FIXME: Always false if account does not have billing address. Billing address is set in the next page.
-      if @account.update(account_params)
+      if @account.update(update_account_params)
         format.html { redirect_to_success }
         format.js do
           flash.now[:success] = t('.success')
@@ -59,17 +59,26 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
   private
 
   def signup_params
-    params_required = params.require(:account)
-    account_params = params_required.except(:user)
-    user_params = params_required.fetch(:user, {}).merge(signup_type: :created_by_provider)
-    Signup::SignupParams.new(plans: [], user_attributes: user_params, account_attributes: account_params, validate_fields: false)
+    Signup::SignupParams.new(plans: [], user_attributes: user_params.merge(signup_type: :created_by_provider), account_attributes: account_params, validate_fields: false)
+  end
+
+  def account_params
+    defined_builtin_fields_names = current_account.defined_builtin_fields_names_for(Account)
+    defined_extra_fields_names = current_account.defined_extra_fields_names_for(Account)
+    allowed_attrs = defined_builtin_fields_names - %i[billing_address country] + %i[country_id]
+    params.require(:account).permit(*allowed_attrs, extra_fields: defined_extra_fields_names)
+  end
+
+  def user_params
+    allowed_attrs = current_account.defined_builtin_fields_names_for(User) + %w[password password_confirmation]
+    params.require(:account).fetch(:user, {}).permit(*allowed_attrs, extra_fields: current_account.defined_extra_fields_names_for(User))
   end
 
   def check_provider_signup_possible
     redirect_to admin_buyers_accounts_path, info: t('.not_possible') unless current_account.signup_provider_possible?
   end
 
-  def account_params
+  def update_account_params
     allowed_fields = current_account.editable_defined_fields_for(current_user).map do |field|
       field_name = field.name
       field_name == 'country' ? 'country_id' : field_name

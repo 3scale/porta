@@ -19,6 +19,12 @@ System::Database::Oracle.define do
     SQL
   end
 
+  trigger 'account_settings' do
+    <<~SQL
+      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND tenant_id <> master_id;
+    SQL
+  end
+
   trigger 'alerts' do
     <<~SQL
       SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND (master <> 1 OR master is NULL);
@@ -581,7 +587,7 @@ System::Database::Oracle.define do
     end
 
     <<~SQL
-      IF #{definitions.map{ _1.join(" THEN\n") }.join("\nELSIF ")}
+      IF #{definitions.map { _1.join(" THEN\n") }.join("\nELSIF ")}
       END IF;
     SQL
   end

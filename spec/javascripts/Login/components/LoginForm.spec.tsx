@@ -70,6 +70,16 @@ it('should disable the sign in button unless fields are filled', () => {
   expect(isSubmitDisabled(wrapper)).toEqual(false)
 })
 
+it('should not render reCAPTCHA when disabled', () => {
+  const wrapper = mountWrapper({ recaptcha: { enabled: false, siteKey: 'key', action: 'provider/sessions' } })
+  expect(wrapper.exists('input.g-recaptcha')).toEqual(false)
+})
+
+it('should render reCAPTCHA when enabled', () => {
+  const wrapper = mountWrapper({ recaptcha: { enabled: true, siteKey: 'key', action: 'provider/sessions' } })
+  expect(wrapper.exists('input.g-recaptcha')).toEqual(true)
+})
+
 describe('when on the first attempt', () => {
   const props = { session: { username: null } }
 

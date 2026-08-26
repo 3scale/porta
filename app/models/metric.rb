@@ -21,12 +21,11 @@ class Metric < ApplicationRecord
 
   has_many :proxy_rules, :dependent => :destroy, inverse_of: :metric
 
-  audited :allow_mass_assignment => true
+  audited
   has_system_name uniqueness_scope: %i[owner_type owner_id], human_name: :friendly_name
 
   acts_as_tree
 
-  attr_protected :service_id, :parent_id, :tenant_id, :audit_ids
   validates :unit, presence: true, unless: :child?
   validates :friendly_name, uniqueness: { scope: %i[owner_type owner_id], case_sensitive: true }, presence: true
   validates :system_name, :unit, :friendly_name, :owner_type, length: { maximum: 255 }
@@ -51,7 +50,7 @@ class Metric < ApplicationRecord
   scope :order_by_unit, -> { order('unit') }
 
   scope :by_provider, ->(provider) {
-    where.has { ((owner_type == 'Service') & owner_id.in(provider.services.pluck(:id))) | ((owner_type == 'BackendApi') & owner_id.in(provider.backend_apis.pluck(:id))) }
+    where(owner: provider.services).or(where(owner: provider.backend_apis))
   }
 
   # Create one of the predefined, default metrics.

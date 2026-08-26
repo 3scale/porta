@@ -117,6 +117,6 @@ class Provider::Admin::Account::EmailConfigurationsControllerTest < ActionDispat
   end
 
   def email_configurations_params
-    { email_configuration: { email: 'myemail@example.com', user_name: 'My Username', password: '123456' } }
+    { email_configuration: { email: 'myemail@example.com', user_name: 'My Username', password: 'superSecret1234#' } }
   end
 end

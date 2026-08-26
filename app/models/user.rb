@@ -109,14 +109,6 @@ class User < ApplicationRecord
   validate :username_is_unique
   validates :open_id, uniqueness: { case_sensitive: true }, allow_nil: true
 
-  attr_accessible :title, :username, :email, :first_name, :last_name,
-                  :conditions, :cas_identifier, :open_id, :service_conditions,
-                  :job_role, :extra_fields, as: %i[default member admin]
-
-  attr_accessible :member_permission_service_ids, :member_permission_ids, as: %i[admin]
-
-
-
   def self.search_states
     %w(pending active)
   end
@@ -131,6 +123,15 @@ class User < ApplicationRecord
   scope :impersonation_admins, -> { where(username: ThreeScale.config.impersonation_admin[:username]) }
 
   scope :admins, -> { where(role: 'admin') }
+
+  JOHN_DOE_ATTRS = { username: 'john', first_name: 'John', last_name: 'Doe', role: :admin }.freeze
+  JOHN_DOE_ORG_NAME = 'Developer'
+
+  scope :sample_developer_john_doe, -> { where(JOHN_DOE_ATTRS).joins(:account).where(accounts: { org_name: JOHN_DOE_ORG_NAME }) }
+
+  def sample_developer_john_doe?
+    JOHN_DOE_ATTRS.all? { |attr, value| send(attr) == value } && account.org_name == JOHN_DOE_ORG_NAME
+  end
 
   scope :active, -> { where(state: 'active') }
 
@@ -182,15 +183,6 @@ class User < ApplicationRecord
     AccessToken.scopes.allowed_for(self)
   end
 
-  def accessible_service_tokens
-    if has_permission?(:plans)
-      accessible_services.joins(:service_tokens)
-        .includes(:service_tokens).map(&:active_service_token)
-    else
-      []
-    end
-  end
-
   def accessible_cinstances
     account.provided_cinstances.permitted_for(self)
 
@@ -226,10 +218,6 @@ class User < ApplicationRecord
 
   def minimal_signup?
     signup.minimal?
-  end
-
-  def api_signup?
-    signup.api?
   end
 
   def cas_signup?
@@ -344,14 +332,6 @@ class User < ApplicationRecord
     account.try!(:provider_id_for_audits) || provider_account.try!(:provider_id_for_audits)
   end
 
-  def provider_requires_strong_passwords?
-    # use fields definitons source (instance variable) as backup when creating new record
-    # and there is no provider account (its still new record and not set through association.build)
-    if source = fields_definitions_source_root
-      source.settings.strong_passwords_enabled?
-    end
-  end
-
   protected
 
   def account_for_sphinx
@@ -424,20 +404,12 @@ class User < ApplicationRecord
       @user = user
     end
 
-    def partner?
-      signup_type.to_s.match(/^partner(:|$)/)
-    end
-
     def new?
       signup_type == :new_signup
     end
 
     def minimal?
       signup_type == :minimal
-    end
-
-    def api?
-      signup_type == :api
     end
 
     def open_id?
@@ -449,7 +421,7 @@ class User < ApplicationRecord
     end
 
     def created_by_provider?
-      signup_type == :created_by_provider
+      %i[created_by_provider api].include?(signup_type)
     end
 
     def cas?
@@ -457,11 +429,11 @@ class User < ApplicationRecord
     end
 
     def machine?
-      minimal? || api? || created_by_provider? || open_id? || cas? || oauth2?
+      minimal? || created_by_provider? || open_id? || cas? || oauth2?
     end
 
     def by_user?
-      not machine?
+      !machine?
     end
 
     private

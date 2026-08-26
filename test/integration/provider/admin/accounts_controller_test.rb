@@ -11,6 +11,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
     @service_plan = master.default_service_plans.first
     @application_plan = master.default_application_plans.first
     @application_plan.update(system_name: 'enterprise') # for the switches tested later
+    FieldsDefinition.create_defaults!(@master)
     FactoryBot.create(:fields_definition, account: @master, target: 'User', name: 'created_by')
   end
 
@@ -104,7 +105,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
     {
       account: {
         org_name: 'Alaska',
-        user: { email: 'foo@example.com', extra_fields: { created_by: 'hi' }, password: '123456', username: 'hello' }
+        user: { email: 'foo@example.com', extra_fields: { created_by: 'hi' }, password: 'superSecret1234#', username: 'hello' }
       }
     }
   end

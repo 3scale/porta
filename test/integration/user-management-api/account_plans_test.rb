@@ -24,7 +24,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
       member = FactoryBot.create(:member, account: @provider, admin_sections: %w[])
       token = FactoryBot.create(:access_token, owner: member, scopes: 'account_management')
 
-      get admin_api_account_plans_path(format: :xml), params: { access_token: token.value }
+      get admin_api_account_plans_path(format: :xml), params: { access_token: token.plaintext_value }
       assert_response :forbidden
     end
 
@@ -32,7 +32,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
       member = FactoryBot.create(:member, account: @provider, admin_sections: %w[partners plans])
       token = FactoryBot.create(:access_token, owner: member, scopes: 'account_management')
 
-      get admin_api_account_plans_path(format: :xml), params: { access_token: token.value }
+      get admin_api_account_plans_path(format: :xml), params: { access_token: token.plaintext_value }
       assert_response :success
     end
 
@@ -40,7 +40,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
       admin = FactoryBot.create(:admin, account: @provider, admin_sections: [])
       token = FactoryBot.create(:access_token, owner: admin, scopes: 'account_management')
 
-      get admin_api_account_plans_path(format: :xml), params: { access_token: token.value }
+      get admin_api_account_plans_path(format: :xml), params: { access_token: token.plaintext_value }
       assert_response :success
     end
 
@@ -49,7 +49,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
       admin = FactoryBot.create(:admin, account: @provider, admin_sections: [])
       token = FactoryBot.create(:access_token, owner: admin, scopes: 'account_management')
 
-      get admin_api_account_plans_path(format: :xml), params: { access_token: token.value }
+      get admin_api_account_plans_path(format: :xml), params: { access_token: token.plaintext_value }
       assert_response :success
     end
   end

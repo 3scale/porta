@@ -17,6 +17,6 @@ class RestoreApicastMasterTokenWorkerTest < ActiveSupport::TestCase
     end
 
     master_token.reload
-    assert_equal random_token, master_token.value
+    assert_equal AccessToken.compute_digest(random_token), master_token.value
   end
 end

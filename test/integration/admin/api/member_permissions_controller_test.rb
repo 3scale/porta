@@ -11,7 +11,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     @service2_id = service_ids.last
     @nonexistent_id = service_ids.max + 1
     @user = FactoryBot.create(:active_user, account: provider)
-    @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
+    @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
 
     host! provider.external_admin_domain
   end
@@ -130,7 +130,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
 
   test "member user can't update his own permissions" do
     user.update_attribute :role, 'member'
-    token = FactoryBot.create(:access_token, owner: user, scopes: %w[account_management]).value
+    token = FactoryBot.create(:access_token, owner: user, scopes: %w[account_management]).plaintext_value
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D
     params = { allowed_sections: ['settings'], allowed_service_ids: '', access_token: token }
 

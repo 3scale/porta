@@ -6,7 +6,7 @@ class Buyers::RoutesTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account)
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     host! @provider.internal_domain
-    login_with @buyer.admins.first.username, "supersecret"
+    login_with @buyer.admins.first.username, "superSecret1234#"
   end
 
   test 'redirect /p/admin/dashboard to /admin' do

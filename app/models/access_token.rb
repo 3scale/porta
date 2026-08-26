@@ -1,9 +1,15 @@
+# frozen_string_literal: true
+
 class AccessToken < ApplicationRecord
-  TIMESTAMP_FORMAT = '%FT%T%:z'.freeze
+  DIGEST_PREFIX = 'SHA384$'
+
+  TIMESTAMP_FORMAT = '%FT%T%:z'
   PAST_TIME = Time.at(0).utc.freeze
   private_constant :PAST_TIME
 
   belongs_to :owner, class_name: 'User', inverse_of: :access_tokens
+
+  attr_reader :plaintext_value
 
   validates :name, length: { maximum: 255 }
 
@@ -39,7 +45,7 @@ class AccessToken < ApplicationRecord
   class Scopes
     extend Forwardable
 
-    delegate %i(each count select any? map) => :scopes
+    delegate %i[each empty? count select any? map] => :scopes
 
     def initialize(scopes)
       @scopes = scopes
@@ -98,14 +104,22 @@ class AccessToken < ApplicationRecord
   validate :validate_scope_exists
   validate :validate_expiration_date, on: %i[create]
 
-  after_initialize :generate_value
+  after_initialize :generate_if_missing, if: :new_record?
 
-  attr_accessible :owner, :name, :scopes, :permission, :expires_at
+  def self.compute_digest(plaintext_value)
+    return nil if plaintext_value.blank?
 
-  attr_readonly :value
+    hash = OpenSSL::Digest::SHA384.hexdigest(plaintext_value.to_s)
+    "#{DIGEST_PREFIX}#{hash}"
+  end
 
-  def self.find_from_value(value)
-    find_by(value: value.to_s.scrub)
+  def self.find_from_value(plaintext_value)
+    return nil if plaintext_value.blank?
+
+    scrubbed = plaintext_value.to_s.scrub
+    digest = compute_digest(scrubbed)
+
+    find_by(value: digest)
   rescue ActiveRecord::StatementInvalid, ArgumentError # utf-8 issues
     nil
   end
@@ -121,8 +135,25 @@ class AccessToken < ApplicationRecord
   # This can't change or it will create new tokens for everyone
   OIDC_SYNC_TOKEN = 'OIDC Synchronization Token'.freeze
 
+  # nil covers legacy tokens created before expiration was added; can be removed after a release
+  scope :stale, -> { where(name: OIDC_SYNC_TOKEN, expires_at: [...Time.now.utc, nil]) }
+
   def self.oidc_sync
-    create_with(scopes: %w[account_management], permission: 'ro').find_or_create_by!(name: OIDC_SYNC_TOKEN)
+    user_id = scope_attributes["owner_id"]
+    cache_key = "access_tokens/user:#{user_id}/oidc"
+
+    # Hot path: skip the transaction entirely on cache hit (zero DB queries).
+    cached = Rails.cache.read(cache_key)
+    return cached if cached
+
+    transaction do
+      # Lock to serialize concurrent cache misses (e.g. full resync).
+      lock.where(name: OIDC_SYNC_TOKEN).load
+
+      Rails.cache.fetch(cache_key, expires_in: 1.hour) do
+        create!(name: OIDC_SYNC_TOKEN, scopes: %w[account_management], permission: 'ro', expires_at: 1.day.from_now.utc.iso8601).plaintext_value
+      end
+    end
   end
 
   def scopes=(values)
@@ -155,8 +186,11 @@ class AccessToken < ApplicationRecord
     errors.add :expires_at, :invalid, message: "Date must follow ISO8601 format and be future. Example: #{1.week.from_now.utc.iso8601}."
   end
 
-  def generate_value
-    self.value ||= self.class.random_id
+  def generate_if_missing
+    return if value.present?
+
+    @plaintext_value = self.class.random_id
+    self.value = self.class.compute_digest(@plaintext_value)
   end
 
   def available_permissions
@@ -167,8 +201,8 @@ class AccessToken < ApplicationRecord
     PERMISSIONS.key(permission)
   end
 
-  def show_value?(*)
-    saved_changes.include?(:value)
+  def plaintext_value_known?(*)
+    @plaintext_value.present?
   end
 
   def available_scopes
@@ -180,7 +214,7 @@ class AccessToken < ApplicationRecord
   end
 
   def self.random_id
-    SecureRandom.hex(32)
+    SecureRandom.hex(48)
   end
 
   def expired?

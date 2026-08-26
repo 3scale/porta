@@ -7,8 +7,6 @@ class CMS::Redirect < ApplicationRecord
   validates :source, uniqueness: { scope: [:provider_id], case_sensitive: true }, length: { maximum: 255 }
   validates :target, length: { maximum: 255 }
 
-  attr_accessible :source, :target
-
   include NormalizePathAttribute
   verify_path_format :source, :target
 end

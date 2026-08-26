@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import $ from 'jquery'
-
 import { StatsChartManager } from 'Stats/lib/chart_manager'
 
 const statsState = {
@@ -73,10 +71,9 @@ describe('ChartManager', () => {
     expect(statsState.setState).toHaveBeenCalledWith({ seriesTotal: 111 }, ['seriesTotal'], false)
   })
 
-  // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
-  it('should update chart when refresh event was triggered', () => {
+  it('should update chart when update is called', () => {
     jest.spyOn(chartManager, 'updateChart')
-    $(statsState).trigger('refresh')
+    chartManager.update()
 
     expect(chartManager.updateChart).toHaveBeenCalled()
   })

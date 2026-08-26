@@ -7,6 +7,40 @@ Feature: Provider password reset
   Background:
     Given a provider
 
+  Rule: ReCAPTCHA protects from bots
+
+    @recaptcha
+    Scenario: Captcha is disabled
+      Given the provider has bot protection disabled
+      When they go to the provider reset password page
+      Then the captcha is not present
+
+    @recaptcha
+    Scenario: Captcha is enabled
+      Given the provider has bot protection enabled
+      When they go to the provider reset password page
+      Then the captcha is present
+
+    @recaptcha
+    Scenario: Bot protection rejects the request
+      Given the provider has bot protection enabled
+      And the client will be marked as a bot
+      And an active user "Pepe" of account "foo.3scale.localhost" with email "pepe@example.com"
+      When they go to the provider reset password page
+      And they fill in "Email" with "pepe@example.com"
+      And press "Reset password"
+      Then they should see "reCAPTCHA verification failed, please try again."
+
+    @recaptcha
+    Scenario: Bot protection allows the request
+      Given the provider has bot protection enabled
+      And the client will not be marked as a bot
+      And an active user "Pepe" of account "foo.3scale.localhost" with email "pepe@example.com"
+      When they go to the provider reset password page
+      And they fill in "Email" with "pepe@example.com"
+      And press "Reset password"
+      Then they should see "We sent an email with password reset instructions to: pepe@example.com"
+
   Rule: On master domain
 
     Background:
@@ -48,31 +82,34 @@ Feature: Provider password reset
       Then they should see "We sent an email with password reset instructions to: unknown@not.valid"
       Then the current page is the provider login page
 
+    @emails
     Scenario: Set a new password
       Given the user has requested a new password
       And follow the link found in the provider password reset email send to "pepe@example.com"
-      And they fill in "Password" with "monkey"
-      And they fill in "Password confirmation" with "monkey"
+      And they fill in "Password" with "superSecret1234#"
+      And they fill in "Password confirmation" with "superSecret1234#"
       And press "Change Password"
       Then they should see "The password has been changed"
       And the current page is the provider login page
-      And the user is now able to sign in with password "monkey"
+      And the user is now able to sign in with password "superSecret1234#"
 
+    @emails
     Scenario: New password form validation
       Given the user has requested a new password
       And follow the link found in the provider password reset email send to "pepe@example.com"
-      And they fill in "Password" with "monkey"
+      And they fill in "Password" with "superSecret1234#"
       And they fill in "Password confirmation" with ""
       Then the submit button is disabled
-      When they fill in "Password confirmation" with "donkey"
+      When they fill in "Password confirmation" with "superSecret1234#5"
       Then the submit button is disabled
-      When they fill in "Password confirmation" with "monkey"
+      When they fill in "Password confirmation" with "superSecret1234#"
       Then the submit button is enabled
 
     Scenario: Invalid password reset token
       Given they go to the provider password page with invalid password reset token
       Then they should see "The password reset token is invalid"
 
+    @emails
     Scenario: Password reset token expires after 1 day
       Given time flies to 12th June 2009
       And the user has requested a new password
@@ -80,11 +117,12 @@ Feature: Provider password reset
       And follow the link found in the provider password reset email send to "pepe@example.com"
       Then they should see "The password reset token is invalid"
 
+    @emails
     Scenario: Reuse a password reset token
       Given the user has requested a new password
       And follow the link found in the provider password reset email send to "pepe@example.com"
-      And they fill in "Password" with "monkey"
-      And they fill in "Password confirmation" with "monkey"
+      And they fill in "Password" with "superSecret1234#"
+      And they fill in "Password confirmation" with "superSecret1234#"
       When press "Change Password"
       Then they should see "The password has been changed"
       When follow the link found in the provider password reset email send to "pepe@example.com"

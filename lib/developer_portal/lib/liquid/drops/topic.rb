@@ -10,7 +10,7 @@ module Liquid
       end
 
       def url
-        System::UrlHelpers.system_url_helpers.forum_topic_path(@model)
+        ''
       end
     end
   end

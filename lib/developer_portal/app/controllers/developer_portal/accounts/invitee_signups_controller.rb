@@ -67,12 +67,6 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
     sso_attributes.all? { |_key, value| value.present? }
   end
 
-  def create_sso_authorization
-    return unless sso_attributes_provided?
-    build_sso_authorization
-    @user.save
-  end
-
   def authentication_provider
     site_account.authentication_providers
       .find_by(system_name: session[:invitation_sso_system_name])
@@ -119,7 +113,12 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
   end
 
   def build_user
-    @user = @invitation.make_user(filter_readonly_params(params[:user], User))
+    @user = @invitation.make_user(user_params)
+  end
+
+  def user_params
+    allowed_attrs = site_account.defined_fields_names_for(User) + %w[password password_confirmation]
+    filter_readonly_params(params[:user], User).permit(*allowed_attrs)
   end
 
   def invitation_token

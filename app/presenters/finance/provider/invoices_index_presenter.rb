@@ -86,7 +86,7 @@ class Finance::Provider::InvoicesIndexPresenter
   private
 
   def raw_invoices
-    @raw_invoices ||= provider.buyer_invoices.includes(:provider_account)
+    @raw_invoices ||= provider.buyer_invoices.includes({ buyer_account: [:admin_user] }, :provider_account)
   end
 
   def states_for_filter

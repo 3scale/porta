@@ -1,7 +1,7 @@
 module PlanHelpers
 
   def create_plan(type, options)
-    ActiveSupport::Deprecation.warn '[create_plan] Stop using this method, use factories'
+    ActiveSupport.deprecator.warn '[create_plan] Stop using this method, use factories'
     options[:cost] ||= 0
 
     issuer = options[:issuer]

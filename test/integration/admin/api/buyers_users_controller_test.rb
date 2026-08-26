@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
+  include FieldsDefinitionsHelpers
+
   def setup
     @provider = FactoryBot.create(:provider_account)
     @buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
@@ -13,6 +15,9 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
   attr_reader :provider, :buyer
 
   test 'creates a user for its buyer' do
+    field_defined(provider, { target: 'User', name: 'first_name' })
+    field_defined(provider, { target: 'User', name: 'last_name' })
+
     assert_difference(buyer.users.method(:count)) do
       post admin_api_account_users_path(buyer), params: params
     end
@@ -22,6 +27,34 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
       assert_equal expected_value, user.public_send(attr_name),
                    "#{attr_name} expected to be #{expected_value} but is #{user.public_send(attr_name)}"
     end
+    assert_equal :created_by_provider, user.signup_type
+  end
+
+  test 'updates a buyer user with password' do
+    user = FactoryBot.create(:simple_user, account: buyer)
+
+    put admin_api_account_user_path(buyer, user), params: { access_token: token_value, password: 'newPassword1234#' }
+
+    assert_response :success
+    assert user.reload.authenticate('newPassword1234#'), 'User should authenticate with new password'
+  end
+
+  test 'update with weak password rejected when strong passwords enabled' do
+    user = FactoryBot.create(:simple_user, account: buyer)
+
+    put admin_api_account_user_path(buyer, user), params: { access_token: token_value, password: 'weakpwd' }
+
+    assert_response :unprocessable_entity
+    assert_match "is too short (minimum is 15 characters)", response.body
+  end
+
+  test 'update with strong password accepted when strong passwords enabled' do
+    user = FactoryBot.create(:simple_user, account: buyer)
+
+    put admin_api_account_user_path(buyer, user), params: { access_token: token_value, password: 'superSecret1234#' }
+
+    assert_response :success
+    assert user.reload.authenticate('superSecret1234#'), 'User should authenticate with new password'
   end
 
   private
@@ -31,13 +64,13 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
       access_token: token_value,
       username: 'testusername',
       email: 'test@example.com',
-      password: '123456',
+      password: 'superSecret1234#',
       first_name: 'testname',
       last_name: 'testsurname'
     }
   end
 
   def token_value
-    @token_value ||= FactoryBot.create(:access_token, owner: provider.admin_user, scopes: 'account_management', permission: 'rw').value
+    @token_value ||= FactoryBot.create(:access_token, owner: provider.admin_user, scopes: 'account_management', permission: 'rw').plaintext_value
   end
 end

@@ -54,9 +54,9 @@ div class="pf-c-drawer pf-m-inline #{'pf-m-expanded' unless hidden}"
               p Testdrive a developer account with:
               dl
                 dt Username:
-                dd john
+                dd = User::JOHN_DOE_ATTRS[:username]
                 dt Password:
-                dd 123456
+                dd = Logic::SampleDeveloperPassword.for(site_account)
 
         - if site_account.cms_toolbar_intro_visible?
           div class="pf-c-drawer__body"

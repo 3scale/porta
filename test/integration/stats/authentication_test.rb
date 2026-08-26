@@ -17,7 +17,7 @@ class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
     assert_media_type 'application/json'
 
     token = FactoryBot.create(:access_token, owner: @provider_account.first_admin, scopes: ['stats'])
-    get usage_stats_data_services_path(@service, format: :json), params: params.merge(access_token: token.value)
+    get usage_stats_data_services_path(@service, format: :json), params: params.merge(access_token: token.plaintext_value)
     assert_response :success
     assert_media_type 'application/json'
   end

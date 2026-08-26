@@ -19,7 +19,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       post admin_buyers_accounts_path, params: {
           account: {
               org_name: 'Alaska',
-              user: { email: 'foo@example.com', extra_fields: { created_by: 'hi' }, password: '123456', username: 'hello' }
+              user: { email: 'foo@example.com', extra_fields: { created_by: 'hi' }, password: 'superSecret1234#', username: 'hello' }
           }
       }
 
@@ -32,9 +32,9 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'hi', user.extra_fields['created_by']
     end
 
-    test 'billing address extra field and webhooks' do
+    test 'legal address extra field and webhooks' do
       FactoryBot.create(:fields_definition, account: @provider,
-                         target: 'Account', name: 'billing_address', read_only: true)
+                         target: 'Account', name: 'org_legaladdress')
 
       @provider.settings.allow_web_hooks!
       WebHook.delete_all
@@ -45,7 +45,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
         post admin_buyers_accounts_path, params: {
           account: {
             org_name: 'hello', org_legaladdress: 'address',
-            user: { username: 'hello', email: 'foo@example.com', password: 'password'}
+            user: { username: 'hello', email: 'foo@example.com', password: 'superSecret1234#'}
           }
         }
         assert_equal 1, WebHookWorker.jobs.size
@@ -200,7 +200,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       post admin_buyers_accounts_path, params: {
         account: {
           org_name: 'Alaska',
-          user: { email: 'foo@example.com', password: '123456', username: 'hello' }
+          user: { email: 'foo@example.com', password: 'superSecret1234#', username: 'hello' }
         }
       }
 
@@ -264,13 +264,43 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
             user: {
                 username: 'johndoe',
                 email: 'user@example.org',
-                password: 'secretpassword'
+                password: 'superSecret1234#'
             }
           }
         }
         assert_select '.pf-m-error', false
         assert_response :redirect
       end
+    end
+
+    test 'update account, including optional built-in and custom fields' do
+      FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'custom_account_field')
+      FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'vat_rate')
+      FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'billing_address', read_only: true)
+      FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'country')
+
+      @buyer.delete_billing_address
+      @buyer.save
+      country = Country.find_by_code!('ES')
+
+      # account[country] and account[billing_address] do not appear in the user-facing form,
+      # they are included in the test to verify that these fields are discarded by the controller,
+      # if the form is tampered with
+      put admin_buyers_account_path(@buyer), params: { account: {
+        org_name: 'new name', vat_rate: '33',
+        country_id: country.id.to_s,
+        country: '67',
+        billing_address: 'some address',
+        extra_fields: { custom_account_field: 'custom value' }
+      } }
+
+      assert_redirected_to admin_buyers_account_path(@buyer)
+      @buyer.reload
+      assert_equal 'new name', @buyer.name
+      assert_equal country.id, @buyer.country.id
+      assert_equal country.code, @buyer.billing_address.to_s
+      assert_equal BigDecimal(33), @buyer.vat_rate
+      assert_equal 'custom value', @buyer.extra_fields['custom_account_field']
     end
 
     test "can't manage buyer's of other providers" do

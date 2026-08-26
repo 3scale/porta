@@ -41,7 +41,7 @@ class Admin::Api::AccountFeaturesController < Admin::Api::BaseController
   protected
 
   def feature_params
-    params.fetch(:feature)
+    params.require(:feature).permit(:name, :system_name, :description)
   end
 
   def features

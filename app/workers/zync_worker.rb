@@ -175,7 +175,7 @@ class ZyncWorker
   def self.provider_access_token(provider)
     user = provider.find_impersonation_admin || provider.first_admin!
 
-    user.access_tokens.oidc_sync.value
+    user.access_tokens.oidc_sync
   end
 
   def notification_url

@@ -1,15 +1,6 @@
 # frozen_string_literal: true
 
 module ServicesHelper
-  def human_backend(backend_version)
-    {
-      "1" => "API key",
-      "2" => "App Id",
-      "oauth" => "OAuth",
-      "oidc" => "OpenID Connect"
-    }[backend_version]
-  end
-
   def plugin_language_name(service)
     service.deployment_option.remove('plugin_')
   end

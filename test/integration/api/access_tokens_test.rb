@@ -17,14 +17,14 @@ class Admin::Api::AccessTokensTest < ActionDispatch::IntegrationTest
 
     user_id = @admin.id
     assert_difference(AccessToken.method(:count), 1) do
-      post_request(user_id, {access_token: access_token.value})
+      post_request(user_id, {access_token: access_token.plaintext_value})
       assert_response :created, "Not created with response body #{response.body}"
     end
     assert_token_values(user_id)
 
 
     assert_no_difference(AccessToken.method(:count)) do
-      post_request(@member.id, {access_token: access_token.value})
+      post_request(@member.id, {access_token: access_token.plaintext_value})
       assert_response :forbidden, "Not forbidden with response body #{response.body}"
     end
   end
@@ -34,7 +34,7 @@ class Admin::Api::AccessTokensTest < ActionDispatch::IntegrationTest
 
     user_id = @admin.id
     assert_difference(AccessToken.method(:count), 1) do
-      post_request(user_id, {access_token: access_token.value}, {value: 'foobar'})
+      post_request(user_id, {access_token: access_token.plaintext_value}, {value: 'foobar'})
       assert_response :created, "Not created with response body #{response.body}"
     end
     assert_not_equal 'foobar', AccessToken.last!.value
@@ -44,7 +44,7 @@ class Admin::Api::AccessTokensTest < ActionDispatch::IntegrationTest
     access_token = FactoryBot.create(:access_token, owner: @admin, scopes: %w[account_management])
 
     assert_no_difference(AccessToken.method(:count)) do
-      post_request(@admin.id, {access_token: access_token.value}, {scopes: ['wrong']})
+      post_request(@admin.id, {access_token: access_token.plaintext_value}, {scopes: ['wrong']})
       assert_response :unprocessable_entity, "Not created with response body #{response.body}"
       assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'scopes')
     end
@@ -56,7 +56,7 @@ class Admin::Api::AccessTokensTest < ActionDispatch::IntegrationTest
     user_id = @admin.id
     expires_at = 1.day.from_now.utc.iso8601
     assert_difference(AccessToken.method(:count), 1) do
-      post_request(user_id, {access_token: access_token.value}, { expires_at: })
+      post_request(user_id, {access_token: access_token.plaintext_value}, { expires_at: })
       assert_response :created, "Not created with response body #{response.body}"
     end
     assert_equal expires_at, AccessToken.last!.expires_at.iso8601

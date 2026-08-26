@@ -1,3 +1,4 @@
+@emails
 Feature: Billing Reporting
   In order to be informed about my spendings
   As a buyer of a provider that has billing enabled

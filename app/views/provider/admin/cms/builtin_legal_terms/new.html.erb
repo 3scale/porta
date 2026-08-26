@@ -2,6 +2,8 @@
   Legal Terms for <%= @page.title %>
 <% end %>
 
+<%= javascript_packs_with_chunks_tag 'cms', 'pf_spacing' %>
+
 <% content_for :page_header_title, "Legal Terms for #{@page.title}" %>
 <%= render 'info' %>
 <%= cms_form_for(@page) do |f| %>

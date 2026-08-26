@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const { products } = container.dataset
 
   ProductsUsedListCardWrapper({
+    title: 'Products using this backend',
     products: safeFromJsonString<CompactListItem[]>(products) ?? []
   }, containerId)
 })

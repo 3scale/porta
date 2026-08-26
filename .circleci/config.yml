@@ -98,8 +98,8 @@ system-builder-ruby33: &system-builder-ruby33
     ORACLE_SYSTEM_PASSWORD: threescalepass
     NLS_LANG: AMERICAN_AMERICA.UTF8
     TZ: UTC
-    MASTER_PASSWORD: p
-    USER_PASSWORD: p
+    MASTER_PASSWORD: superSecret1234#
+    USER_PASSWORD: superSecret1234#
     LC_ALL: C.utf8
     RAILS_ENV: test
 
@@ -148,7 +148,7 @@ dnsmasq-container: &dnsmasq-container
       --log-facility=- \
       --log-queries \
       --no-poll \
-      --server=/circleci.com/dns.podman/circleci-tasks-prod.s3.us-east-1.amazonaws.com/circleci-binary-releases.s3.amazonaws.com/$DEFAULT_DNS \
+      --server=/circleci.com/dns.podman/circleci-tasks-prod.s3.us-east-1.amazonaws.com/circleci-binary-releases.s3.amazonaws.com/api.stripe.com/js.stripe.com/$DEFAULT_DNS \
       --address=/#/127.0.0.1
 
 only-master-filter: &only-master-filter
@@ -857,7 +857,6 @@ jobs:
 ##################################### CIRCLECI WORKFLOWS ############################################
 
 workflows:
-  version: 2
 
   mysql_build:
     jobs:

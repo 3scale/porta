@@ -5,12 +5,12 @@ class Stats::UsageControllerTest < ActionController::TestCase
   def setup
     @provider = FactoryBot.create :provider_account
     @service = @provider.default_service
-    host! @provider.external_domain
+    host! @provider.internal_admin_domain
   end
 
   test 'index requires login' do
     get :index, params: { service_id: @service.id }
-    assert_redirected_to '/login'
+    assert_redirected_to '/p/login'
   end
 
   test 'index' do

@@ -3,6 +3,8 @@ namespace :db do
   task :deploy => :environment do
     if ActiveRecord::Migrator.current_version.zero?
       Rake::Task['db:deploy:setup'].invoke
+    elsif !Account.master?
+      Rake::Task['db:deploy:seed'].invoke
     else
       Rake::Task['db:migrate'].invoke
     end
@@ -17,6 +19,10 @@ namespace :db do
       end
 
       Rake::Task['db:schema:load'].invoke
+      Rake::Task['db:deploy:seed'].invoke
+    end
+
+    task seed: :environment do
       Rake::Task['db:seed'].invoke
 
       Rake::Task['countries:import'].invoke

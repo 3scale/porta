@@ -27,7 +27,7 @@ Feature: Provider settings authorization
       | the emails settings page                         |
       | the email templates page                         |
       | the dns settings page                            |
-      | the bot protection page                          |
+      | the security settings page                          |
       | the xss protection page                          |
       | the developer portal users sso integrations page |
 
@@ -47,12 +47,11 @@ Feature: Provider settings authorization
       | the fields definitions index page                |
       | the edit site settings page                      |
       | the finance settings page                        |
-      | the forum settings page                          |
       | the emails settings page                         |
       | the email templates page                         |
       | the site settings page                           |
       | the dns settings page                            |
-      | the bot protection page                          |
+      | the security settings page                          |
       | the xss protection page                          |
       | the developer portal users sso integrations page |
 
@@ -73,6 +72,6 @@ Feature: Provider settings authorization
       | the site settings page                           |
       | the feature visibility page                      |
       | the dns settings page                            |
-      | the bot protection page                          |
+      | the security settings page                          |
       | the xss protection page                          |
       | the developer portal users sso integrations page |

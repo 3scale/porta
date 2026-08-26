@@ -7,7 +7,6 @@
  *   - https://guides.rubyonrails.org/v6.1.0/working_with_javascript_in_rails.html
  *   - https://github.com/rails/rails/blob/main/actionview/app/assets/javascripts/rails-ujs.esm.js
  */
-import type { JQueryXHR, JQuery as JQuery1 } from 'Types/jquery/v1'
 
 declare global {
   interface Window {
@@ -26,7 +25,7 @@ declare global {
 }
 
 interface RailsUJS {
-  handleRemote: (arg: JQuery1) => JQueryXHR | false;
+  handleRemote: (this: HTMLElement, e: Event) => boolean | undefined;
 }
 
 type AJAXBeforeEvent = Event
@@ -51,4 +50,14 @@ interface AJAXErrorEvent<T> extends Event {
 
 interface AJAXCompleteEvent extends Event {
   detail: [xhr: XMLHttpRequest, status: string];
+}
+
+export type {
+  AJAXBeforeEvent,
+  AJAXBeforeSendEvent,
+  AJAXSendEvent,
+  AJAXStopEvent,
+  AJAXSuccessEvent,
+  AJAXErrorEvent,
+  AJAXCompleteEvent
 }

@@ -3,6 +3,14 @@
 class AccountSetting < ApplicationRecord
   self.store_full_sti_class = false
 
+  def self.find_sti_class(type_name)
+    super
+  rescue ActiveRecord::SubclassNotFound => exception
+    # In case there are records for unknown settings
+    System::ErrorReporting.report_error(exception)
+    self
+  end
+
   # TODO: remove attr_accessible once protected_attributes_continued gem is removed
   attr_accessible :type, :value, :account, :tenant_id
 
@@ -10,7 +18,7 @@ class AccountSetting < ApplicationRecord
 
   audited associated_with: :account
 
-  validates :value, presence: true
+  validates :value, exclusion: { in: [nil], message: "cannot be nil" }
 
   delegate :provider_id_for_audits, to: :account, allow_nil: true
 
@@ -25,4 +33,22 @@ class AccountSetting < ApplicationRecord
   def self.setting_name
     sti_name.underscore.to_sym
   end
+
+  def self.display_name
+    setting_name.to_s.titleize
+  end
+
+  # Instance methods that delegate to class methods
+  delegate :setting_name, :default_value, :display_name, to: :class
+
+  # Look up a setting class by its snake_case name
+  # Dynamically constantizes the setting name under AccountSetting namespace
+  # Example: :bg_colour -> AccountSetting::BgColour
+  def self.class_for_setting(setting_name)
+    class_name = setting_name.to_s.camelize
+    "AccountSetting::#{class_name}".constantize
+  rescue NameError
+    nil
+  end
+
 end

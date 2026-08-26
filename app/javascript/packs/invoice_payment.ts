@@ -27,7 +27,7 @@ const style = {
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 document.addEventListener('DOMContentLoaded', async () => {
   const dataset = document.querySelector<HTMLElement>('.stripe-form')!.dataset
-  const { stripePublishableKey = '', clientSecret = '' } = dataset
+  const { publishableKey = '', clientSecret = '' } = dataset
   const form = document.querySelector('#payment-form')!
   const callbackForm = document.querySelector<HTMLFormElement>('#payment-callback-form')!
   const payButton = document.querySelector<HTMLButtonElement>('#submit-payment')!
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const spinner = document.querySelector('#spinner')!
   const buttonText = document.querySelector('#button-text')!
 
-  const stripe = await loadStripe(stripePublishableKey)!
+  const stripe = await loadStripe(publishableKey)
   const elements = stripe!.elements()
   const card = elements.create('card', { style })
 

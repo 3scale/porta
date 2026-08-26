@@ -11,9 +11,9 @@ module Provider
         before_action :disable_client_cache
         before_action :load_access_token, only: %i[edit update destroy]
 
-        def index
-          @access_tokens = access_tokens
-        end
+        helper_method :access_tokens, :services_with_token
+
+        def index; end
 
         def new
           @presenter = AccessTokensNewPresenter.new(current_account)
@@ -23,13 +23,13 @@ module Provider
         def edit; end
 
         def create
-          @presenter = AccessTokensNewPresenter.new(current_account)
           @access_token = access_tokens.build(access_token_params)
 
           if @access_token.save
-            flash[:token] = @access_token.id
-            redirect_to provider_admin_user_access_tokens_path, success: t('.success')
+            flash.now[:success] = t('.success')
+            render :show, locals: { token: @access_token }
           else
+            @presenter = AccessTokensNewPresenter.new(current_account)
             render :new
           end
         end
@@ -58,6 +58,10 @@ module Provider
 
         def access_tokens
           @access_tokens ||= current_user.access_tokens
+        end
+
+        def services_with_token
+          @services_with_token ||= current_user.decorate.accessible_services_with_token
         end
 
         def load_access_token

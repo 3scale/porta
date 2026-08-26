@@ -1,6 +1,6 @@
 void function ($) {
   $('#provider-change-plan').replaceWith(<%= json render('widget', provider: @provider) %>);
-  $.colorbox.close();
+  colorbox.close();
   <%= render 'shared/flash_alerts' %>
 }(jQuery);
 

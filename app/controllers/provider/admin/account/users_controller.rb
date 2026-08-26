@@ -25,7 +25,6 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
     @user.validate_fields!
 
     @user.assign_attributes(user_params)
-    @user.role = user_params.fetch(:role, @user.role)
 
     if @user.save
       redirect_to provider_admin_account_users_path, success: t('.success')
@@ -57,7 +56,7 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
   end
 
   def user_params
-    allowed_attrs = @user.defined_builtin_fields.map(&:name) + @user.special_fields
+    allowed_attrs = @user.defined_builtin_fields_names + %w[password password_confirmation]
 
     if can?(:update_role, @user)
       allowed_attrs += [:role, { member_permission_ids: [] }]

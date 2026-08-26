@@ -91,7 +91,7 @@ When "the modal is submitted with:" do |table|
 end
 
 When "(I )(they )select {string} from {string}" do |value, field|
-  ActiveSupport::Deprecation.warn "[cucumber] Detected a form not using PF4 css" unless page.has_css?('.pf-c-form__label', text: field, wait: 0)
+  ActiveSupport.deprecator.warn "[cucumber] Detected a form not using PF4 css" unless page.has_css?('.pf-c-form__label', text: field, wait: 0)
   element = find_field(field)
   # 'input' for React forms, and 'select' for HTML
   if element.tag_name == 'select'

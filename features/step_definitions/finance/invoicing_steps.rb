@@ -54,7 +54,7 @@ Given "{buyer} has an invoice for {date} with the following item(s):" do |buyer,
 end
 
 Given "an invoice of {buyer} for {date} with items(:)" do |buyer, month, items|
-  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Use the newer step.'
+  ActiveSupport.deprecator.warn '[Cucumber] Deprecated! Use the newer step.'
   invoice = create_invoice buyer, month
   items.hashes.each { |item| invoice.line_items.create!(item) }
 end
@@ -92,6 +92,13 @@ Given(/^the buyer pays the invoice but failed$/) do
   invoice.fail
 end
 
+Given("the invoice has a pending payment intent") do
+  invoice = @invoice.presence || Invoice.last
+  invoice.finalize
+  invoice.issue
+  FactoryBot.create(:payment_intent, invoice: invoice, reference: 'pi_test', state: 'requires_payment_method')
+end
+
 Then(/^I should (?:see|still see) (\d+) invoices?$/) do |count|
   if count.to_i == 0
     should have_no_xpath("//tr[contains(@id, 'invoice_')]")
@@ -109,7 +116,7 @@ Then /^the buyer should have (\d+) invoices?$/ do |number|
 end
 
 Then /^the buyer should have following line items for "([^"]*)"(?: in the (\d)(?:nd|st|rd|th))? invoice:$/ do |date, order, items|
-  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Assert table instead.'
+  ActiveSupport.deprecator.warn '[Cucumber] Deprecated! Assert table instead.'
   step "the buyer logs in"
 
   visit admin_account_invoices_path
@@ -133,7 +140,7 @@ end
 
 # TODO: change to accept REGEXPs! (use page.body and assert)
 Then(/^I should see line items$/) do |items|
-  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Assert table instead.'
+  ActiveSupport.deprecator.warn '[Cucumber] Deprecated! Assert table instead.'
   assert_line_items(items)
 end
 
@@ -231,4 +238,19 @@ end
 
 Then "the total cost is/should( be) {string}" do |cost_with_currency|
   assert_equal cost_with_currency, find('table.invoice tfoot tr td#invoice_cost').text
+end
+
+Given "Stripe API is stubbed" do
+  stub_request(:get, %r{https://api\.stripe\.com/v1/payment_intents/pi_test})
+    .to_return(status: 200, body: '{"id": "pi_test", "client_secret": "pi_test_secret", "object": "payment_intent"}', headers: { 'Content-Type' => 'application/json' })
+end
+
+Then "the Stripe form is visible and configured" do
+  stripe_form = page.find('.stripe-form')
+
+  assert_not_empty stripe_form['data-publishable-key']
+  assert_not_empty stripe_form['data-client-secret']
+  within(stripe_form) do
+    assert_selector('#card-element iframe')
+  end
 end

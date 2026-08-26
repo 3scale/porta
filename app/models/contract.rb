@@ -4,7 +4,7 @@ class Contract < ApplicationRecord
   # https://github.com/collectiveidea/audited/blob/f03c5b5d1717f2ebec64032d269316dc74476056/lib/audited/auditor.rb#L305-L311
   self.table_name = 'cinstances'
 
-  audited allow_mass_assignment: true
+  audited
 
   # FIXME: This class should be an abstract class I think, but doing so makes plenty of tests fail
   # self.abstract_class = true
@@ -47,8 +47,6 @@ class Contract < ApplicationRecord
 
   # TODO: remove with Rails 3
   attr_reader :old_plan, :accepted_on_create
-
-  attr_protected :plan_id, :state, :provider_public_key, :paid_until, :trial_period_expires_at, :setup_fee, :type, :variable_cost_paid_until, :application_id, :user_key, :user_account_id, :tenant_id, :audit_ids
 
   # TODO: unit test this scope
   def self.provided_by(account)

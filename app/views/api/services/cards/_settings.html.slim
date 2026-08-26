@@ -1,0 +1,16 @@
+div class="pf-c-card"
+  div class="pf-c-card__header"
+    div class="pf-c-card__title" = t('.title')
+  div class="pf-c-card__body"
+    ul class="pf-c-list pf-m-plain pf-m-bordered"
+      - if service.deployment_option.present? && service.traffic?
+        li == "Integrated through <b>#{t(service.deployment_option, scope: "deployment_options.phrased")}</b>"
+      li == "Authenticated by <b>#{service.human_backend}</b>"
+      li == "ID for API calls is <b>#{service.id}</b> and system name is <b>#{service.system_name}</b>"
+      - service.friendly_service_settings.each do |setting|
+        li = setting
+
+  div class="pf-c-card__footer"
+    = t('.view_more_html', integration_link: link_to('configuration', admin_service_integration_path(service), title: t('.configuration')),
+                           metrics_link: link_to('methods', admin_service_metrics_path(service), title: t('.methods')),
+                           settings_link: link_to('settings', settings_admin_service_path(service), title: t('.settings')))

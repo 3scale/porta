@@ -5,6 +5,7 @@ require 'test_helper'
 class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
   setup do
     @provider = FactoryBot.create(:provider_account)
+    FieldsDefinition.create_defaults!(@provider.provider_account)
   end
 
   test "forbid retrieving objects from multiple tenants" do
@@ -23,7 +24,7 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
     service = @provider.first_service!
     plan = FactoryBot.create(:application_plan, issuer: service)
     plan.update_column(:tenant_id, @provider.tenant_id + 1)
-    token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+    token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
     assert_raises ThreeScale::Middleware::Multitenant::TenantChecker::TenantLeak do
       get admin_api_service_application_plans_path(service_id: service.id, format: :json, access_token: token)
     end
@@ -54,7 +55,7 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
     plan = FactoryBot.create(:application_plan, issuer: service)
     service.update_column(:tenant_id, @provider.tenant_id)
     plan.update_column(:tenant_id, @provider.tenant_id + 1)
-    token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).value
+    token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).plaintext_value
     get admin_api_service_application_plans_path(service_id: service.id, format: :json, access_token: token)
     assert_response :success
     put admin_api_service_application_plan_path(service_id: service.id, id: plan.id, format: :json), params: {access_token: token, description: "desc1"}
@@ -68,7 +69,7 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
     service.update_column(:tenant_id, @provider.tenant_id)
     plan.update_column(:tenant_id, @provider.tenant_id + 1)
 
-    token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).value
+    token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).plaintext_value
     auth_pair = []
     auth_pair << ["", token]
     auth_pair << [token, ""]
@@ -115,7 +116,7 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
       org_name: 'Alaska',
       username: 'person',
       email: 'person@example.com',
-      password: '123456',
+      password: 'superSecret1234#',
       user_extra_field: 'hi-user',
       account_extra_field: 'hi-account'
     }

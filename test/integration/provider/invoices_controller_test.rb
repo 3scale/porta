@@ -68,9 +68,15 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
   end
 
   test 'update' do
-    put admin_finance_invoice_path @invoice
+    new_period = Month.new(1.month.from_now)
+    new_period_param = new_period.to_param
+    new_friendly_id = "#{new_period_param}-00000001"
+    put admin_finance_invoice_path(@invoice), params: { invoice: { friendly_id: new_friendly_id, period: new_period_param } }
     assert_response :redirect
+    @invoice.reload
     assert_equal @invoice, assigns(:invoice)
+    assert_equal new_friendly_id, @invoice.friendly_id
+    assert_equal new_period, @invoice.period
   end
 
   test '#charge does not invoke invoice automatic charging' do

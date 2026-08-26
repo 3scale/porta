@@ -6,7 +6,7 @@ class Admin::Api::WebHooksFailuresControllerTest < ActionController::TestCase
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
     host! @provider.external_admin_domain
   end
 

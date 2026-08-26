@@ -10,6 +10,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     @service_plan = master_account.default_service_plans.first
     @application_plan = master_account.default_application_plans.first
 
+    FieldsDefinition.create_defaults!(master_account)
     FactoryBot.create(:fields_definition, account: master_account, target: 'Account', name: 'account_extra_field')
     FactoryBot.create(:fields_definition, account: master_account, target: 'User', name: 'user_extra_field')
 
@@ -102,6 +103,18 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_contains JSON.parse(response.body).dig('errors', 'user'), 'Email should look like an email address'
   end
 
+  test 'signup with non-matching password fails' do
+    assert_no_difference Account.method(:count) do
+      post master_api_providers_path(format: :json), params: signup_params.merge({ password_confirmation: 'non-matching-password' })
+
+      assert_response :unprocessable_entity
+  
+      errors = response.parsed_body[:errors]
+      assert_equal ["Users invalid"], errors[:account]
+      assert_equal ["Password confirmation doesn't match Password"], errors[:user]
+    end
+  end
+
   test '#create returns the right errors when user validation fails for xml' do
     post master_api_providers_path(format: :xml), params: signup_params({ email: '' })
     assert_response :unprocessable_entity
@@ -122,7 +135,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     token = FactoryBot.create(:access_token, owner: master_account.admins.first, scopes: 'account_management')
     assert_difference Account.method(:count), 1 do
       assert_difference User.method(:count), 2 do # the main user and the impersonation_admin user
-        post master_api_providers_path, params: signup_params({ api_key: '', access_token: token.value })
+        post master_api_providers_path, params: signup_params({ api_key: '', access_token: token.plaintext_value })
         assert_response :created
       end
     end
@@ -132,7 +145,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_no_difference Account.method(:count) do
       user = FactoryBot.create(:member, account: master_account)
       token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-      post master_api_providers_path, params: signup_params({ access_token: token.value }).except(:api_key)
+      post master_api_providers_path, params: signup_params({ access_token: token.plaintext_value }).except(:api_key)
       assert_response :forbidden
       assert_equal 'Your access token does not have the correct permissions', JSON.parse(response.body)['error']
     end
@@ -142,7 +155,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_difference Account.method(:count) do
       user = FactoryBot.create(:member, account: master_account, member_permission_ids: [:partners])
       token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-      post master_api_providers_path, params: signup_params({ access_token: token.value }).except(:api_key)
+      post master_api_providers_path, params: signup_params({ access_token: token.plaintext_value }).except(:api_key)
       assert_response :created
     end
   end
@@ -167,6 +180,15 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_response :unprocessable_entity
   end
 
+  test '#create with annotations' do
+    post master_api_providers_path(format: :json), params: signup_params.merge({ annotations: { managed_by: 'operator' }})
+    assert_response :created
+
+    new_tenant = response.parsed_body[:signup][:account]
+    assert_equal({ 'managed_by' => 'operator'}, new_tenant[:annotations])
+    assert_equal 'operator', Account.find(new_tenant[:id]).annotations.where(name: 'managed_by').first.value
+  end
+
   test '#update' do
     provider = FactoryBot.create(:provider_account, provider_account: master_account)
     user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
@@ -176,7 +198,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
       from_email: 'from@email.com', support_email: 'support@email.com',
       finance_support_email: 'finance@email.com', site_access_code: 'new-access-code',
       account_extra_field: 'testing-account-extra-field', state_event: 'suspend'
-    }, access_token: token.value, format: :json }
+    }, access_token: token.plaintext_value, format: :json }
     put master_api_provider_path(provider, update_params)
     assert_response :ok
 
@@ -195,14 +217,35 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     provider.schedule_for_deletion!
 
-    update_params = { account: { from_email: 'from@email.com', state_event: 'resume'},
-                      access_token: token.value, format: :json }
+    update_params = { account: { from_email: 'from@email.com', state_event: 'resume', org_name: 'new-org-name' },
+                      access_token: token.plaintext_value, format: :json }
     put master_api_provider_path(provider, update_params)
     assert_response :ok
 
     provider.reload
+    assert_equal 'approved', provider.state
     assert_not_equal update_params[:account][:from_email], provider.from_email
-    assert_equal 'approved',                           provider.state
+    assert_not_equal 'new-org-name', provider.org_name
+  end
+
+  test '#update with annotations' do
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+
+    assert_empty provider.annotations
+
+    put master_api_provider_path(provider, format: :json), params: {
+      annotations: { managed_by: 'operator' },
+      access_token: token.plaintext_value
+    }
+    assert_response :ok
+
+    updated_account = response.parsed_body[:signup][:account]
+    assert_equal({ 'managed_by' => 'operator'}, updated_account[:annotations])
+
+    assert_equal 1, provider.reload.annotations.count
+    assert_equal 'operator', provider.annotations.where(name: 'managed_by').first.value
   end
 
   test '#destroy' do
@@ -211,7 +254,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     freeze_time do
-      delete master_api_provider_path(provider, access_token: token.value, format: :json)
+      delete master_api_provider_path(provider, access_token: token.plaintext_value, format: :json)
       assert_response :ok
       assert_equal '', response.body
       assert provider.reload.scheduled_for_deletion?
@@ -223,7 +266,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     provider = FactoryBot.create(:provider_account, provider_account: master_account)
     user     = FactoryBot.create(:member, account: master_account)
     token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-    delete master_api_provider_path(provider, access_token: token.value, format: :json)
+    delete master_api_provider_path(provider, access_token: token.plaintext_value, format: :json)
     assert_response :forbidden
     assert_equal 'Your access token does not have the correct permissions', JSON.parse(response.body)['error']
   end
@@ -232,7 +275,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     provider = FactoryBot.create(:provider_account, provider_account: master_account)
     token    = FactoryBot.create(:access_token, owner: master_account.admin_users.first, scopes: 'account_management')
 
-    get master_api_provider_path(provider, access_token: token.value, format: :json)
+    get master_api_provider_path(provider, access_token: token.plaintext_value, format: :json)
 
     assert_response :ok
     assert_equal provider.reload.id, JSON.parse(response.body).dig('signup', 'account', 'id')
@@ -256,9 +299,11 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
       org_name: 'Alaska',
       username: 'person',
       email: 'person@example.com',
-      password: '123456',
+      password: 'superSecret1234#',
       user_extra_field: 'hi-user',
-      account_extra_field: 'hi-account'
+      account_extra_field: 'hi-account',
+      from_email: 'from@example.com',
+      support_email: 'support@example.com'
     }.merge(different_params)
   end
 
@@ -275,7 +320,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     test '#plan_upgrade successful upgrade' do
       new_plan = FactoryBot.create(:application_plan, issuer: master_account.default_service)
 
-      put plan_upgrade_master_api_provider_path(provider, access_token: token.value, plan_id: new_plan.id, format: :xml)
+      put plan_upgrade_master_api_provider_path(provider, access_token: token.plaintext_value, plan_id: new_plan.id, format: :xml)
 
       assert_response :ok
       assert_equal new_plan.id, provider.reload.bought_application_plans.first.id
@@ -284,7 +329,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     test '#plan_upgrade missing plan' do
       current_plan_id = provider.reload.bought_application_plans.first.id
       new_plan_id = 999
-      put plan_upgrade_master_api_provider_path(provider, access_token: token.value, plan_id: new_plan_id, format: :xml)
+      put plan_upgrade_master_api_provider_path(provider, access_token: token.plaintext_value, plan_id: new_plan_id, format: :xml)
 
       assert_response :not_found
       assert_equal current_plan_id, provider.reload.bought_application_plans.first.id
@@ -296,7 +341,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
       new_plan = FactoryBot.create(:application_plan_without_rules, issuer: master_account.default_service, name: new_plan_name)
       current_plan_id = provider.reload.bought_application_plans.first.id
 
-      put plan_upgrade_master_api_provider_path(provider, access_token: token.value, plan_id: new_plan.id, format: :xml)
+      put plan_upgrade_master_api_provider_path(provider, access_token: token.plaintext_value, plan_id: new_plan.id, format: :xml)
 
       assert_response :bad_request
       assert_equal current_plan_id, provider.reload.bought_application_plans.first.id

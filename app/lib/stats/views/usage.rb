@@ -8,7 +8,8 @@ module Stats
         include System::UrlHelpers.system_url_helpers
       end
 
-      GRANULARITIES = {:year  => :month,
+      GRANULARITIES = {:eternity => :eternity,
+                       :year  => :month,
                        :month => :day,
                        :week  => 6.hours,
                        :day   => :hour}.with_indifferent_access
@@ -60,6 +61,7 @@ module Stats
         end
 
         return result if options.fetch(:skip_change, true)
+        return result if options[:period].to_s == 'eternity'
 
         if granularity.to_s == 'day'
           previous_range = range.class.new(range.previous.begin.midnight, range.previous.end.midnight) # this is to keep us from breaking in DST.......
@@ -141,12 +143,23 @@ module Stats
       end
 
       def extract_range_and_granularity(options)
+        raise InvalidParameterError, "Granularity 'eternity' is only supported for period 'eternity'" if options[:granularity].to_s == 'eternity' && options[:period].to_s != 'eternity'
+
         if options[:period]
           period = sanitize_period(options[:period])
           granularity = options[:granularity] || GRANULARITIES[period]
-          length = 1.send(period)
+
+          if period.to_sym == :eternity
+            raise InvalidParameterError, "Only 'eternity' granularity is supported for period 'eternity'" if granularity.to_sym != :eternity
+
+            utc = ActiveSupport::TimeZone['UTC']
+            range_since = utc.parse('1970-01-01')
+            range_until = utc.now.end_of_day
+            return [range_since..range_until, :eternity]
+          end
 
           timezone = extract_timezone(options)
+          length = 1.send(period)
           range_since = to_time(options[:since].presence || timezone.now - length, timezone)
           range_until = (range_since + length - 1.second).end_of_minute # taking a second away means excluding the extra day in case of a month, etc
 

@@ -2,7 +2,7 @@ class Feature < ApplicationRecord
 
   self.background_deletion = [:features_plans]
 
-  audited :allow_mass_assignment => true
+  audited
 
   #TODO: these need tests
   #OPTIMIZE subclassing a better solution for these 2
@@ -22,8 +22,6 @@ class Feature < ApplicationRecord
   scope :with_object_scope, ->(object) do
     where(:scope => object.class.model_name.to_s)
   end
-
-  attr_protected :featurable_id, :featurable_type, :tenant_id, :audit_ids
 
   validates :system_name, uniqueness: { scope: [:featurable_id, :featurable_type], case_sensitive: true }
   validates :system_name, :name, length: { maximum: 255 }

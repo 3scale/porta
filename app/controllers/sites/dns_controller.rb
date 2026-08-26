@@ -8,7 +8,7 @@ class Sites::DnsController < Sites::BaseController
   end
 
   def update
-    if @account.update(site_params, without_protection: true)
+    if @account.update(site_params)
       redirect_to admin_site_dns_url, success: t('.success')
     else
       flash.now[:danger] = @account.errors.full_messages.join(' ')

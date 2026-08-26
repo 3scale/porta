@@ -42,7 +42,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       buyer_user = FactoryBot.create(:admin, account: buyer)
       buyer_user.update(email: nil)
 
-      get find_admin_api_accounts_path(format: :json, access_token: token.value)
+      get find_admin_api_accounts_path(format: :json, access_token: token.plaintext_value)
       assert_response :not_found
     end
   end
@@ -56,6 +56,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
     test '#update from a member with service_permissions is updated correctly' do
       rolling_updates_on
       rolling_update(:service_permissions, enabled: true)
+      assert_not buyer.settings.monthly_billing_enabled
 
       put admin_api_account_path(buyer, format: :xml), params: update_params
       assert_response :ok
@@ -70,10 +71,17 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
 
       FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'my_field')
 
-      put admin_api_account_path(buyer, format: :xml), params: update_params.merge({ extra_fields: { my_field: 4 } }), as: :json
+      put admin_api_account_path(buyer, format: :xml), params: update_params.merge(extra_fields: { my_field: 4 }), as: :json
       assert_response :ok
 
-      assert buyer.reload.extra_fields['my_field'].is_a?(String)
+      my_field = buyer.reload.extra_fields['my_field']
+      assert my_field.is_a?(String)
+      assert_equal "4", my_field
+
+      put admin_api_account_path(buyer, format: :xml), params: update_params.merge(my_field: 'another value'), as: :json
+      assert_response :ok
+
+      assert_equal 'another value', buyer.reload.extra_fields['my_field']
     end
 
     test '#update from a member without service_permissions returns error message in xml' do
@@ -139,8 +147,8 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       buyer.account_settings.delete_all
 
       assert_difference(PaymentDetail.method(:count), 0) do
-          get admin_api_account_path(buyer, format: :xml, access_token: token.value)
-          assert_response :success
+        get admin_api_account_path(buyer, format: :xml, access_token: token.plaintext_value)
+        assert_response :success
       end
 
       assert_difference(PaymentDetail.method(:count), 1) do
@@ -158,7 +166,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       FactoryBot.create(:webhook, account: provider, account_updated_on: true, active: true)
 
       assert_difference(WebHookWorker.jobs.method(:size)) do
-        put admin_api_account_path(buyer, format: :json), params: { monthly_billing_enabled: true, access_token: token.value }
+        put admin_api_account_path(buyer, format: :json), params: { monthly_billing_enabled: true, access_token: token.plaintext_value }
         assert_response :success
       end
     end
@@ -178,7 +186,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       FactoryBot.create(:webhook, account: provider, account_deleted_on: true, active: true)
 
       assert_difference(WebHookWorker.jobs.method(:size)) do
-        delete admin_api_account_path(buyer, access_token: token.value)
+        delete admin_api_account_path(buyer, access_token: token.plaintext_value)
         assert_response :success
       end
     end
@@ -203,7 +211,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def update_params
-    @update_params ||= { monthly_billing_enabled: true, access_token: token.value }
+    @update_params ||= { monthly_billing_enabled: true, access_token: token.plaintext_value }
   end
 
   def token(user: provider.admin_user)

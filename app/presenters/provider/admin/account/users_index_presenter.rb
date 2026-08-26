@@ -11,7 +11,8 @@ class Provider::Admin::Account::UsersIndexPresenter
 
     @users = users.order(sorting_params)
                   .paginate(pagination_params)
-                  .decorate
+    ActiveRecord::Associations::Preloader.new(records: @users.select(&:member?), associations: :member_permissions).call if @users.any?(&:member?)
+    @users = @users.decorate
   end
 
   attr_reader :users

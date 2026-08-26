@@ -8,7 +8,7 @@ class Provider::Admin::Account::InvoicesController < Provider::Admin::Account::B
   helper_method :empty_invoices?
 
   def index
-    @invoices = current_account.invoices.ordered
+    @invoices = current_account.invoices.includes(:buyer_account, :provider_account).ordered
   end
 
   def show

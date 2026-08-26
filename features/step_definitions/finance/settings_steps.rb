@@ -4,6 +4,11 @@ But "{provider} doesn't have a payment gateway set up" do |provider|
   provider.update!(payment_gateway_type: nil, payment_gateway_options: nil)
 end
 
+Given "{provider} has Stripe configured as payment gateway" do |provider|
+  provider.update(payment_gateway_type: :stripe, payment_gateway_options: { login: 'sk_test', publishable_key: 'pk_test', endpoint_secret: 'some-secret' })
+  assert_instance_of ActiveMerchant::Billing::StripeGateway, provider.payment_gateway
+end
+
 But "the provider's payment gateway is unconfigured" do
   @provider.update!(payment_gateway_options: nil)
 end

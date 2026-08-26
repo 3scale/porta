@@ -6,7 +6,7 @@ module Admin::Api::Services
   class MappingRulesControllerTest < ActionController::TestCase
     def setup
       provider = FactoryBot.create(:provider_account)
-      @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
+      @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
       assert @service = provider.first_service!
       assert @proxy = @service.proxy
 

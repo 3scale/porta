@@ -13,19 +13,19 @@ Feature: Provider stats
 
   Scenario: Stats access
     And I follow "API"
-    And I follow "Analytics"
+    And I follow "View more stats for this service"
     And I follow "Traffic"
     Then I should be on the provider stats usage page
 
   Scenario: Usage stats
     And I follow "API"
-    And I follow "Analytics"
+    And I follow "View more stats for this service"
     Then I should see "Traffic"
 
   Scenario: Top applications (multiple applications mode)
     Given a buyer "bob" signed up to provider "foo.3scale.localhost"
     And I follow "API"
-    And I follow "Analytics"
+    And I follow "View more stats for this service"
     And I go to the provider stats apps page
     Then I should see "Top Applications" in a header
     And I should see a chart called "chart"
@@ -37,7 +37,7 @@ Feature: Provider stats
       | API     | Default | true    |
     And a buyer "bob" signed up to application plan "Default"
     And I follow "API"
-    And I follow "Analytics"
+    And I follow "View more stats for this service"
     And I follow "Top Applications"
     Then I should see "Top Applications" in a header
 
@@ -47,7 +47,7 @@ Feature: Provider stats
     And a backend
     And the backend is used by the product
     When I go to the overview page of product "My API"
-    And I follow "Analytics"
+    And I follow "View more stats for this service"
     And I follow "Traffic"
     Then I should see "Hits (hits)"
 
@@ -57,7 +57,7 @@ Feature: Provider stats
     And a service "My API" of the provider
     And the backend is used by the product
     When I go to the overview page of product "My API"
-    And I follow "Analytics"
+    And I follow "View more stats for this service"
     And I follow "Traffic"
     Then I should see "Hits (hits)"
 
@@ -75,7 +75,7 @@ Feature: Provider stats
       | fiona    | June 18th 2009 |
     When I log in as provider "foo.3scale.localhost"
     And I follow "API"
-    And I follow "Analytics"
+    And I follow "View more stats for this service"
     And I follow "Signups"
     Then I should see these buyers in the latest signups table:
       | fiona    |
@@ -102,7 +102,7 @@ Feature: Provider stats
       | FancyWidget     | Oct 18th 2010 |
     When I log in as provider "foo.3scale.localhost"
     And I follow "API"
-    And I follow "Analytics"
+    And I follow "View more stats for this service"
     And I follow "Signups"
     Then I should see these applications in the latest signups table:
       | FancyWidget     |

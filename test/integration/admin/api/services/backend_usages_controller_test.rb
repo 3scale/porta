@@ -18,7 +18,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
     end
 
     attr_reader :access_token
-    delegate :value, to: :access_token, prefix: true
+    delegate :plaintext_value, to: :access_token, prefix: true
 
     test 'create' do
       assert_difference(service.backend_api_configs.method(:count)) do
@@ -159,7 +159,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
     end
 
     attr_reader :member, :access_token
-    delegate :value, to: :access_token, prefix: true
+    delegate :plaintext_value, to: :access_token, prefix: true
 
     test 'with permission to all services' do
       get admin_api_service_backend_usages_path(collection_params)
@@ -237,7 +237,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
   end
 
   def collection_params(other_params = {})
-    { service_id: service.id, access_token: access_token_value }.merge(other_params)
+    { service_id: service.id, access_token: access_token_plaintext_value }.merge(other_params)
   end
 
   def resource_params(other_params = {})

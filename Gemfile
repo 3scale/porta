@@ -12,15 +12,13 @@ gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 7.1.5'
+gem 'rails', '~> 7.2.3'
 
 gem 'mail', '~> 2.8.1'
 
 gem "activejob-uniqueness"
 # Needed for XML serialization of ActiveRecord::Base
 gem 'activemodel-serializers-xml'
-
-gem 'protected_attributes_continued', '~> 1.9.0'
 
 gem 'rails-observers'
 
@@ -43,7 +41,7 @@ gem 'sorted_set', '~> 1.0'
 gem 'i18n'
 
 # Apisonator client
-gem 'pisoni', '~> 1.30'
+gem 'pisoni', '~> 1.31'
 
 gem '3scale_time_range', '0.0.6'
 
@@ -61,7 +59,7 @@ gem 'yabeda-prometheus-mmap'
 gem 'yabeda-sidekiq'
 
 gem 'activemerchant', '~> 1.137'
-gem 'audited', '~> 5.4.2'
+gem 'audited', '~> 5.8.0'
 gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can not generate Stripe's "customers"
 
 gem 'acts_as_list', '~> 0.9.17'
@@ -73,21 +71,33 @@ gem 'formtastic', '~> 5.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 gem 'json', '~> 2.7', '>= 2.7.1'
 gem 'responders', '~> 3.2' # For respond_with support
+# uri >= 1.0.0 switched the default parser from RFC2396 to RFC3986 (ruby/uri#107),
+# removed URI::DEFAULT_PARSER, dropped URI.decode, and the RFC3986 parser has no
+# `registry` component. We rely on all of these across models (Proxy, ProxyRule,
+# WebHook, AuthenticationProvider) and controllers. Upgrading is worthwhile but
+# requires careful inspection of every call-site and should be deployed/tested
+# separately from the Faraday update.
+gem 'uri', '< 1.0.0'
 
 gem 'mysql2', '~> 0.5.3'
 
 gem '3scale_client', '~> 2.11', require: false
 gem 'analytics-ruby', require: false
 
+# connection_pool 3.0 changed `#with` from positional to keyword-only args,
+# breaking redis-client 0.22.2 (pinned by hiredis-client). Upgrading
+# hiredis-client + redis-client to >= 0.26.3 would resolve this; until then
+# keep connection_pool on 2.x.
+gem 'connection_pool', '~> 2.2', '< 3'
 gem 'dalli'
-gem 'faraday', '~> 2.0', '<= 2.9'
+gem 'faraday', '~> 2.0', '>= 2.14.3'
 gem 'mimemagic', '~> 0.3.10'
 gem 'nokogiri', '~> 1.18.9', force_ruby_platform: true
 gem 'secure_headers', '~> 6.3.0'
 gem 'redlock'
 
 gem 'acts-as-taggable-on', '~> 11.0'
-gem 'baby_squeel', '~> 3.0', '>= 3.0.0'
+gem 'baby_squeel', '~> 4.0.0'
 gem 'browser'
 gem 'diff-lcs', '~> 1.2'
 gem 'hiredis-client'
@@ -111,7 +121,6 @@ gem 'svg-graph', require: false
 gem 'swagger-ui_rails', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev'
 gem 'swagger-ui_rails2', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev-2.1.3'
 gem 'thinking-sphinx', '~> 5.6.0'
-gem 'ts-datetime-delta', require: 'thinking_sphinx/deltas/datetime_delta'
 gem 'will_paginate', '~> 3.3'
 gem 'zip-zip', require: false
 
@@ -225,7 +234,7 @@ group :development, :test do
   gem 'active_record_query_trace'
 
   gem 'bootsnap', '~> 1.16'
-  gem 'bullet', '~> 7.1.6'
+  gem 'bullet', '~> 7.2.0'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
@@ -251,10 +260,13 @@ group :oracle do
   oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
   # ENV['NLS_LANG'] ||= 'AMERICAN_AMERICA.AL32UTF8' if oracle
   ENV['NLS_LANG'] ||= 'AMERICAN_AMERICA.UTF8' if oracle
-  gem 'activerecord-oracle_enhanced-adapter', '~> 7.1.0', install_if: oracle
+  gem 'activerecord-oracle_enhanced-adapter', '~> 7.2.0', install_if: oracle
   gem 'ruby-oci8', require: false, install_if: oracle
 end
 
 gem 'kubeclient'
 gem 'nkf'
 gem 'pg', '~> 1.3.5'
+gem 'mutex_m'
+gem 'observer'
+gem 'csv'

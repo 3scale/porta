@@ -1,0 +1,21 @@
+- apps = service.latest_applications
+
+div class="pf-c-card"
+  div class="pf-c-card__header"
+    div class="pf-c-card__title" = t('.title')
+  div class="pf-c-card__body"
+    ul class="pf-c-list pf-m-plain pf-m-bordered"
+      - if apps.empty?
+        a class="pf-c-button pf-m-link pf-m-inline" href=new_admin_service_application_path(service)
+          span class="pf-c-button__icon pf-m-start"
+            i class="fas fa-plus-circle" aria-hidden="true"
+          = t('.create')
+      - else
+        - apps.each do |app|
+          - account = app.user_account
+          li == "#{link_to app.name, provider_admin_application_path(app)} from #{link_to account.org_name, admin_buyers_account_path(account)}"
+  - unless apps.empty?
+    div class="pf-c-card__footer"
+      = pf_link_to t('shared.view_more'), admin_service_applications_path(service),
+                                          class: 'pf-m-inline',
+                                          title: t('.view_more')

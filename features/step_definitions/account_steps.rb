@@ -38,7 +38,7 @@ end
 
 Then "new accounts with {plan} will be pending for approval" do |plan|
   params = Signup::SignupParams.new(plans: [plan], user_attributes: {
-    password: 'password',
+    password: 'superSecret1234#',
     username: 'pepe',
     email: 'pepe@example.com'
   }, account_attributes: {

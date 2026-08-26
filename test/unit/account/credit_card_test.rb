@@ -70,7 +70,8 @@ class Account::CreditCardTest < ActiveSupport::TestCase
 
   test 'unstore credit card is callable from outside the class' do
     provider = FactoryBot.create(:simple_account, :payment_gateway_type => :bogus, :credit_card_auth_code => "fdsa",
-                       :credit_card_expires_on => Date.new(2020, 4, 2), :credit_card_partial_number => "0989")
+                       :credit_card_expires_on => Date.new(2020, 4, 2), :credit_card_partial_number => "0989",
+                       :payment_method_id => 'pm_test123')
 
     assert_nothing_raised do
       provider.unstore_credit_card!
@@ -79,6 +80,7 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     assert_nil provider.credit_card_auth_code
     assert_equal Time.zone.today.change(:day => 1), provider.credit_card_expires_on_with_default
     assert_nil provider.credit_card_partial_number
+    assert_nil provider.payment_method_id
   end
 
   test 'unstore credit card succeeds if gateway settings are invalid' do

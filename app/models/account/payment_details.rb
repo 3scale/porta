@@ -10,7 +10,8 @@ module Account::PaymentDetails
       :credit_card_auth_code,
       :credit_card_partial_number,
       :credit_card_expires_on,
-      :credit_card_authorize_net_payment_profile_token
+      :credit_card_authorize_net_payment_profile_token,
+      :payment_method_id
     ].freeze
 
     delegate(
@@ -45,6 +46,8 @@ module Account::PaymentDetails
     end
   end
 
+  # Only clears attributes that are columns on the accounts table.
+  # payment_method_id is not an account column, so it is not included here.
   def clear_cc_attributes
     self[:credit_card_auth_code] = nil
     self[:credit_card_partial_number] = nil

@@ -6,7 +6,7 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
   def setup
     provider = FactoryBot.create(:provider_account)
     host! provider.external_admin_domain
-    @token = FactoryBot.create(:access_token, owner: provider.admin_user, scopes: %w[account_management]).value
+    @token = FactoryBot.create(:access_token, owner: provider.admin_user, scopes: %w[account_management]).plaintext_value
     @settings = provider.settings
   end
 
@@ -20,7 +20,6 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
         hide_service: false,
         signups_enabled: true,
         account_approval_required: false,
-        strong_passwords_enabled: false,
         public_search: false,
         account_plans_ui_visible: true,
         change_account_plan_permission: 'request',

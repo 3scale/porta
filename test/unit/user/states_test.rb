@@ -91,5 +91,24 @@ class User::StatesTest < ActiveSupport::TestCase
       user.activate!
     end
   end
-end
 
+  class ActivateOnMinimalTest < ActiveSupport::TestCase
+    def setup
+      @provider = FactoryBot.create(:simple_provider)
+      @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
+      @user = FactoryBot.create(:pending_user, account: @buyer, password: 'superSecret1234#', password_confirmation: 'superSecret1234#')
+    end
+
+    test 'returns true for minimal signup with password and no approval required' do
+      @user.signup_type = :minimal
+
+      assert @user.activate_on_minimal?
+    end
+
+    test 'returns false for new_signup even with password' do
+      @user.signup_type = :new_signup
+
+      assert_not @user.activate_on_minimal?
+    end
+  end
+end

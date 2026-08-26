@@ -127,7 +127,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
       user: {
         email: 'foo2@example.com',
         username: 'username',
-        password: 'password'
+        password: 'superSecret1234#'
       }
     })
 

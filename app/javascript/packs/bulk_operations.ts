@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-const jquery1 = window.$
 
 document.addEventListener('DOMContentLoaded', () => {
   const dataSelectedTotal = 'data-selected-total-entries'
@@ -13,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function hrefFor (url: string) {
     // url address might already include some parameters
     const connector = url.includes('?') ? '&' : '?'
-    let href = url.concat(connector, jquery1('table tbody .select :checked').serialize())
+    let href = url.concat(connector, $('table tbody .select :checked').serialize())
 
     const selectTotalEntries = findSelectTotalEntries()
     if (selectTotalEntries?.hasAttribute(dataSelectedTotal)) {
@@ -69,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateBulkOperationsCard () {
-    const bulk = jquery1('#bulk-operations')
+    const bulk = $('#bulk-operations')
     const selected = selectedRows()
 
     if (selected > 0) {
@@ -97,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .forEach(dt => {
         dt.querySelector('button')!
           .addEventListener('click', () => {
-            jquery1.colorbox({
+            window.colorbox({
               title: dt.nextElementSibling!.textContent,
               href: hrefFor(dt.dataset.url!)
             })

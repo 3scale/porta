@@ -21,13 +21,13 @@ git clone https://github.com/3scale/porta.git
 
 ## Setup Database
 
-The database need to be created and initialized. To do so run:
+The database needs to be created and initialized. To do so run:
 
 ```sh
 bundle exec rake db:setup
 ```
 
-This command will seed the application with the multi-tenant, a buyer and a developer accounts which will be accessible at: `http://master-account.3scale.localhost:3000/`, `http://provider-admin.3scale.localhost:3000/`, `http://provider.3scale.localhost:3000/` respectively. Take note of the credentials generated at this moment in order to log in to each of the portals above.
+This command will seed the application with multi-tenant, buyer and developer accounts which will be accessible at: `http://master-account.3scale.localhost:3000/`, `http://provider-admin.3scale.localhost:3000/`, `http://provider.3scale.localhost:3000/` respectively. Take note of the credentials generated at this moment in order to log in to each of the portals above.
 
 It's also possible to have a custom setup by means of environment variables. These can be found at `db/seed.rb` although here are the most often used ones:
 
@@ -51,13 +51,11 @@ Install all dependencies:
 bundle && yarn
 ```
 
-And the rails server up by running the following command:
+Start the rails server by running the following command:
 
 ```bash
-$ env UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
+rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
 ```
-
-> The number of unicorn workers is variable and sometimes it will need more than 2. In case the server is slow or start suffering from timeouts, try restarting porta with a higher number like 8.
 
 ## Sphinx server
 
@@ -76,13 +74,13 @@ bundle exec rails assets:precompile
 ```
 
 This will include both the rails assets pipeline and webpack and it's intended for production and tests.
-For development, if you're gonna change anything under app/javascript like React or Typescript, it's more convenient to use live code reloading:
+For development, if you're gonna change anything under app/javascript or app/assets/stylesheets, it's more convenient to use live code reloading:
 
 ```sh
-bundle exec rails webpack:dev
+yarn dev
 ```
 
-This will re-compile webpack and reload the browser whenever a file under app/javascript is updated.
+This will re-compile webpack and CSS after changes are saved and reload the browser.
 
 #### Environment variables
 

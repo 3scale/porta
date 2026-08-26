@@ -12,6 +12,7 @@ class Account < ApplicationRecord
 
 
   include Fields::Fields
+
   required_fields_are :org_name
   optional_fields_are :org_legaladdress, :org_legaladdress_cont,
                       :telephone_number, :vat_code, :vat_rate, :fiscal_code,
@@ -99,16 +100,12 @@ class Account < ApplicationRecord
   after_destroy :destroy_all_contracts
 
   include WebHooksHelpers #TODO: make this inclusion more dsl-ish
+
   fires_human_web_hooks_on_events
 
   before_validation(on: :create, if: :provider?) { generate_s3_prefix }
   before_validation(on: :create, if: :provider?) { generate_domains }
   before_create :generate_site_access_code
-
-  attr_protected :master, :provider, :buyer, :from_email, :vat_rate, :sample_data, :default_service_id, :s3_prefix,
-                 :provider_account_id, :paid_at, :paid, :signs_legal_terms, :tenant_id, :default_account_plan_id,
-                 :default_service_id, :domain, :subdomain, :self_subdomain, :self_domain,:audit_ids, :partner,
-                 :hosted_proxy_deployed_at
 
   belongs_to :partner
   has_many :users, inverse_of: :account, dependent: :destroy
@@ -144,6 +141,7 @@ class Account < ApplicationRecord
 
   def smart_destroy
     return if master?
+
     if buyer?
       first_admin # needs to be cached before destroying
       destroy
@@ -231,6 +229,7 @@ class Account < ApplicationRecord
   def settings
     @settings_facade ||= Settings.new(self)
   end
+
   accepts_nested_attributes_for :profile
 
   belongs_to :country
@@ -287,6 +286,7 @@ class Account < ApplicationRecord
   validate :master_uniqueness, if: :master?
 
   include Authentication
+
   validates :support_email,         format: { with: RE_EMAIL_OK, message: MSG_EMAIL_BAD,
                                               allow_blank: true, unless: :buyer? }
   validates :finance_support_email, format: { with: RE_EMAIL_OK, message: MSG_EMAIL_BAD,
@@ -333,10 +333,6 @@ class Account < ApplicationRecord
                       elsif country_name
                         Country.find_by(name: country_name)&.id
                       end
-  end
-
-  def special_fields
-    %i[country annotations]
   end
 
   # Returns the id corresponding to an account with given api key. This function avoids
@@ -417,6 +413,7 @@ class Account < ApplicationRecord
   # Decides if the email sent from this provider should have the viral email footer appended.
   def should_apply_email_engagement_footer?
     return false if master?
+
     if buyer? && !provider? # no idea what I'm doing.
       provider_account.settings.skip_email_engagement_footer.denied?
     else
@@ -445,6 +442,7 @@ class Account < ApplicationRecord
   # don't freak out, this is a legacy naming
   def multiple_applications_allowed?
     return false unless settings
+
     settings.multiple_applications.visible?
   end
 

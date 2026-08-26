@@ -8,7 +8,7 @@ class Admin::Api::ApplicationPlanMetricPricingRulesControllerTest < ActionDispat
     service  = FactoryBot.create(:service, account: @provider)
     @plan    = FactoryBot.create(:application_plan, issuer: service)
     @metric  = FactoryBot.create(:metric, owner: service)
-    @access_token_value = FactoryBot.create(:access_token, owner: @provider.admin_user, scopes: %w[account_management]).value
+    @access_token_value = FactoryBot.create(:access_token, owner: @provider.admin_user, scopes: %w[account_management]).plaintext_value
 
     host! provider.external_admin_domain
   end

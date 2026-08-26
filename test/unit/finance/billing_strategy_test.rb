@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Finance::BillingStrategyTest < ActiveSupport::TestCase
@@ -14,7 +16,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     @bs = @provider.billing_strategy
     @bs.numbering_period = 'monthly'
 
-    @buyer = FactoryBot.create(:buyer_account)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
   end
 
   test 'add_cost' do
@@ -218,6 +220,92 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
 
   test 'notify_billing_finished' do
     @bs.notify_billing_finished(Time.utc(1984, 1, 1))
+  end
+
+  test 'self.daily does not mark billing strategy as failed for rate limit errors' do
+    assert @bs.instance_of? Finance::PostpaidBillingStrategy
+
+    Finance::PostpaidBillingStrategy.any_instance.stubs(:daily).raises(mock_gateway_rate_limit_error({ buyer_id: @buyer.id }))
+
+    # These should NOT be called for rate limit errors
+    Rails.logger.expects(:error).never
+    System::ErrorReporting.expects(:report_error).never
+
+    # The rate limit error should be re-raised
+    assert_raises(Finance::Payment::GatewayRateLimitError) do
+      Finance::BillingStrategy.daily(only: [@provider.id])
+    end
+  end
+
+  test 'self.daily marks billing strategy as failed for non-rate-limit errors' do
+    # Stub the instance method to raise a regular error
+    error_message = 'Something went wrong'
+    Finance::PostpaidBillingStrategy.any_instance.stubs(:daily).raises(StandardError.new(error_message))
+
+    # These SHOULD be called for regular errors
+    expected_message = "BillingStrategy #{@bs.id}(#{@provider.name}) failed utterly"
+    Rails.logger.expects(:error).with(expected_message)
+    System::ErrorReporting.expects(:report_error).with(
+      instance_of(StandardError),
+      error_message: expected_message,
+      error_class: 'BillingError'
+    )
+
+    # The error should be re-raised after logging
+    assert_raises(StandardError) do
+      Finance::BillingStrategy.daily(only: [@provider.id])
+    end
+  end
+
+  test "#daily of postpaid billing strategy succeeds" do
+    assert @bs.instance_of? Finance::PostpaidBillingStrategy
+    @bs.update(charging_enabled: true)
+
+    @bs.daily(now: Time.now.utc, buyer_ids: [@buyer.id])
+
+    @bs.expects(:error).never
+    System::ErrorReporting.expects(:report_error).never
+    assert_empty @bs.failed_buyers
+  end
+
+  test 'bill_and_charge_each re-raises rate limit errors without logging' do
+    # These should NOT be called for rate limit errors
+    @bs.expects(:error).never
+    System::ErrorReporting.expects(:report_error).never
+
+    # The rate limit error should be re-raised immediately
+    assert_raises(Finance::Payment::GatewayRateLimitError) do
+      @bs.send(:bill_and_charge_each, { buyer_ids: [@buyer.id] }) do |b|
+        raise mock_gateway_rate_limit_error({ buyer_id: @buyer.id })
+      end
+    end
+
+    # failed_buyers should remain empty for rate limit errors
+    assert_empty @bs.failed_buyers
+  end
+
+  test 'bill_and_charge_each logs and reports non-rate-limit errors' do
+    error_message = 'Payment processing failed'
+
+    # These SHOULD be called for regular errors
+    expected_msg = "Failed to bill or charge #{@buyer.name}(#{@buyer.id}) of provider(#{@provider.id}): #{error_message}\n"
+    @bs.expects(:error).with(expected_msg, @buyer)
+    System::ErrorReporting.expects(:report_error).with(
+      instance_of(StandardError),
+      error_message: expected_msg,
+      error_class: 'BillingError',
+      parameters: { buyer_id: @buyer.id, provider_id: @provider.id }
+    )
+
+    # NOTE: the exception is only re-raised in test environment, in production it is not propagated
+    assert_raises(StandardError, match: error_message) do
+      @bs.send(:bill_and_charge_each, { buyer_ids: [@buyer.id] }) do |b|
+        raise StandardError, error_message
+      end
+    end
+
+    # failed_buyers should include the buyer for regular errors
+    assert_includes @bs.failed_buyers, @buyer.id
   end
 
   def test_create_invoices_to_review_event

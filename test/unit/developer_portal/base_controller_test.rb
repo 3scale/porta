@@ -14,9 +14,9 @@ module DeveloperPortal
         params = account.fields_definitions.each_with_object({}) { |fd, p| p[fd.name]=SecureRandom.hex }
         TestController.any_instance.expects(:site_account).returns(account)
 
-        result = TestController.new.send(:filter_readonly_params, params, User)
+        result = TestController.new.send(:filter_readonly_params, ::ActionController::Parameters.new(params), User)
 
-        assert_equal 3, result.size
+        assert_equal 3, result.keys.size
         assert_not_includes result, ro_fields.map(&:name)
       end
 

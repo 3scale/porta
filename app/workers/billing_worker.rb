@@ -3,11 +3,11 @@
 class BillingWorker
   include Sidekiq::Job
 
-  sidekiq_options queue: :billing, retry: 3
+  sidekiq_options queue: :billing, retry: 5
 
-  sidekiq_retry_in do |_count|
-    # after lock has been released
-    1.hours + 10
+  sidekiq_retry_in do |_count, _exception|
+    # wait for lock to be released
+    (1.hour + rand(30.minutes.to_i)).to_i
   end
 
   class Callback

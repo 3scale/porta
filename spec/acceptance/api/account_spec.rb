@@ -8,11 +8,7 @@ resource "Account" do
   let(:account) { FactoryBot.build(:buyer_account, provider_account: provider) }
   let(:payment_detail) { FactoryBot.create(:payment_detail, account: account) }
 
-  let(:resource) do
-    FieldsDefinition.create_defaults!(master)
-    provider.reload
-    account
-  end
+  let(:resource) { account }
 
   let(:expected_provider_fields) { %w[admin_domain domain admin_base_url base_url from_email support_email finance_support_email site_access_code] }
 
@@ -106,7 +102,7 @@ resource "Account" do
       parameter :email, 'Email of the admin user'
       parameter :password, 'Password of the admin user'
 
-      let(:password) { 'password' }
+      let(:password) { 'superSecret1234#' }
       let(:email) { 'email@example.com' }
       let(:username) { 'new_user' }
       let(:org_name) { 'New Signup' }

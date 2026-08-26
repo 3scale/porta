@@ -9,7 +9,6 @@ module SettingsRepresenter
   property :hide_service
   property :signups_enabled
   property :account_approval_required
-  property :strong_passwords_enabled
   property :public_search
   property :account_plans_ui_visible
   property :change_account_plan_permission

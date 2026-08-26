@@ -20,26 +20,25 @@ class Partners::UsersController < Partners::BaseController
   end
 
   def create
-    @user = @account.users.build
-    @user.email = params[:email]
-    @user.password = SecureRandom.hex
-    @user.first_name = params[:first_name].presence
-    @user.last_name = params[:last_name].presence
-    @user.open_id = params[:open_id].presence
-    @user.username = params[:username]
-    @user.signup_type = :partner
+    @user = @account.users.build(user_params)
+    @user.signup_type = :created_by_provider
     @user.role = :admin
     @user.activate!
-    if @user.save
-      render json: {id: @user.id, success: true}
-    else
-      render json: {errors: @user.errors, success: false}
-    end
+    @user.save!
+
+    render json: {id: @user.id, success: true}
+  rescue StandardError
+    render json: {errors: @user.errors, success: false}, status: :unprocessable_entity
   end
 
   private
 
   def find_account
     @account = @partner.providers.find(params[:provider_id])
+  end
+
+  def user_params
+    allowed_attrs = %i[email password first_name last_name open_id username]
+    params.permit(*allowed_attrs)
   end
 end

@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class InvoiceTest < ActiveSupport::TestCase
+  include BillingResultsTestHelpers
+
   fixtures :countries
 
   should belong_to :buyer_account
@@ -24,10 +26,10 @@ class InvoiceTest < ActiveSupport::TestCase
     @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
     @invoice = FactoryBot.create(:invoice,
-                                  period: Month.new(@local_time),
-                                  provider_account: @provider,
-                                  buyer_account: @buyer,
-                                  friendly_id: '0000-00-00000001')
+                                 period: Month.new(@local_time),
+                                 provider_account: @provider,
+                                 buyer_account: @buyer,
+                                 friendly_id: '0000-00-00000001')
     @billing = Finance::BackgroundBilling.new(@invoice)
   end
 
@@ -371,16 +373,16 @@ class InvoiceTest < ActiveSupport::TestCase
   def setup_1984_and_2009_invoices
     travel_to(Time.zone.local(2009, 6, 1)) do
       @invoice_one = FactoryBot.create(:invoice,
-                                        buyer_account: @buyer,
-                                        provider_account: @provider,
-                                        period: Month.new(Time.utc(2009, 6, 1)))
+                                       buyer_account: @buyer,
+                                       provider_account: @provider,
+                                       period: Month.new(Time.utc(2009, 6, 1)))
     end
 
     travel_to(Time.zone.local(1984, 10, 1)) do
       @invoice_two = FactoryBot.create(:invoice,
-                                        provider_account: @provider,
-                                        buyer_account: @buyer,
-                                        period: Month.new(Time.utc(1984, 10, 1)))
+                                       provider_account: @provider,
+                                       buyer_account: @buyer,
+                                       period: Month.new(Time.utc(1984, 10, 1)))
     end
   end
 
@@ -521,6 +523,67 @@ class InvoiceTest < ActiveSupport::TestCase
     refute @invoice.charge!, 'Invoice should not charge!'
   end
 
+  test '#charge! re-raises GatewayRateLimitError without incrementing retry counter' do
+    @buyer.expects(:charge!).raises(mock_gateway_rate_limit_error)
+
+    @provider.stubs(:payment_gateway_configured?).returns(true)
+    @billing.create_line_item!(name: 'Fake', cost: 1.233, description: 'really', quantity: 1)
+    @invoice.issue_and_pay_if_free!
+
+    # Should re-raise the error
+    assert_raises(Finance::Payment::GatewayRateLimitError) do
+      @invoice.charge!(true)
+    end
+
+    # Retry counter should NOT be incremented for rate limit errors
+    assert_equal 0, @invoice.reload.charging_retries_count
+    assert_nil @invoice.last_charging_retry
+
+    # Invoice should remain in pending state, not marked as unpaid
+    assert_equal 'pending', @invoice.state
+  end
+
+  test '#charge! handles CreditCardError by incrementing retry counter and marking as unpaid' do
+    @buyer.expects(:charge!).raises(Finance::Payment::CreditCardError.new('Card declined'))
+    @provider.stubs(:payment_gateway_configured?).returns(true)
+    @billing.create_line_item!(name: 'Fake', cost: 1.233, description: 'really', quantity: 1)
+    @invoice.issue_and_pay_if_free!
+
+    # Mock the mailer
+    InvoiceMessenger.expects(:unsuccessfully_charged_for_buyer).returns(stub(deliver: true))
+
+    @invoice.charge!
+
+    # Retry counter SHOULD be incremented for regular errors
+    assert_equal 1, @invoice.reload.charging_retries_count
+    assert_not_nil @invoice.last_charging_retry
+
+    # Invoice should be marked as unpaid
+    assert_equal 'unpaid', @invoice.state
+  end
+
+  test '#charge! marks invoice as failed after max retries' do
+    @buyer.expects(:charge!).raises(Finance::Payment::CreditCardError.new('Card declined'))
+    @provider.stubs(:payment_gateway_configured?).returns(true)
+    @billing.create_line_item!(name: 'Fake', cost: 1.233, description: 'really', quantity: 1)
+    @invoice.issue_and_pay_if_free!
+
+    # Mark as unpaid first so we can transition to failed
+    @invoice.mark_as_unpaid!
+    @invoice.update_attribute(:charging_retries_count, Invoice::MAX_CHARGE_RETRIES - 1)
+
+    # Mock the mailer for final failure
+    InvoiceMessenger.expects(:unsuccessfully_charged_for_buyer_final).returns(stub(deliver: true))
+
+    @invoice.charge!
+
+    # Should reach max retries
+    assert_equal Invoice::MAX_CHARGE_RETRIES, @invoice.reload.charging_retries_count
+
+    # Invoice should be marked as failed
+    assert_equal 'failed', @invoice.state
+  end
+
   test '#buyer_field_label' do
     @buyer.expects(:field_label).with('vat_rate')
     @invoice.buyer_field_label('vat_rate')
@@ -586,10 +649,13 @@ class InvoiceTest < ActiveSupport::TestCase
 
     test 'jumps the counter when friendly id jumps' do
       invoice = FactoryBot.create(:invoice,
-                                    period: @invoice_period,
-                                    provider_account: @provider,
-                                    buyer_account: @buyer,
-                                    friendly_id: '2018-00000008').reload
+                                  period: @invoice_period,
+                                  provider_account: @provider,
+                                  buyer_account: @buyer)
+
+      invoice.friendly_id = '2018-00000008'
+      invoice.save!
+      invoice.reload
 
       assert_equal 8, invoice.counter.invoice_count
 

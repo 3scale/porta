@@ -106,7 +106,9 @@ class AccountTest < ActiveSupport::TestCase
   # regression test: https://github.com/3scale/system/pull/3406
   test 'update with nil as param should not raise error' do
     buyer = FactoryBot.create(:simple_buyer)
+
     buyer.update(nil)
+    assert_empty buyer.saved_changes, 'no changes should be saved'
   end
 
   test 'should validate self_domain uniqueness' do
@@ -154,7 +156,10 @@ class AccountTest < ActiveSupport::TestCase
     provider = FactoryBot.create(:simple_provider)
     @named_scoped_provider = provider
 
-    @named_scoped_provider.update(org_name: 'account is not readonly')
+    new_org_name = 'account is not readonly'
+    @named_scoped_provider.update(org_name: new_org_name)
+
+    assert_equal new_org_name, @named_scoped_provider.reload.org_name
   end
 
   test 'deleted buyer account have working #to_xml' do
@@ -181,6 +186,26 @@ class AccountTest < ActiveSupport::TestCase
 
     @account.update_attribute(:vat_rate, 2.34) # rubocop:disable Rails/SkipsModelValidations
     assert_equal 2.34, @account.reload.vat_rate
+  end
+
+  test 'vat_rate value is converted automatically on update' do
+    assert_nil @account.vat_rate
+
+    @account.update(vat_rate: "23.45")
+    assert_instance_of BigDecimal, @account.vat_rate
+    assert_equal 23.45, @account.vat_rate
+
+    @account.update(vat_rate: Float(45.23))
+    assert_instance_of BigDecimal, @account.vat_rate
+    assert_equal 45.23, @account.vat_rate
+
+    @account.update(vat_rate: Integer(30))
+    assert_instance_of BigDecimal, @account.vat_rate
+    assert_equal 30, @account.vat_rate
+
+    @account.update(vat_rate: 'random-string')
+    assert_instance_of BigDecimal, @account.vat_rate
+    assert_equal 0, @account.vat_rate
   end
 
   test 'without :timezone set return UTC as default :timezone' do

@@ -10,9 +10,7 @@ class PaymentDetail < ApplicationRecord
 
   belongs_to :account
 
-  audited allow_mass_assignment: true
-
-  attr_protected :account_id, :audit_ids
+  audited
 
   validates :credit_card_partial_number, length: { :maximum => 4,
                                                    :allow_blank => true,

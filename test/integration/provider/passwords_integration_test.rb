@@ -33,7 +33,7 @@ class Provider::PasswordsControllerIntegrationTest < ActionDispatch::Integration
       assert_equal session[:password_reset_token], regenerated_token
 
       # user updates his password
-      put provider_password_path(user: { password: 'alaska123',password_confirmation: 'alaska123' })
+      put provider_password_path(user: { password: 'new_password_123',password_confirmation: 'new_password_123' })
       assert_response :redirect
       assert_match 'password has been changed', flash[:success]
       assert_nil session[:password_reset_token]
@@ -49,6 +49,45 @@ class Provider::PasswordsControllerIntegrationTest < ActionDispatch::Integration
       get provider_password_path(password_reset_token: regenerated_token)
       assert_response :redirect
       assert_match 'password reset token is invalid', flash[:danger]
+    end
+  end
+
+  class WithBotProtectionTest < Provider::PasswordsControllerIntegrationTest
+    def setup
+      @user = FactoryBot.create(:simple_user)
+      host! @user.account.internal_admin_domain
+      Recaptcha.stubs(:captcha_configured?).returns(true)
+      Recaptcha.stubs(:skip_env?).returns(false)
+      Recaptcha.stubs(:invalid_response?).returns(false)
+    end
+
+    test 'destroy renders reset page with error when bot protection detects spam' do
+      @user.account.settings.update(admin_bot_protection_level: :captcha)
+      Recaptcha.stubs(:verify_via_api_call).returns([false, {}])
+
+      delete provider_password_path(email: @user.email)
+
+      assert_response :success
+      assert_match 'reCAPTCHA verification failed, please try again.', response.body
+    end
+
+    test 'destroy sends password reset when bot check passes' do
+      @user.account.settings.update(admin_bot_protection_level: :captcha)
+      Recaptcha.stubs(:verify_via_api_call).returns([true, {}])
+
+      delete provider_password_path(email: @user.email)
+
+      assert_match "We sent an email with password reset instructions to: #{@user.email}", flash[:success]
+      assert_redirected_to provider_login_path
+    end
+
+    test 'destroy works normally when bot protection is disabled' do
+      @user.account.settings.update(admin_bot_protection_level: :none)
+
+      delete provider_password_path(email: @user.email)
+
+      assert_match "We sent an email with password reset instructions to: #{@user.email}", flash[:success]
+      assert_redirected_to provider_login_path
     end
   end
 

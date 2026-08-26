@@ -1,3 +1,4 @@
+# RH allowed licenses list: https://docs.fedoraproject.org/en-US/legal/allowed-licenses/
 ---
 - - :permit
   - MIT
@@ -243,3 +244,9 @@
     :why: Public domain license
     :versions: []
     :when: 2024-11-12 19:29:30.296279869 Z
+- - :permit
+  - BlueOak-1.0.0
+  - :who: Joan Lledó
+    :why: Approved by OSI and Fedora
+    :versions: []
+    :when: 2026-04-29 07:57:00.547859043 Z

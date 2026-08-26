@@ -1,5 +1,10 @@
 import validate from 'validate.js'
 
+// IMPORTANT: This STRONG_PASSWORD_MIN_SIZE constant is duplicated from the backend.
+// The source of truth is app/lib/authentication/by_password.rb. If this constant changes in Ruby,
+// you must update it here as well. Do not modify it without updating the backend first.
+const STRONG_PASSWORD_MIN_SIZE = 15
+
 const loginConstraints = {
   username: { presence: { allowEmpty: false, message: 'Email or username is mandatory' } },
   password: { presence: { allowEmpty: false, message: 'Password is mandatory' } }
@@ -12,7 +17,7 @@ function validateLogin (fields: Record<keyof typeof loginConstraints, string>): 
 const changePasswordConstraints = {
   password: {
     presence: { allowEmpty: false, message: 'Password is mandatory' },
-    length: { minimum: 6 }
+    length: { minimum: STRONG_PASSWORD_MIN_SIZE }
   },
   passwordConfirmation: {
     presence: { allowEmpty: false, message: 'Password confirmation is mandatory' },

@@ -26,7 +26,7 @@ class Admin::Api::ServiceFeaturesController < Admin::Api::ServiceBaseController
   # Service Feature Update
   # PUT /admin/api/services/{service_id}/features/{id}.xml
   def update
-    feature.update(feature_params)
+    feature.update(feature_update_params)
 
     respond_with(feature)
   end
@@ -42,7 +42,11 @@ class Admin::Api::ServiceFeaturesController < Admin::Api::ServiceBaseController
   protected
 
   def feature_params
-    params.fetch(:feature)
+    params.require(:feature).permit(:name, :system_name, :description, :scope)
+  end
+
+  def feature_update_params
+    feature_params.except(:scope)
   end
 
   def features

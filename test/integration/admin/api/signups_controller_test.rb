@@ -21,7 +21,7 @@ class Admin::Api::SignupsControllerTest < ActionDispatch::IntegrationTest
         assert_difference(WebHookWorker.jobs.method(:size)) do
           post admin_api_signup_path, params: {
             format: :json,
-            access_token: token.value,
+            access_token: token.plaintext_value,
             org_name: 'company',
             username: 'person'
           }

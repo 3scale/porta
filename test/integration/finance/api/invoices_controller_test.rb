@@ -27,7 +27,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
 
     def setup
       ThreeScale.config.stubs(onpremises: true)
-      @access_token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[finance]).value
+      @access_token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[finance]).plaintext_value
       @provider = master_account
       @now = Time.zone.now
       @later = @now + 2.months
@@ -66,7 +66,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     @later = @now + 2.months
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider, created_at: @now)
     @provider.settings.allow_finance!
-    @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[finance]).value
+    @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[finance]).plaintext_value
     host! @provider.external_admin_domain
 
     [@now, @later].each { |datetime| FactoryBot.create(:invoice_counter, provider_account: @provider, invoice_prefix: datetime.strftime('%Y-%m')) }
@@ -195,7 +195,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_difference(Audited.audit_class.method(:count)) do
       Invoice.with_synchronous_auditing do
         assert_difference(Invoice.method(:count)) do
-          post api_invoices_path, params: invoice_params.merge!(access_token: token.value), headers: { accept: Mime[:json] }
+          post api_invoices_path, params: invoice_params.merge!(access_token: token.plaintext_value), headers: { accept: Mime[:json] }
           assert_response :created
         end
       end

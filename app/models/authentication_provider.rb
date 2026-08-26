@@ -10,7 +10,7 @@ class AuthenticationProvider < ApplicationRecord
 
   include SystemName
 
-  enum account_type: {developer: 'developer', provider: 'provider'}
+  enum :account_type, { developer: 'developer', provider: 'provider' }
 
   has_system_name uniqueness_scope: [:account_id]
   validates :kind, uniqueness: { scope: %i[account_id account_type], case_sensitive: true }, if: :developer?
@@ -22,8 +22,8 @@ class AuthenticationProvider < ApplicationRecord
             length: { maximum: 255 }
 
   validates :system_name, exclusion: [
-      RedhatCustomerPortalSupport::RH_CUSTOMER_PORTAL_SYSTEM_NAME,
-      ServiceDiscovery::AuthenticationProviderSupport::SERVICE_DISCOVERY_SYSTEM_NAME
+    RedhatCustomerPortalSupport::RH_CUSTOMER_PORTAL_SYSTEM_NAME,
+    ServiceDiscovery::AuthenticationProviderSupport::SERVICE_DISCOVERY_SYSTEM_NAME
   ]
 
   before_validation :set_defaults, on: :create
@@ -141,6 +141,7 @@ class AuthenticationProvider < ApplicationRecord
   def verify_valid_kind_for_account_type
     my_class = self.class
     return if developer? || (provider? && my_class.available(my_class.account_types[:provider]).include?(my_class))
+
     errors.add(:kind, :not_found)
     false
   end

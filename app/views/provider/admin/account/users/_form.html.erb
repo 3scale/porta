@@ -3,8 +3,8 @@
 <% end %>
 
 <%= form.inputs :name => "Change Password" do %>
-  <%= form.input :password, :required => true %>
-  <%= form.input :password_confirmation, :required => true %>
+  <%= form.input :password, :required => false %>
+  <%= form.input :password_confirmation, :required => false %>
 <% end -%>
 
 <% if can? :update_role, @user %>

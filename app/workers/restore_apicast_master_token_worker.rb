@@ -17,6 +17,6 @@ class RestoreApicastMasterTokenWorker < ApplicationJob
     master = Account.master
     access_token = master.access_tokens.find_by!(name: token_name)
     # Need to do that because `:value` is a readonly attribute
-    AccessToken.where(id: access_token.id).limit(1).update_all(value: token) # rubocop:disable Rails/SkipsModelValidations
+    AccessToken.where(id: access_token.id).limit(1).update_all(value: AccessToken.compute_digest(token)) # rubocop:disable Rails/SkipsModelValidations
   end
 end

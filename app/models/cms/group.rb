@@ -1,6 +1,4 @@
 class CMS::Group < ApplicationRecord
-  attr_accessible :provider, :sections, :name, :accounts
-
   # This is BuyerGroup
   self.table_name = :cms_groups
 

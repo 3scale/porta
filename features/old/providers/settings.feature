@@ -7,17 +7,6 @@ Feature: Settings management
   Background:
     Given a provider is logged in
 
-  Scenario: Strong password setting
-    And I go to the usage rules settings page
-    When I check "Strong passwords"
-    And I press "Update settings"
-    Then they should see a toast alert with text "Settings updated"
-    And the provider should have strong passwords enabled
-    When I uncheck "Strong passwords"
-    And I press "Update settings"
-    Then they should see a toast alert with text "Settings updated"
-    And the provider should have strong passwords disabled
-
   Scenario: Account approval required checkbox is enabled
     Given the provider has 1 account plan
     When I go to the usage rules settings page

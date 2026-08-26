@@ -45,7 +45,7 @@ module Backend
 
       def make_default_backend_service
         ThreeScale::Core::Service.make_default(backend_id)
-        account.update!({default_service_id: id}, without_protection: true)
+        account.update!({default_service_id: id})
       end
     end
   end

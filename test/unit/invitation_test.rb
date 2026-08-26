@@ -80,6 +80,7 @@ class InvitationTest < ActiveSupport::TestCase
     assert_equal @provider, user.account
     assert_equal 'bob@example.net', user.email
     assert_equal 'bobby', user.username
+    assert_equal :new_signup, user.signup_type
   end
 
   test 'Invitation#accept! accepts the invitation' do
@@ -107,7 +108,7 @@ class InvitationTest < ActiveSupport::TestCase
 
   test 'creating invited user accepts the invitation' do
     invitation = @provider.invitations.create!(:email => 'bob@example.net')
-    user = invitation.make_user(:username => 'bob', :password => 'monkey')
+    user = invitation.make_user(:username => 'bob', :password => 'superSecret1234#')
 
     assert_change :of => -> { invitation.accepted? }, :from => false, :to => true do
       user.save!

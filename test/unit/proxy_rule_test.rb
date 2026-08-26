@@ -154,6 +154,87 @@ class ProxyRuleTest < ActiveSupport::TestCase
     assert backend_proxy_rule.valid?
   end
 
+  class LockOwnerForPositionUpdate < ActiveSupport::TestCase
+    test 'destroy still tracks proxy config affecting changes' do
+      proxy = FactoryBot.create(:simple_proxy)
+      proxy_rule = FactoryBot.create(:proxy_rule, proxy: proxy)
+
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        proxy_rule.destroy
+        assert tracker.tracking?(ProxyConfigAffectingChanges::TrackedObject.new(proxy_rule)),
+               'lock_owner_for_position_update must not break proxy config change tracking'
+      end
+    end
+
+    test 'skips lock when act_as_list_no_update?' do
+      proxy = FactoryBot.create(:simple_proxy)
+      proxy_rule = FactoryBot.create(:proxy_rule, proxy: proxy)
+      proxy_rule.stubs(:act_as_list_no_update?).returns(true)
+
+      Proxy.any_instance.expects(:lock!).never
+      proxy_rule.destroy
+    end
+  end
+
+  class ConcurrentMappingRuleDeletion < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    setup do
+      @original_method = ProxyRule.instance_method(:lock_owner_for_position_update)
+      @old_pool_size = ActiveRecord::Base.connection_pool.size
+      db_config = ActiveRecord::Base.connection_db_config.configuration_hash.merge(pool: 20)
+      ActiveRecord::Base.establish_connection(db_config)
+      @provider = FactoryBot.create(:simple_provider)
+    end
+
+    teardown do
+      ProxyRule.define_method(:lock_owner_for_position_update, @original_method)
+      db_config = ActiveRecord::Base.connection_db_config.configuration_hash.merge(pool: @old_pool_size)
+      ActiveRecord::Base.establish_connection(db_config)
+    end
+
+    attr_reader :provider
+
+    test 'concurrent deletes under same proxy owner do not deadlock' do
+      proxy = FactoryBot.create(:service, account: provider).proxy
+      rules = FactoryBot.create_list(:proxy_rule, 10, proxy: proxy)
+      assert_concurrent_deletes_do_not_deadlock(rules)
+    end
+
+    test 'concurrent deletes under same backend_api owner do not deadlock' do
+      backend_api = FactoryBot.create(:backend_api, account: provider)
+      rules = FactoryBot.create_list(:proxy_rule, 10, owner: backend_api, proxy: nil)
+      assert_concurrent_deletes_do_not_deadlock(rules)
+    end
+
+    private
+
+    def assert_concurrent_deletes_do_not_deadlock(rules)
+      inject_barrier_seam(rules.size)
+      threads = rules.map { |rule| spawn_destroy_thread(rule) }
+      threads.each(&:join)
+      assert_empty ProxyRule.where(id: rules.map(&:id))
+    end
+
+    def inject_barrier_seam(size)
+      barrier = Concurrent::CyclicBarrier.new(size)
+      original = @original_method
+
+      ProxyRule.define_method(:lock_owner_for_position_update) do
+        raise "not all threads synchronized" unless barrier.wait(5)
+
+        original.bind_call(self)
+      end
+    end
+
+    def spawn_destroy_thread(rule)
+      Thread.new do
+        Thread.current.report_on_exception = false
+        rule.destroy!
+      end
+    end
+  end
+
   class PositionUpdateOnConcurrentDeletion < ActiveSupport::TestCase
     disable_transactional_fixtures!
 

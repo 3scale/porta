@@ -4,7 +4,7 @@ require 'test_helper'
 
 class User::RolesTest < ActiveSupport::TestCase
   test 'default role is :member' do
-    user = User.create!(username: 'bob', email: 'bob@example.com', password: 'monkey')
+    user = User.create!(username: 'bob', email: 'bob@example.com', password: 'superSecret1234#')
     assert_equal :member, user.role
   end
 
@@ -93,14 +93,6 @@ class User::RolesTest < ActiveSupport::TestCase
     account = FactoryBot.create(:account, provider: false)
 
     assert_not account.admins.first.provider_admin?
-  end
-
-  test 'role is not mass assignable' do
-    user = FactoryBot.create(:user)
-
-    assert_no_change :of => -> { user.role } do
-      user.update(role: :admin)
-    end
   end
 
   test 'role accepts also string' do

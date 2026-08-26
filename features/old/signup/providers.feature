@@ -1,4 +1,4 @@
-@audit @javascript
+@audit @javascript @emails
 Feature: Signup
   In order to use Red Hat 3scale API management infrastructure
   As a wanna-be API provider
@@ -21,7 +21,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
      | Email                   | tom@monsterapi.com |
      | First name              | quentin            |
      | Organization/Group Name | foo                |
-     | Password                | godzilla           |
+     | Password                | superSecret1234#   |
    And I press "Sign up"
    Then I should see "Hi quentin, thank you for signing up"
    And the domain of provider "foo" should be "foo.3scale.localhost"
@@ -36,7 +36,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   When I follow the activation link in an email sent to "tom@monsterapi.com"
    And I fill in the following:
     | Email or Username | tom@monsterapi.com |
-    | Password          | godzilla           |
+    | Password          | superSecret1234#   |
    And I press "Sign in"
   Then I should be logged in as "admin"
   And I should be on the provider onboarding wizard page
@@ -69,8 +69,8 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
      | Username                | bob                   |
      | Email                   | bob@customer.net      |
      | Organization/Group Name | bob's enterprise      |
-     | Password                | ie4ever               |
-     | Password confirmation   | ie4ever               |
+     | Password                | superSecret1234#      |
+     | Password confirmation   | superSecret1234#      |
     And I press "Sign up"
     And I wait a moment
    Then I should see "Thank you"
@@ -79,7 +79,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   When I follow the activation link in an email sent to "bob@customer.net"
   And I fill in the following:
     | Username or Email | bob     |
-    | Password          | ie4ever |
+    | Password          | superSecret1234# |
   And I press "Sign in"
   Then I should see "Signed in successfully"
   Then I should be on the homepage
@@ -87,9 +87,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   Then I follow "Sign Out bob"
   Then I should see "You have been logged out"
   And I follow "Login"
-  And I fill in the following:
-  | Username or Email |   john |
-  | Password          | 123456 |
+  And I fill in the sample user credentials
   And I press "Sign in"
   Then I should see "Signed in successfully"
   Then I should be on the homepage

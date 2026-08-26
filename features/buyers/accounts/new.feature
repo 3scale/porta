@@ -35,9 +35,9 @@ Feature: Audience > Accounts > New
   Scenario: Fields validation
     Given they go to the new buyer account page
     When the form is submitted with:
-      | Username | u        |
-      | Email    | invalid  |
-      | Password | p        |
+      | Username | u                  |
+      | Email    | invalid            |
+      | Password | superSecret1234#   |
       | Organization/Group Name | Org |
     Then field "Username" has inline error "is too short"
     And field "Email" has inline error "should look like an email address"
@@ -63,6 +63,7 @@ Feature: Audience > Accounts > New
       | Organization/Group Name | Alice's Web Widget |
       | Country                 | Spain              |
       | Fields with choices     | option1            |
+      | Password                | superSecret1234#   |
 
     Then the current page is the buyer account page for "Alice's Web Widget"
     And the inverted table has the following rows within the account details card:

@@ -5,7 +5,7 @@ class Applications::ApplicationDeletedEvent < ApplicationRelatedEvent
   # @param [Cinstance] application
   # :reek:NilCheck but proxy can be nil at this point
   def self.create(application)
-    service = application.service || Service.new({id: application.service_id}, without_protection: true)
+    service = application.service || Service.new(id: application.service_id)
     new(
       application: MissingModel::MissingApplication.new(id: application.id),
       service_backend_id: service.backend_id,

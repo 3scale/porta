@@ -6,13 +6,13 @@ class UserObserver < ActiveRecord::Observer
       # probably to ignore master in tests?
       return if user.account.provider_account.nil?
 
-      if user.new_signup?
-        if user.account.provider?
-          ProviderUserMailer.activation(user).deliver_later
-          ActivationReminderWorker.enqueue(user)
-        else
-          UserMailer.signup_notification(user).deliver_later
-        end
+      return unless user.new_signup? && !user.invitation
+
+      if user.account.provider?
+        ProviderUserMailer.activation(user).deliver_later
+        ActivationReminderWorker.enqueue(user)
+      else
+        UserMailer.signup_notification(user).deliver_later
       end
     end
   end

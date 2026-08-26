@@ -31,16 +31,17 @@ Feature: CMS Template versions
     When they follow "Versions"
     And follow "Revert" in the 1st row
     And confirm the dialog
-    Then a success toast alert is displayed with text "Reverted to version from 24 Dec 2012 12:00:00 UTC"
+    Then they should see a success toast alert with text "Reverted to version from 24 Dec 2012 12:00:00 UTC"
     Then the draft template should contain "Original Prankster"
 
   Scenario: Revert to version from the version itself
     Given they fill the template draft with "<div>Dammit, I Changed Again</div>"
     And press "Save"
+    And they should see a toast alert with text "Template saved"
     When they follow "Versions"
     And follow "24 Dec 2012 12:00:00 UTC"
     And the version template should contain "Original Prankster"
     When they follow "Revert"
     And confirm the dialog
-    Then a success toast alert is displayed with text "Reverted to version from 24 Dec 2012 12:00:00 UTC"
+    Then they should see a success toast alert with text "Reverted to version from 24 Dec 2012 12:00:00 UTC"
     Then the draft template should contain "Original Prankster"

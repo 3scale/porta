@@ -16,7 +16,7 @@ class Plan < ApplicationRecord
 
   has_system_name :uniqueness_scope => [ :type, :issuer_id, :issuer_type ]
 
-  audited :allow_mass_assignment => true
+  audited
   acts_as_list scope: %i[issuer_id issuer_type]
 
   # There is a race condition here, the record gets deleted but the callbacks were not triggered yet
@@ -30,8 +30,6 @@ class Plan < ApplicationRecord
 
   validates :state, inclusion: { in: %w(hidden published) }
   before_validation(:on => :create) { set_state_to_hidden_if_nil } # otherwise the validation above fails as state machine hasnt kicked in yet (ugly)
-
-  attr_protected :issuer_id, :original_id, :type, :issuer_type, :tenant_id, :audit_ids, :state
 
   state_machine :initial => :hidden do
     state :hidden

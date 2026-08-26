@@ -100,7 +100,7 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
     FactoryBot.create(:redhat_customer_portal_authentication_provider, account: provider)
     FactoryBot.create(:keycloak_authentication_provider, account: provider)
     FactoryBot.create(:redhat_customer_portal_authentication_provider, account: FactoryBot.build_stubbed(:simple_provider))
-    get admin_api_authentication_providers_path(format: :json, access_token: access_token.value)
+    get admin_api_authentication_providers_path(format: :json, access_token: access_token.plaintext_value)
     assert_response :ok
     authentication_providers = JSON.parse(response.body)['authentication_providers']
     assert authentication_providers.present?
@@ -114,14 +114,14 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
     FactoryBot.create(:redhat_customer_portal_authentication_provider, account: provider)
     FactoryBot.create(:keycloak_authentication_provider, account: provider)
     FactoryBot.create(:redhat_customer_portal_authentication_provider, account: FactoryBot.build_stubbed(:simple_provider))
-    get admin_api_authentication_providers_path(format: :xml, access_token: access_token.value)
+    get admin_api_authentication_providers_path(format: :xml, access_token: access_token.plaintext_value)
     assert_response :ok
     assert_xml './authentication_providers/authentication_provider', 2
   end
 
   test '#show returns the requested authentication provider' do
     authentication_provider = FactoryBot.create(:authentication_provider, account: provider)
-    get admin_api_authentication_provider_path(authentication_provider, format: :json, access_token: access_token.value)
+    get admin_api_authentication_provider_path(authentication_provider, format: :json, access_token: access_token.plaintext_value)
     assert_response :ok
     assert_equal authentication_provider.id, JSON.parse(response.body).dig('authentication_provider', 'id')
   end
@@ -130,7 +130,7 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
     authentication_provider = FactoryBot.create(:authentication_provider, account: provider)
     AuthenticationProvider.any_instance.expects(:authorization_scope).with('show').returns('show')
     Ability.any_instance.expects(:authorize!).raises(CanCan::AccessDenied)
-    get admin_api_authentication_provider_path(authentication_provider, format: :json, access_token: access_token.value)
+    get admin_api_authentication_provider_path(authentication_provider, format: :json, access_token: access_token.plaintext_value)
     assert_response :forbidden
   end
 
@@ -144,6 +144,6 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
       token_url: 'http://token_url', user_info_url: 'http://user_info_url', authorize_url: 'http://authorize_url',
       kind: 'github', skip_ssl_certificate_verification: true, automatically_approve_accounts: true
     }.merge(different_attributes)
-    { authentication_provider: attributes, format: format, access_token: access_token.value }
+    { authentication_provider: attributes, format: format, access_token: access_token.plaintext_value }
   end
 end

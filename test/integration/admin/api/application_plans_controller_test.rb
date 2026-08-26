@@ -3,10 +3,11 @@
 require 'test_helper'
 
 class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
+  include ActiveJob::TestHelper
 
   def setup
     AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
-    @token = FactoryBot.create(:access_token, owner: current_account.admin_users.first!, scopes: %w[account_management]).value
+    @token = FactoryBot.create(:access_token, owner: current_account.admin_users.first!, scopes: %w[account_management]).plaintext_value
     host! current_account.internal_admin_domain
     @service = FactoryBot.create(:service, account: current_account)
   end
@@ -75,6 +76,20 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
       get admin_api_service_application_plans_path(service_id: service.id, format: :json, access_token: @token)
       assert_response :success
       assert_equal 2, JSON.parse(response.body)['plans'].length
+    end
+
+    def test_update_syncs_plan_name_to_backend
+      application_plan = FactoryBot.create(:application_plan, name: 'old name', issuer: service)
+      cinstances = FactoryBot.create_list(:simple_cinstance, 2, plan: application_plan)
+
+      ThreeScale::Core::Application.expects(:save_batch)
+        .with(service.backend_id, expected_backend_applications(cinstances, application_plan, 'new name'))
+
+      Sidekiq::Testing.inline! do
+        put admin_api_service_application_plan_path(application_plan, service_id: service.id, format: :json, access_token: @token,
+                                                    application_plan: { name: 'new name' })
+        assert_response :success
+      end
     end
 
     def test_approval_required
@@ -159,6 +174,15 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
   private
 
   attr_reader :service
+
+  def expected_backend_applications(cinstances, plan, plan_name)
+    cinstances.map do |cinstance|
+      state = cinstance.state
+      state = :active if cinstance.live?
+      { service_id: plan.service.backend_id, id: cinstance.application_id, state: state,
+        plan_id: plan.id, plan_name: plan_name, redirect_url: cinstance.redirect_url }
+    end
+  end
 
   def application_plan_params(state_event: 'publish', approval_required: 0)
     @application_plan_params ||= {

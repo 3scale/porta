@@ -7,6 +7,6 @@ class Liquid::Drops::TopicTest < ActiveSupport::TestCase
     drop = ::Liquid::Drops::Topic.new(topic)
 
     assert_equal 'IMPORTANT', drop.title
-    assert_equal "/forum/topics/important", drop.url
+    assert_equal "", drop.url
   end
 end

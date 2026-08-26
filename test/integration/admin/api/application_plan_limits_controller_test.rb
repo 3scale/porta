@@ -9,7 +9,7 @@ class Admin::Api::ApplicationPlanLimitsControllerTest < ActionDispatch::Integrat
 
   setup do
     @provider = FactoryBot.create(:provider_account)
-    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
     host! @provider.external_admin_domain
     @service = FactoryBot.create(:simple_service, account: @provider)
     @app_plan = FactoryBot.create(:simple_application_plan, issuer: service)

@@ -76,14 +76,15 @@ Feature: Provider Account Settings User Invitations
       Then field "Send invitation to" has inline error "This invitation has already been sent."
       And no invitation should be sent to "alice@example.org"
 
+    @emails
     Scenario: Accepting an invitation with different email
       Given an invitation sent to "alice@example.org" to join account "foo.3scale.localhost"
       And the invitee follows the link to sign up to the provider in the invitation sent to "alice@example.org"
       And the form is submitted with:
         | Email                 | peter@example.com |
         | Username              | peter             |
-        | Password              | 123456            |
-        | Password confirmation | 123456            |
+        | Password              | superSecret1234#  |
+        | Password confirmation | superSecret1234#  |
       And they log out
       When the provider logs in
       And they go to the provider users page

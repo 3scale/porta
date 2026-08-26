@@ -49,7 +49,9 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     assert user.active?
     assert user.valid?
     assert user.account.valid?
-    assert_equal :'partner:someone', user.signup_type
+    assert_equal :created_by_provider, user.signup_type
+    assert user.signup.machine?
+    assert_not user.signup.by_user?
     assert_equal account, user.account
 
     assert_equal provider_params[:open_id], user.open_id
@@ -77,13 +79,68 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'post with specific password' do
     prepare_master_account
-    post :create, params: provider_params.merge(password: 'foobar123')
+    post :create, params: provider_params.merge(password: 'superSecret1234#')
     user = assigns(:user)
     account = assigns(:account)
     strategy = Authentication::Strategy::Internal.new(account, true)
-    assert strategy.authenticate(username: user.username, password: 'foobar123')
+    assert strategy.authenticate(username: user.username, password: 'superSecret1234#')
     body = JSON.parse(response.body)
     assert_equal body['success'], true
+  end
+
+  test 'post without password creates user with no password' do
+    prepare_master_account
+    post :create, params: provider_params
+
+    assert_response :success
+    user = assigns(:user)
+    assert user.valid?
+    assert_nil user.password_digest, 'User should have no password when not provided'
+    assert_not user.already_using_password?, 'User should not be using password'
+
+    body = JSON.parse(response.body)
+    assert_equal true, body['success']
+  end
+
+  test 'post without password or open_id creates user with no password' do
+    # Partner users have signup_type :created_by_provider so password is not required.
+    # A user created this way must go through password reset to set a password and log in.
+    prepare_master_account
+    post :create, params: provider_params.except(:open_id)
+
+    assert_response :success
+    user = assigns(:user)
+    assert user.valid?
+    assert_nil user.password_digest, 'User should have no password when not provided'
+
+    body = JSON.parse(response.body)
+    assert_equal true, body['success']
+  end
+
+  test 'post with weak password rejected when strong passwords enabled' do
+    prepare_master_account
+
+    post :create, params: provider_params.merge(password: 'weakpwd')
+
+    assert_response :unprocessable_entity
+    body = JSON.parse(response.body)
+
+    refute body['success']
+    assert body['errors']['user']['password'].present?
+  end
+
+  test 'post with strong password accepted when strong passwords enabled' do
+    prepare_master_account
+
+    post :create, params: provider_params.merge(password: 'superSecret1234#')
+
+    assert_response :success
+    user = assigns(:user)
+    assert user.valid?
+    assert user.authenticate('superSecret1234#')
+
+    body = JSON.parse(response.body)
+    assert_equal true, body['success']
   end
 
   test 'post with an invalid email' do

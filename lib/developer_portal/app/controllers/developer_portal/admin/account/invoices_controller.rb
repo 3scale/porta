@@ -63,7 +63,7 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
   end
 
   def accessible_invoices
-    current_account.invoices.visible_for_buyer
+    current_account.invoices.includes(:provider_account).visible_for_buyer
   end
 
   def find_invoice

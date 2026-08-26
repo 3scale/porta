@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_05_22_195407) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_19_102359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,6 +24,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_22_195407) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.datetime "expires_at", precision: nil
+  end
+
+  create_table "account_settings", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "type", null: false
+    t.text "value", null: false
+    t.bigint "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "type"], name: "index_account_settings_on_account_id_and_type", unique: true
   end
 
   create_table "accounts", force: :cascade do |t|
@@ -127,7 +137,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_22_195407) do
     t.string "value"
     t.string "annotated_type", null: false
     t.bigint "annotated_id", null: false
-    t.integer "tenant_id"
+    t.bigint "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["annotated_type", "annotated_id", "name"], name: "index_annotations_on_annotated_type_and_annotated_id_and_name", unique: true
@@ -175,7 +185,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_22_195407) do
     t.string "kind", limit: 255
     t.text "audited_changes"
     t.text "comment"
-    t.integer "associated_id"
+    t.bigint "associated_id"
     t.string "associated_type", limit: 255
     t.string "remote_address", limit: 255
     t.string "request_uuid", limit: 255
@@ -461,7 +471,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_22_195407) do
     t.decimal "tax_rate", precision: 5, scale: 2, default: "0.0", null: false
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
-    t.integer "tenant_id"
+    t.bigint "tenant_id"
     t.boolean "enabled", default: true
     t.index ["code"], name: "index_countries_on_code"
   end
@@ -1314,7 +1324,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_22_195407) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.integer "pos"
-    t.integer "tenant_id"
+    t.bigint "tenant_id"
   end
 
   create_table "taggings", force: :cascade do |t|

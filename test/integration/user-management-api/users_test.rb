@@ -22,7 +22,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   test 'index with access token as a member' do
     token = FactoryBot.create(:access_token, owner: @member, scopes: ['account_management'])
 
-    get admin_api_users_path(format: :xml), params: { access_token: token.value }
+    get admin_api_users_path(format: :xml), params: { access_token: token.plaintext_value }
 
     assert_response :forbidden
   end
@@ -31,11 +31,11 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
 
     AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(false)
-    get admin_api_users_path(format: :xml), params: { access_token: token.value }
+    get admin_api_users_path(format: :xml), params: { access_token: token.plaintext_value }
     assert_response :forbidden
 
     AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
-    get admin_api_users_path(format: :xml), params: { access_token: token.value }
+    get admin_api_users_path(format: :xml), params: { access_token: token.plaintext_value }
     assert_response :success
   end
 
@@ -45,7 +45,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     impersonation_admin.save!
 
     AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
-    get admin_api_users_path(format: :xml), params: { access_token: token.value }
+    get admin_api_users_path(format: :xml), params: { access_token: token.plaintext_value }
     assert_response :success
     refute_xpath ".//username", /impersonation_admin/
   end
@@ -54,18 +54,18 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: @member, scopes: ['account_management'])
 
     # member's opening his page
-    get admin_api_user_path(format: :xml, id: @member.id), params: { access_token: token.value }
+    get admin_api_user_path(format: :xml, id: @member.id), params: { access_token: token.plaintext_value }
     assert_response :success
 
     # member's opening admin's page
-    get admin_api_user_path(format: :xml, id: admin.id), params: { access_token: token.value }
+    get admin_api_user_path(format: :xml, id: admin.id), params: { access_token: token.plaintext_value }
     assert_response :forbidden
   end
 
   test 'show with access token as an admin' do
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
 
-    get admin_api_user_path(format: :xml, id: @member.id), params: { access_token: token.value }
+    get admin_api_user_path(format: :xml, id: @member.id), params: { access_token: token.plaintext_value }
 
     assert_response :success
   end
@@ -74,28 +74,28 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
 
     AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(false)
-    post admin_api_users_path(format: :xml), params: { username: 'aaa', email: 'aaa@aaa.hu', access_token: token.value }
+    post admin_api_users_path(format: :xml), params: { username: 'aaa', email: 'aaa@aaa.hu', access_token: token.plaintext_value }
     assert_response :forbidden
 
     AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
-    post admin_api_users_path(format: :xml), params: { username: 'aaa', email: 'aaa@aaa.hu', access_token: token.value }
+    post admin_api_users_path(format: :xml), params: { username: 'aaa', email: 'aaa@aaa.hu', access_token: token.plaintext_value }
     assert_response :success
   end
 
   test 'update with access token as a member' do
     token = FactoryBot.create(:access_token, owner: @member, scopes: ['account_management'])
 
-    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.value)
+    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.plaintext_value)
     assert_response :success
 
-    put admin_api_user_path(format: :xml, id: admin.id, access_token: token.value)
+    put admin_api_user_path(format: :xml, id: admin.id, access_token: token.plaintext_value)
     assert_response :forbidden
   end
 
   test 'update with access token as an admin' do
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
 
-    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.value)
+    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.plaintext_value)
 
     assert_response :success
   end
@@ -103,7 +103,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   test 'destroy with access token as a member' do
     token = FactoryBot.create(:access_token, owner: @member, scopes: ['account_management'])
 
-    delete admin_api_user_path(format: :xml, id: admin.id, access_token: token.value)
+    delete admin_api_user_path(format: :xml, id: admin.id, access_token: token.plaintext_value)
 
     assert_response :forbidden
   end
@@ -111,7 +111,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   test 'destroy with access token as an admin' do
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
 
-    delete admin_api_user_path(format: :xml, id: @member.id, access_token: token.value)
+    delete admin_api_user_path(format: :xml, id: @member.id, access_token: token.plaintext_value)
 
     assert_response :success
   end
@@ -119,7 +119,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   test 'admin/update_role with access token as a member' do
     token = FactoryBot.create(:access_token, owner: @member, scopes: ['account_management'])
 
-    put admin_api_user_path(format: :xml, id: admin.id, access_token: token.value)
+    put admin_api_user_path(format: :xml, id: admin.id, access_token: token.plaintext_value)
 
     assert_response :forbidden
   end
@@ -127,7 +127,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   test 'admin/update_role with access token as an admin' do
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
 
-    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.value)
+    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.plaintext_value)
 
     assert_response :success
   end
@@ -136,7 +136,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
     service = @provider.services.default
 
-    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.value), params: { member_permission_service_ids: [service.id], member_permission_ids: %w[monitoring services] }
+    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.plaintext_value), params: { member_permission_service_ids: [service.id], member_permission_ids: %w[monitoring services] }
 
     assert_response :success
 
@@ -150,7 +150,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     service = @provider.services.default
     admin_sections = @member.admin_sections
 
-    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.value), params: { member_permission_service_ids: [service.id], member_permission_ids: %w[monitoring] }
+    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.plaintext_value), params: { member_permission_service_ids: [service.id], member_permission_ids: %w[monitoring] }
 
     assert_response :success
 
@@ -160,15 +160,27 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     assert_equal admin_sections, @member.admin_sections
   end
 
+  test 'set member permissions with provider key' do
+    service = @provider.services.default
+
+    put admin_api_user_path(format: :xml, id: @member.id), params: { member_permission_service_ids: [service.id], member_permission_ids: %w[monitoring services], provider_key: @provider.api_key }
+
+    assert_response :success
+
+    assert @member.reload
+    assert_equal [service.id], @member.member_permission_service_ids
+    assert_equal Set[ :services, :monitoring ], @member.admin_sections
+  end
+
   test 'suspend/unsuspend with access token as a member' do
     token = FactoryBot.create(:access_token, owner: @member, scopes: ['account_management'])
 
     admin.activate!
 
-    put suspend_admin_api_user_path(format: :xml, id: admin.id, access_token: token.value)
+    put suspend_admin_api_user_path(format: :xml, id: admin.id, access_token: token.plaintext_value)
     assert_response :forbidden
 
-    put unsuspend_admin_api_user_path(format: :xml, id: admin.id, access_token: token.value)
+    put unsuspend_admin_api_user_path(format: :xml, id: admin.id, access_token: token.plaintext_value)
     assert_response :forbidden
   end
 
@@ -177,10 +189,10 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
     @member.activate!
 
-    put suspend_admin_api_user_path(format: :xml, id: @member.id, access_token: token.value)
+    put suspend_admin_api_user_path(format: :xml, id: @member.id, access_token: token.plaintext_value)
     assert_response :success
 
-    put unsuspend_admin_api_user_path(format: :xml, id: @member.id, access_token: token.value)
+    put unsuspend_admin_api_user_path(format: :xml, id: @member.id, access_token: token.plaintext_value)
     assert_response :success
   end
 
@@ -306,7 +318,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
                                              provider_key: @provider.api_key }
 
     chuck = User.last
-    assert chuck.authenticated?('posted-password')
+    assert chuck.authenticate('posted-password')
   end
 
   test 'create errors' do
@@ -323,6 +335,22 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :forbidden
+  end
+
+  test 'create sets user signup_type' do
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
+
+    post admin_api_users_path(format: :json), params: {
+      provider_key: @provider.api_key,
+      username: 'new_provider_user',
+      email: 'new_provider_user@example.com'
+    }
+
+    assert_response :success
+
+    new_user = User.find(response.parsed_body[:user][:id])
+    assert_equal 'new_provider_user@example.com', new_user.email
+    assert_equal :created_by_provider, new_user.signup_type
   end
 
   test 'show' do
@@ -390,13 +418,32 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test 'update also updates password' do
     chuck = FactoryBot.create(:user, account: @provider, role: 'member')
-    assert chuck.authenticated?('supersecret')
+    assert chuck.authenticate('superSecret1234#')
 
     put admin_api_user_path(format: :xml, id: chuck.id, password: "updated-password", password_confirmation: "updated-password"), params: { provider_key: @provider.api_key }
 
     chuck.reload
     assert_response :success
-    assert chuck.authenticated?('updated-password')
+    assert chuck.authenticate('updated-password')
+  end
+
+  test 'update with weak password rejected when strong passwords enabled' do
+    chuck = FactoryBot.create(:user, account: @provider, role: 'member')
+
+    put admin_api_user_path(format: :xml, id: chuck.id, password: "weakpwd", password_confirmation: "weakpwd"), params: { provider_key: @provider.api_key }
+
+    assert_response :unprocessable_entity
+    assert_match "is too short (minimum is 15 characters)", response.body
+  end
+
+  test 'update with strong password accepted when strong passwords enabled' do
+    chuck = FactoryBot.create(:user, account: @provider, role: 'member')
+
+    put admin_api_user_path(format: :xml, id: chuck.id, password: "superSecret1234#", password_confirmation: "superSecret1234#"), params: { provider_key: @provider.api_key }
+
+    chuck.reload
+    assert_response :success
+    assert chuck.authenticate('superSecret1234#')
   end
 
   test 'update does not updates state nor role' do

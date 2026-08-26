@@ -55,7 +55,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         Plain-PricingRule-#{pricing_rule.id}
         Association-Metric-#{metric.id}:pricing_rules
         Plain-Metric-#{metric.id}
-        ]
+      ]
 
       assert_equal exp, TracingDeleteObjectHierarchyWorker.trace
     end
@@ -238,8 +238,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     def perform_expectations
       DeleteObjectHierarchyWorker.stubs(:perform_later)
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything, 'destroy')
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(Plan.new({ id: customized_plan.id }, without_protection: true), anything, 'destroy')
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new(id: contract.id), anything, 'destroy')
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Plan.new(id: customized_plan.id), anything, 'destroy')
     end
 
     class AccountPlanTest < DeletePlanTest
@@ -555,7 +555,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         buyer.save!
         topic = FactoryBot.create(:topic, user: buyer.admin_user, forum: provider.forum)
         before_objects << topic
-        topic_subscription = UserTopic.create({user: buyer.admin_user, topic:}, {without_protection: true})
+        topic_subscription = UserTopic.create(user: buyer.admin_user, topic:)
 
         perform_enqueued_jobs(queue: "deletion") do
           DeleteObjectHierarchyWorker.delete_later buyer
@@ -600,7 +600,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         case object
         when Account, InvoiceCounter, Invoice
           object.provider_account_id == master_account.id
-        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting, Forum
+        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting, Forum, AccountSetting
           object_of_master?(Account.find(object.account_id))
         when Feature
           object_of_master?(object.featurable_type.constantize.find(object.featurable_id))

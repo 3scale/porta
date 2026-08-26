@@ -48,4 +48,12 @@
 
   <%= fields_definitions_rows(@user,["name"]) %>
 
+  <% if @sample_developer_password %>
+    <tr>
+      <th>Generated password (please change)</th>
+      <td>
+        <code><%= @sample_developer_password %></code>
+      </td>
+    </tr>
+  <% end %>
 </table>

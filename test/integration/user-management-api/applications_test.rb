@@ -41,17 +41,17 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
     get(admin_api_applications_path)
     assert_response :forbidden
-    get admin_api_applications_path, params: { access_token: token.value }
+    get admin_api_applications_path, params: { access_token: token.plaintext_value }
     assert_response :success
     assert_select "applications/application", false
 
     user.update(member_permission_service_ids: [@service.id])
-    get admin_api_applications_path, params: { access_token: token.value, service_id: service_2.id }
+    get admin_api_applications_path, params: { access_token: token.plaintext_value, service_id: service_2.id }
     assert_response :success
     assert_select "applications/application", false
 
     user.update(member_permission_service_ids: [@service.id, service_2.id])
-    get admin_api_applications_path, params: { access_token: token.value }
+    get admin_api_applications_path, params: { access_token: token.plaintext_value }
     assert_response :success
     assert_select "applications/application", 2
     assert_select "applications/application/id", @application.id.to_s
@@ -59,7 +59,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
     assert_select "applications/application/id", application_2.id.to_s
     assert_select "applications/application/service_id", service_2.id.to_s
 
-    get admin_api_applications_path, params: { access_token: token.value, service_id: @service.id }
+    get admin_api_applications_path, params: { access_token: token.plaintext_value, service_id: @service.id }
     assert_response :success
     assert_select "applications/application", 1
     assert_select "applications/application/id", @application.id.to_s

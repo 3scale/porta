@@ -61,7 +61,7 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
   end
 
   def update
-    if @invoice.update(params[:invoice])
+    if @invoice.update(invoice_params)
       redirect_to admin_finance_invoice_url(@invoice), success: t('.success')
     else
       render :edit
@@ -95,5 +95,9 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
 
   def find_invoice
     @invoice = collection.find(params[:id])
+  end
+
+  def invoice_params
+    @invoice_params ||= params.require(:invoice).permit(:friendly_id, :period)
   end
 end

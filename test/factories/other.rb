@@ -56,12 +56,13 @@ FactoryBot.define do
 
   factory(:metric) do
     association :owner, factory: :service
-    sequence(:friendly_name) { |n| "Metric #{n}" }
-    sequence(:unit) { |m| "metric_#{m}" }
+    friendly_name { "Metric #{SecureRandom.hex(4)}" }
+    unit { 'hit' }
 
     # TODO: use this factory throughout the codebase
     factory(:method) do
       parent { owner.metrics.hits }
+      friendly_name { "Method #{SecureRandom.hex(4)}" }
     end
   end
 

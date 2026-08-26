@@ -12,7 +12,7 @@ div class="pf-c-card"
 
       = f.actions do
         = f.commit_button t('.submit_button_label')
+        = f.cancel_link provider_admin_user_access_tokens_path
         = f.delete_button 'Delete', provider_admin_user_access_token_path(@access_token),
-                                    data: { confirm: 'Are you sure?' },
-                                    title: 'Delete Access Token'
-
+                                    data: { confirm: t('.delete_confirm') },
+                                    title: t('.delete_title')

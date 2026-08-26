@@ -5,6 +5,7 @@ class Provider::Admin::Messages::TrashController < FrontendController
 
   def index
     @messages = current_account.trashed_messages
+                               .includes(:sender)
                                .not_system
                                .latest_first
                                .paginate(pagination_params)

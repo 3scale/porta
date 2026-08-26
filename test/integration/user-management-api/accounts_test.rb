@@ -62,12 +62,30 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
       end
 
       test 'update billing_address' do
+        field_defined(@provider, { target: "Account", name: "billing_address", read_only: true })
         put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska', billing_address: 'Calle Napoles 187, Barcelona. Spain' })
         assert_response :unprocessable_entity
 
-        billing_address = { name: '3scale', address1: 'Calle Napoles 187', city: 'Barcelona', country:  'Spain' }.transform_keys { |k| "billing_address[#{k}]" }
-        put admin_api_account_path(@buyer, format: :xml), params: params.merge(billing_address).merge({ org_name: 'alaska' })
+        billing_address = { name: '3scale', address1: 'Calle Napoles 187', city: 'Barcelona', country:  'Spain' }
+
+        billing_address_params_nested = billing_address.transform_keys { |k| "billing_address[#{k}]" }
+        put admin_api_account_path(@buyer, format: :xml), params: params.merge(billing_address_params_nested)
         assert_response :success
+
+        @buyer.reload
+        assert_equal 'Barcelona', @buyer.billing_address_city
+        assert_equal 'Calle Napoles 187', @buyer.billing_address_address1
+
+        # reset to empty to test with another format
+        @buyer.update(billing_address_name: '', billing_address_address1: '', billing_address_city: '', billing_address_country: '')
+
+        billing_address_params_strings = billing_address.transform_keys { |k| "billing_address_#{k}" }
+        put admin_api_account_path(@buyer, format: :xml), params: params.merge(billing_address_params_strings)
+        assert_response :success
+
+        @buyer.reload
+        assert_equal 'Barcelona', @buyer.billing_address_city
+        assert_equal 'Calle Napoles 187', @buyer.billing_address_address1
       end
 
       test '#update' do
@@ -81,6 +99,97 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
         plan = FactoryBot.create(:account_plan, issuer: @provider)
         put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
         assert_response :success
+      end
+
+      test '#find returns 304 when account has not been modified' do
+        buyer_user = @buyer.users.last!
+
+        # First request - get the account and capture headers
+        get find_admin_api_accounts_path(format: :json), params: params.merge({ user_id: buyer_user.id })
+        assert_response :success
+        etag = response.header['ETag']
+        last_modified = response.header['Last-Modified']
+
+        assert_not_nil etag, 'ETag header should be present'
+        assert_not_nil last_modified, 'Last-Modified header should be present'
+
+        # Second request with If-None-Match and If-Modified-Since headers
+        headers = {
+          'HTTP_IF_NONE_MATCH' => etag,
+          'HTTP_IF_MODIFIED_SINCE' => last_modified
+        }
+        get find_admin_api_accounts_path(format: :json), params: params.merge({ user_id: buyer_user.id }), headers: headers
+        assert_response :not_modified
+      end
+
+      test '#find returns 200 (not 304) when account has been modified' do
+        buyer_user = @buyer.users.last!
+
+        # First request - get the account and capture headers
+        get find_admin_api_accounts_path(format: :json), params: params.merge({ user_id: buyer_user.id })
+        assert_response :success
+        etag = response.header['ETag']
+        last_modified = response.header['Last-Modified']
+
+        assert_not_nil etag, 'ETag header should be present'
+        assert_not_nil last_modified, 'Last-Modified header should be present'
+
+        assert_equal 'approved', @buyer.state
+
+        # Bump updated_at manually, because otherwise it could be the same as last-modified timestamp
+        @buyer.update(state: 'suspended', updated_at: @buyer.updated_at + 1.second)
+
+        # Second request with old ETag and Last-Modified headers
+        # Should return 200 with new content, NOT 304
+        headers = {
+          'HTTP_IF_NONE_MATCH' => etag,
+          'HTTP_IF_MODIFIED_SINCE' => last_modified
+        }
+        get find_admin_api_accounts_path(format: :json), params: params.merge({ user_id: buyer_user.id }), headers: headers
+        assert_response :success, 'Should return 200 because account was modified'
+
+        assert_equal 'suspended', response.parsed_body["account"]["state"]
+      end
+
+      test '#index returns 304 when accounts have not been modified' do
+        get admin_api_accounts_path(format: :json), params: params
+        assert_response :success
+        etag = response.header['ETag']
+        last_modified = response.header['Last-Modified']
+
+        assert_not_nil etag, 'ETag header should be present'
+        assert_not_nil last_modified, 'Last-Modified header should be present'
+
+        # Second request with If-None-Match and If-Modified-Since headers
+        headers = {
+          'HTTP_IF_NONE_MATCH' => etag,
+          'HTTP_IF_MODIFIED_SINCE' => last_modified
+        }
+        get admin_api_accounts_path(format: :json), params: params, headers: headers
+        assert_response :not_modified
+      end
+
+      test '#index returns 200 (not 304) when accounts have been modified' do
+        get admin_api_accounts_path(format: :json), params: params
+        assert_response :success
+        etag = response.header['ETag']
+        last_modified = response.header['Last-Modified']
+
+        assert_not_nil etag, 'ETag header should be present'
+        assert_not_nil last_modified, 'Last-Modified header should be present'
+
+        # Bump updated_at manually, because otherwise it could be the same as last-modified timestamp
+        @buyer.update(org_name: 'Modified Organization', updated_at: @buyer.updated_at + 1.second)
+
+        # Second request with old ETag and Last-Modified headers
+        # Should return 200 with new content, NOT 304
+        headers = {
+          'HTTP_IF_NONE_MATCH' => etag,
+          'HTTP_IF_MODIFIED_SINCE' => last_modified
+        }
+        get admin_api_accounts_path(format: :json), params: params, headers: headers
+        assert_response :success
+        assert_not_equal etag, response.header['ETag'], 'ETag should be different after modification'
       end
     end
 
@@ -183,7 +292,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
           assert_not settings.monthly_billing_enabled
 
           put admin_api_account_path(@buyer, format: :xml), params: {
-            access_token: token.value,
+            access_token: token.plaintext_value,
             monthly_billing_enabled: true,
             monthly_charging_enabled: true,
             org_name: 'ooooooooo'
@@ -243,7 +352,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     protected
 
     def access_token_params(token = @token)
-      { access_token: token.value }
+      { access_token: token.plaintext_value }
     end
 
     alias params access_token_params
@@ -515,6 +624,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     test 'update with extra fields' do
       field_defined(@provider, { target: "Account", name: "some_extra_field" })
+      field_defined(@provider, { target: "Account", name: "vat_rate" })
 
       put admin_api_account_path(@buyer, format: :xml), params: params.merge({ some_extra_field: "stuff", vat_rate: 33 })
 
@@ -523,7 +633,18 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
       @buyer.reload
       assert_equal "stuff", @buyer.extra_fields["some_extra_field"]
-      assert_equal 33, @buyer.vat_rate
+      assert_equal BigDecimal(33), @buyer.vat_rate
+    end
+
+    test 'account update with annotations' do
+      put admin_api_account_path(@buyer, format: :json), params: params.merge({ annotations: { managed_by: 'operator' } })
+
+      assert_response :success
+
+      assert_equal({ 'managed_by' => 'operator'}, response.parsed_body[:account][:annotations])
+
+      assert_equal 1,  @buyer.reload.annotations.count
+      assert_equal 'operator', @buyer.annotations.where(name: 'managed_by').first.value
     end
 
     test 'destroy' do

@@ -76,7 +76,7 @@ module VerticalNavHelper
     items = []
     items << {id: :webhooks,  title: 'Webhooks',        path: edit_provider_admin_webhooks_path} if can? :manage, :web_hooks
     items << {id: :apidocs,   title: '3scale API Docs', path: provider_admin_api_docs_path}
-    items << {id: :bot_protection,  title: 'Bot Protection',  path: edit_provider_admin_bot_protection_path}
+    items << {id: :security,  title: 'Security',  path: edit_provider_admin_security_path}
   end
 
   # Audience
@@ -161,7 +161,7 @@ module VerticalNavHelper
     if can?(:manage, :settings)
       portal_settings_items = []
       portal_settings_items << {id: :admin_site_dns,   title: 'Domains & Access', path: admin_site_dns_path}
-      portal_settings_items << {id: :spam_protection,  title: 'Bot Protection',  path: edit_admin_site_spam_protection_path}
+      portal_settings_items << {id: :security,  title: 'Security',  path: edit_admin_site_security_path}
       portal_settings_items << {id: :xss_protection,   title: 'XSS Protection',   path: edit_admin_site_developer_portal_path} if current_account.show_xss_protection_options?
       portal_settings_items << {id: :sso_integrations, title: 'SSO Integrations', path: provider_admin_authentication_providers_path}
 

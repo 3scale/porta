@@ -19,10 +19,10 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
 
     get admin_api_service_path(@service)
     assert_response :forbidden
-    get admin_api_service_path(@service), params: { access_token: token.value }
+    get admin_api_service_path(@service), params: { access_token: token.plaintext_value }
     assert_response :not_found
     user.update(member_permission_service_ids: [@service.id])
-    get admin_api_service_path(@service), params: { access_token: token.value }
+    get admin_api_service_path(@service), params: { access_token: token.plaintext_value }
     assert_response :success
   end
 
@@ -55,6 +55,26 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_service(@response.body, { account_id: @provider.id, name: 'service foo' })
     assert @provider.services.find_by(name: 'service foo')
+  end
+
+  test 'create with annotations' do
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
+
+    assert_difference(Service.method(:count)) do
+      post admin_api_services_path(format: :json), params: {
+        provider_key: @provider.api_key,
+        name: 'annotated service',
+        annotations: { managed_by: 'operator' }
+      }
+      assert_response :created
+    end
+
+    service = response.parsed_body[:service]
+    assert_equal({ 'managed_by' => 'operator'}, service[:annotations])
+
+    persisted_service = Service.find(service[:id])
+    assert_equal 1, persisted_service.annotations.count
+    assert_equal 'operator', persisted_service.annotations.where(name: 'managed_by').first.value
   end
 
   test 'create with json body parameters' do
@@ -93,6 +113,21 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
     assert_equal 'supp@topo.com', @service.support_email
   end
 
+  test 'update with annotations' do
+    put admin_api_service_path(@service, format: :json), params: {
+      provider_key: @provider.api_key,
+      annotations: { managed_by: 'operator' }
+    }
+
+    assert_response :success
+
+    service = response.parsed_body[:service]
+    assert_equal({ 'managed_by' => 'operator'}, service[:annotations])
+
+    assert_equal 1, @service.reload.annotations.count
+    assert_equal 'operator', @service.annotations.where(name: 'managed_by').first.value
+  end
+
   pending_test 'update with wrong id' do
   end
 
@@ -102,7 +137,7 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
     _other_service  = FactoryBot.create(:simple_service, account: @provider)
 
     access_token = FactoryBot.create(:access_token, owner: @provider.admins.first, scopes: 'account_management')
-    delete admin_api_service_path @service.id, access_token: access_token.value, format: :json
+    delete admin_api_service_path @service.id, access_token: access_token.plaintext_value, format: :json
 
     assert_response 200
     assert_raise(ActiveRecord::RecordNotFound) { Service.accessible.find(@service.id) }
@@ -123,12 +158,12 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
       ro_token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'ro')
       rw_token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw')
 
-      put admin_api_service_path(@service), params: { access_token: rw_token.value, format: :xml, name: 'new service name' }
+      put admin_api_service_path(@service), params: { access_token: rw_token.plaintext_value, format: :xml, name: 'new service name' }
       assert_response :success
       @service.reload
       assert_equal 'new service name', @service.name
 
-      put admin_api_service_path(@service), params: { access_token: ro_token.value, format: :xml, name: 'other service name' }
+      put admin_api_service_path(@service), params: { access_token: ro_token.plaintext_value, format: :xml, name: 'other service name' }
       assert_response :forbidden
       @service.reload
       assert_equal 'new service name', @service.name

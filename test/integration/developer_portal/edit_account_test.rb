@@ -6,6 +6,7 @@ class DeveloperPortal::EditAccountTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:simple_provider)
     @buyer    = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'ontheroad')
+    FieldsDefinition.create_defaults!(@provider)
 
     login_buyer @buyer
 

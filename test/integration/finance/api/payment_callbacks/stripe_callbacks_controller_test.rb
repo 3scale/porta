@@ -23,7 +23,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       stripe_event = self.stripe_event(type: 'payment_intent.succeeded', payment_intent_data: { id: 'some-payment-intent-id' })
       Stripe::Webhook.expects(:construct_event).returns(stripe_event)
 
-      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
+      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.plaintext_value }
       assert_response :no_content
     end
 
@@ -32,7 +32,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       gateway_options.gateway_settings[:endpoint_secret] = ''
       gateway_options.save(validate: false)
 
-      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
+      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.plaintext_value }
       assert_response :unprocessable_entity
       assert_equal 'Configuration is missing', response.body
     end
@@ -41,14 +41,14 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       exception = Stripe::SignatureVerificationError.new('invalid signature', 'invalid header content')
       Stripe::Webhook.expects(:construct_event).raises(exception)
 
-      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
+      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.plaintext_value }
       assert_response :bad_request
     end
 
     test 'invalid json payload' do
       Stripe::Webhook.expects(:construct_event).raises(JSON::ParserError)
 
-      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
+      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.plaintext_value }
       assert_response :bad_request
     end
 
@@ -56,7 +56,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       stripe_event = self.stripe_event(type: 'payment_intent.requires_action', payment_intent_data: { id: 'some-payment-intent-id' })
       Stripe::Webhook.expects(:construct_event).returns(stripe_event)
 
-      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
+      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.plaintext_value }
       assert_response :not_found
     end
 
@@ -64,7 +64,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       stripe_event = self.stripe_event(type: 'payment_intent.succeeded', payment_intent_data: { id: 'non-existent-payment-intent-id' })
       Stripe::Webhook.expects(:construct_event).returns(stripe_event)
 
-      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
+      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.plaintext_value }
       assert_response :no_content
     end
 
@@ -77,7 +77,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       System::ErrorReporting.expects(:report_error).at_least_once # because the setup doesn't really build all required objects
       System::ErrorReporting.expects(:report_error).with(instance_of(Finance::Api::PaymentCallbacks::StripeCallbacksController::StripeCallbackError), event: stripe_event, payment_intent: payment_intent)
 
-      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
+      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.plaintext_value }
       assert_response :no_content
     end
 
@@ -85,7 +85,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       provider_account.payment_gateway_type = :bogus
       provider_account.save!
 
-      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
+      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.plaintext_value }
       assert_response :not_found
     end
   end

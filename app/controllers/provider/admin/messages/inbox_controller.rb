@@ -7,6 +7,7 @@ class Provider::Admin::Messages::InboxController < Provider::Admin::Messages::Ba
 
   def index
     @messages = current_account.received_messages
+                               .includes(message: { sender: [:admin_user] })
                                .not_system
                                .latest_first
                                .paginate(pagination_params)
@@ -26,7 +27,7 @@ class Provider::Admin::Messages::InboxController < Provider::Admin::Messages::Ba
 
   def reply
     reply = @message.reply
-    reply.attributes = message_params
+    reply.assign_attributes(message_params.merge(origin: "web"))
 
     if reply.save && reply.deliver
       redirect_to({ action: :index }, success: t('.success'))
@@ -43,7 +44,7 @@ class Provider::Admin::Messages::InboxController < Provider::Admin::Messages::Ba
   private
 
   def message_params
-    params.fetch(:message).merge(:origin => "web")
+    params.require(:message).permit(:subject, :body)
   end
 
   def find_message

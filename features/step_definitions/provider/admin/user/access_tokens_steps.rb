@@ -14,3 +14,7 @@ Given "{provider} has the following access tokens:" do |provider, table|
     @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, **options)
   end
 end
+
+Given "a token will be created with value {string}" do |value|
+  AccessToken.stubs(:random_id).returns(value).once
+end
