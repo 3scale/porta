@@ -3,13 +3,14 @@
 - content_for :javascripts do
   = javascript_packs_with_chunks_tag 'provider_stats'
 
-.Stats
-  .StatsMenu-container
-  .StatsSelector-container
-  .StatsChart-container#chart
-  .StatsCSVLink-container.pf-l-flex
-  .StatsHelpText-container
-  .StatsApplicationsTable-container
+.pf-c-card
+  .pf-c-card__body
+    .StatsMenu-container
+    .StatsSelector-container
+    .StatsChart-container#chart
+    .StatsCSVLink-container.pf-l-flex
+    .StatsHelpText-container
+    .StatsApplicationsTable-container
 
 p.Stats-message--notice
   = timezone_information

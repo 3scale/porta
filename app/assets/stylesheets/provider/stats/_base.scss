@@ -1,35 +1,18 @@
 @use 'provider/colors' as *;
 @use 'provider/typography' as *;
-@use 'utils';
-
-.Stats {
-  @include utils.white-box-shadow;
-
-  margin-bottom: line-height-times(1);
-  padding: line-height-times(1);
-}
 
 .StatsMenu-container,
-.StatsMenuContainer,
-.StatsSelector-container,
-.StatsSelectorContainer {
+.StatsSelector-container {
   display: inline-block;
 }
 
-$stats-menu-border-color: $border-color;
-$stats-menu-text-color: $font-color;
-$stats-menu-link-color: $font-color;
-$stats-menu-link-color-selected: $highlight-color;
-$stats-menu-help-color: $label-color;
-
 .StatsMenu {
-  border: $border-width solid $stats-menu-border-color;
+  border: $border-width solid $border-color;
   border-radius: $border-radius;
-  color: $stats-menu-text-color;
+  color: $font-color;
   display: inline-block;
   margin: 0 line-height-times(.5) line-height-times(1) 0;
   padding: line-height-times(.5);
-  height: auto;
 
   &-period {
     display: inline-block;
@@ -44,7 +27,7 @@ $stats-menu-help-color: $label-color;
   }
 
   &-custom {
-    border-left: $border-width solid $stats-menu-border-color;
+    border-left: $border-width solid $border-color;
     display: inline-block;
     font-style: italic;
     padding-left: line-height-times(.25);
@@ -55,15 +38,14 @@ $stats-menu-help-color: $label-color;
     }
   }
 
-  &-link,
   &-Link {
-    color: $stats-menu-link-color;
+    color: $font-color;
     cursor: pointer;
     text-decoration: underline;
 
     &:hover,
     &.is-selected {
-      color: $stats-menu-link-color-selected;
+      color: $highlight-color;
     }
   }
 
@@ -81,29 +63,9 @@ $stats-menu-help-color: $label-color;
 }
 
 .Stats-message--notice {
-  color: $stats-menu-help-color;
+  color: $label-color;
   font-style: italic;
   margin: 0;
-
-  &.is-hidden {
-    display: none;
-  }
-}
-
-.StatsLogs,
-.StatsLogs-loading {
-  &.is-hidden {
-    display: none;
-  }
-}
-
-.StatsLogs-pagination-item {
-  display: inline-block;
-  padding: 0 line-height-times(.125);
-}
-
-.StatsLogs-pagination-link {
-  cursor: pointer;
 }
 
 .StatsMessages-list {
@@ -115,15 +77,11 @@ $stats-menu-help-color: $label-color;
   margin-bottom: line-height-times(.5);
 }
 
-$stats-chart-border-color: $border-color;
-$stats-chart-tooltip-color: $label-color;
-
 .StatsChart-container {
   &.is-loading {
     background-image: url('/assets/spinner.svg');
     background-position: center;
     background-repeat: no-repeat;
-    content: '';
     height: 320px; // Fixed value, comes from stats package
     opacity: .5;
   }
@@ -138,7 +96,7 @@ $stats-chart-tooltip-color: $label-color;
 
   .c3-grid line.c3-ygrid,
   .c3-axis-y .tick line {
-    stroke: $stats-chart-border-color;
+    stroke: $border-color;
   }
 
   .c3-ygrid {
@@ -150,7 +108,7 @@ $stats-chart-tooltip-color: $label-color;
   }
 
   .c3-tooltip-container {
-    border: $border-width solid $stats-chart-border-color;
+    border: $border-width solid $border-color;
     border-radius: $border-radius;
     box-shadow: var(--pf-global--BoxShadow--md);
     background: var(--pf-global--BackgroundColor--200);
@@ -159,7 +117,7 @@ $stats-chart-tooltip-color: $label-color;
   .c3-tooltip {
     border: 0;
     border-radius: $border-radius;
-    box-shadow: 0 0 0 transparent;
+    box-shadow: none;
     opacity: 1;
   }
 
@@ -167,13 +125,18 @@ $stats-chart-tooltip-color: $label-color;
     background-color: #f0f0f0;
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
-    color: $stats-chart-tooltip-color;
+    color: $label-color;
     padding: line-height-times(.125) line-height-times(.5);
+  }
+
+  .c3-tooltip td {
+    border-left: none;
+    padding: 0 line-height-times(.5);
   }
 
   .c3-tooltip tr {
     border: 0;
-    border-bottom: $border-width solid $stats-chart-border-color;
+    border-bottom: $border-width solid $border-color;
 
     &:last-child {
       border-bottom: 0;
@@ -189,19 +152,6 @@ $stats-chart-tooltip-color: $label-color;
       }
     }
   }
-
-  /* stylelint-disable-next-line no-descending-specificity -- FIXME */
-  .c3-tooltip td {
-    border-left: none;
-    padding: 0 line-height-times(.5);
-  }
-}
-
-.StatsChart,
-.StatsChart-noDataMessageContainer {
-  &.is-hidden {
-    display: none;
-  }
 }
 
 .StatsMethodsTable-name.is-children {
@@ -216,9 +166,9 @@ $stats-chart-tooltip-color: $label-color;
   margin-top: line-height-times(.5);
   width: 100%;
 
-  /* stylelint-disable-next-line no-descending-specificity -- FIXME */
+  /* stylelint-disable-next-line no-descending-specificity -- false positive: unrelated to .c3-tooltip td above */
   td, th {
-    border-bottom: $border-width solid $stats-menu-border-color;
+    border-bottom: $border-width solid $border-color;
   }
 }
 

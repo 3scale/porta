@@ -3,10 +3,11 @@
 - content_for :javascripts do
   = javascript_packs_with_chunks_tag 'provider_stats'
 
-.Stats
-  .StatsSelector-container
-  .StatsChart-container#chart
-  .StatsCSVLink-container.pf-l-flex
+.pf-c-card
+  .pf-c-card__body
+    .StatsSelector-container
+    .StatsChart-container#chart
+    .StatsCSVLink-container.pf-l-flex
 
 p.Stats-message--notice Average usage by hour in the past 30 days
 
