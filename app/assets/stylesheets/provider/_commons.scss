@@ -204,3 +204,8 @@ hr {
 .excluded {
   color: $error-color;
 }
+
+.is-hidden {
+  /* stylelint-disable-next-line declaration-no-important -- JS-toggled utility, must override any display value */
+  display: none !important;
+}

@@ -1,5 +1,9 @@
 <% content_for :page_header_title, 'Edit User' %>
 
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag 'provider/admin/account/users_edit' %>
+<% end %>
+
 <%= semantic_form_for @user,
                      :url => provider_admin_account_user_path(@user),
                      :html => {:class => 'edit-user-form'},
