@@ -137,7 +137,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
   class ReadOnlyTokenTest < Admin::Api::AccountsControllerTest
     disable_transactional_fixtures!
 
-    test "no write side-effects like lazy_initialization on show"
+    test "no write side-effects like lazy_initialization on show" do
       token(user: member)
       token.permission = 'ro'
       token.save!
