@@ -1,4 +1,4 @@
-# Manual setup on Fedora (42)
+# Manual setup on Fedora (43+)
 
 ### Language and runtime version management
 
@@ -12,7 +12,7 @@ ln -s .tool-versions.sample .tool-versions
 
 ### Ruby and Node.js
 
-The project supports **[ruby 3.3.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 18](https://nodejs.org/download/release/v18.20.4/)**.
+The project supports **[ruby 3.3.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 24](https://nodejs.org/download/release/v24/)**.
 The recommended way to install them is with `asdf`:
 
 ```
@@ -24,8 +24,21 @@ asdf install
 
 > Alternatively, Node.js can be installed as a [Module](https://developer.fedoraproject.org/tech/languages/nodejs/nodejs.html):
 > ```
-> dnf module install nodejs:16
+> dnf module install nodejs:24
 > ```
+
+### Podman short-name resolution
+
+Fedora 43 ships with Podman in `enforcing` short-name mode, which requires an interactive TTY to
+resolve unqualified image names (e.g. `mysql:8.0`). This breaks automated or non-interactive use.
+
+```sh
+mkdir -p ~/.config/containers/registries.conf.d
+cat > ~/.config/containers/registries.conf.d/00-shortnames.conf << 'EOF'
+short-name-mode = "permissive"
+unqualified-search-registries = ["docker.io"]
+EOF
+```
 
 ### Dependencies
 
@@ -109,10 +122,21 @@ And install all gems:
 bundle install
 ```
 
-> It's possible that eventmachine installation fails. If so, try adding the following config:
+> It's possible that some native gem installations fail. Known workarounds:
 >
 > ```sh
+> # eventmachine SSL headers (all Fedora versions)
 > bundle config build.eventmachine --with-cppflags="-I/usr/include/openssl/"
+> ```
+>
+> **Ruby 3.3.x:** On some builds `HAVE_STDBOOL_H` is not set, causing `error: unknown type name 'bool'` when compiling native gems. Run these before `bundle install`:
+>
+> ```sh
+> bundle config build.bootsnap "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.commonmarker "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.hiredis-client "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.ruby-prof "--with-cppflags=-DHAVE_STDBOOL_H=1"
+> bundle config build.unf_ext "--with-cppflags=-DHAVE_STDBOOL_H=1"
 > ```
 
 ### Yarn (1.x)
