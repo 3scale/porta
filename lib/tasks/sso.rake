@@ -18,7 +18,11 @@ namespace :sso do
 
   desc "generates sso keys for all providers that don't have one"
   task :generate_sso_keys => :environment do
-    Account.providers_with_master.includes(:settings).where("settings.sso_key is null").find_each(batch_size: 50) do | provider |
+    sso_key_type = Settings.setting_class_for(:sso_key)
+    Account.providers_with_master
+      .where.not(id: AccountSetting.where(type: sso_key_type).select(:account_id))
+      .includes(:account_settings)
+      .find_each(batch_size: 50) do |provider|
       print "** generating an sso_key for provider: #{provider.org_name}..."
       provider.settings.update_attribute :sso_key, ThreeScale::SSO.generate_sso_key
       puts " #{provider.settings.sso_key}"
@@ -29,8 +33,7 @@ namespace :sso do
   task :generate_sso_key, [:account_id] => :environment do | t, args |
     settings= Account.providers_with_master.find(args[:account_id]).settings
     puts "** overwriting sso_key: `#{settings.sso_key}' for provider: #{args[:account_id]}."
-    settings.generate_sso_key
-    settings.save!
+    settings.update_attribute(:sso_key, ThreeScale::SSO.generate_sso_key)
     puts "** generated a new sso_key: `#{settings.sso_key}' for provider #{args[:account_id]}."
   end
 end

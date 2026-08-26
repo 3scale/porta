@@ -143,7 +143,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   end
 
   def preload_presentation_associations(records)
-    associations = %i[annotations settings payment_detail] +
+    associations = %i[annotations account_settings payment_detail] +
       (current_account.defined_builtin_fields_names_for(Account).include?('country') ? [:country] : []) +
       (request.format.xml? ? %i[users bought_plans] : [])
 
