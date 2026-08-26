@@ -39,6 +39,27 @@ class Settings
 
   # --- Override special attribute accessors ---
 
+  def sso_key
+    record = setting_record_for(:sso_key)
+    return record.typed_value if record
+
+    return nil unless account&.persisted? && account.provider?
+
+    # Lazily generate and persist the SSO key on first access (outside any
+    # account creation transaction to avoid FK-induced deadlocks)
+    generated = ThreeScale::SSO.generate_sso_key
+    AccountSetting.connection.execute(
+      AccountSetting.sanitize_sql([
+        "INSERT INTO account_settings (account_id, type, value, tenant_id, created_at, updated_at)" \
+        " VALUES (?, 'SSOKey', ?, ?, ?, ?)" \
+        " ON DUPLICATE KEY UPDATE account_settings.updated_at = account_settings.updated_at",
+        account.id, generated, account.tenant_id, Time.current, Time.current
+      ])
+    )
+    account.account_settings.reset
+    generated
+  end
+
   def authentication_strategy
     record = setting_record_for(:authentication_strategy)
     val = record ? record.typed_value : ALL_SETTINGS[:authentication_strategy]
