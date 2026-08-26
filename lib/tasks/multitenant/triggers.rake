@@ -54,7 +54,7 @@ namespace :multitenant do
     Invoice.update_all "tenant_id = provider_account_id WHERE provider_account_id <> #{MASTER_ID}"
     LineItem.update_all "tenant_id = (SELECT tenant_id FROM invoices WHERE id = line_items.invoice_id AND tenant_id <> #{MASTER_ID})"
     Service.update_all "tenant_id = account_id WHERE account_id <> #{MASTER_ID}"
-    Settings.update_all "tenant_id = (SELECT tenant_id FROM accounts WHERE id = settings.account_id AND tenant_id <> #{MASTER_ID})"
+    AccountSetting.update_all "tenant_id = (SELECT tenant_id FROM accounts WHERE id = account_settings.account_id AND tenant_id <> #{MASTER_ID})"
     WebHook.update_all "tenant_id = account_id WHERE account_id <> #{MASTER_ID}"
     Invitation.update_all "tenant_id = (SELECT tenant_id FROM accounts WHERE id = invitations.account_id AND tenant_id <> #{MASTER_ID})"
     MailDispatchRule.update_all "tenant_id = (SELECT tenant_id FROM accounts WHERE id = mail_dispatch_rules.account_id AND tenant_id <> #{MASTER_ID})"
