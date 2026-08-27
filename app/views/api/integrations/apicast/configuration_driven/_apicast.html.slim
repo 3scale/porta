@@ -1,5 +1,5 @@
 section.Configuration class=('Configuration--is-promoted' unless deployment_option_is_service_mesh?(@service))
-  article.Configuration-summary data-state="open"
+  article.Configuration-summary
     h3.Configuration-title = deployment_option_is_service_mesh?(@service) ? 'Service mesh Configuration' : 'APIcast Configuration'
 
     dl.u-dl
@@ -39,9 +39,9 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
 - unless deployment_option_is_service_mesh?(@service)
   section style="margin-top: 48px;"
 
-    .SettingsBox.Environment class=('Environment--is-promoted' if @show_presenter.environments_have_same_config?)
+    .Environment class=('Environment--is-promoted' if @show_presenter.environments_have_same_config?)
       = pf_link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'staging'), class: 'SettingsBox-toggle'
-      article.Environment-summary data-state="open"
+      article.Environment-summary
         h3.Environment-title Staging APIcast
         - if @show_presenter.any_sandbox_configs?
           dl.u-dl
@@ -71,10 +71,10 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
         - else
           | no configuration has been saved for APIcast staging yet
 
-    .SettingsBox.Environment
+    .Environment
       - if @show_presenter.any_production_configs?
         = pf_link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'production'), class: 'SettingsBox-toggle'
-      article.Environment-summary data-state="open" style="margin-top: 24px;"
+      article.Environment-summary style="margin-top: 24px;"
         h3.Environment-title Production APIcast
         - if @show_presenter.any_production_configs?
           dl.u-dl

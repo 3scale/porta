@@ -111,11 +111,3 @@
     border-top: $border-width solid $border-color;
   }
 }
-
-*[data-state="closed"] {
-  display: none;
-}
-
-*[data-state="open"] {
-  display: inherit;
-}
