@@ -422,27 +422,6 @@ li.hidden {
   display: none;
 }
 
-#new_service_wrapper {
-  .errorMessage {
-    color: $error-color;
-    margin: 0;
-    padding: 0 line-height-times(1);
-  }
-
-  .new-service-source-input {
-    padding: 0 line-height-times(0.5);
-  }
-}
-
-// Overrides
-.new-service-form {
-  @include utils.white-box-shadow;
-
-  form.formtastic:not(.pf-c-form) {
-    box-shadow: none;
-  }
-}
-
 form#liquid-settings > fieldset {
   border-top: 0;
 }

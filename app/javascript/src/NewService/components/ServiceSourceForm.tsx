@@ -25,7 +25,7 @@ const ServiceSourceForm: FunctionComponent<Props> = (props) => {
                 value="manual"
                 onChange={handleFormsVisibility}
               />
-              <span className="new-service-source-input">Define manually</span>
+              <span className="pf-u-px-sm">Define manually</span>
             </label>
           </li>
           <li className="radio">
@@ -38,7 +38,7 @@ const ServiceSourceForm: FunctionComponent<Props> = (props) => {
                 value="discover"
                 onChange={handleFormsVisibility}
               />
-              <span className="new-service-source-input">Import from OpenShift</span>
+              <span className="pf-u-px-sm">Import from OpenShift</span>
               {loadingProjects && <i className="fa fa-spinner fa-spin" />}
               {isServiceDiscoveryUsable || (
                 <a href={serviceDiscoveryAuthenticateUrl}>
