@@ -19,7 +19,9 @@ module Apicast
         config.backend_api.proxy_rules.decorate(context: { backend_api_path: config.path })
       end
 
-      api_proxy_rules.as_json(root: false, methods: METHODS)
+      api_proxy_rules.as_json(root: false, methods: METHODS).each do |rule|
+        rule['pattern'] = PcreEscaper.escape(rule['pattern'])
+      end
     end
   end
 end

@@ -41,6 +41,23 @@ class Apicast::ProviderSourceTest < ActiveSupport::TestCase
     assert_equal 'plain', service_attributes['proxy']['jwt_claim_with_client_id_type']
   end
 
+  def test_proxy_rule_patterns_are_pcre_escaped
+    proxy = FactoryBot.build_stubbed(:proxy)
+    proxy.stubs(jwt_claim_with_client_id_type: nil, jwt_claim_with_client_id: nil)
+    service = FactoryBot.build_stubbed(:simple_service, proxy: proxy)
+
+    metric = FactoryBot.build_stubbed(:metric, service: service)
+    rule = FactoryBot.build_stubbed(:proxy_rule, proxy: proxy, pattern: '/api.v2/search(*)', metric: metric)
+    proxy.stubs(proxy_rules: [rule])
+
+    @account.stubs(services: [service])
+
+    result = @source.attributes_for_proxy
+    proxy_rules = result['services'][0]['proxy']['proxy_rules']
+
+    assert_equal '/api\\.v2/search\\(\\*\\)', proxy_rules[0]['pattern']
+  end
+
   def test_policies_with_default_apicast_policy
     ThreeScale.config.stubs(onpremises: true)
     proxy = FactoryBot.build_stubbed(:proxy, policies_config: [{ name: 'cors',

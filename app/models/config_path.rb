@@ -12,7 +12,8 @@ class ConfigPath
   def to_regex
     return '^(/.*)' if empty?
 
-    "^(#{path}/.*|#{path}/?)"
+    escaped = Apicast::PcreEscaper.escape(path)
+    "^(#{escaped}/.*|#{escaped}/?)"
   end
 
   def empty?

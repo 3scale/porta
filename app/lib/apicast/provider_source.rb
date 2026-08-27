@@ -47,7 +47,19 @@ module Apicast
       }
 
       ActiveRecord::Associations::Preloader.new(records: Array(provider), associations: {services: [:service_tokens, {backend_api_configs: :backend_api, proxy: [:gateway_configuration, {proxy_rules: :metric}]}]}).call
-      provider.as_json(hash).merge(timestamp: Time.now.utc.iso8601)
+      result = provider.as_json(hash).merge(timestamp: Time.now.utc.iso8601)
+      escape_proxy_rule_patterns!(result)
+      result
+    end
+
+    private
+
+    def escape_proxy_rule_patterns!(result)
+      Array(result['services']).each do |service|
+        Array(service.dig('proxy', 'proxy_rules')).each do |rule|
+          rule['pattern'] = Apicast::PcreEscaper.escape(rule['pattern'])
+        end
+      end
     end
 
     protected
