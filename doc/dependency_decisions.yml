@@ -250,3 +250,9 @@
     :why: Approved by OSI and Fedora
     :versions: []
     :when: 2026-04-29 07:57:00.547859043 Z
+- - :permit
+  - GPL-2.0-only
+  - :who: Aleksandar Kostadinov
+    :why: this is the preferred SPDX name of the already approved but deprecated GPL-2 and GPL-2.0 identifiers
+    :versions: []
+    :when: 2026-07-24 18:16:05.649037719 Z
