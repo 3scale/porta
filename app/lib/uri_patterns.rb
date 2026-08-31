@@ -12,6 +12,7 @@ module UriPatterns
   ABS_PATH = URI::RFC2396_PARSER.pattern[:ABS_PATH]
   QUERY    = URI::RFC2396_PARSER.pattern[:QUERY]
 
-  # URL scanner for free-form text (e.g. message bodies).
-  HYPERLINK_SCANNER = %r{https?://(?:[^\s()\[\]>]|\([^\s()]*\)|\[[^\s\[\]]*\])+}
+  # URL scanner for free-form text (e.g. message bodies). ASCII-only to prevent
+  # homograph and bidi attacks via look-alike Unicode characters.
+  HYPERLINK_SCANNER = %r{https?://(?:[[:ascii:]&&[^\s()\[\]>]]|\([[:ascii:]&&[^\s()]]*\)|\[[[:ascii:]&&[^\s\[\]]]*\])+}
 end

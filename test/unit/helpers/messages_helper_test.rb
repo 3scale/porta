@@ -128,8 +128,8 @@ class MessagesHelperTest < ActionView::TestCase
   end
 
   def test_url_with_non_ascii_characters_in_path
-    # Old URI.regexp scanner stopped at non-ASCII bytes; new scanner includes them
-    assert_equal %(text <a href="http://example.com/unicöde">http://example.com/unicöde</a> end),
+    # Non-ASCII characters are excluded to prevent homograph/bidi attacks
+    assert_equal %(text <a href="http://example.com/unic">http://example.com/unic</a>öde end),
                  hyperlink_urls('text http://example.com/unicöde end')
   end
 
