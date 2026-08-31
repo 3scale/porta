@@ -121,6 +121,18 @@ class MessagesHelperTest < ActionView::TestCase
                  hyperlink_urls('Some http://google.com: text')
   end
 
+  def test_url_with_square_brackets_in_path
+    # Old URI.regexp scanner stopped at '['; new scanner includes the bracketed segment
+    assert_equal %(text <a href="http://example.com/path[bar]">http://example.com/path[bar]</a> end),
+                 hyperlink_urls('text http://example.com/path[bar] end')
+  end
+
+  def test_url_with_non_ascii_characters_in_path
+    # Old URI.regexp scanner stopped at non-ASCII bytes; new scanner includes them
+    assert_equal %(text <a href="http://example.com/unicöde">http://example.com/unicöde</a> end),
+                 hyperlink_urls('text http://example.com/unicöde end')
+  end
+
   # this is regression test for: https://github.com/3scale/system/issues/4819
   def test_if_random_word_with_colon_at_the_end_is_not_treated_like_link
     assert_equal %(Some random word:),
