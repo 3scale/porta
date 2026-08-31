@@ -133,6 +133,12 @@ class MessagesHelperTest < ActionView::TestCase
                  hyperlink_urls('text http://example.com/unicöde end')
   end
 
+  def test_url_with_single_closing_paren_not_in_url
+    # Single ')' not part of a balanced group should not be part of the link
+    assert_equal %((<a href="http://example.com">http://example.com</a>)),
+                 hyperlink_urls('(http://example.com)')
+  end
+
   # this is regression test for: https://github.com/3scale/system/issues/4819
   def test_if_random_word_with_colon_at_the_end_is_not_treated_like_link
     assert_equal %(Some random word:),
