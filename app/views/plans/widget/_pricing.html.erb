@@ -1,0 +1,31 @@
+<div class='limits plan-review-section'>
+  <h3>Cost</h3>
+  <dl>
+  <% unless plan.setup_fee.zero? %>
+    <dt>Setup Fee</dt>
+    <dd><%=  format_cost(plan.setup_fee)%></dd>
+  <%- end -%>
+
+  <% unless plan.cost_per_month.zero? %>
+    <dt>Monthly fee</dt>
+    <dd><%= format_cost(plan.cost_per_month) %></dd>
+  <% end %>
+  </dl>
+  <% unless plan.pricing_rules.empty? %>
+    <% plan.pricing_rules.joins(:metric).group_by(&:metric).each do |metric, pricing_rules| %>
+      <h4><%= metric.friendly_name %></h4>
+      <table class='plan-preview-pricing-rules'>
+        <% pricing_rules.each do |pricing_rule| %>
+        <tr>
+        <td>
+          <%= display_pricing_rule_range(pricing_rule) %>
+        </td>
+        <td class='pricing-rules-by-metric'>
+          <%= format_cost(pricing_rule.cost_per_unit_as_money) %>
+        </td>
+        </tr>
+        <% end %>
+      </table>
+    <% end %>
+  <% end %>
+</div>
