@@ -158,22 +158,6 @@ table.inverted td {
   font-weight: $font-weight-bold;
 }
 
-table#contracts_table {
-  position: relative;
-}
-
-table#contracts_table ul.usage_limits {
-  list-style: none;
-  padding: 0;
-}
-
-table#contracts_table tr td.thhead {
-  border-top-right-radius: line-height-times(1);
-  margin: line-height-times(.25);
-  padding-right: 0;
-  padding-top: 0;
-}
-
 table#mapping_rules {
   tr th a,
   tr td.actions a {
@@ -183,12 +167,6 @@ table#mapping_rules {
   tr td.actions a {
     margin-left: line-height-times(.5);
   }
-}
-
-td.thhead h3 {
-  margin-top: 0;
-  padding-right: line-height-times(math.div(2,3));
-  padding-top: line-height-times(1);
 }
 
 .u-amount {
