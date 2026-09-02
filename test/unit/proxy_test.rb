@@ -269,6 +269,9 @@ class ProxyTest < ActiveSupport::TestCase
 
     @proxy.hostname_rewrite = 'my-own.api.example.net::80'
     refute @proxy.valid?
+
+    @proxy.hostname_rewrite = 'my_proxy.internal'
+    refute @proxy.valid?
   end
 
   test 'backend' do
@@ -301,7 +304,7 @@ class ProxyTest < ActiveSupport::TestCase
     backend_api.stubs(account: @account)
     @proxy.api_backend = 'https://example.org:3/path'
     refute @proxy.valid?
-    assert_equal [@proxy.errors.generate_message(:api_backend, :invalid)], @proxy.errors.messages[:api_backend]
+    assert_equal [@proxy.errors.generate_message(:api_backend, :invalid_url)], @proxy.errors.messages[:api_backend]
 
     @account.expects(:provider_can_use?).with(:proxy_private_base_path).at_least_once.returns(true)
     @proxy.api_backend = 'https://example.org:3/path'
@@ -342,7 +345,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'api_test_path formats valid' do
-    [  '/', '/i/m/a/lumberjack/42', '/~stuff', '/!not_-here']. each do |path|
+    ['/', '/i/m/a/lumberjack/42', '/~stuff', '/!not_-here', '/path?key=value&other=123'].each do |path|
       @proxy.api_test_path = path
       @proxy.valid?
       assert_empty @proxy.errors[:api_test_path], "errors found on - #{path}"
@@ -361,7 +364,7 @@ class ProxyTest < ActiveSupport::TestCase
     %w[example.org:9 fdsfas ssh://example.org:39 http://example.org:32/fdsa?a=1].each do |endpoint|
       @proxy.api_backend = endpoint
       refute @proxy.valid?
-      assert_equal [@proxy.errors.generate_message(:api_backend, :invalid)], @proxy.errors.messages[:api_backend]
+      assert_equal [@proxy.errors.generate_message(:api_backend, :invalid_url)], @proxy.errors.messages[:api_backend]
     end
 
     %w[http://localhost/ https://127.0.0.1 http://127.10.0.50].each do |endpoint|
