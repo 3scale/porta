@@ -397,6 +397,62 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  class UsageRulesTest < self
+    test 'usage rules page renders plan change radio buttons with correct param name' do
+      get usage_rules_admin_service_path(service)
+      assert_response :success
+      assert_select "input[type=radio][name='service[buyer_plan_change_permission]']", count: 2
+    end
+
+    test 'usage rules page shows all plan change options when finance is allowed' do
+      provider.settings.finance.allow
+
+      get usage_rules_admin_service_path(service)
+      assert_response :success
+      assert_select "input[type=radio][name='service[buyer_plan_change_permission]']", count: 5
+    end
+
+    test 'update buyer_plan_change_permission persists the value' do
+      assert_equal 'request', service.buyer_plan_change_permission
+
+      put admin_service_path(service), params: { service: { buyer_plan_change_permission: 'direct' } }
+
+      assert_equal 'direct', service.reload.buyer_plan_change_permission
+    end
+
+    test 'update buyer_plan_change_permission does not change other attributes' do
+      original_name = service.name
+      original_buyers_manage_apps = service.buyers_manage_apps
+
+      put admin_service_path(service), params: { service: { buyer_plan_change_permission: 'direct' } }
+
+      service.reload
+      assert_equal 'direct', service.buyer_plan_change_permission
+      assert_equal original_name, service.name
+      assert_equal original_buyers_manage_apps, service.buyers_manage_apps
+    end
+
+    test 'member without plans permission cannot access usage rules' do
+      member = FactoryBot.create(:member, account: provider)
+      member.activate!
+      logout! && login!(provider, user: member)
+
+      get usage_rules_admin_service_path(service)
+      assert_response :forbidden
+    end
+
+    test 'member with plans permission can access usage rules' do
+      member = FactoryBot.create(:member, account: provider)
+      member.admin_sections = %w[plans]
+      member.activate!
+      member.save!
+      logout! && login!(provider, user: member)
+
+      get usage_rules_admin_service_path(service)
+      assert_response :success
+    end
+  end
+
   class MemberPermissions < self
     def setup
       super
