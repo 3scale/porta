@@ -2,7 +2,6 @@
 
 div class="pf-c-form__group-control pf-m-stack"
   - allowed_permissions.each do |permission|
-    - value = permission.to_s
     div class="pf-c-radio"
-      = form.radio_button setting, value, class: "pf-c-radio__input"
-      = form.label "#{setting}_#{value}", t("formtastic.labels.settings.change_plan_permission.#{permission}"), class: "pf-c-radio__label"
+      = form.radio_button setting, permission, class: "pf-c-radio__input"
+      = form.label "#{setting}_#{permission}", t("formtastic.labels.settings.change_plan_permission.#{permission}"), class: "pf-c-radio__label"
