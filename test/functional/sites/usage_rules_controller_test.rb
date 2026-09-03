@@ -46,6 +46,26 @@ class Sites::UsageRulesControllerTest < ActionController::TestCase
     assert_template :edit
   end
 
+  test 'renders correct checked state for change_account_plan_permission' do
+    @provider.settings.account_plans.allow
+    @settings.update!(change_account_plan_permission: 'direct')
+
+    get :edit
+
+    assert_response :success
+    assert_select "input[name='settings[change_account_plan_permission]'][value='direct'][checked='checked']", count: 1
+  end
+
+  test 'renders correct checked state for change_service_plan_permission' do
+    @provider.settings.service_plans.allow
+    @settings.update!(change_service_plan_permission: 'direct')
+
+    get :edit
+
+    assert_response :success
+    assert_select "input[name='settings[change_service_plan_permission]'][value='direct'][checked='checked']", count: 1
+  end
+
   test 'update with valid params' do
     @settings.update(strong_passwords_enabled: true, public_search: true)
     %i[useraccountarea_enabled signups_enabled public_search
