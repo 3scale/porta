@@ -417,19 +417,33 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       put admin_service_path(service), params: { service: { buyer_plan_change_permission: 'direct' } }
 
+      assert_response :redirect
       assert_equal 'direct', service.reload.buyer_plan_change_permission
     end
 
-    test 'update buyer_plan_change_permission does not change other attributes' do
-      original_name = service.name
-      original_buyers_manage_apps = service.buyers_manage_apps
+    test 'usage rules page renders correct checked state for plan change permission' do
+      service.update!(buyer_plan_change_permission: 'direct')
 
-      put admin_service_path(service), params: { service: { buyer_plan_change_permission: 'direct' } }
+      get usage_rules_admin_service_path(service)
 
+      assert_response :success
+      assert_select "input[name='service[buyer_plan_change_permission]'][value='direct'][checked='checked']", count: 1
+    end
+
+    test 'crafted POST cannot update non-permitted service attributes' do
+      original_account_id = service.account_id
+
+      put admin_service_path(service), params: {
+        service: {
+          buyer_plan_change_permission: 'direct',
+          account_id: 0
+        }
+      }
+
+      assert_response :redirect
       service.reload
       assert_equal 'direct', service.buyer_plan_change_permission
-      assert_equal original_name, service.name
-      assert_equal original_buyers_manage_apps, service.buyers_manage_apps
+      assert_equal original_account_id, service.account_id
     end
 
     test 'member without plans permission cannot access usage rules' do
