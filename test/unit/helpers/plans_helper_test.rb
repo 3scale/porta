@@ -23,23 +23,23 @@ class PlansHelperTest < ActionView::TestCase
     stubs(current_account: tenant)
 
     stubs(:can?).with(:manage, :account_plans).returns(true)
-    tenant.settings.allow_account_plans
-    tenant.settings.update_column(:account_plans_ui_visible, true)
+    tenant.settings.account_plans.allow
+    tenant.settings.update_attribute(:account_plans_ui_visible, true)
     assert account_plans_management_visible?
 
     stubs(:can?).with(:manage, :account_plans).returns(false)
-    tenant.settings.allow_account_plans
-    tenant.settings.update_column(:account_plans_ui_visible, true)
+    tenant.settings.account_plans.allow
+    tenant.settings.update_attribute(:account_plans_ui_visible, true)
     refute account_plans_management_visible?
 
     stubs(:can?).with(:manage, :account_plans).returns(true)
-    tenant.settings.deny_account_plans
-    tenant.settings.update_column(:account_plans_ui_visible, true)
+    tenant.settings.account_plans.deny
+    tenant.settings.update_attribute(:account_plans_ui_visible, true)
     refute account_plans_management_visible?
 
     stubs(:can?).with(:manage, :account_plans).returns(true)
-    tenant.settings.allow_account_plans
-    tenant.settings.update_column(:account_plans_ui_visible, false)
+    tenant.settings.account_plans.allow
+    tenant.settings.update_attribute(:account_plans_ui_visible, false)
     refute account_plans_management_visible?
   end
 end

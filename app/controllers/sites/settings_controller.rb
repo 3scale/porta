@@ -12,6 +12,8 @@ class Sites::SettingsController < Sites::BaseController
 
   def edit; end
 
+  ALLOWED_PARAMS = %i[cc_terms_path cc_privacy_path cc_refunds_path].freeze
+
   def update
     if @settings.update(settings_params)
       redirect_to edit_admin_site_settings_path, success: t('.success')
@@ -29,5 +31,9 @@ class Sites::SettingsController < Sites::BaseController
 
   def find_settings
     @settings = current_account.settings
+  end
+
+  def settings_params
+    params.require(:settings).permit(*ALLOWED_PARAMS).reject { |_, v| v.to_s.empty? }
   end
 end
