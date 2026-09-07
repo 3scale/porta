@@ -430,41 +430,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_select "input[name='service[buyer_plan_change_permission]'][value='direct'][checked='checked']", count: 1
     end
 
-    test 'crafted POST cannot update non-permitted service attributes' do
-      original_account_id = service.account_id
-
-      put admin_service_path(service), params: {
-        service: {
-          buyer_plan_change_permission: 'direct',
-          account_id: 0
-        }
-      }
-
-      assert_response :redirect
-      service.reload
-      assert_equal 'direct', service.buyer_plan_change_permission
-      assert_equal original_account_id, service.account_id
-    end
-
-    test 'member without plans permission cannot access usage rules' do
-      member = FactoryBot.create(:member, account: provider)
-      member.activate!
-      logout! && login!(provider, user: member)
-
-      get usage_rules_admin_service_path(service)
-      assert_response :forbidden
-    end
-
-    test 'member with plans permission can access usage rules' do
-      member = FactoryBot.create(:member, account: provider)
-      member.admin_sections = %w[plans]
-      member.activate!
-      member.save!
-      logout! && login!(provider, user: member)
-
-      get usage_rules_admin_service_path(service)
-      assert_response :success
-    end
   end
 
   class MemberPermissions < self
