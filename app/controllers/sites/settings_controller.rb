@@ -25,10 +25,6 @@ class Sites::SettingsController < Sites::BaseController
 
   private
 
-  def settings_params
-    params.require(:settings).permit(:cc_terms_path, :cc_privacy_path, :cc_refunds_path)
-  end
-
   def find_settings
     @settings = current_account.settings
   end
