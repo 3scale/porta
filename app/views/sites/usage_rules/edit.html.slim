@@ -42,7 +42,7 @@ div class="pf-c-card"
                   span class="pf-c-form__label-text"
                     = t('sites.usage_rules.edit.plans_label')
                 = render 'shared/plan_change_settings', setting: :change_account_plan_permission,
-                                                        current: settings.change_account_plan_permission.to_sym
+                                                        form: form
 
       - if can?(:see, :service_plans)
         = form.inputs 'Service plans'
@@ -56,7 +56,7 @@ div class="pf-c-card"
                   span class="pf-c-form__label-text"
                     = t('sites.usage_rules.edit.plans_label')
               = render 'shared/plan_change_settings', setting: :change_service_plan_permission,
-                                                      current: settings.change_service_plan_permission.to_sym
+                                                      form: form
 
       = form.actions do
         = form.commit_button 'Update settings'

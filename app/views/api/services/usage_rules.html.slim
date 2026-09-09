@@ -60,7 +60,7 @@ div class="pf-c-card"
               span class="pf-c-form__label-text"
                 = t('sites.usage_rules.edit.plans_label')
           = render 'shared/plan_change_settings', setting: :buyer_plan_change_permission,
-                                                  current: @service.buyer_plan_change_permission.to_sym
+                                                  form: form
 
       = form.inputs 'Alerts' do
         div class="pf-c-content"
