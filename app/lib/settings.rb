@@ -114,14 +114,14 @@ class Settings
 
   def update(attrs)
     attrs = normalize_attrs(attrs)
-    update_approval_required(attrs) if approval_required_editable?
+    process_approval_required(attrs)
     assign_attributes(attrs)
     save
   end
 
   def update!(attrs)
     attrs = normalize_attrs(attrs)
-    update_approval_required(attrs) if approval_required_editable?
+    process_approval_required(attrs)
     assign_attributes(attrs)
     save!
   end
@@ -211,11 +211,7 @@ class Settings
   end
 
   def account_approval_required
-    @account_approval_required = default_account_plan.approval_required
-  end
-
-  def account_approval_required=(value)
-    @account_approval_required = value
+    default_account_plan.approval_required
   end
 
   delegate :provider_id_for_audits, to: :account, allow_nil: true
@@ -269,9 +265,13 @@ class Settings
     provider.account_plans.default || not_custom_account_plans.first!
   end
 
-  def update_approval_required(attrs)
+  # Always extract account_approval_required from attrs so it never reaches
+  # assign_attributes (there is no AccountSetting for it). Only apply the
+  # value when approval_required_editable? — i.e. exactly one non-custom plan.
+  def process_approval_required(attrs)
     value = attrs.delete(:account_approval_required)
-    default_account_plan.update_attribute(:approval_required, value) unless value.to_s.empty?
+    return unless approval_required_editable? && !value.to_s.empty?
+    default_account_plan.update_attribute(:approval_required, value)
   end
 
 end
