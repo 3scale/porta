@@ -114,14 +114,12 @@ class Settings
 
   def update(attrs)
     attrs = normalize_attrs(attrs)
-    process_approval_required(attrs)
     assign_attributes(attrs)
     save
   end
 
   def update!(attrs)
     attrs = normalize_attrs(attrs)
-    process_approval_required(attrs)
     assign_attributes(attrs)
     save!
   end
@@ -210,6 +208,9 @@ class Settings
     not_custom_account_plans.size > 1 && account_plans_ui_visible?
   end
 
+  # Read-only delegation to the default account plan — not a stored setting.
+  # Controllers that allow this parameter must handle it explicitly before
+  # calling settings.update; the facade has no write path for it.
   def account_approval_required
     default_account_plan.approval_required
   end
@@ -263,15 +264,6 @@ class Settings
 
   def default_account_plan
     provider.account_plans.default || not_custom_account_plans.first!
-  end
-
-  # Always extract account_approval_required from attrs so it never reaches
-  # assign_attributes (there is no AccountSetting for it). Only apply the
-  # value when approval_required_editable? — i.e. exactly one non-custom plan.
-  def process_approval_required(attrs)
-    value = attrs.delete(:account_approval_required)
-    return unless approval_required_editable? && !value.to_s.empty?
-    default_account_plan.update_attribute(:approval_required, value)
   end
 
 end
