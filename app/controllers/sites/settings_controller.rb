@@ -26,7 +26,7 @@ class Sites::SettingsController < Sites::BaseController
   private
 
   def settings_params
-    params.require(:settings).permit(*ALLOWED_PARAMS)
+    params.require(:settings).permit(*ALLOWED_PARAMS).reject { |_, v| v.to_s.empty? }
   end
 
   def find_settings
