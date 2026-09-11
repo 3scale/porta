@@ -16,7 +16,7 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   #   - permissions_policy_dev_portal
   # These should be virtual attributes in Settings model that delegate to AccountSettings
   ALLOWED_PARAMS = %i[
-    useraccountarea_enabled hide_service signups_enabled account_approval_required public_search
+    useraccountarea_enabled hide_service signups_enabled public_search
     account_plans_ui_visible change_account_plan_permission service_plans_ui_visible change_service_plan_permission
     enforce_sso
   ].freeze
@@ -30,6 +30,7 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   # Settings Update
   # PUT /admin/api/settings.json
   def update
+    update_approval_required
     settings.update(settings_params)
     respond_with(settings)
   end
@@ -42,6 +43,13 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
 
   def settings_params
     @settings_params ||= params.require(:settings).permit(*ALLOWED_PARAMS).reject { |_, v| v.to_s.empty? }
+  end
+
+  def update_approval_required
+    return unless settings.approval_required_editable?
+    value = params.dig(:settings, :account_approval_required)
+    return if value.to_s.empty?
+    current_account.account_plans.default.update_attribute(:approval_required, value)
   end
 
   def validate_enforcing_sso_allowed
