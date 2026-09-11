@@ -9,7 +9,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
     accounts = buyer_accounts
 
     # Only eager load for XML format which uses Account#to_xml that accesses these associations
-    accounts = accounts.includes(:users, :settings, :payment_detail, :country, :annotations, bought_plans: [:original]) if request.format.xml?
+    accounts = accounts.includes(:users, :account_settings, :payment_detail, :country, :annotations, bought_plans: [:original]) if request.format.xml?
 
     if state = params[:state].presence
       accounts = accounts.where(:state => state.to_s)

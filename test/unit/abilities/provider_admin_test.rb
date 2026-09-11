@@ -10,12 +10,12 @@ module Abilities
     end
 
     def test_web_hooks
-      Settings::Switch.any_instance.stubs(:allowed?).returns(false)
+      AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(false)
       assert_can ability, :admin, :web_hooks
       assert_cannot ability, :manage, :web_hooks
 
       # ability :manage depends on :admin ability and the switch
-      Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+      AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
       assert_can ability, :admin, :web_hooks
       assert_can ability, :manage, :web_hooks
     end
@@ -25,24 +25,24 @@ module Abilities
         #SaaS
         ThreeScale.config.stubs(onpremises: false)
 
-        Settings::Switch.any_instance.stubs(:allowed?).returns(false)
+        AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(false)
         assert_can ability, :admin, name
         assert_cannot ability, :manage, name
 
         # ability :manage depends on :admin ability and the switch
-        Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+        AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
         assert_can ability, :admin, name
         assert_can ability, :manage, name
 
         # On premises
         ThreeScale.config.stubs(onpremises: true)
 
-        Settings::Switch.any_instance.stubs(:allowed?).returns(false)
+        AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(false)
         assert_cannot ability, :see, name
         assert_cannot ability, :manage, name
 
         # ability :manage depends on :admin ability and the switch
-        Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+        AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
         assert_can ability, :see, name
         assert_can ability, :manage, name
       end
@@ -53,12 +53,12 @@ module Abilities
       [true, false].each do |onprem|
         ThreeScale.config.stubs(onpremises: onprem)
 
-        Settings::Switch.any_instance.stubs(:allowed?).returns(false)
+        AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(false)
         assert_can ability, :admin, :multiple_services
         assert_cannot ability, :manage, :multiple_services
 
         # ability :manage depends on :admin ability and the switch
-        Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+        AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
         assert_can ability, :admin, :multiple_services
         assert_can ability, :manage, :multiple_services
       end
@@ -87,7 +87,7 @@ module Abilities
     def test_destroy_services
       service_1 = FactoryBot.create(:simple_service)
       account = service_1.account
-      Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+      AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
 
       @admin = FactoryBot.create(:admin, account: account)
       service_2 = FactoryBot.create(:simple_service, account: account)

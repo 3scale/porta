@@ -19,15 +19,20 @@ class AccountSetting < ApplicationRecord
 
   delegate :provider_id_for_audits, to: :account, allow_nil: true
 
-  class_attribute :default_value, instance_writer: false, default: nil
+  def typed_assign(raw_value)
+    self.value = self.class.serialize(raw_value)
+  end
 
-  # Derives setting name from class: AccountSetting::BgColour -> 'bg_colour'
+  class_attribute :default_value, instance_writer: false, default: nil
+  class_attribute :non_null, instance_writer: false, default: false
+
+  # Derives setting name from class: AccountSetting::BgColour -> :bg_colour
   def self.setting_name
-    sti_name.underscore
+    sti_name.underscore.to_sym
   end
 
   def self.display_name
-    setting_name.titleize
+    setting_name.to_s.titleize
   end
 
   # Instance methods that delegate to class methods

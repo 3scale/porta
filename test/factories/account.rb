@@ -103,7 +103,8 @@ FactoryBot.define do
       # [multiservices] This might not be right
       account.stubs(:service).returns(FactoryBot.build_stubbed(:service, :account => account))
 
-      settings = FactoryBot.build_stubbed(:settings, :account => account)
+      settings = Settings.new
+      settings.account = account
       account.stubs(:settings).returns(settings)
 
       profile = FactoryBot.build_stubbed(:profile, :account => account)
@@ -194,7 +195,6 @@ FactoryBot.define do
     master { true }
     org_name { 'Master account' }
     payment_gateway_type { :bogus }
-    association :settings
 
     after(:build) do |account|
       account.billing_strategy = FactoryBot.build(:postpaid_with_charging)
