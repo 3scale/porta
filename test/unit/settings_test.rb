@@ -67,60 +67,24 @@ class SettingsTest < ActiveSupport::TestCase
     assert @settings.approval_required_disabled?
   end
 
-  test "account_approval_required: editable + present applies the value" do
+  test "account_approval_required getter delegates to default account plan" do
+    plan = @provider.account_plans.default
+    plan.update!(approval_required: true)
+    assert @settings.account_approval_required
+
+    plan.update!(approval_required: false)
+    assert_not @settings.account_approval_required
+  end
+
+  test "account_approval_required passed to settings.update is silently ignored" do
+    # The facade has no write path for account_approval_required —
+    # controllers must handle it explicitly before calling settings.update.
     plan = @provider.account_plans.default
     plan.update!(approval_required: false)
-    @settings.stubs(:approval_required_editable?).returns(true)
 
-    @settings.update(account_approval_required: true)
-    assert plan.reload.approval_required
-
-    @settings.update(account_approval_required: false)
-    assert_not plan.reload.approval_required
-  end
-
-  test "account_approval_required: editable + absent leaves plan unchanged" do
-    plan = @provider.account_plans.default
-    plan.update!(approval_required: true)
-    @settings.stubs(:approval_required_editable?).returns(true)
-
-    @settings.update({})
-    assert plan.reload.approval_required
-  end
-
-  test "account_approval_required: not editable + present is ignored" do
-    plan = @provider.account_plans.default
-    plan.update!(approval_required: false)
-    @settings.stubs(:approval_required_editable?).returns(false)
-
-    @settings.update(account_approval_required: true)
-    assert_not plan.reload.approval_required
-  end
-
-  test "account_approval_required: not editable + absent leaves plan unchanged" do
-    plan = @provider.account_plans.default
-    plan.update!(approval_required: true)
-    @settings.stubs(:approval_required_editable?).returns(false)
-
-    @settings.update({})
-    assert plan.reload.approval_required
-  end
-
-  test "account_approval_required: empty string is ignored even when editable" do
-    plan = @provider.account_plans.default
-    plan.update!(approval_required: true)
-    @settings.stubs(:approval_required_editable?).returns(true)
-
-    @settings.update(account_approval_required: "")
-    assert plan.reload.approval_required
-  end
-
-  test "account_approval_required: is always removed from attrs before assign_attributes" do
-    # Passing account_approval_required must never raise NoMethodError regardless
-    # of editability — it should be silently consumed before assign_attributes.
-    @settings.stubs(:approval_required_editable?).returns(false)
     assert_nothing_raised { @settings.update(account_approval_required: true, signups_enabled: false) }
-    assert_not @settings.signups_enabled
+    assert_not plan.reload.approval_required, "facade must not write account_approval_required"
+    assert_not @settings.signups_enabled, "other params still applied"
   end
 
   test "accessing account_approval_required with hidden plan" do
@@ -131,9 +95,6 @@ class SettingsTest < ActiveSupport::TestCase
     plan.update_attribute(:approval_required, true)
     @provider.reload
     assert @provider.settings.account_approval_required
-
-    @provider.settings.update(account_approval_required: false)
-    assert_not @provider.account_plans.first.approval_required
   end
 
   def test_service_plans_visible_ui_switch
