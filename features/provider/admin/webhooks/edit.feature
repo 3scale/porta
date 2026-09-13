@@ -28,10 +28,10 @@ Feature: Provider webhooks
     Then they should see a toast alert with text "http://3scale-test.org responded with 200"
 
   Scenario: Webhook endpoint is wrong
-    Given the provider has a webhook with endpoint "http:://banana"
     When they go to the edit webhooks page
-    And press "Ping!"
-    Then they should see a toast alert with text "Hostname not supplied: 'http:://banana'"
+    And the form is submitted with:
+      | URL | http:://banana |
+    Then they should see "Must be a valid URL such as http://example.com"
 
   Scenario: Webhooks switch is denied
     Given the provider has "web_hooks" switch denied

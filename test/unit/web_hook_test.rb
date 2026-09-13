@@ -71,6 +71,32 @@ class WebHookTest < ActiveSupport::TestCase
     end
   end
 
+  test 'validate url' do
+    hook = FactoryBot.build_stubbed(:web_hook, active: true)
+
+    hook.url = 'http://example.com'
+    assert_valid hook
+
+    hook.url = 'https://example.com/webhook?token=abc'
+    assert_valid hook
+
+    hook.url = 'foo'
+    refute_valid hook
+    assert hook.errors[:url].present?
+
+    hook.url = 'ftp://example.com'
+    refute_valid hook
+    assert hook.errors[:url].present?
+
+    hook.url = ''
+    refute_valid hook
+    assert hook.errors[:url].present?
+
+    hook.active = false
+    hook.url = 'not-a-url'
+    assert_valid hook
+  end
+
   test '#ping' do
     hook = WebHook.new(url: "http://foo")
 
