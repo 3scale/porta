@@ -213,6 +213,40 @@ class SettingsTest < ActiveSupport::TestCase
       "should have exactly one record, not a duplicate"
   end
 
+  class PersistedTest < ActiveSupport::TestCase
+    test 'false when account is nil' do
+      assert_not Settings.new.persisted?
+    end
+
+    test 'false when account is not persisted' do
+      provider = FactoryBot.build(:simple_provider)
+      assert_not provider.settings.persisted?
+    end
+
+    test 'true when account is persisted and no settings cached' do
+      provider = FactoryBot.create(:simple_provider)
+      # Access settings without loading any AccountSetting records
+      settings = provider.settings
+      assert settings.persisted?
+    end
+
+    test 'true when account is persisted and all cached settings are persisted' do
+      provider = FactoryBot.create(:simple_provider)
+      settings = provider.settings
+      settings.update!(bg_colour: '#fff')
+      # After save all records should be persisted
+      assert settings.persisted?
+    end
+
+    test 'false when account is persisted but has unsaved (new) settings in cache' do
+      provider = FactoryBot.create(:simple_provider)
+      settings = provider.settings
+      # Assign without saving — builds a new in-memory record
+      settings.bg_colour = '#fff'
+      assert_not settings.persisted?
+    end
+  end
+
   class FinanceDisabledSwitchTest < ActiveSupport::TestCase
     def setup
       @provider = FactoryBot.build_stubbed(:simple_provider)
