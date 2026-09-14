@@ -7,8 +7,14 @@ class Settings
   attr_accessor :account
   alias provider account
 
+  # The facade is considered persisted when the account exists AND all cached
+  # AccountSetting records are themselves persisted (none are new or dirty).
+  # If no records are cached yet, there is nothing unsaved so it is persisted.
   def persisted?
-    account&.persisted? || false
+    return false unless account&.persisted?
+    cached = account.account_settings.target  # the in-memory loaded records, nil if not yet loaded
+    return true if cached.nil? || cached.empty?
+    cached.all?(&:persisted?)
   end
 
   # Eager-load all AccountSetting subclasses so we can discover them
