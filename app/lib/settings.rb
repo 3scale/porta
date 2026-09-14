@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
 class Settings
+  include ActiveModel::Conversion
+  extend ActiveModel::Naming
+
   attr_accessor :account
   alias provider account
+
+  def persisted?
+    account&.persisted? || false
+  end
 
   # Eager-load all AccountSetting subclasses so we can discover them
   Rails.autoloaders.main.eager_load_dir(Rails.root.join('app/models/account_setting'))
