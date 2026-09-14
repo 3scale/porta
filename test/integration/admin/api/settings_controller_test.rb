@@ -82,7 +82,7 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_not settings.reload.enforce_sso
   end
 
-  test 'update account_approval_required' do
+  test 'update account_approval_required when editable applies the value' do
     account = settings.account
     assert_not settings.account_approval_required
 
@@ -91,8 +91,34 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert JSON.parse(response.body)['settings']['account_approval_required']
     assert account.reload.settings.account_approval_required
+  end
+
+  test 'update account_approval_required is not reset when omitted from subsequent request' do
+    account = settings.account
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true }
+    assert account.reload.settings.account_approval_required
 
     put admin_api_settings_path(format: :json), params: { access_token: token, public_search: true }
+    assert_response :success
+    assert account.reload.settings.account_approval_required
+  end
+
+  test 'update account_approval_required is ignored when not editable (multiple plans)' do
+    account = settings.account
+    FactoryBot.create(:account_plan, issuer: account)
+    assert_not settings.approval_required_editable?
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true }
+
+    assert_response :success
+    assert_not account.reload.settings.account_approval_required
+  end
+
+  test 'update account_approval_required is ignored when empty string' do
+    account = settings.account
+    account.account_plans.default.update!(approval_required: true)
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: '' }
 
     assert_response :success
     assert account.reload.settings.account_approval_required
