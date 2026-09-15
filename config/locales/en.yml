@@ -780,6 +780,10 @@ en:
           success: Referrer filter has been deleted
 
       service_discovery:
+        auth:
+          show:
+            success: Service discovery authentication was successful
+            error: Service discovery authentication failed
         services:
           create:
             error: Cannot create product
@@ -1898,6 +1902,7 @@ en:
 
   errors:
     messages:
+      invalid_url: "Invalid URL format"
       host_label_too_long: is too long for one or more labels of the host (maximum is %{count} characters)
       duplicated_user_provider_side: "Duplicate user registration. Delete one of the duplicates in order to continue."
       duplicated_user_buyer_side: "For activating your account please contact support."
@@ -2027,17 +2032,17 @@ en:
             base:
               cannot_be_destroyed_with_products: cannot be deleted because it is used by at least one Product
             private_endpoint:
-              invalid: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
+              invalid_url: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
         proxy:
           attributes:
             api_backend:
-              invalid: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
+              invalid_url: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
             api_test_path:
               invalid: "only URI characters allowed"
             endpoint:
-              invalid: "the accepted format is 'protocol://address(:port)'"
+              invalid_url: "the accepted format is 'protocol://address(:port)'"
             sandbox_endpoint:
-              invalid: "the accepted format is 'protocol://address(:port)'"
+              invalid_url: "the accepted format is 'protocol://address(:port)'"
             oauth_login_url:
               invalid: "invalid auth login url. (hint: make sure it uses https scheme)"
         proxy_config:
@@ -2105,7 +2110,7 @@ en:
         web_hook:
           attributes:
             url:
-              invalid: Must be a valid URL such as http://example.com
+              invalid_url: Must be a valid URL such as http://example.com
 
         cms/partial:
           attributes:

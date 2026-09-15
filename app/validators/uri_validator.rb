@@ -5,9 +5,7 @@ class UriValidator < ActiveModel::EachValidator
   DEFAULT_PERMISSIONS_OF_PARTS = {
     port:     true,
     userinfo: false,
-    registry: false,
     path:     false,
-    opaque:   false,
     query:    false,
     fragment: false
   }.freeze
@@ -50,11 +48,12 @@ class UriValidator < ActiveModel::EachValidator
       @accepted_scheme = accepted_scheme
     end
 
-    attr_reader :uri, :permissions_parts, :accepted_scheme, :generic_error_message
+    attr_reader :uri, :permissions_parts, :accepted_scheme
+
     delegate :host, :scheme, to: :uri
 
     def errors
-      return [generic_error_message] if uri.blank?
+      return [:invalid_url] if uri.blank?
 
       errors_scheme | errors_host | errors_forbidden_parts
     end
@@ -69,11 +68,11 @@ class UriValidator < ActiveModel::EachValidator
                 [*accepted_scheme].include?(scheme)
       end
 
-      valid ? [] : [:invalid]
+      valid ? [] : [:invalid_url]
     end
 
     def errors_host
-      return [:invalid] if host.blank?
+      return [:invalid_url] if host.blank?
 
       errors = []
       errors << I18n.t('errors.messages.too_long', count: MAX_HOST_SIZE) unless valid_host_size?
@@ -90,7 +89,7 @@ class UriValidator < ActiveModel::EachValidator
     end
 
     def errors_forbidden_parts
-      contains_forbidden_parts? ? [:invalid] : []
+      contains_forbidden_parts? ? [:invalid_url] : []
     end
 
     def contains_forbidden_parts?
