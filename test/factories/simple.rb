@@ -59,6 +59,10 @@ FactoryBot.define do
     after(:stub) do |account|
       account.provider = true
       account.stubs(:provider_key).returns("stubbed-#{SecureRandom.hex(16)}")
+
+      settings = Settings.new
+      settings.account = account
+      account.stubs(:settings).returns(settings)
     end
 
     after(:create) do |account|

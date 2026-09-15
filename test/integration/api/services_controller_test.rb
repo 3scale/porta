@@ -27,8 +27,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'settings with finance globally denied' do
       provider = master_account
-      provider.settings.stubs(globally_denied_switches: [:finance])
-      provider.settings.finance.allow
+      ThreeScale.config.stubs(onpremises: true)
 
       logout! && login!(provider)
       get settings_admin_service_path(provider.default_service)

@@ -12,16 +12,16 @@ div class="pf-c-card"
       - provider.available_switches.each do |switch|
         tr
           td
-            b => t(:name, scope: [:switches, switch.name])
+            b => t(:name, scope: [:switches, switch.setting_name])
 
-            - if (description = t(:internal, scope: [:switches, switch.name], default: '').presence)
+            - if (description = t(:internal, scope: [:switches, switch.setting_name], default: '').presence)
               | (#{description})
 
           td
             => switch.status.capitalize
           td
             - if switch.denied?
-              = fancy_button_to 'enable', master_provider_switch_path(provider, switch.name), method: :put, data: { confirm: 'Really?', disable_with: true }
+              = fancy_button_to 'enable', master_provider_switch_path(provider, switch.setting_name), method: :put, data: { confirm: 'Really?', disable_with: true }
   div class="pf-c-card__body"
     = form_for app, builder: Fields::PatternflyFormBuilder,
                     url: edit_master_provider_plan_path(provider),
