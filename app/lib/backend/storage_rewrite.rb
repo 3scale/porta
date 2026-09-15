@@ -26,17 +26,46 @@ module Backend
       end
     end
 
-    class CinstanceRewriter < Rewriter
+    class BatchRewriter
+      BATCH_SIZE = 1000
+
+      def self.rewrite(**kwargs)
+        scope = kwargs[:scope] || self::CLASS
+        ids = kwargs[:ids]
+        scope = scope.where(id: ids) if ids.present?
+        log_progress = kwargs[:log_progress] || false
+        progress = log_progress ? ProgressCounter.new(scope.count) : nil
+
+        scope.includes(self::INCLUDE).find_in_batches(batch_size: BATCH_SIZE) do |batch|
+          self::REWRITER.call(batch)
+          progress&.call(increment: batch.size)
+        end
+      end
+    end
+
+    class CinstanceRewriter < BatchRewriter
       CLASS = Cinstance
-      INCLUDE = %i[plan service].freeze
-      REWRITER = ->(cinstance) do
-        cinstance.send(:update_backend_application)
-        cinstance.send(:update_backend_user_key_to_application_id_mapping)
-        # to ensure that there is a 'backend_object' - there are
-        # invalid data floating around
-        if cinstance.provider_account
-          cinstance.application_keys.each { |app_key| app_key.send(:update_backend_value) }
-          cinstance.referrer_filters.each { |ref_filter| ref_filter.send(:update_backend_value) }
+      INCLUDE = %i[plan service application_keys referrer_filters].freeze
+      REWRITER = ->(batch) do
+        service = batch.first.service
+        return unless service
+
+        applications = batch.filter_map do |cinstance|
+          plan = cinstance.plan
+          next unless plan
+
+          cinstance.backend_batch_attributes(service, plan)
+        end
+
+        if applications.present?
+          result = ThreeScale::Core::Application.save_batch(service.backend_id, applications)
+          if result && result[:failed].to_i.positive?
+            failed_ids = result[:failures]&.map { _1[:id] }&.join(', ') # rubocop:disable Rails/Pluck
+            Rails.logger.warn(
+              "[StorageRewrite] Batch save partial failure for service #{service.backend_id}: " \
+              "#{result[:failed]} failed (#{failed_ids})"
+            )
+          end
         end
       end
     end
@@ -111,8 +140,10 @@ module Backend
         logger.info "#{action} services for provider #{id}..."
         process(provider.services)
 
-        logger.info "#{action} buyer applications for provider #{id}..."
-        process(provider.buyer_applications)
+        logger.info "#{action} applications for provider #{id}..."
+        provider.services.each do |service|
+          process(provider.buyer_applications.where(service: service))
+        end
 
         logger.info "#{action} provider applications for provider #{id}..."
         process(provider.bought_cinstances)

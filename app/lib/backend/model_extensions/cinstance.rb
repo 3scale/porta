@@ -40,6 +40,14 @@ module Backend
         }
       end
 
+      def backend_batch_attributes(service, plan)
+        attrs = backend_application_attributes(service, plan)
+        attrs[:user_key] = user_key if user_key.present?
+        attrs[:application_keys] = application_keys.pluck_values
+        attrs[:referrer_filters] = referrer_filters.pluck_values
+        attrs
+      end
+
       def delete_backend_application
         if service.present? && service.id.present? && application_id.present?
           ThreeScale::Core::Application.delete(service.backend_id, application_id)
