@@ -57,11 +57,21 @@ module Backend
         processor.rewrite_all
       end
 
-      test 'rewrites all collections for a provider' do
+      test 'rewrites services, provider applications, metrics and usage limits for a provider with no services' do
         processor = StorageRewrite::Processor.new
-        # services, provider's apps, buyers' apps, metrics and usage limits
-        processor.expects(:rewrite).times(5)
+        # services, bought_cinstances, metrics, usage_limits (no buyer_applications loop when no services)
+        processor.expects(:rewrite).times(4)
         processor.rewrite_provider(providers.first.id)
+      end
+
+      test 'rewrites buyer applications once per service' do
+        provider = providers.first
+        FactoryBot.create(:simple_service, account: provider)
+        FactoryBot.create(:simple_service, account: provider)
+        processor = StorageRewrite::Processor.new
+        # services, bought_cinstances, metrics, usage_limits + 2 services × buyer_applications
+        processor.expects(:rewrite).times(6)
+        processor.rewrite_provider(provider.id)
       end
 
       test 'rewrite provider resyncs all metrics of the provider' do
@@ -73,6 +83,61 @@ module Backend
           ::BackendMetricWorker.expects(:perform_now).with(service.backend_id, metric.id)
         end
         StorageRewrite::Processor.new.rewrite_provider(provider.id)
+      end
+    end
+
+    class CinstanceRewriterTest < ActiveSupport::TestCase
+      test 'calls save_batch for a batch of cinstances from the same service' do
+        provider = FactoryBot.create(:simple_provider)
+        service = FactoryBot.create(:simple_service, account: provider)
+        plan = FactoryBot.create(:simple_application_plan, issuer: service)
+        buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+        cinstance = FactoryBot.create(:simple_cinstance, plan: plan, user_account: buyer)
+
+        ThreeScale::Core::Application.expects(:save_batch).once.with do |service_id, applications|
+          service_id == service.backend_id && applications.any? { |a| a[:id] == cinstance.application_id }
+        end
+
+        StorageRewrite::CinstanceRewriter.rewrite(scope: provider.buyer_applications.where(service: service))
+      end
+
+      test 'batch attributes include user_key, application_keys and referrer_filters' do
+        provider = FactoryBot.create(:simple_provider)
+        service = FactoryBot.create(:simple_service, account: provider)
+        plan = FactoryBot.create(:simple_application_plan, issuer: service)
+        buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+        cinstance = FactoryBot.create(:simple_cinstance, plan: plan, user_account: buyer)
+        key = cinstance.application_keys.add
+        filter = cinstance.referrer_filters.add('example.com')
+        cinstance.reload
+
+        ThreeScale::Core::Application.expects(:save_batch).once.with do |_service_id, applications|
+          app_attrs = applications.find { |a| a[:id] == cinstance.application_id }
+          app_attrs &&
+            app_attrs[:application_keys].include?(key.value) &&
+            app_attrs[:referrer_filters].include?(filter.value)
+        end
+
+        StorageRewrite::CinstanceRewriter.rewrite(scope: provider.buyer_applications.where(service: service))
+      end
+
+      test 'skips cinstances without a plan' do
+        provider = FactoryBot.create(:simple_provider)
+        service = FactoryBot.create(:simple_service, account: provider)
+        plan = FactoryBot.create(:simple_application_plan, issuer: service)
+        buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+        valid_cinstance = FactoryBot.create(:simple_cinstance, plan: plan, user_account: buyer)
+        orphan_plan = FactoryBot.create(:simple_application_plan, issuer: service)
+        planless_cinstance = FactoryBot.create(:simple_cinstance, plan: orphan_plan, user_account: buyer)
+        orphan_plan.delete
+
+        ThreeScale::Core::Application.expects(:save_batch).once.with do |_service_id, applications|
+          application_ids = applications.map { _1[:id] }
+          application_ids.include?(valid_cinstance.application_id) &&
+            !application_ids.include?(planless_cinstance.application_id)
+        end
+
+        StorageRewrite::CinstanceRewriter.rewrite(scope: provider.buyer_applications.where(service: service))
       end
     end
 
