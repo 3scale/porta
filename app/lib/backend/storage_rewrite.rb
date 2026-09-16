@@ -137,11 +137,12 @@ module Backend
           return
         end
 
+        services = provider.services
         logger.info "#{action} services for provider #{id}..."
-        process(provider.services)
+        process(services)
 
         logger.info "#{action} applications for provider #{id}..."
-        provider.services.each do |service|
+        services.each do |service|
           process(provider.buyer_applications.where(service: service))
         end
 
