@@ -72,6 +72,19 @@ class ServiceDecoratorTest < Draper::TestCase
     assert decorator.traffic?
   end
 
+  def test_friendly_service_settings_for_all_buyer_plan_change_permissions
+    service = FactoryBot.create(:simple_service)
+    decorator = ServiceDecorator.decorate(service)
+
+    %w[request direct none credit_card request_credit_card].each do |permission|
+      service.update_column(:buyer_plan_change_permission, permission)
+
+      assert_nothing_raised("Missing i18n for buyer_plan_change_permission=#{permission}") do
+        decorator.friendly_service_settings
+      end
+    end
+  end
+
   private
 
   def stub_can(action, object)

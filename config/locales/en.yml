@@ -1584,6 +1584,8 @@ en:
             buyer_plan_change_permission:
               request: "Users can <strong>request plan change</strong>"
               direct: "Users can <strong>directly change plans</strong>"
+              credit_card: "Users need a <strong>credit card</strong> to change plans directly"
+              request_credit_card: "Users need a <strong>credit card</strong> to change to paid plans directly"
               none: "Users can <strong>not change plans</strong>"
             buyers_manage_apps:
               enabled: "Users <strong>can</strong> manage applications"
