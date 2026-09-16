@@ -112,7 +112,7 @@ module Backend
         cinstance.reload
 
         ThreeScale::Core::Application.expects(:save_batch).once.with do |_service_id, applications|
-          app_attrs = applications.find { |a| a[:id] == cinstance.application_id }
+          app_attrs = applications.find { _1[:id] == cinstance.application_id }
           app_attrs &&
             app_attrs[:application_keys].include?(key.value) &&
             app_attrs[:referrer_filters].include?(filter.value)
@@ -134,7 +134,7 @@ module Backend
         ThreeScale::Core::Application.expects(:save_batch).once.with do |_service_id, applications|
           application_ids = applications.map { _1[:id] }
           application_ids.include?(valid_cinstance.application_id) &&
-            !application_ids.include?(planless_cinstance.application_id)
+            application_ids.exclude?(planless_cinstance.application_id)
         end
 
         StorageRewrite::CinstanceRewriter.rewrite(scope: provider.buyer_applications.where(service: service))
