@@ -8,9 +8,9 @@ module Backend
 
     BATCH_SIZE = 1000
 
-    # Rewriter and its subclasses perform operations that update the objects on 3scale Backend
+    # Base class for rewriters that sync objects to 3scale Backend.
+    # Subclasses define CLASS, INCLUDE, and REWRITER constants.
     class Rewriter
-      # Rewrite a collection
       # @param scope [ActiveRecord::Associations::CollectionProxy] ActiveRecord collection with filtered scope
       # @param ids [Array] Array of IDs belonging to scope or class
       # @param log_progress [Boolean] specifies whether to print progress to console
@@ -21,31 +21,33 @@ module Backend
         log_progress = kwargs[:log_progress] || false
         progress = log_progress ? ProgressCounter.new(scope.count) : nil
 
-        scope.includes(self::INCLUDE).find_each do |model|
+        iterate(scope.includes(self::INCLUDE), progress)
+      end
+
+      def self.iterate(scope, progress)
+        scope.find_each do |model|
           self::REWRITER.call(model)
           progress&.call
         end
       end
+      private_class_method :iterate
     end
 
-    class BatchRewriter
-      def self.rewrite(**kwargs)
-        scope = kwargs[:scope] || self::CLASS
-        ids = kwargs[:ids]
-        scope = scope.where(id: ids) if ids.present?
-        log_progress = kwargs[:log_progress] || false
-        progress = log_progress ? ProgressCounter.new(scope.count) : nil
-
-        scope.includes(self::INCLUDE).find_in_batches(batch_size: StorageRewrite::BATCH_SIZE) do |batch|
+    class BatchRewriter < Rewriter
+      def self.iterate(scope, progress)
+        scope.find_in_batches(batch_size: StorageRewrite::BATCH_SIZE) do |batch|
           self::REWRITER.call(batch)
           progress&.call(increment: batch.size)
         end
       end
+      private_class_method :iterate
     end
 
     class CinstanceRewriter < BatchRewriter
       CLASS = Cinstance
       INCLUDE = %i[plan service application_keys referrer_filters].freeze
+      # All records in a batch must belong to the same service. Callers are responsible
+      # for scoping per service before passing the collection (see Processor#rewrite_provider).
       REWRITER = ->(batch) do
         service = batch.first.service
         return unless service
@@ -147,7 +149,12 @@ module Backend
         end
 
         logger.info "#{action} provider applications for provider #{id}..."
-        process(provider.bought_cinstances)
+        # A provider is almost always subscribed to only one master service, but iterate
+        # per-service for correctness since CinstanceRewriter assumes a single-service batch.
+        master_services = Service.where(account: Account.master)
+        master_services.each do |service|
+          process(provider.bought_cinstances.where(service: service))
+        end
 
         logger.info "#{action} metrics for provider #{id}..."
         process(Metric.by_provider(provider))
