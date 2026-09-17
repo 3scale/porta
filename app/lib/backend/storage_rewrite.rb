@@ -6,6 +6,8 @@ module Backend
 
   module StorageRewrite
 
+    BATCH_SIZE = 1000
+
     # Rewriter and its subclasses perform operations that update the objects on 3scale Backend
     class Rewriter
       # Rewrite a collection
@@ -27,8 +29,6 @@ module Backend
     end
 
     class BatchRewriter
-      BATCH_SIZE = 1000
-
       def self.rewrite(**kwargs)
         scope = kwargs[:scope] || self::CLASS
         ids = kwargs[:ids]
@@ -36,7 +36,7 @@ module Backend
         log_progress = kwargs[:log_progress] || false
         progress = log_progress ? ProgressCounter.new(scope.count) : nil
 
-        scope.includes(self::INCLUDE).find_in_batches(batch_size: BATCH_SIZE) do |batch|
+        scope.includes(self::INCLUDE).find_in_batches(batch_size: StorageRewrite::BATCH_SIZE) do |batch|
           self::REWRITER.call(batch)
           progress&.call(increment: batch.size)
         end
@@ -181,8 +181,6 @@ module Backend
 
     # Used for scheduling asynchronous jobs for later processing
     class AsyncProcessor < Processor
-      BATCH_SIZE = 500
-
       def initialize(**kwargs)
         super(**kwargs)
         @action = :enqueue
@@ -190,7 +188,7 @@ module Backend
 
       # Enqueue for asynchronous processing in batches
       def process(collection)
-        collection.in_batches(of: BATCH_SIZE) do |batch|
+        collection.in_batches(of: StorageRewrite::BATCH_SIZE) do |batch|
           BackendStorageRewriteWorker.perform_async(batch.klass.name, batch.pluck(:id))
         end
       end
