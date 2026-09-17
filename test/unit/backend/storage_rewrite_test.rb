@@ -221,7 +221,7 @@ module Backend
       end
 
       test 'enqueues buyer applications per service' do
-        master = FactoryBot.create(:simple_master)
+        FactoryBot.create(:simple_master)
         provider = FactoryBot.create(:simple_provider)
         buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
         service1 = FactoryBot.create(:simple_service, account: provider)
@@ -236,7 +236,7 @@ module Backend
 
         Backend::StorageRewrite::AsyncProcessor.new.rewrite_provider(provider.id)
 
-        cinstance_batches = enqueued.select { |klass, _| klass == 'Cinstance' }
+        cinstance_batches = enqueued.select { |klass, _| klass == 'Cinstance' } # rubocop:disable Style/HashSlice
         # app1 and app2 belong to different services — they must be in separate batches
         batch_for_app1 = cinstance_batches.find { |_, ids| ids.include?(app1.id) }
         batch_for_app2 = cinstance_batches.find { |_, ids| ids.include?(app2.id) }
