@@ -139,6 +139,49 @@ module Backend
 
         StorageRewrite::CinstanceRewriter.rewrite(scope: provider.buyer_applications.where(service: service))
       end
+
+      test 'does not call save_batch when all cinstances in the batch lack a plan' do
+        provider = FactoryBot.create(:simple_provider)
+        service = FactoryBot.create(:simple_service, account: provider)
+        buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+        orphan_plan = FactoryBot.create(:simple_application_plan, issuer: service)
+        FactoryBot.create(:simple_cinstance, plan: orphan_plan, user_account: buyer)
+        orphan_plan.delete
+
+        ThreeScale::Core::Application.expects(:save_batch).never
+
+        StorageRewrite::CinstanceRewriter.rewrite(scope: provider.buyer_applications.where(service: service))
+      end
+
+      test 'does not call save_batch when the batch has no associated service' do
+        provider = FactoryBot.create(:simple_provider)
+        service = FactoryBot.create(:simple_service, account: provider)
+        plan = FactoryBot.create(:simple_application_plan, issuer: service)
+        buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+        cinstance = FactoryBot.create(:simple_cinstance, plan: plan, user_account: buyer)
+        # Delete the service directly to leave a dangling FK, simulating an orphaned cinstance
+        service.delete
+
+        ThreeScale::Core::Application.expects(:save_batch).never
+
+        StorageRewrite::CinstanceRewriter.rewrite(scope: Cinstance.where(id: cinstance.id))
+      end
+
+      test 'logs a warning on partial batch failure from apisonator' do
+        provider = FactoryBot.create(:simple_provider)
+        service = FactoryBot.create(:simple_service, account: provider)
+        plan = FactoryBot.create(:simple_application_plan, issuer: service)
+        buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+        cinstance = FactoryBot.create(:simple_cinstance, plan: plan, user_account: buyer)
+
+        ThreeScale::Core::Application.stubs(:save_batch).returns(
+          { failed: 1, failures: [{ id: cinstance.application_id }] }
+        )
+
+        Rails.logger.expects(:warn).with { |msg| msg.include?('[StorageRewrite] Batch save partial failure') }
+
+        StorageRewrite::CinstanceRewriter.rewrite(scope: provider.buyer_applications.where(service: service))
+      end
     end
 
     class ServiceRewriterTest < ActiveSupport::TestCase
