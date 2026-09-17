@@ -219,6 +219,31 @@ module Backend
         end
         Backend::StorageRewrite::AsyncProcessor.new.rewrite_provider(provider.id)
       end
+
+      test 'enqueues buyer applications per service' do
+        master = FactoryBot.create(:simple_master)
+        provider = FactoryBot.create(:simple_provider)
+        buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+        service1 = FactoryBot.create(:simple_service, account: provider)
+        service2 = FactoryBot.create(:simple_service, account: provider)
+        plan1 = FactoryBot.create(:simple_application_plan, issuer: service1)
+        plan2 = FactoryBot.create(:simple_application_plan, issuer: service2)
+        app1 = FactoryBot.create(:simple_cinstance, plan: plan1, user_account: buyer)
+        app2 = FactoryBot.create(:simple_cinstance, plan: plan2, user_account: buyer)
+
+        enqueued = []
+        BackendStorageRewriteWorker.stubs(:perform_async).with { |klass, ids| enqueued << [klass, ids] }
+
+        Backend::StorageRewrite::AsyncProcessor.new.rewrite_provider(provider.id)
+
+        cinstance_batches = enqueued.select { |klass, _| klass == 'Cinstance' }
+        # app1 and app2 belong to different services — they must be in separate batches
+        batch_for_app1 = cinstance_batches.find { |_, ids| ids.include?(app1.id) }
+        batch_for_app2 = cinstance_batches.find { |_, ids| ids.include?(app2.id) }
+        assert batch_for_app1, 'no batch found for app1'
+        assert batch_for_app2, 'no batch found for app2'
+        assert_not_equal batch_for_app1, batch_for_app2, 'app1 and app2 should be in separate batches'
+      end
     end
   end
 end
