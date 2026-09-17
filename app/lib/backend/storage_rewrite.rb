@@ -52,7 +52,16 @@ module Backend
         service = batch.first.service
         return unless service
 
+        expected_service_id = batch.first.service_id
         applications = batch.filter_map do |cinstance|
+          if cinstance.service_id != expected_service_id
+            Rails.logger.warn(
+              "[StorageRewrite] Batch spans multiple services; expected service_id #{expected_service_id} " \
+              "but found #{cinstance.service_id}. Skipping batch."
+            )
+            return # rubocop:disable Lint/NonLocalExitFromIterator
+          end
+
           plan = cinstance.plan
           next unless plan
 

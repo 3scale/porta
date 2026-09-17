@@ -167,6 +167,22 @@ module Backend
         StorageRewrite::CinstanceRewriter.rewrite(scope: Cinstance.where(id: cinstance.id))
       end
 
+      test 'logs a warning and skips the batch when it spans multiple services' do
+        provider = FactoryBot.create(:simple_provider)
+        service1 = FactoryBot.create(:simple_service, account: provider)
+        service2 = FactoryBot.create(:simple_service, account: provider)
+        plan1 = FactoryBot.create(:simple_application_plan, issuer: service1)
+        plan2 = FactoryBot.create(:simple_application_plan, issuer: service2)
+        buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+        FactoryBot.create(:simple_cinstance, plan: plan1, user_account: buyer)
+        FactoryBot.create(:simple_cinstance, plan: plan2, user_account: buyer)
+
+        ThreeScale::Core::Application.expects(:save_batch).never
+        Rails.logger.expects(:warn).with { |msg| msg.include?('[StorageRewrite] Batch spans multiple services') }
+
+        StorageRewrite::CinstanceRewriter.rewrite(scope: provider.buyer_applications.where(service: [service1, service2]))
+      end
+
       test 'logs a warning on partial batch failure from apisonator' do
         provider = FactoryBot.create(:simple_provider)
         service = FactoryBot.create(:simple_service, account: provider)
