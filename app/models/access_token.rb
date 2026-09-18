@@ -129,7 +129,11 @@ class AccessToken < ApplicationRecord
   end
 
   def self.find_from_id_or_value(id_or_value)
-    find_by(id: id_or_value) || find_from_value(id_or_value)
+    if id_or_value.to_s.length <= 19
+      find_by(id: id_or_value)
+    else
+      find_from_value(id_or_value)
+    end
   end
 
   # This can't change or it will create new tokens for everyone
