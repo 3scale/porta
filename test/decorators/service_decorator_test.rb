@@ -79,7 +79,7 @@ class ServiceDecoratorTest < Draper::TestCase
     %w[request direct none credit_card request_credit_card].each do |permission|
       service.update_column(:buyer_plan_change_permission, permission)
 
-      assert_nothing_raised { decorator.friendly_service_settings }
+      assert decorator.friendly_service_settings
     end
   end
 
