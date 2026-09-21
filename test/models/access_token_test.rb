@@ -95,6 +95,23 @@ class AccessTokenTest < ActiveSupport::TestCase
     assert_raise(ActiveRecord::RecordNotFound) { AccessToken.find_from_id_or_value!('fake') }
   end
 
+  # Regression test for https://redhat.atlassian.net/browse/THREESCALE-16355
+  # When the leading digits of a token's value match another token's id, MySQL silently casts the
+  # string to an integer. find_from_value must run first to avoid returning the wrong token.
+  # Smells of :reek:TooManyStatements but it's OK.
+  def test_find_from_id_or_value_edge_cases
+    token_a = FactoryBot.create(:access_token)
+    value_legacy = token_a.id.to_s.ljust(64, 'asdf')
+    value_new = token_a.id.to_s.ljust(96, 'asdf')
+
+    token_b = FactoryBot.create(:access_token, value: AccessToken.compute_digest(value_legacy))
+    token_c = FactoryBot.create(:access_token, value: AccessToken.compute_digest(value_new))
+
+    assert_equal token_a, AccessToken.find_from_id_or_value(token_a.id)
+    assert_equal token_b, AccessToken.find_from_id_or_value(value_legacy)
+    assert_equal token_c, AccessToken.find_from_id_or_value(value_new)
+  end
+
   # find_from_value tests
 
   def test_find_from_value_returns_nil_for_invalid_token
