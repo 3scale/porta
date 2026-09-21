@@ -34,7 +34,7 @@ module TestHelpers
         raise_on_method ThreeScale::Core.singleton_class, :storage
         # mock Application
         clear_method ThreeScale::Core::Application.singleton_class,
-          :save, :delete, :save_id_by_key, :delete_id_by_key
+          :save, :delete, :save_id_by_key, :delete_id_by_key, :save_batch
         # mock Metric
         clear_method ThreeScale::Core::Metric.singleton_class,
           :save, :delete, :load
