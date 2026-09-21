@@ -129,11 +129,10 @@ class AccessToken < ApplicationRecord
   end
 
   def self.find_from_id_or_value(id_or_value)
-    if id_or_value.to_s.length <= 19
-      find_by(id: id_or_value)
-    else
-      find_from_value(id_or_value)
-    end
+    # MySQL casts '123foo' to '123' which may try to find the wrong token
+    found_by_id = find_by(id: id_or_value) if id_or_value.to_s.match?(/\A\d{,19}\z/)
+
+    found_by_id || find_from_value(id_or_value)
   end
 
   # This can't change or it will create new tokens for everyone
