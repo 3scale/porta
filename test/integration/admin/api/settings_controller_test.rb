@@ -123,4 +123,14 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert account.reload.settings.account_approval_required
   end
+
+  test 'update account_approval_required is ignored when nil' do
+    account = settings.account
+    account.account_plans.default.update!(approval_required: true)
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: nil }
+
+    assert_response :success
+    assert account.reload.settings.account_approval_required
+  end
 end
