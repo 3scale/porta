@@ -146,11 +146,11 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
 
   test 'update account_approval_required is ignored when a non-empty array' do
     account = settings.account
-    account.account_plans.default.update!(approval_required: true)
+    account.account_plans.default.update!(approval_required: false)
 
     put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: ['true'] }
 
     assert_response :success
-    assert account.reload.settings.account_approval_required
+    assert_not account.reload.settings.account_approval_required
   end
 end
