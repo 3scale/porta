@@ -20,11 +20,8 @@ class MenuHelperTest < ActionView::TestCase
   end
 
   test 'forcibly_denied_switch?' do
-    Settings.stubs(globally_denied_switches: [])
     assert @provider.settings.finance.denied?
-    assert_not forcibly_denied_switch?(:finance)
-
-    Settings.stubs(globally_denied_switches: [:finance])
+    assert_not @provider.settings.finance.globally_denied?
     assert_not forcibly_denied_switch?(:finance)
   end
 
