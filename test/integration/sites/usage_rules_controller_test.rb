@@ -54,11 +54,21 @@ class Sites::UsageRulesControllerIntegrationTest < ActionDispatch::IntegrationTe
     assert plan.reload.approval_required
   end
 
-  test 'update account_approval_required with an array is ignored' do
+  test 'update account_approval_required with an empty array is ignored' do
     plan = provider.account_plans.default
     plan.update!(approval_required: true)
 
     put admin_site_usage_rules_path, params: { settings: { account_approval_required: [] } }
+
+    assert_redirected_to admin_site_settings_url
+    assert plan.reload.approval_required
+  end
+
+  test 'update account_approval_required with a non-empty array is ignored' do
+    plan = provider.account_plans.default
+    plan.update!(approval_required: true)
+
+    put admin_site_usage_rules_path, params: { settings: { account_approval_required: ['1'] } }
 
     assert_redirected_to admin_site_settings_url
     assert plan.reload.approval_required
