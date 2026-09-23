@@ -35,7 +35,7 @@ class Sites::UsageRulesController < Sites::BaseController
   def update_approval_required
     return unless @settings.approval_required_editable?
     value = params.require(:settings).permit(:account_approval_required)[:account_approval_required]
-    return if value.to_s.empty?
+    return if value.blank?
     current_account.account_plans.default.update_attribute(:approval_required, value)
   end
 end
