@@ -7,17 +7,19 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   # GET /admin/api/accounts.xml
   def index
     accounts = buyer_accounts
+    accounts = accounts.where(state: params[:state].to_s) if params[:state].present?
+    accounts = accounts.order(:created_at, :id).paginate(pagination_params)
 
-    # Only eager load for XML format which uses Account#to_xml that accesses these associations
-    accounts = accounts.includes(:users, :settings, :payment_detail, :country, :annotations, bought_plans: [:original]) if request.format.xml?
-
-    if state = params[:state].presence
-      accounts = accounts.where(:state => state.to_s)
+    # Optimization: `paginate` adds OFFSET which is an expensive operation. To avoid an expensive OFFSET, we paginate a
+    # narrow query that only returns ids, then get the full data only for those ids.
+    # Pagination metadata is lost in the `paginatied_ids` subquery. We need to wrap the results under
+    # `WillPaginate::Collection` in order for `respond_with` to find the metadata.
+    collection = WillPaginate::Collection.create(accounts.current_page, accounts.per_page, accounts.total_entries) do |page|
+      page.replace(Account.with(paginated_ids: accounts.select(id: :account_id)).joins(:paginated_ids)
+                          .order(:created_at, :id).to_a)
     end
 
-    accounts = accounts.paginate(pagination_params)
-
-    respond_with(accounts)
+    respond_with(preload_to_present(collection))
   end
 
   # Account Find
@@ -117,13 +119,6 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
     @buyer_account ||= buyer_accounts.find(params[:id])
   end
 
-  def preload_to_present(accounts)
-    # Only preload for XML format which uses Account#to_xml that accesses these associations
-    ActiveRecord::Associations::Preloader.new(records: Array(accounts), associations: [:annotations, bought_plans: [:original]]).call if request.format.xml?
-
-    accounts
-  end
-
   def buyer_users
     @buyer_users ||= current_account.buyer_users
   end
@@ -137,6 +132,38 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   end
 
   private
+
+  def preload_to_present(accounts)
+    records = Array(accounts)
+    associations = %i[annotations settings payment_detail]
+    associations << :country if current_account.defined_builtin_fields_names_for(Account).include?('country')
+    associations += %i[users bought_plans] if request.format.xml?
+
+    preload_associations(records, associations)
+    preload_associations(records.select(&:buyer?), :provider_account)
+    preload_xml_plan_associations(records) if request.format.xml?
+
+    accounts
+  end
+
+  def preload_xml_plan_associations(accounts)
+    plans = accounts.flat_map(&:bought_plans)
+
+    preload_associations(plans.grep(AccountPlan), { issuer: :default_account_plan })
+    preload_associations(plans.grep(ServicePlan), [ :service, { issuer: [:default_service_plan, :account] }])
+    preload_associations(plans.grep(ApplicationPlan), [:original, { issuer: [:default_application_plan, :account] }])
+  end
+
+  def preload_associations(records, associations)
+    return if records.empty?
+
+    if associations.is_a?(Symbol)
+      records = records.reject { _1.association(associations).loaded? }
+      return if records.empty?
+    end
+
+    ActiveRecord::Associations::Preloader.new(records: records, associations: associations).call
+  end
 
   def find_buyer_account
     case
