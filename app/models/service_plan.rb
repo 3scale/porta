@@ -19,7 +19,7 @@ class ServicePlan < Plan
   before_destroy :destroy_contracts
 
   def provider_account
-    service && service.account
+    issuer&.account
   end
 
   def master?
