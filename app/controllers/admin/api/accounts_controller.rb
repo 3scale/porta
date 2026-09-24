@@ -150,7 +150,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
     plans = accounts.flat_map(&:bought_plans)
 
     preload_associations(plans.grep(AccountPlan), { issuer: :default_account_plan })
-    preload_associations(plans.grep(ServicePlan), { issuer: [:default_service_plan, :account] })
+    preload_associations(plans.grep(ServicePlan), [ :service, { issuer: [:default_service_plan, :account] }])
     preload_associations(plans.grep(ApplicationPlan), [:original, { issuer: [:default_application_plan, :account] }])
   end
 
