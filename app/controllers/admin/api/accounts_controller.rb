@@ -7,17 +7,22 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   # GET /admin/api/accounts.xml
   def index
     accounts = buyer_accounts
+    accounts = accounts.where(state: params[:state].to_s) if params[:state].present?
+    accounts = accounts.order(:created_at, :id).paginate(pagination_params)
 
-    # Only eager load for XML format which uses Account#to_xml that accesses these associations
-    accounts = accounts.includes(:users, :settings, :payment_detail, :country, :annotations, bought_plans: [:original]) if request.format.xml?
+    associations = %i[settings payment_detail]
+    associations += [:users, :country, :annotations, bought_plans: [:original]] if request.format.xml?
 
-    if state = params[:state].presence
-      accounts = accounts.where(:state => state.to_s)
+    # Optimization: `paginate` adds OFFSET which is an expensive operation. To avoid an expensive OFFSET, we paginate a
+    # narrow query that only returns ids, then get the full data only for those ids.
+    # Pagination metadata is lost in the `paginatied_ids` subquery. We need to wrap the results under
+    # `WillPaginate::Collection` in order for `respond_with` to find the metadata.
+    collection = WillPaginate::Collection.create(accounts.current_page, accounts.per_page, accounts.total_entries) do |page|
+      page.replace(Account.with(paginated_ids: accounts.select(id: :account_id)).joins(:paginated_ids)
+                          .order(:created_at, :id).includes(*associations).to_a)
     end
 
-    accounts = accounts.paginate(pagination_params)
-
-    respond_with(accounts)
+    respond_with(collection)
   end
 
   # Account Find
