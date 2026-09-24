@@ -120,12 +120,14 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :users
       Bullet.add_safelist class_name: "AccountContract", type: :n_plus_one_query, association: :plan
       Bullet.add_safelist class_name: "AccountPlan", type: :n_plus_one_query, association: :customizations
+      Bullet.add_safelist class_name: "AccountPlan", type: :n_plus_one_query, association: :issuer
       Bullet.add_safelist class_name: "AccountPlan", type: :n_plus_one_query, association: :pricing_rules
       Bullet.add_safelist class_name: "Alert", type: :n_plus_one_query, association: :cinstance
       Bullet.add_safelist class_name: "ApiDocs::Service", type: :unused_eager_loading, association: :service
       Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :customizations
       Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :pricing_rules
       Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :usage_limits
+      Bullet.add_safelist class_name: "ApplicationPlan", type: :unused_eager_loading, association: :issuer
       Bullet.add_safelist class_name: "BackendApi", type: :counter_cache, association: :backend_api_configs
       Bullet.add_safelist class_name: "CMS::Builtin::Section", type: :n_plus_one_query, association: :children
       Bullet.add_safelist class_name: "CMS::Builtin::Section", type: :n_plus_one_query, association: :parent
@@ -154,8 +156,10 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "ServiceContract", type: :n_plus_one_query, association: :plan
       Bullet.add_safelist class_name: "ServiceContract", type: :n_plus_one_query, association: :user_account
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :customizations
+      Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :issuer
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :pricing_rules
       Bullet.add_safelist class_name: "ServicePlan", type: :unused_eager_loading, association: :pricing_rules # Or features/buyers/accounts/service_contracts/index.feature:90 fails
+      Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :service
       Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :last_user
       Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :recent_post
       Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :metric
