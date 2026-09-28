@@ -126,7 +126,7 @@ class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCa
       expected_url += "?client_id=#{@authentication.client_id}"
       expected_url += "&nonce=my-random-nonce"
       expected_url += "&redirect_uri=#{redirect_uri}"
-      expected_url += "&response_type=id_token+token"
+      expected_url += "&response_type=id_token%20token"
       expected_url += "&scope=openid"
       expected_url += "&state=keycloak-auth-implicit-flow-3scale"
 
