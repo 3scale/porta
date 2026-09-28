@@ -8,16 +8,13 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   def index
     accounts = buyer_accounts
 
-    # Only eager load for XML format which uses Account#to_xml that accesses these associations
-    accounts = accounts.includes(:users, :settings, :payment_detail, :country, :annotations, bought_plans: [:original]) if request.format.xml?
-
     if state = params[:state].presence
       accounts = accounts.where(:state => state.to_s)
     end
 
-    accounts = accounts.paginate(pagination_params)
+    accounts = accounts.paginate(pagination_params).to_a
 
-    respond_with(accounts)
+    respond_with(preload_to_present(accounts))
   end
 
   # Account Find
@@ -117,13 +114,6 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
     @buyer_account ||= buyer_accounts.find(params[:id])
   end
 
-  def preload_to_present(accounts)
-    # Only preload for XML format which uses Account#to_xml that accesses these associations
-    ActiveRecord::Associations::Preloader.new(records: Array(accounts), associations: [:annotations, bought_plans: [:original]]).call if request.format.xml?
-
-    accounts
-  end
-
   def buyer_users
     @buyer_users ||= current_account.buyer_users
   end
@@ -137,6 +127,39 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   end
 
   private
+
+  def preload_to_present(accounts)
+    records = Array(accounts)
+    preload_presentation_associations(records)
+    preload_associations(records.select(&:buyer?), :provider_account)
+    preload_xml_plan_associations(records) if request.format.xml?
+
+    accounts
+  end
+
+  def preload_presentation_associations(records)
+    preload_associations(
+      records,
+      %i[annotations settings payment_detail] +
+        (current_account.defined_builtin_fields_names_for(Account).include?('country') ? [:country] : []) +
+        (request.format.xml? ? %i[users bought_plans] : [])
+    )
+  end
+
+  def preload_xml_plan_associations(accounts)
+    plans = accounts.flat_map(&:bought_plans)
+
+    preload_associations(plans.grep(AccountPlan), { issuer: :default_account_plan })
+    preload_associations(plans.grep(ServicePlan), [:service, { issuer: %i[default_service_plan account] }])
+    preload_associations(plans.grep(ApplicationPlan), [:original, { issuer: %i[default_application_plan account] }])
+  end
+
+  def preload_associations(records, associations)
+    records = records.reject { _1.association(associations).loaded? } if associations.is_a?(Symbol)
+    return if records.empty?
+
+    ActiveRecord::Associations::Preloader.new(records: records, associations: associations).call
+  end
 
   def find_buyer_account
     case
