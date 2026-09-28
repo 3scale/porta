@@ -1,12 +1,11 @@
-<%# This file only exists to support very old portals that don't use 3scale.js OR 3scale_v2.js
-    Packages included in this file are not guaranteed to support jQuery > 2, so unfortunately we
-    have to keep them.
+<%# This file only exists to support very old portals that don't use 3scale.js OR 3scale_v2.js.
+    It loads a fixed version of jQuery 2.1.4 (with jquery-migrate for 1.x compatibility).
+    Packages included in this file are not guaranteed to support jQuery > 2.
 %>
 
 <%= csrf_meta_tag %>
 
-<% jquery_version = defined?(jquery) ? jquery : '2.1.4' %>
-<%= javascript_include_tag "essential_assets/jquery-#{jquery_version}.min.js" %>
+<%= javascript_include_tag 'essential_assets/jquery-2.1.4.min.js' %>
 
 <%= javascript_include_tag 'essential_assets/jquery-migrate-1.2.1.min.js' %>
 
