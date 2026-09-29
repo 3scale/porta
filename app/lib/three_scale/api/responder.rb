@@ -3,9 +3,9 @@ class ThreeScale::Api::Responder < ActionController::Responder
   private
 
   def api_behavior
-    resource = serializable
-    return if get? && !stale_checked? && !controller.stale?(resource)
+    return if get? && !stale_checked? && !controller.stale?(primary_records)
 
+    resource = serializable
     resource = representer.prepare(resource) unless resource.frozen?
 
     case
@@ -74,12 +74,28 @@ class ThreeScale::Api::Responder < ActionController::Responder
     end
   end
 
+  def primary_records
+    @primary_records ||= begin
+      resource = options.fetch(:serialize) { self.resource }
+      return resource unless resource.is_a?(ActiveRecord::Relation)
+
+      ordered_relation(resource).unscope(:includes, :preload).to_a
+    end
+  end
+
   def serializable
     @serializable ||= begin
-      resource = options.fetch(:serialize){ self.resource }
-      resource = resource.is_a?(ActiveRecord::Relation) ? ordered_relation(resource).to_a : resource
-
-      resource
+      records = primary_records
+      if records.is_a?(Array)
+        resource = options.fetch(:serialize) { self.resource }
+        if resource.is_a?(ActiveRecord::Relation)
+          associations = resource.includes_values + resource.preload_values
+          unless associations.empty?
+            ActiveRecord::Associations::Preloader.new(records: records, associations: associations).call
+          end
+        end
+      end
+      records
     end
   end
 

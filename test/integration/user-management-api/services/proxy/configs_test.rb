@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
+  include NPlusOneControl::MinitestHelper
 
   def setup
     @account = FactoryBot.create(:provider_account)
@@ -23,7 +24,9 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
       'HTTP_IF_MODIFIED_SINCE' => response.header['Last-Modified'],
       'HTTP_IF_NONE_MATCH'     => response.header['ETag']
     }
-    get latest_admin_api_service_proxy_configs_path(params), headers: headers
+    assert_number_of_queries(13) do
+      get latest_admin_api_service_proxy_configs_path(params), headers: headers
+    end
     assert_response :not_modified
 
     get latest_admin_api_service_proxy_configs_path(params.merge(format: :xml))
@@ -48,7 +51,9 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
       'HTTP_IF_MODIFIED_SINCE' => response.header['Last-Modified'],
       'HTTP_IF_NONE_MATCH'     => response.header['ETag']
     }
-    get admin_api_service_proxy_config_path(params), headers: headers
+    assert_number_of_queries(13) do
+      get admin_api_service_proxy_config_path(params), headers: headers
+    end
     assert_response :not_modified
 
     get admin_api_service_proxy_config_path(params.merge(version: 'non-existing-version'))

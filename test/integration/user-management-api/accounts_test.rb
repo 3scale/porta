@@ -5,6 +5,7 @@ require 'test_helper'
 class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   include FieldsDefinitionsHelpers
   include TestHelpers::ApiPagination
+  include NPlusOneControl::MinitestHelper
 
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
@@ -118,7 +119,9 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
           'HTTP_IF_NONE_MATCH' => etag,
           'HTTP_IF_MODIFIED_SINCE' => last_modified
         }
-        get find_admin_api_accounts_path(format: :json), params: params.merge({ user_id: buyer_user.id }), headers: headers
+        assert_number_of_queries(18) do
+          get find_admin_api_accounts_path(format: :json), params: params.merge({ user_id: buyer_user.id }), headers: headers
+        end
         assert_response :not_modified
       end
 
@@ -165,7 +168,9 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
           'HTTP_IF_NONE_MATCH' => etag,
           'HTTP_IF_MODIFIED_SINCE' => last_modified
         }
-        get admin_api_accounts_path(format: :json), params: params, headers: headers
+        assert_number_of_queries(11) do
+          get admin_api_accounts_path(format: :json), params: params, headers: headers
+        end
         assert_response :not_modified
       end
 
