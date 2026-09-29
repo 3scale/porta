@@ -113,10 +113,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :admin_users
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :bought_cinstances
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :country
-      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :payment_detail
-      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :provider_account
-      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :settings
-      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :annotations
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :users
       Bullet.add_safelist class_name: "AccountContract", type: :n_plus_one_query, association: :plan
       Bullet.add_safelist class_name: "AccountPlan", type: :n_plus_one_query, association: :customizations
