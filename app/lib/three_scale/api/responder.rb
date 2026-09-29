@@ -4,7 +4,7 @@ class ThreeScale::Api::Responder < ActionController::Responder
 
   def api_behavior
     resource = serializable
-    return if get? && !controller.stale?(resource)
+    return if get? && !stale_checked? && !controller.stale?(resource)
 
     resource = representer.prepare(resource) unless resource.frozen?
 
@@ -85,5 +85,9 @@ class ThreeScale::Api::Responder < ActionController::Responder
 
   def ordered_relation(relation)
     relation.order_values.empty? ? relation.order(:id) : relation
+  end
+
+  def stale_checked?
+    controller.response.etag.present? || controller.response.last_modified.present?
   end
 end
