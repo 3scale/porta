@@ -21,6 +21,13 @@ module ThreeScale
     end
 
     def deferred_lookup_query_shape?
+      # Deferred lookup selects IDs for the requested page, then fetches the full
+      # records for those IDs. It requires a single-column primary key and a plain
+      # model query. Custom selects, joins, or eager loading can change which records
+      # the IDs refer to. Grouping, HAVING, or DISTINCT can change the returned rows.
+      # Custom FROM clauses can change the source, and existing CTEs can conflict
+      # with the added CTE. Locks must keep their original behavior, so those queries
+      # use WillPaginate's normal path.
       simple_model_rows? && unaggregated_rows? && default_query_context?
     end
 
