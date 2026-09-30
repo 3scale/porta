@@ -72,7 +72,7 @@ module ThreeScale
     def optimized_lookup_records
       primary_key = klass.primary_key
       ordered_relation = order_values.empty? ? order(primary_key) : self
-      page_ids = ordered_relation.select(primary_key => optimized_lookup_foreign_key)
+      page_ids = ordered_relation.select(primary_key => klass.model_name.to_s.foreign_key)
 
       ordered_relation
         .except(:limit, :offset)
@@ -80,10 +80,6 @@ module ThreeScale
         .joins(CTE_NAME)
         .load
         .records
-    end
-
-    def optimized_lookup_foreign_key
-      klass.model_name.singular.foreign_key
     end
   end
 end
