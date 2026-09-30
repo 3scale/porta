@@ -82,9 +82,7 @@ class ThreeScale::WillPaginateMysqlDeferredLookupTest < ActiveSupport::TestCase
       'custom from' => User.from('users'),
       'lock' => User.lock
     }
-    if User.connection.supports_common_table_expressions?
-      unsafe_relations['existing CTE'] = User.with(other_users: User.select(:id))
-    end
+    unsafe_relations['existing CTE'] = User.with(other_users: User.select(:id)) if User.connection.supports_common_table_expressions?
 
     unsafe_relations.each do |description, base_relation|
       relation = base_relation.where(id: user.id).paginate(page: 1, per_page: 1, total_entries: 1)
@@ -123,13 +121,14 @@ class ThreeScale::WillPaginateMysqlDeferredLookupTest < ActiveSupport::TestCase
     skip 'requires CTE support' unless ActiveRecord::Base.connection.supports_common_table_expressions?
   end
 
-  def capture_sql_queries
+  def capture_sql_queries(&block)
     queries = []
-    callback = lambda do |_name, _start, _finish, _id, payload|
-      queries << payload[:sql] unless payload[:name] == 'SCHEMA'
+    callback = ->(_name, _start, _finish, _id, payload) do
+      name, sql = payload.values_at(:name, :sql)
+      queries << sql unless name == 'SCHEMA'
     end
 
-    ActiveSupport::Notifications.subscribed(callback, 'sql.active_record') { yield }
+    ActiveSupport::Notifications.subscribed(callback, 'sql.active_record', &block)
     queries
   end
 end
