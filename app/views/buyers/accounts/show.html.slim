@@ -13,7 +13,7 @@
           = link_to 'Edit', edit_admin_buyers_account_path(@account), class: 'action edit'
       = render partial: 'shared/annotations', locals: { resource: @account, plain: true }
 
-div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
+div class="pf-l-grid pf-m-gutter pf-m-all-6-col lists-with-borderless-bottom"
   / Left column
   div class="pf-l-grid__item"
     div class="pf-l-flex pf-m-column pf-m-flex-1"
@@ -56,10 +56,3 @@ div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
             div class="pf-c-card__title" Application
             div class="pf-c-card__body"
               = render partial: 'buyers/applications/widget', locals: { cinstance: cinstance }
-
-/ HACK: This is old style from dashboard_card. Remove it once table.list is replaced with Patternfly
-css:
-  table.list tr:last-child th,
-  table.list tr:last-child td {
-    border-bottom: none;
-  }
