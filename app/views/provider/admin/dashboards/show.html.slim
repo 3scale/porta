@@ -1,5 +1,4 @@
 - content_for :stylesheets do
-  = stylesheet_link_tag 'vendor/c3'
   = stylesheet_link_tag 'provider/admin/dashboard'
 
 - content_for :javascripts do
@@ -33,6 +32,7 @@ div class="Dashboard pf-l-flex"
       div class="pf-c-content"
         h1 APIs
       - if presenter.access_to_products? || presenter.access_to_backends?
+        / Gutter space is defined by --pf-l-grid--m-gutter--GridGap, default is 1rem.
         div class="pf-l-grid pf-m-gutter"
           - if presenter.access_to_products?
             div id="products-widget" class="pf-l-grid__item pf-m-6-col" data-products-widget=presenter.products_widget_data.to_json

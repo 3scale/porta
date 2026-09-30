@@ -1,6 +1,9 @@
 - content_for :title, 'Traffic analytics'
 - content_for :page_header_title, "Traffic"
 
+- content_for :stylesheets do
+  = stylesheet_link_tag 'provider/stats'
+
 - content_for :javascripts do
   = javascript_packs_with_chunks_tag 'provider_stats'
 
