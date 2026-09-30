@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-require 'active_record/database_configurations'
-require 'system/database'
+ActiveSupport.on_load(:active_record) do
+  if System::Database.mysql?
+    require 'three_scale/will_paginate_mysql_deferred_lookup'
 
-if System::Database.mysql?
-  require 'will_paginate/active_record'
-  require 'three_scale/will_paginate_mysql_deferred_lookup'
-
-  WillPaginate::ActiveRecord::RelationMethods.prepend(ThreeScale::WillPaginateMysqlDeferredLookup)
+    WillPaginate::ActiveRecord::RelationMethods.prepend(ThreeScale::WillPaginateMysqlDeferredLookup)
+  end
 end
+
