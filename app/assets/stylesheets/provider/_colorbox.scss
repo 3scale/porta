@@ -1,6 +1,6 @@
 @use 'provider/colors' as *;
 @use 'provider/typography' as *;
-@use 'provider/links' as *;
+@use 'utils' as *;
 @use 'sass:math';
 
 /* stylelint-disable selector-id-pattern */

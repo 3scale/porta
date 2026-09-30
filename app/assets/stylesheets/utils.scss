@@ -2,3 +2,12 @@
   background-color: white;
   box-shadow: var(--pf-global--BoxShadow--sm);
 }
+
+@mixin iconic($content) {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 400;
+  font-style: normal;
+  display: inline-block;
+  text-decoration: none;
+  content: $content;
+}

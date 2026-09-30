@@ -1,26 +1,21 @@
 @forward 'provider/typography';
 @forward 'provider/layouts/commons';
 
-// vendored styles
+/* vendored styles */
 @forward 'vendor/jquery.ui';
 
-// TODO: remove this crap
-// but be aware that you have to remove all div.right and similar shit
+/* TODO: replace layout rules (div.right, div.left, etc.) with CSS Grid, then remove */
 @forward 'provider/legacy_theme';
 
-// modules and constants
+/* modules and constants */
 @forward 'provider/commons';
-@forward 'provider/buttons';
 @forward 'provider/links';
 @forward 'provider/footer';
 @forward 'provider/tables';
 @forward 'provider/forms';
-@forward 'vendor/c3';
-@forward 'provider/stats/base';
-@forward 'provider/stats/selector';
 @forward 'provider/logo';
 
-// view specific stylesheets placed in the controller paths
+/* TODO: extract as page-specific stylesheets */
 @forward 'provider/settings_box';
 @forward 'provider/colorbox';
 @forward 'provider/pagination';

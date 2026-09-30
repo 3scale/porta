@@ -1,5 +1,11 @@
 @use 'provider/colors' as *;
 @use 'provider/typography' as *;
+@use 'utils' as *;
+
+a {
+  text-decoration: none;
+  color: $link-color;
+}
 
 p a:not(.pf-c-button) {
   text-decoration: underline;
@@ -10,19 +16,11 @@ p a:not(.pf-c-button) {
   }
 }
 
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
+.button,
 a {
-  text-decoration: none;
-  color: $link-color;
-}
-
-@mixin iconic($content) {
-  font-family: "Font Awesome 5 Free";
-  font-weight: $font-weight-normal;
-  font-style: normal;
-  display: inline-block;
-  text-decoration: none;
-  content: $content;
+  &.next {
+    float: right;
+  }
 }
 
 a.action:not(.pf-c-button),
@@ -115,6 +113,4 @@ input[type='submit'].action {
       color: $link-hover-color;
     }
   }
-
 }
-
