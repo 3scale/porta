@@ -1,5 +1,9 @@
 <% content_for :page_header_title, @metric.child? ? "New Method" : "New Metric" %>
 
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag 'provider/admin/backend_apis/metrics_new' %>
+<% end %>
+
 <% content_for :javascripts do %>
   <%= stylesheet_packs_chunks_tag 'pf_form' %>
 <% end %>

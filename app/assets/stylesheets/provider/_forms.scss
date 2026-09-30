@@ -3,9 +3,9 @@
 @use 'sass:math';
 @use 'utils';
 
-$fieldset-margin-bottom: 32px; // --pf-c-form__group--m-action--MarginTop
+$fieldset-margin-bottom: var(--pf-c-form__group--m-action--MarginTop);
 
-/* stylelint-disable no-descending-specificity -- FIXME */
+/* stylelint-disable no-descending-specificity */
 input[type='text']:not(.pf-c-form-control, .pf-c-text-input-group__text-input),
 input[type='search']:not(.pf-c-form-control),
 input[type='number']:not(.pf-c-form-control),
@@ -46,11 +46,6 @@ form.formtastic:not(.pf-c-form) fieldset.inputs input[type='password'] {
   }
 }
 
-// HACK: overrides form.button-to min height so that it fits pf-c-table
-.pf-c-table form.button-to button.unset-min-height {
-  height: unset;
-}
-
 .error input[type='text'],
 .error textarea,
 .error select,
@@ -68,7 +63,7 @@ textarea {
   height: line-height-times(4.5);
 }
 
-// TODO: where is this applied and why isn't it wrapper around form?
+/* TODO: where is this applied and why isn't it wrapped around form? */
 button:not(.pf-c-button, .pf-c-nav__link, .pf-c-dropdown__menu-item, .pf-c-select__menu-item,
   .pf-c-data-list__item-draggable-button, .pf-c-dropdown__toggle-button) {
   min-width: line-height-times(2);
@@ -79,6 +74,7 @@ form + hr {
   margin: line-height-times(1) 0;
 }
 
+/* only used in proxy_rules (mapping rules) */
 td.delta {
   max-width: line-height-times(2);
 }
@@ -152,6 +148,17 @@ form.formtastic:not(.pf-c-form) fieldset.actions ol {
 }
 
 form.formtastic:not(.pf-c-form) {
+  @include utils.white-box-shadow;
+
+  min-width: line-height-times(20);
+  padding: line-height-times(1);
+  text-align: left;
+  width: 100%;
+
+  &:first-of-type {
+    margin: 0;
+  }
+
   ol,
   ul,
   li {
@@ -163,46 +170,6 @@ form.formtastic:not(.pf-c-form) {
     .inputs ol {
       position: relative;
     }
-  }
-}
-
-form.formtastic:not(.pf-c-form) ol > li {
-  padding: 0;
-  margin: 0 0 line-height-times(1);
-  max-width: line-height-times(32);
-  position: relative;
-
-  &.hidden {
-    margin: 0;
-  }
-}
-
-form.formtastic:not(.pf-c-form) table fieldset > ol > li {
-  margin: 0 0 line-height-times(.5);
-  min-width: 0;
-}
-
-form.formtastic:not(.pf-c-form) fieldset > ol > li.radio fieldset ol li {
-  margin: 0 0 line-height-times(.25);
-}
-
-/* -------------------------------------------------------------------------------------------------
-Load this stylesheet after formtastic.css in your layouts to override the CSS to suit your needs.
--------------------------------------------------------------------------------------------------- */
-
-/* stylelint-disable-next-line no-duplicate-selectors -- FIXME: we need to treat this carefully */
-form.formtastic:not(.pf-c-form) {
-  @include utils.white-box-shadow;
-
-  min-width: line-height-times(20);
-  padding: line-height-times(1);
-  text-align: left;
-
-  /* overriding legacy_theme text-align: center */
-  width: 100%;
-
-  &:first-of-type {
-    margin: 0;
   }
 
   fieldset.inputs[data-behavior~="toggle-inputs"] {
@@ -237,10 +204,6 @@ form.formtastic:not(.pf-c-form) {
         color: $font-color;
       }
     }
-  }
-
-  p.instruction {
-    margin: 10px 0;
   }
 
   fieldset > ol > li label {
@@ -299,12 +262,31 @@ form.formtastic:not(.pf-c-form) {
     border: 0;
   }
 
-  // TODO: use the actual PF vars here
   legend:not(.label) {
-    color: rgb(21, 21, 21); // --pf-c-content--Color
-    font-size: 18px; // --pf-c-form__section-title--FontSize
-    font-weight: 700; // --pf-c-form__section-title--FontWeight
+    color: var(--pf-c-content--Color);
+    font-size: var(--pf-c-form__section-title--FontSize);
+    font-weight: var(--pf-c-form__section-title--FontWeight);
   }
+}
+
+form.formtastic:not(.pf-c-form) ol > li {
+  padding: 0;
+  margin: 0 0 line-height-times(1);
+  max-width: line-height-times(32);
+  position: relative;
+
+  &.hidden {
+    margin: 0;
+  }
+}
+
+form.formtastic:not(.pf-c-form) table fieldset > ol > li {
+  margin: 0 0 line-height-times(.5);
+  min-width: 0;
+}
+
+form.formtastic:not(.pf-c-form) fieldset > ol > li.radio fieldset ol li {
+  margin: 0 0 line-height-times(.25);
 }
 
 form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label {
@@ -364,20 +346,6 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {
   }
 }
 
-/*** FancyBox Adjustments ***/
-#fancybox-inner form.formtastic:not(.pf-c-form) fieldset > ol > li label {
-  float: none;
-  text-align: left;
-}
-
-#fancybox-inner form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-hints {
-  margin: 0;
-}
-
-#fancybox-inner form.formtastic:not(.pf-c-form) fieldset.actions {
-  padding: 0;
-}
-
 form.formtastic:not(.pf-c-form) strong small {
   font-size: $font-size-sm;
 }
@@ -391,9 +359,7 @@ form.formtastic:not(.pf-c-form) .radio.required abbr {
 }
 
 form.button-to,
-form.button-to div,
-form.inline,
-form.inline div {
+form.button-to div {
   display: inline;
 }
 
@@ -422,47 +388,19 @@ li.hidden {
   display: none;
 }
 
-form#liquid-settings > fieldset {
-  border-top: 0;
-}
-
-// TODO: will be moved eventually to a NewMetric React component
-form.formtastic#new_metric {
-  li#metric_system_name_input {
-    div {
-      display: block;
-
-      input,
-      p,
-      #system_name_popover {
-        display: inline;
-      }
-
-      input {
-        margin-right: .5rem;
-        width: 60%;
-      }
-
-      p {
-        margin-right: 1rem;
-      }
-    }
-  }
-}
-
-// HACK: first pf-c-section in a form don't have margin-top. However, formtastic adds hidden fields
-// before and therefore the section is not a first element and margin-top is maintained.
+/* HACK: first pf-c-section in a form don't have margin-top. However, formtastic adds hidden fields
+   before and therefore the section is not a first element and margin-top is maintained. */
 .pf-c-form > input[type="hidden"] + .pf-c-form__section {
   margin-top: 0;
 }
 
-// HACK: this class needs ot be under a pf-c-form but most forms are still very old and would break
-// if we add this class directly. This is to give the required "star" its styles. Remove when all
-// forms use pf-c-form
-// TODO: use actual PF vars
+/* HACK: this class needs to be under a pf-c-form but most forms are still very old and would break
+   if we add this class directly. This is to give the required "star" its styles. Remove when all
+   forms use pf-c-form.
+   TODO: use actual PF vars */
 form:not(.pf-c-form) .pf-c-form__label-required {
-  margin-left: 0.25rem; // --pf-c-form__label-required--MarginLeft
-  font-size: 0.875rem; // --pf-c-form__label-required--FontSize
-  color: #c9190b; // --pf-c-form__label-required--Color
+  margin-left: var(--pf-c-form__label-required--MarginLeft, 0.25rem);
+  font-size: var(--pf-c-form__label-required--FontSize, 0.875rem);
+  color: var(--pf-c-form__label-required--Color, #c9190b);
 }
 /* stylelint-enable no-descending-specificity */
