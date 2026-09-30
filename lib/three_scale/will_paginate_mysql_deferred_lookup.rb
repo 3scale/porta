@@ -21,16 +21,26 @@ module ThreeScale
     end
 
     def deferred_lookup_query_shape?
+      simple_model_rows? && unaggregated_rows? && default_query_context?
+    end
+
+    def simple_model_rows?
       klass.primary_key.is_a?(String) &&
         select_values.empty? &&
         joins_values.empty? &&
         left_outer_joins_values.empty? &&
         eager_load_values.empty? &&
-        !eager_loading? &&
-        group_values.empty? &&
+        !eager_loading?
+    end
+
+    def unaggregated_rows?
+      group_values.empty? &&
         having_clause.empty? &&
-        !distinct_value &&
-        from_clause.empty? &&
+        !distinct_value
+    end
+
+    def default_query_context?
+      from_clause.empty? &&
         with_values.empty? &&
         lock_value.nil?
     end
