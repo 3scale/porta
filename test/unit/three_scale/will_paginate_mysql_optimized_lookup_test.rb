@@ -2,20 +2,20 @@
 
 require 'test_helper'
 require 'will_paginate/active_record'
-require 'three_scale/will_paginate_mysql_deferred_lookup'
+require 'three_scale/will_paginate_mysql_optimized_lookup'
 
-class ThreeScale::WillPaginateMysqlDeferredLookupTest < ActiveSupport::TestCase
-  test 'the deferred lookup is prepended only for MySQL' do
+class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
+  test 'the optimized lookup is prepended only for MySQL' do
     relation_methods = WillPaginate::ActiveRecord::RelationMethods
-    deferred_lookup_is_prepended = relation_methods.ancestors.include?(ThreeScale::WillPaginateMysqlDeferredLookup)
+    optimized_lookup_is_prepended = relation_methods.ancestors.include?(ThreeScale::WillPaginateMysqlOptimizedLookup)
 
-    assert_equal System::Database.mysql?, deferred_lookup_is_prepended
+    assert_equal System::Database.mysql?, optimized_lookup_is_prepended
   end
 
   test 'paginated relations stay lazy and load the requested page through a CTE' do
     skip_unless_mysql_with_cte
 
-    prefix = "deferred-lookup-#{SecureRandom.hex(8)}"
+    prefix = "optimized-lookup-#{SecureRandom.hex(8)}"
     countries = (1..5).map do |number|
       FactoryBot.create(:country, name: "#{prefix}-#{number}")
     end
@@ -30,12 +30,12 @@ class ThreeScale::WillPaginateMysqlDeferredLookupTest < ActiveSupport::TestCase
 
     page = nil
     queries = capture_sql_queries { page = relation.to_a }
-    deferred_lookup_query = queries.find { |sql| sql.include?('will_paginate_page_ids') }
+    optimized_lookup_query = queries.find { |sql| sql.include?('will_paginate_page_ids') }
 
-    assert_not_nil deferred_lookup_query
-    assert_match(/\bLIMIT\s+2\s+OFFSET\s+2\b/i, deferred_lookup_query)
-    assert_equal 1, deferred_lookup_query.scan(/\bLIMIT\b/i).length
-    assert_equal 1, deferred_lookup_query.scan(/\bOFFSET\b/i).length
+    assert_not_nil optimized_lookup_query
+    assert_match(/\bLIMIT\s+2\s+OFFSET\s+2\b/i, optimized_lookup_query)
+    assert_equal 1, optimized_lookup_query.scan(/\bLIMIT\b/i).length
+    assert_equal 1, optimized_lookup_query.scan(/\bOFFSET\b/i).length
     assert_equal countries.sort_by(&:name).reverse.drop(2).take(2).map(&:id), page.map(&:id)
     assert relation.loaded?
 
@@ -52,7 +52,7 @@ class ThreeScale::WillPaginateMysqlDeferredLookupTest < ActiveSupport::TestCase
     assert_empty(capture_sql_queries { relation.to_a })
   end
 
-  test 'preloaded associations remain loaded after deferred lookup' do
+  test 'preloaded associations remain loaded after optimized lookup' do
     skip_unless_mysql_with_cte
 
     user = FactoryBot.create(:user_with_account)
