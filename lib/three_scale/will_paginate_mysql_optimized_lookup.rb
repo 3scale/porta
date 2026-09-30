@@ -1,33 +1,41 @@
 # frozen_string_literal: true
 
 module ThreeScale
-  module WillPaginateMysqlDeferredLookup
+  # Normal pagination uses LIMIT/OFFSET to skip rows before returning full records:
+  #   SELECT widgets.* FROM widgets ORDER BY widgets.id LIMIT 50 OFFSET 10000
+  #
+  # The optimized lookup selects IDs for the page first, then fetches those rows:
+  #   WITH will_paginate_page_ids AS (
+  #     SELECT widgets.id AS widget_id FROM widgets
+  #     ORDER BY widgets.id LIMIT 50 OFFSET 10000
+  #   )
+  #   SELECT widgets.* FROM widgets
+  #   JOIN will_paginate_page_ids ON will_paginate_page_ids.widget_id = widgets.id
+  #
+  # It applies to paginated MySQL relations with CTE support and a single-column
+  # primary key. The relation must have no custom select, joins or eager loading,
+  # grouping, HAVING, DISTINCT, custom FROM, existing CTE, or lock. Other relation
+  # shapes use WillPaginate's usual query.
+  module WillPaginateMysqlOptimizedLookup
     CTE_NAME = :will_paginate_page_ids
 
     def to_a
-      return super unless deferred_lookup?
+      return super unless optimized_lookup?
 
-      load_records(deferred_lookup_records) unless loaded?
+      load_records(optimized_lookup_records) unless loaded?
       super
     end
 
     private
 
-    def deferred_lookup?
+    def optimized_lookup?
       current_page.present? &&
         limit_value.present? &&
         connection.supports_common_table_expressions? &&
-        deferred_lookup_query_shape?
+        optimized_lookup_query_shape?
     end
 
-    def deferred_lookup_query_shape?
-      # Deferred lookup selects IDs for the requested page, then fetches the full
-      # records for those IDs. It requires a single-column primary key and a plain
-      # model query. Custom selects, joins, or eager loading can change which records
-      # the IDs refer to. Grouping, HAVING, or DISTINCT can change the returned rows.
-      # Custom FROM clauses can change the source, and existing CTEs can conflict
-      # with the added CTE. Locks must keep their original behavior, so those queries
-      # use WillPaginate's normal path.
+    def optimized_lookup_query_shape?
       simple_model_rows? && unaggregated_rows? && default_query_context?
     end
 
@@ -61,10 +69,10 @@ module ThreeScale
         lock_value.nil?
     end
 
-    def deferred_lookup_records
+    def optimized_lookup_records
       primary_key = klass.primary_key
       ordered_relation = order_values.empty? ? order(primary_key) : self
-      page_ids = ordered_relation.select(primary_key => deferred_lookup_foreign_key)
+      page_ids = ordered_relation.select(primary_key => optimized_lookup_foreign_key)
 
       ordered_relation
         .except(:limit, :offset)
@@ -74,7 +82,7 @@ module ThreeScale
         .records
     end
 
-    def deferred_lookup_foreign_key
+    def optimized_lookup_foreign_key
       klass.model_name.singular.foreign_key
     end
   end
