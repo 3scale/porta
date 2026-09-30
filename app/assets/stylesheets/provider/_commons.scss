@@ -1,7 +1,6 @@
 @use 'provider/colors' as *;
 @use 'provider/typography' as *;
 @use 'sass:math';
-@use 'utils';
 
 html {
   @include typography-base;
@@ -11,20 +10,17 @@ body {
   text-align: center;
 }
 
-main > h1,
-main > h2 {
-  font-weight: $font-weight-light;
+* {
+  margin: 0;
 }
 
-main > h1:first-child,
-main > h2:first-child {
-  background-color: $body-background;
-  margin: line-height-times(-1);
-  margin-bottom: line-height-times(1);
-  padding: line-height-times(1);
+ul,
+p,
+ol,
+dl {
+  padding: 0;
 }
 
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
 h1 {
   font-size: $main-title-font-size;
   font-weight: $font-weight-light;
@@ -36,13 +32,11 @@ h1 {
   }
 }
 
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
 h2,
 h3 {
   margin-bottom: line-height-times(.5);
 }
 
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
 .pf-c-page__main-section h2 {
   font-weight: $font-weight-bold;
   font-size: $secondary-title-font-size;
@@ -51,17 +45,13 @@ h3 {
 .pf-c-page__main-section h3 {
   font-size: $sub-title-font-size;
   margin-bottom: 0;
-
-  em {
-    font-style: italic;
-  }
 }
 
 p {
   margin: line-height-times(.5) 0 line-height-times(1);
 }
 
-// HACK: this gives card-like style to all pre-existing divs
+/* HACK: this gives card-like style to all pre-existing divs */
 :not(.pf-c-content) > h1 + p,
 :not(.pf-c-content) > h2 + p {
   background-color: $body-background;
@@ -69,37 +59,14 @@ p {
   padding: line-height-times(1);
 }
 
-main > p:not(:first-child) {
-  @include utils.white-box-shadow;
-
-  padding: line-height-times(1);
-}
-
-main > h1:first-child + p,
-main > h2:first-child + p {
-  box-shadow: none;
-  margin: line-height-times(-2) line-height-times(-1) line-height-times(1);
-}
-
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
+/* stylelint-disable-next-line no-descending-specificity -- false positive: sets margin, not padding like the reset above */
 dd p {
   margin: 0;
 }
 
+/* only used in provider/admin/liquid_docs and swagger API docs */
 pre:not(.pf-c-code-block__pre) {
   margin: line-height-times(.5) 0;
-}
-
-* {
-  margin: 0;
-}
-
-ul,
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
-p,
-ol,
-dl {
-  padding: 0;
 }
 
 p + ul:not(.pf-c-list) {
@@ -131,7 +98,6 @@ p + ul:not(.pf-c-list) {
 
 .u-dl {
   @extend %dl;
-
 }
 
 .u-dl-term {
@@ -143,12 +109,9 @@ p + ul:not(.pf-c-list) {
 }
 
 .u-dl-definition {
-  /* stylelint-disable-next-line declaration-property-value-keyword-no-deprecated -- FIXME: update Sass */
-  word-break: break-word;
-}
-
-.u-dl-definition {
   @extend %dd;
+
+  overflow-wrap: break-word;
 
   .action {
     float: right;
@@ -159,10 +122,7 @@ p + ul:not(.pf-c-list) {
   }
 }
 
-a img {
-  border: none;
-}
-
+/* only used in provider/admin/liquid_docs and swagger API docs */
 pre code:not(.pf-c-code-block__code) {
   border-radius: $border-radius;
   margin: line-height-times(.5) 0 line-height-times(1);
@@ -171,17 +131,18 @@ pre code:not(.pf-c-code-block__code) {
   background-color: var(--pf-global--BackgroundColor--light-200);
   border: $border-width solid $border-color;
 
-
   &:hover {
     overflow: auto;
   }
 }
 
+/* only used in provider/admin/account/change_plans/widget.html.erb */
 .u-divider {
   height: line-height-times(1);
   margin: line-height-times(.5) 0;
 }
 
+/* .u-hr only used in provider/admin/account/change_plans/widget.html.erb */
 .u-hr,
 hr {
   border: 0;
@@ -192,6 +153,7 @@ hr {
   background: $border-color;
 }
 
+/* only used in api/integrations/apicast/shared/_mapping_rule.html.erb */
 .ui-sortable-handler {
   color: $success-color;
   cursor: move;

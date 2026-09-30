@@ -2,19 +2,9 @@
 @use 'provider/typography' as *;
 @use 'sass:math';
 
-// WARNING: this is just a magic value, I do not know why it works
-$table-columns-width: line-height-times(11);
-$search-header-width: line-height-times(4);
-
-/* stylelint-disable no-descending-specificity -- FIXME */
 table:not(.pf-c-table) {
   background-color: $body-background;
   width: 100%;
-
-  .search th {
-    height: line-height-times(3);
-    vertical-align: middle;
-  }
 
   td,
   th {
@@ -23,26 +13,16 @@ table:not(.pf-c-table) {
     vertical-align: top;
   }
 
-
   .title {
     max-width: line-height-times(5);
   }
 
-  .operations:not(.pf-c-table__action),
-  td.action {
+  .operations:not(.pf-c-table__action) {
     padding-right: 0;
     text-align: right;
   }
 }
 
-th.header {
-  border-bottom: solid 1px $border-color;
-  color: $label-color;
-  font-variant: small-caps;
-  padding-top: line-height-times(2);
-}
-
-// TODO: seek and destroy .is-inline, .StatsMethodsTable
 table:not(.pf-c-table) a.action,
 table:not(.pf-c-table) button.action {
   margin: line-height-times(-0.25) 0 line-height-times(-0.25) line-height-times(.25);
@@ -51,20 +31,16 @@ table:not(.pf-c-table) button.action {
 }
 
 table.list {
-  td,
-  th {
+  td {
     border-bottom: $border-width solid $border-color;
     font-weight: $font-weight-normal;
   }
 
-  .feature {
-    td,
-    th {
-      &:last-child {
-        padding-right: 0;
-        text-align: right;
-      }
-    }
+  th {
+    border-bottom: $border-width solid $border-color;
+    font-weight: $font-weight-normal;
+    padding-right: line-height-times(.5);
+    text-align: left;
   }
 
   .action:last-child,
@@ -82,80 +58,43 @@ table.list {
   margin-top: 0;
   width: 100%;
 
-  th {
-    border-bottom: $border-width solid $border-color;
-    padding-right: line-height-times(.5);
-    text-align: left;
-  }
-
+  /* only used in plans/_widget.html.erb */
   &.list-checkmarks tr th {
-    /* stylelint-disable-next-line declaration-property-value-keyword-no-deprecated -- FIXME: update sass */
-    word-break: break-word;
+    overflow-wrap: break-word;
+
+    &.header {
+      color: $label-color;
+      font-variant: small-caps;
+    }
   }
-}
-
-table.mini {
-  border: line-height-times(1) solid white;
-}
-
-table.mini td {
-  padding-right: line-height-times(1);
-}
-
-table.mini {
-  width: auto;
-}
-
-// --- components/tables.css ---
-
-td.right {
-  text-align: right;
 }
 
 table .select {
   min-width: line-height-times(1);
 }
 
-table#mapping_rules {
-  tr th a,
-  tr td.actions a {
-    display: inline-block;
-  }
-
-  tr td.actions a {
-    margin-left: line-height-times(.5);
-  }
-}
-
 .u-amount {
   text-align: right;
-}
-
-// Overrides
-table#mapping_rules .actions a.action.add {
-  margin: line-height-times(-0.25) line-height-times(.5);
 }
 
 td.metric,
 td.pattern,
 td.StatsMethodsTable-name {
-  /* stylelint-disable-next-line declaration-property-value-keyword-no-deprecated -- FIXME: update sass */
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .pf-c-table {
-  // HACK: old tables that has a search form element get styled as a table-cell and it breaks the
-  // total colspan. This rule makes sure the form is never visible and instead a "td" element fills
-  // the colspan. Apparently this does not affect Chrome and Firefox.
-  // TODO: this won't be necessary once all legacy tables have been upgraded with Patternfly.
-  form.search {
-    display: none;
-  }
-
   tr.unread {
     td[data-label] a {
       font-weight: $font-weight-bold;
     }
   }
 }
-/* stylelint-enable no-descending-specificity */
+
+/* only used in buyers/accounts/show.html.erb */
+.lists-with-borderless-bottom {
+  table.list tr:last-child th,
+  table.list tr:last-child td {
+    border-bottom: none;
+  }
+}
