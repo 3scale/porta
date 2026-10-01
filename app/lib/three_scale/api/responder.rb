@@ -74,6 +74,7 @@ class ThreeScale::Api::Responder < ActionController::Responder
     end
   end
 
+  # when represented resource is an ActiveRecord::Relation, fetch without `includes/preload`
   def primary_records
     @primary_records ||= begin
       resource = options.fetch(:serialize) { self.resource }
@@ -83,6 +84,7 @@ class ThreeScale::Api::Responder < ActionController::Responder
     end
   end
 
+  # when represented resource is an ActiveRecord::Relation, fetch `includes/preload` we previously skipped
   def serializable
     @serializable ||= begin
       records = primary_records
