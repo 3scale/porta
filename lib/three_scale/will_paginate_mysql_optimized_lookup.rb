@@ -20,7 +20,7 @@ module ThreeScale
     CTE_NAME = :will_paginate_page_ids
 
     def to_a
-      return super unless optimized_lookup?
+      return super unless can_optimize?
 
       load_records(optimized_lookup_records) unless loaded?
       super
@@ -28,7 +28,7 @@ module ThreeScale
 
     private
 
-    def optimized_lookup?
+    def can_optimize?
       current_page.present? &&
         limit_value.present? &&
         connection.supports_common_table_expressions? &&
