@@ -1,10 +1,10 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
+import { Alert, Spinner } from '@patternfly/react-core'
 
 import { ServiceDiscoveryForm } from 'NewService/components/ServiceDiscoveryForm'
 import * as utils from 'utilities/fetchData'
 import { FormWrapper } from 'NewService/components/FormElements/FormWrapper'
-import { ErrorMessage } from 'NewService/components/FormElements/ErrorMessage'
 import { ServiceDiscoveryListItems } from 'NewService/components/FormElements/ServiceDiscoveryListItems'
 import { waitForPromises } from 'utilities/test-utils'
 
@@ -12,6 +12,7 @@ import type { Props } from 'NewService/components/ServiceDiscoveryForm'
 
 const props: Props = {
   formActionPath: 'action-path',
+  loadingProjects: false,
   setLoadingProjects: jest.fn()
 }
 
@@ -32,6 +33,14 @@ it('should render `ServiceDiscoveryListItems` child', () => {
   expect(wrapper.exists(ServiceDiscoveryListItems)).toEqual(true)
 })
 
+it('should render a spinner when loading projects', () => {
+  const wrapper = mount(<ServiceDiscoveryForm {...{ ...props, loadingProjects: true }} />)
+  expect(wrapper.exists(Spinner)).toEqual(true)
+
+  wrapper.setProps({ loadingProjects: false })
+  expect(wrapper.exists(Spinner)).toEqual(false)
+})
+
 describe('fetchProjects', () => {
   const fetch = jest.spyOn(utils, 'fetchData')
 
@@ -46,7 +55,7 @@ describe('fetchProjects', () => {
     const wrapper = mount(<ServiceDiscoveryForm {...props} />)
 
     await waitForPromises(wrapper)
-    expect(wrapper.find(ErrorMessage).text()).toContain(msg)
+    expect(wrapper.find(Alert).text()).toContain(msg)
   })
 
   it('should fetch projects when first redendered', async () => {
