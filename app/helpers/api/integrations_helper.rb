@@ -91,6 +91,7 @@ module Api::IntegrationsHelper
     proxy_rules = owner.proxy_rules
     last_rule = proxy_rules.last
     return 'None' unless last_rule
+
     code = content_tag(:code) { "#{proxy_rule_uri(path, last_rule)} => #{last_rule.metric.name}" }
     code + link_to_more_proxy_rules(proxy_rules, proxy_rules_path_for(owner))
   end
@@ -104,6 +105,7 @@ module Api::IntegrationsHelper
   def link_to_more_proxy_rules(proxy_rules, url_to_more)
     rules_size = proxy_rules.size
     return '' if rules_size <= 1
+
     link_to(" and #{rules_size - 1} more.", url_to_more)
   end
 end

@@ -140,6 +140,7 @@ $font-weight-bold: 700;
 }
 
 .cm-s-neat .CodeMirror-cursor {
+  /* stylelint-disable-next-line declaration-no-important -- overrides CodeMirror's own inline cursor border-left */
   border-left: $border-width-lg solid $highlight-color !important;
 }
 

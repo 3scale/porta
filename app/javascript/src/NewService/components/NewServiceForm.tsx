@@ -49,7 +49,7 @@ const NewServiceForm: FunctionComponent<Props> = ({
 
       <PageSection>
         <div className="new-service-form">
-          {(isServiceDiscoveryAccessible || true) && (
+          {isServiceDiscoveryAccessible && (
             <ServiceSourceForm
               handleFormsVisibility={handleFormsVisibility}
               isServiceDiscoveryUsable={isServiceDiscoveryUsable}

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module PatternflyComponentsHelper
+module PatternflyComponentsHelper # rubocop:disable Metrics/ModuleLength
   # :reek:ControlParameter
   def icon_color(variant)
     case variant&.to_sym
@@ -48,6 +48,7 @@ module PatternflyComponentsHelper
     end
   end
 
+  # :reek:TooManyStatements
   def pf_inline_alert(title, **options, &)
     plain_class = options[:plain] ? 'pf-m-plain' : ''
     variant = options[:variant]
@@ -102,8 +103,8 @@ module PatternflyComponentsHelper
 
     input = tag.input(class: 'pf-c-form-control', value:, readonly: true, type: :text)
     button = tag.button(class: 'pf-c-button pf-m-control', type: :button, aria: { label: 'Copy to clipboard' }) do
-               tag.i class: 'fas fa-copy', aria: { hidden: "true" }
-             end
+      tag.i class: 'fas fa-copy', aria: { hidden: "true" }
+    end
 
     tag.div class: 'pf-c-clipboard-copy' do
       tag.div class: 'pf-c-clipboard-copy__group' do
@@ -120,6 +121,7 @@ module PatternflyComponentsHelper
     end
   end
 
+  # :reek:FeatureEnvy
   def pf_link_to(body, url, html_options = {})
     variant = html_options.delete(:variant) || :link
     html_options[:class] = "pf-c-button pf-m-#{variant} #{html_options.delete(:class)}".strip
