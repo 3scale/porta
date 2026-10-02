@@ -1,42 +1,49 @@
 <% if cinstance.backend_version.v2? %>
   <div class="pf-c-card__body">
-    <table id="keys" class="list">
+    <table id="keys" class="pf-c-table pf-m-no-border-rows">
       <tr>
         <th>Application ID</th>
         <td><%= cinstance.application_id %></td>
         <td></td>
       </tr>
-      <%= render partial: 'provider/admin/keys/key', collection: cinstance.application_keys,
-                                                     locals: { cinstance: cinstance } %>
+      <% cinstance.application_keys.each do |key| %>
+        <tr id="<%= dom_id(key) %>" class="key" data-key="<%= key.to_param %>">
+          <td>Application key</td>
+          <td class="key"><%= key %></td>
+          <td>
+            <span class="delete_key operations" style="<%= 'display:none;' unless cinstance.can_delete_key? %>">
+              <%= delete_link_for provider_admin_application_key_path(cinstance, key), remote: true %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
     </table>
   </div>
 
-  <% if cinstance.backend_version.app_keys_allowed? %>
-    <%- can_add_keys = cinstance.application_keys.can_add? %>
-    <div class="pf-c-card__body">
-      <div id="app-keys-operations" <%= "style=display:none;" unless can_add_keys %>>
-        <% if cinstance.custom_keys_enabled? %>
-          <%= link_to 'Add Custom key', new_provider_admin_application_key_path(cinstance),
-                      class: 'fancybox action add',
-                      'data-autodimensions' => 'true',
-                      title: 'Add Custom key' %>
-        <% end %>
-        <%= link_to 'Add Random key', provider_admin_application_keys_path(cinstance),
-                    method: :post,
-                    remote: true,
-                    class: 'create_key add action pull-right' %>
-      </div>
-
-      <div id="app-keys-limit-warning" <%= "style=display:none;" if can_add_keys %>>
-        Keys limit reached.
-      </div>
+  <%- can_add_keys = cinstance.application_keys.can_add? %>
+  <div class="pf-c-card__body">
+    <div id="app-keys-operations" style="<%= 'display:none' unless can_add_keys %>">
+      <% if cinstance.custom_keys_enabled? %>
+        <%= link_to 'Add Custom key', new_provider_admin_application_key_path(cinstance),
+                    class: 'fancybox action add',
+                    'data-autodimensions' => 'true',
+                    title: 'Add Custom key' %>
+      <% end %>
+      <%= link_to 'Add Random key', provider_admin_application_keys_path(cinstance),
+                  method: :post,
+                  remote: true,
+                  class: 'create_key add action pull-right' %>
     </div>
-  <% end %>
+
+    <div id="app-keys-limit-warning" style="<%= 'display:none' if can_add_keys %>">
+      Keys limit reached.
+    </div>
+  </div>
 
 <% elsif cinstance.backend_version.oauth? %>
   <%- keys = cinstance.keys %>
   <div class="pf-c-card__body">
-    <table id="keys" class="list">
+    <table id="keys" class="pf-c-table pf-m-no-border-rows">
       <tr>
         <th>Client ID</th>
         <td><%= cinstance.application_id %></td>
@@ -80,14 +87,14 @@
   </div>
 
 <% else %>
+  <% user_key = cinstance.user_key %>
   <table id="keys" class="pf-c-table pf-m-no-border-rows">
     <tr>
-    <%- user_key = cinstance.user_key %>
       <td class="pf-m-fit-content">
         <%= user_key_label(cinstance) %>
       </td>
       <td class="pf-m-truncate pf-m-width-max">
-        <span id="cinstance-user-key" title=<%= user_key %>><%= user_key %></span>
+        <span id="cinstance-user-key" title="<%= user_key %>"><%= user_key %></span>
       </td>
       <td class="pf-m-fit-content">
         <% if cinstance.custom_keys_enabled? %>
