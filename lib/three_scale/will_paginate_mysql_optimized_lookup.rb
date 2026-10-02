@@ -28,43 +28,21 @@ module ThreeScale
 
     private
 
-    def can_optimize?
+    # :reek:NilCheck
+    def can_optimize? # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       current_page.present? &&
         limit_value.present? &&
         connection.supports_common_table_expressions? &&
-        optimized_lookup_query_shape?
-    end
-
-    def optimized_lookup_query_shape?
-      simple_model_rows? && unaggregated_rows? && default_query_context?
-    end
-
-    def simple_model_rows?
-      klass.primary_key.is_a?(String) &&
+        klass.primary_key.is_a?(String) &&
         select_values.empty? &&
-        unjoined_rows?
-    end
-
-    def unjoined_rows?
-      joins_values.empty? &&
+        joins_values.empty? &&
         left_outer_joins_values.empty? &&
-        no_eager_loading?
-    end
-
-    def no_eager_loading?
-      eager_load_values.empty? &&
-        !eager_loading?
-    end
-
-    def unaggregated_rows?
-      group_values.empty? &&
+        eager_load_values.empty? &&
+        !eager_loading? &&
+        group_values.empty? &&
         having_clause.empty? &&
-        !distinct_value
-    end
-
-    # :reek:NilCheck
-    def default_query_context?
-      from_clause.empty? &&
+        !distinct_value &&
+        from_clause.empty? &&
         with_values.empty? &&
         lock_value.nil?
     end
