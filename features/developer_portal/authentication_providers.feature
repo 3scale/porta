@@ -11,4 +11,4 @@ Feature: Authenticate using external Authentication Providers
   Scenario: Signup with Auth0
     Given the provider has the authentication provider "Auth0" published
     And I go to the login page
-    Then I should see the link "Authenticate with Auth0" containing "auth0.com client_id= redirect_uri= response_type= scope=openid+profile+email" in the URL
+    Then I should see the link "Authenticate with Auth0" containing "auth0.com client_id= redirect_uri= response_type= scope=openid%20profile%20email" in the URL
