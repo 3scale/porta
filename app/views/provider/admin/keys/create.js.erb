@@ -4,8 +4,13 @@
   <% if @key.persisted? %>
     colorbox.close();
     var keys = container.find("table#keys tbody");
-    var key = <%= render_to_js_string('key', :cinstance => @cinstance, :key => @key) %>;
-    $(key).hide().appendTo(keys.<%= @cinstance.backend_version.oauth? ? 'empty' : 'slice' %>()).fadeIn();
+    <% if @cinstance.backend_version.oauth? %>
+      var key = <%= render_to_js_string('oauth_secret', cinstance: @cinstance, oauth_secret: @key) %>;
+      $(key).hide().appendTo(keys.empty()).fadeIn();
+    <% else %>
+      var key = <%= render_to_js_string('key', cinstance: @cinstance, key: @key) %>;
+      $(key).hide().appendTo(keys.slice()).fadeIn();
+    <% end %>
 
   <% else %>
     <% if @error %>
