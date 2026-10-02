@@ -60,7 +60,7 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
     assert_equal user.account_id, page.first.account.id
   end
 
-  test 'unsafe query shapes use WillPaginate pagination SQL' do
+  test 'the optimized lookup is not used for unsafe query shapes' do
     skip_unless_mysql
 
     user = FactoryBot.create(:user_with_account)
@@ -87,7 +87,7 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
     end
   end
 
-  test 'adapters without CTE support use WillPaginate pagination SQL' do
+  test 'the optimized lookup is not used without CTE support' do
     skip_unless_mysql
 
     user = FactoryBot.create(:user_with_account)
