@@ -1,8 +1,9 @@
 @use 'provider/colors' as *;
 @use 'provider/typography' as *;
-@use 'provider/links' as *;
+@use 'utils' as *;
 @use 'sass:math';
 
+/* stylelint-disable selector-id-pattern */
 #colorbox,
 #cboxOverlay,
 #cboxWrapper {
@@ -17,11 +18,16 @@
 
 #cboxWrapper {
   max-width: none;
+
+  h2 {
+    font-weight: $font-weight-bold;
+    font-size: $secondary-title-font-size;
+  }
 }
 
 #colorbox {
-  box-shadow: 0 0 line-height-times(.5) $box-shadow-color;
-  background: rgba($body-background, .99);
+  box-shadow: var(--pf-global--BoxShadow--lg);
+  background: white;
   border: $border-width solid $border-color;
   text-align: left;
   border-radius: $border-radius;
@@ -32,11 +38,6 @@
 
     fieldset.inputs {
       border-top: 0;
-    }
-
-    fieldset.actions {
-      margin-bottom: 0;
-      margin-left: 0 !important;
     }
 
     table,
@@ -59,7 +60,7 @@
   position: fixed;
   width: 100%;
   height: 100%;
-  background: rgba($content-background, .8);
+  background: var(--pf-global--BackgroundColor--dark-transparent-100);
 }
 
 #cboxMiddleLeft,
@@ -70,6 +71,9 @@
 #cboxContent {
   position: relative;
   padding: line-height-times(2) line-height-times(1) line-height-times(1);
+  /* stylelint-disable-next-line declaration-no-important -- colorbox sets width via inline style
+   * but doesn't auto-resize to fit content. Proposed fix: pass { width: '90%' } or { innerWidth: ... }
+   * to colorbox() in application.ts instead of this override. */
   width: auto !important;
   min-width: line-height-times(20);
 }
@@ -129,3 +133,4 @@
     }
   }
 }
+/* stylelint-enable selector-id-pattern */

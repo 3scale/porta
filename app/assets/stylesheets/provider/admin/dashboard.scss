@@ -1,7 +1,6 @@
+@use 'vendor/c3';
 @use 'provider/colors' as *;
 @use 'provider/typography' as *;
-
-/* Grid gutter space defined by --pf-l-grid--m-gutter--GridGap, default is 1rem. */
 
 button.pf-c-button.pf-m-primary.pf-c-button__float-button {
   display: none;
@@ -51,6 +50,7 @@ section#audience {
       display: inline;
     }
 
+    /* stylelint-disable declaration-no-important -- overrides C3.js inline styles on SVG elements */
     .new-accounts-chart {
       position: absolute !important;
       inset: calc(#{line-height-times(3)} - 4px) 9px 5px 8px;
@@ -69,8 +69,10 @@ section#audience {
         stroke-width: $border-width;
       }
     }
+    /* stylelint-enable declaration-no-important */
   }
 
+  /* stylelint-disable-next-line selector-id-pattern */
   #dashboard-widget-potential_upgrades .pf-c-content > h2 {
     margin-bottom: 0;
   }

@@ -7,9 +7,9 @@
 
 <span id="acceptBox">
   <%= form_for @cinstance, url: accept_provider_admin_application_path(@cinstance), html: {:class => :action, :method => :put} do |f| %>
-    <%= f.submit 'Accept', class: 'outline-button-thin--positive' %>
+    <%= f.button 'Accept', class: 'pf-c-button pf-m-primary pf-m-small' %>
     or
-    <%= link_to 'Reject', '#rejectBox', onclick: 'toggle_accept_reject()', class: 'outline-button-thin--negative' %>
+    <%= link_to 'Reject', '#rejectBox', onclick: 'toggle_accept_reject()', class: 'pf-c-button pf-m-danger pf-m-small' %>
   <% end %>
 </span>
 
@@ -19,8 +19,8 @@
     <label>Reason for rejection? (to be appended to message dispatched to user)</label>
     <%= text_area_tag :reason, nil, :class => :short, :cols => 30, :rows => 5 %>
 
-      <%= link_to 'Accept', '#', onclick: 'toggle_accept_reject()', class: 'outline-button-thin--positive' %>
+      <%= link_to 'Accept', '#', onclick: 'toggle_accept_reject()', class: 'pf-c-button pf-m-secondary pf-m-small' %>
       or
-      <%= f.submit 'Reject', class: 'outline-button-thin--negative' %>
+      <%= f.button 'Reject', class: 'pf-c-button pf-m-danger pf-m-small' %>
   <% end %>
 </div>

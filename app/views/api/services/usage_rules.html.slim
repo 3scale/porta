@@ -2,12 +2,12 @@
 - content_for :page_header_title, 'Usage Rules'
 
 - content_for :javascripts do
-  = stylesheet_packs_chunks_tag 'pf_form', 'usage_rules'
+  = stylesheet_packs_chunks_tag 'pf_form', 'usage_rules', 'pf_spacing'
 
 div class="pf-c-card"
   div class="pf-c-card__body"
     / TODO: THREESCALE-12093: remove autosubmit
-    - if (can? :manage, :service_plans) && !current_account.settings.service_plans_ui_visible? || true
+    - if (can? :manage, :service_plans) && !current_account.settings.service_plans_ui_visible?
       = form_tag polymorphic_path([:masterize, :admin, @service, ServicePlan]), method: :post,
                                                                                 class: 'autosubmit pf-c-form pf-m-limit-width',
                                                                                 remote: true

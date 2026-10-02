@@ -45,9 +45,6 @@ $caption-font-size: math.div(7,8) * $fontSize;
 $font-size-base: 1 * $fontSize;
 $font-size-lg: $font-size-base * math.div(5,4);
 $font-size-sm: $font-size-base * math.div(7,8);
-$font-size-base: 1 * $fontSize;
-$font-size-lg: $font-size-base * math.div(5,4);
-$font-size-sm: $font-size-base * math.div(7,8);
 
 // line-heights
 $lineHeight: 1.5;
@@ -78,22 +75,13 @@ $spacer-2lh: line-height-times(2); // 32px;
 }
 
 @mixin colors-base() {
-  background-color: $background-color-base;
-  color: $color-base;
+  background-color: $body-background;
+  color: $font-color;
 }
 
 @mixin colors-inverted-base() {
-  background-color: $color-base;
-  color: $background-color-base;
-}
-
-@mixin debug-vertical-rhythm {
-  background-image: linear-gradient(rgba(black, 0.04) 1px, transparent 1px);
-  background-size: 1px ($line-height-base * 1rem);
-
-  * {
-    background-color: transparent !important;
-  }
+  background-color: $font-color;
+  color: $body-background;
 }
 
 @mixin typography-base($inverted: false) {
@@ -135,7 +123,6 @@ $spacer-2lh: line-height-times(2); // 32px;
 
 $border-radius: line-height-times(.125);
 $border-radius-sm: line-height-times(.125);
-$layout-wrapper-min-width: line-height-times(50);
 
 @mixin ellipsis {
   overflow: hidden;

@@ -7,53 +7,56 @@
   <%= link_to 'Edit', edit_admin_buyers_account_user_path(account_id: @user.account_id, id: @user.id), class: 'action edit' %>
 <% end %>
 
-<table class="list mini">
+<div class="pf-c-card" style="max-width: 55%;">
+  <div class="pf-c-card__body">
+    <table class="list">
+      <tr>
+        <th>Name</th>
+        <td><%= h @user.display_name %></td>
+      </tr>
 
-  <tr>
-    <th>Name</th>
-    <td><%= h @user.display_name %></td>
-  </tr>
+      <tr>
+        <th>Created on</th>
+        <td><%= h @user.created_at.to_fs(:long) %></td>
+      </tr>
 
-  <tr>
-    <th>Created on</th>
-    <td><%= h @user.created_at.to_fs(:long) %></td>
-  </tr>
+      <% if @user.last_login_at.present? -%>
+        <tr>
+          <th>Last logged in on</th>
+          <td><%= h @user.last_login_at.to_fs(:long) %></td>
+        </tr>
+      <% end -%>
 
-  <% if @user.last_login_at.present? -%>
-    <tr>
-      <th>Last logged in on</th>
-      <td><%= h @user.last_login_at.to_fs(:long) %></td>
-    </tr>
-  <% end -%>
+      <tr>
+        <th>Role</th>
+        <td><%= h @user.role %></td>
+      </tr>
 
-  <tr>
-    <th>Role</th>
-    <td><%= h @user.role %></td>
-  </tr>
+      <tr>
+        <th>State</th>
+        <td>
+          <% if @user.active? %>
+            <i class="included fas fa-check-circle" title="Feature is enabled for this plan"></i>
+          <% else %>
+            <i class="excluded fas fa-times-circle" title="Feature is disabled for this plan"></i>
+          <% end %>
+          <%= h @user.state %>
+          <span class="operations">
+            <%= button_activate_or_suspend(@user) %>
+          </span>
+        </td>
+      </tr>
 
-  <tr>
-    <th>State</th>
-    <td>
-      <% if @user.active? %>
-        <i class="included fas fa-check-circle" title="Feature is enabled for this plan"></i>
-      <% else %>
-        <i class="excluded fas fa-times-circle" title="Feature is disabled for this plan"></i>
+      <%= fields_definitions_rows(@user,["name"]) %>
+
+      <% if @sample_developer_password %>
+        <tr>
+          <th>Generated password (please change)</th>
+          <td>
+            <code><%= @sample_developer_password %></code>
+          </td>
+        </tr>
       <% end %>
-      <%= h @user.state %>
-      <span class="operations">
-        <%= button_activate_or_suspend(@user) %>
-      </span>
-    </td>
-  </tr>
-
-  <%= fields_definitions_rows(@user,["name"]) %>
-
-  <% if @sample_developer_password %>
-    <tr>
-      <th>Generated password (please change)</th>
-      <td>
-        <code><%= @sample_developer_password %></code>
-      </td>
-    </tr>
-  <% end %>
-</table>
+    </table>
+  </div>
+</div>

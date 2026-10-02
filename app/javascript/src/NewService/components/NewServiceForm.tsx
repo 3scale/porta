@@ -59,7 +59,7 @@ const NewServiceForm: FunctionComponent<Props> = ({
           )}
           {formMode === 'manual'
             ? <ServiceManualForm backendApis={backendApis} formActionPath={adminServicesPath} template={template} />
-            : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />}
+            : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} loadingProjects={loadingProjects} setLoadingProjects={setLoadingProjects} />}
         </div>
       </PageSection>
     </>

@@ -1,3 +1,4 @@
+import '@patternfly/patternfly/layouts/Flex/flex.css'
 
 import { statsUsage } from 'Stats/provider/stats_usage'
 import { statsDaysOfWeek } from 'Stats/provider/stats_days_of_week'

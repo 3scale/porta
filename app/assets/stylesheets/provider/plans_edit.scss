@@ -1,6 +1,7 @@
 @use 'provider/colors' as *;
 @use 'provider/typography' as *;
 
+/* stylelint-disable-next-line selector-id-pattern */
 #header_table {
   margin-top: line-height-times(2);
 }
@@ -22,7 +23,7 @@ th.collapsible {
 }
 
 table.contract_table {
-	margin-bottom: line-height-times(.5);
+  margin-bottom: line-height-times(.5);
 
   &#features {
     table-layout: fixed;
@@ -35,6 +36,7 @@ table.contract_table {
   }
 
   &#metrics,
+  /* stylelint-disable-next-line selector-id-pattern */
   &#backend_api_metrics {
     tbody {
       tr {
@@ -43,11 +45,6 @@ table.contract_table {
         }
       }
     }
-  }
-
-  td.selected strong {
-    background: $light-background-color;
-    padding: line-height-times(0.125);
   }
 
   table.usage_table {
@@ -82,7 +79,7 @@ table.contract_table {
     &.selected {
       color: $font-color;
       font-weight: $font-weight-bold;
-      border-bottom: $border-width solid $background-color-base;
+      border-bottom: $border-width solid $body-background;
       border-left: $border-width solid $border-color;
       border-right: $border-width solid $border-color;
     }
@@ -107,15 +104,10 @@ table.contract_table {
     }
   }
 
-  .usageHidden {
-    position: absolute;
-    background: $font-color;
-  }
-
   tbody tr td {
-    /* stylelint-disable-next-line no-descending-specificity -- FIXME */
+    /* stylelint-disable-next-line no-descending-specificity -- false positive: unrelated to td.metric_slot table tr td above */
     &:last-child {
-      border-top: 1px solid $altoGray;
+      border-top: $border-width solid $border-color;
       padding-right: line-height-times(1);
     }
 
@@ -124,6 +116,7 @@ table.contract_table {
     }
   }
 
+  /* stylelint-disable-next-line selector-id-pattern */
   #metrics_container > tr > th.backend_api_metric_title {
     padding-left: line-height-times(1);
   }

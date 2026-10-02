@@ -1,0 +1,287 @@
+@use 'vendor/c3';
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+@use 'sass:math';
+
+.StatsMenu-container,
+.StatsSelector-container {
+  display: inline-block;
+}
+
+.StatsMenu {
+  border: $border-width solid $border-color;
+  border-radius: $border-radius;
+  color: $font-color;
+  display: inline-block;
+  margin: 0 line-height-times(.5) line-height-times(1) 0;
+  padding: line-height-times(.5);
+
+  &-period {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &-periodItem {
+    display: inline-block;
+    margin: 0 line-height-times(.25);
+  }
+
+  &-custom {
+    border-left: $border-width solid $border-color;
+    display: inline-block;
+    font-style: italic;
+    padding-left: line-height-times(.25);
+
+    select {
+      width: auto;
+      margin: line-height-times(-0.25) 0;
+    }
+  }
+
+  &-Link {
+    color: $font-color;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover,
+    &.is-selected {
+      color: $highlight-color;
+    }
+  }
+
+  &-periodLink,
+  &-customLink {
+    &.is-selected {
+      font-weight: $font-weight-bold;
+      text-decoration: none;
+    }
+  }
+
+  &-customInput {
+    display: none;
+  }
+}
+
+.Stats-message--notice {
+  color: $label-color;
+  font-style: italic;
+  margin: 0;
+}
+
+.StatsMessages-list {
+  margin-bottom: line-height-times(.5);
+  padding-left: line-height-times(1);
+}
+
+.StatsMessages-title {
+  margin-bottom: line-height-times(.5);
+}
+
+.StatsChart-container {
+  &.is-loading {
+    background-image: url('/assets/spinner.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 320px; // Fixed value, comes from stats package
+    opacity: .5;
+  }
+
+  .c3 svg {
+    font: $font-size-sm 'Lucida Grande', verdana, sans-serif;
+  }
+
+  .c3-line {
+    stroke-width: $border-width-lg;
+  }
+
+  .c3-grid line.c3-ygrid,
+  .c3-axis-y .tick line {
+    stroke: $border-color;
+  }
+
+  .c3-ygrid {
+    stroke-dasharray: 0;
+  }
+
+  .c3-axis-y .domain {
+    display: none;
+  }
+
+  .c3-tooltip-container {
+    border: $border-width solid $border-color;
+    border-radius: $border-radius;
+    box-shadow: var(--pf-global--BoxShadow--md);
+    background: var(--pf-global--BackgroundColor--200);
+  }
+
+  .c3-tooltip {
+    border: 0;
+    border-radius: $border-radius;
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  .c3-tooltip th {
+    background-color: #f0f0f0;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    color: $label-color;
+    padding: line-height-times(.125) line-height-times(.5);
+  }
+
+  .c3-tooltip td {
+    border-left: none;
+    padding: 0 line-height-times(.5);
+  }
+
+  .c3-tooltip tr {
+    border: 0;
+    border-bottom: $border-width solid $border-color;
+
+    &:last-child {
+      border-bottom: 0;
+
+      td {
+        &:first-child {
+          border-bottom-left-radius: $border-radius;
+        }
+
+        &:last-child {
+          border-bottom-right-radius: $border-radius;
+        }
+      }
+    }
+  }
+}
+
+.StatsMethodsTable-name.is-children {
+  background-image: url('/assets/child_metric_background.png');
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding-left: line-height-times(1);
+}
+
+.StatsMethodsTable {
+  margin-bottom: line-height-times(1);
+  margin-top: line-height-times(.5);
+  width: 100%;
+
+  /* stylelint-disable-next-line no-descending-specificity -- false positive: unrelated to .c3-tooltip td above */
+  td, th {
+    border-bottom: $border-width solid $border-color;
+  }
+}
+
+.ui-datepicker {
+  /* stylelint-disable-next-line declaration-no-important -- overrides jQuery UI inline z-index: 1,
+   * which lands below pf-c-page__main's z-index of 100 (--pf-global--ZIndex--xs).
+   * Uses PF4 DatePicker's z-index variable (--pf-c-date-picker__calendar--ZIndex) */
+  z-index: var(--pf-global--ZIndex--sm) !important;
+}
+
+/* Stats selector (dropdown for metric selection) */
+
+$body-color: $font-color;
+$dropdown-bg: #f0f0f0 !default;
+$dropdown-border-color: $border-color !default;
+$dropdown-border-width: $border-width !default;
+$dropdown-divider-bg: $border-color !default;
+$dropdown-link-color: $font-color;
+$caret-width: line-height-times(math.div(1,3)) !default;
+$caret-width-lg: $caret-width !default;
+$zindex-dropdown: 1000 !default;
+
+.StatsSelector {
+  display: inline-block;
+  margin-bottom: line-height-times(1);
+  position: relative;
+  font-size: $font-size-base;
+
+  &-item {
+    background: none;
+    clear: both;
+    color: $dropdown-link-color;
+    cursor: pointer;
+    display: block;
+    font-size: $font-size-base;
+    font-weight: $font-weight-normal;
+    line-height: $line-height-base;
+    padding: line-height-times(.125) line-height-times(1);
+    text-align: inherit;
+    white-space: nowrap;
+    width: 100%;
+    border-radius: $border-radius;
+
+    &:hover {
+      color: $link-hover-color;
+    }
+
+    &.is-children {
+      font-style: italic;
+      padding-left: line-height-times(1);
+    }
+
+    &.is-children::before {
+      content: '- ';
+    }
+
+    &.is-selected {
+      font-weight: $font-weight-bold;
+    }
+
+    &-detail {
+      font-size: $font-size-sm;
+    }
+  }
+
+  &-toggle {
+    border: $border-width solid $border-color;
+    font-size: $font-size-base;
+    padding: line-height-times(.5);
+    width: auto;
+    color: $link-color;
+    height: auto;
+
+    &::after {
+      border-left: $caret-width solid transparent;
+      border-right: $caret-width solid transparent;
+      border-top: $caret-width solid;
+      content: '';
+      display: inline-block;
+      height: 0;
+      margin-left: line-height-times(.25);
+      margin-right: line-height-times(.25);
+      vertical-align: middle;
+      width: 0;
+    }
+  }
+
+  &-menu {
+    background-clip: padding-box;
+    background-color: white;
+    border: $border-width solid $border-color;
+    color: $body-color;
+    display: none;
+    float: left;
+    font-size: $font-size-base;
+    left: 0;
+    line-height: $line-height-base;
+    list-style: none;
+    margin: line-height-times(.125) 0 0;
+    min-width: line-height-times(6);
+    padding: line-height-times(.25) 0;
+    position: absolute;
+    text-align: left;
+    top: 100%;
+    z-index: $zindex-dropdown;
+    border-radius: $border-radius;
+  }
+
+  &.is-open {
+    > .StatsSelector-menu {
+      display: block;
+    }
+  }
+}

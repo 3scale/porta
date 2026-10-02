@@ -1,3 +1,7 @@
+<% content_for :javascripts do %>
+  <%= stylesheet_packs_chunks_tag 'pf_alignment' %>
+<% end %>
+
 <table class="plan_widget list list-checkmarks">
 
   <% if plan.is_a?(AccountPlan) && plan.description.present? -%>
@@ -13,9 +17,9 @@
     <% features.each do |feature|
        enabled = plan.includes_feature?(feature)
      %>
-      <tr class="feature <%= enabled ? 'enabled' : 'disabled' %>">
+      <tr class="<%= enabled ? 'enabled' : 'disabled' %>">
         <th colspan="2"><%= h feature.name %></th>
-        <td>
+        <td class="pf-u-text-align-right">
           <% if enabled %>
             <i class="included fas fa-check-circle" title="Feature is enabled for this plan"></i>
           <% else %>
@@ -45,7 +49,7 @@
             </tr>
           <% end %>
         <% else -%>
-          <tr class="usage_limit">&nbsp;</tr>
+          <tr class="usage_limit"></tr>
         <% end %>
 
       <% end # if metric visible-%>
@@ -55,9 +59,9 @@
       <tr><th class="header" colspan="3">Metrics</th></tr>
       <% plan.metrics_without_limits.each do |metric| %>
       	<% if metric.visible_in_plan?(plan) %>
-          <tr class="feature unlimited_metric" id="<%= dom_id(metric) %>_unlimited">
+          <tr class="unlimited_metric" id="<%= dom_id(metric) %>_unlimited">
             <th rowspan="1"> <%= display_metric_name(metric) %></th>
-            <td colspan="2"><i class="included fas fa-check-circle"></i></td>
+            <td colspan="2" class="pf-u-text-align-right"><i class="included fas fa-check-circle"></i></td>
           </tr>
         <% end %>
       <% end %>

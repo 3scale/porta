@@ -1,6 +1,4 @@
 @use 'provider/colors' as *;
-@use 'provider/layouts/main' as *;
-@use 'provider/links' as *;
 @use 'provider/typography' as *;
 
 #user-permissions-form {
@@ -11,7 +9,7 @@
   margin-top: 0;
 }
 
-/* stylelint-disable no-descending-specificity -- FIXME */
+/* stylelint-disable no-descending-specificity */
 form.formtastic fieldset > ol > li.radio fieldset,
 form.formtastic fieldset > ol > li fieldset {
   .FeatureAccessList {
@@ -119,8 +117,12 @@ form.formtastic fieldset > ol > li fieldset {
     &-item {
       position: relative;
 
-      &:last-of-type .ServiceAccessList-label {
+      &:last-of-type {
         margin-bottom: 0;
+
+        .ServiceAccessList-label {
+          margin-bottom: 0;
+        }
       }
     }
 
@@ -132,24 +134,15 @@ form.formtastic fieldset > ol > li fieldset {
       border: $border-width dotted $border-color;
       margin-left: -2%;
       border-radius: $border-radius;
-      background-color: $background-color-base;
+      background-color: $body-background;
 
       &.is-checked {
         border: $border-width solid $border-color;
-        background-color: rgba($background-color-base, 0.8)
+        background-color: rgba($body-background, 0.8)
       }
     }
 
   }
-}
-
-.is-hidden {
-  display: none !important;
-}
-
-.is-unavailable {
-  text-decoration: line-through !important;
-  color: $light-color;
 }
 
 form.formtastic fieldset > ol > li.radio.u-servicePermissionsDisabled fieldset,
@@ -168,3 +161,12 @@ form.formtastic fieldset > ol > li.u-servicePermissionsDisabled fieldset {
   }
 }
 /* stylelint-enable no-descending-specificity */
+
+/* stylelint-disable-next-line selector-id-pattern */
+#user_member_permissions_input {
+  margin-bottom: 0;
+
+  fieldset:last-of-type {
+    margin-bottom: 0;
+  }
+}

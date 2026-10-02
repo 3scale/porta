@@ -5,7 +5,7 @@
 section.Section
   .SettingsBox
     = pf_link_to 'edit', edit_provider_admin_backend_api_path(@backend_api), class: 'SettingsBox-toggle' if can?(:edit, BackendApi)
-    dl.SettingsBox-summary.u-dl data-state="open"
+    dl.SettingsBox-summary.u-dl
       dt.u-dl-term Name
       dd.u-dl-definition = @backend_api.name
       dt.u-dl-term System name

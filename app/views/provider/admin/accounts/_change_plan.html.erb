@@ -1,5 +1,9 @@
 <%= javascript_include_tag 'provider/plans_widget.js' %>
 
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag 'provider/admin/accounts/plans_widget' %>
+<% end %>
+
 <%= javascript_tag do %>
   $(function() {
     var plan = $("[data-object='plan']");

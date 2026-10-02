@@ -1,19 +1,19 @@
 @use 'provider/colors' as *;
 
-$footer-link-color: $osloGray;
-$footer-link-hover-color: $link-hover-color;
+$footer-link-color: var(--pf-global--palette--black-500);
 
 footer {
+  z-index: 1;
+
   a {
     color: $footer-link-color;
 
     &:hover {
-      color: $footer-link-hover-color;
+      color: $link-hover-color;
     }
   }
 
   .powered-by-3scale {
     text-decoration: none;
-    color: $footer-link-color;
   }
 }

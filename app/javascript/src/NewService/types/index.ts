@@ -17,6 +17,7 @@ export interface FormProps {
   id: string;
   formActionPath: string;
   hasHiddenServiceDiscoveryInput?: boolean;
+  isSubmitDisabled?: boolean;
   submitText: string;
   children?: React.ReactNode;
 }

@@ -1,0 +1,25 @@
+/* stylelint-disable-next-line selector-id-pattern */
+form.formtastic#new_metric {
+  /* stylelint-disable-next-line selector-id-pattern */
+  li#metric_system_name_input {
+    div {
+      display: block;
+
+      input,
+      p,
+      /* stylelint-disable-next-line selector-id-pattern */
+      #system_name_popover {
+        display: inline;
+      }
+
+      input {
+        margin-right: .5rem;
+        width: 60%;
+      }
+
+      p {
+        margin-right: 1rem;
+      }
+    }
+  }
+}

@@ -1,15 +1,19 @@
 - content_for :title, 'Traffic analytics'
 - content_for :page_header_title, 'Traffic analytics'
 
+- content_for :stylesheets do
+  = stylesheet_link_tag 'provider/stats'
+
 - content_for :javascripts do
   = javascript_packs_with_chunks_tag 'provider_stats'
 
-.Stats
-  .StatsMenu-container
-  .StatsSelector-container
-  .StatsChart-container#chart
-  .StatsCSVLink-container
-  .StatsMethodsTable-container
+.pf-c-card
+  .pf-c-card__body
+    .StatsMenu-container
+    .StatsSelector-container
+    .StatsChart-container#chart
+    .StatsCSVLink-container.pf-l-flex
+    .StatsMethodsTable-container
 
 p.Stats-message--notice
   = timezone_information

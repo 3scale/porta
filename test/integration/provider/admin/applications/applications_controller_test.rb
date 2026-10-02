@@ -96,17 +96,17 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
 
       test 'show plan widget features are drawn correctly' do
         service = provider.default_service
-        feature = FactoryBot.create(:feature, featurable: service, name: 'ticked')
-        application.plan.features_plans.create!(feature: feature)
-        FactoryBot.create(:feature, featurable: service, name: 'crossed')
+        included_feature = FactoryBot.create(:feature, featurable: service, name: 'included feature')
+        application.plan.features_plans.create!(feature: included_feature)
+        FactoryBot.create(:feature, featurable: service, name: 'excluded feature')
 
         get provider_admin_application_path(application)
 
         assert_response :success
 
         page = Nokogiri::HTML4::Document.parse(response.body)
-        assert page.xpath("//tr[@class='feature enabled']").text.include? 'ticked'
-        assert page.xpath("//tr[@class='feature disabled']").text.include? 'crossed'
+        assert page.xpath("//tr[.//th[normalize-space()='included feature']]//i[contains(@class,'fa-check-circle')]").any?
+        assert page.xpath("//tr[.//th[normalize-space()='excluded feature']]//i[contains(@class,'fa-times-circle')]").any?
       end
 
       test 'show plan of the app does not show in the plans select' do

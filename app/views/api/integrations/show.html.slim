@@ -1,9 +1,7 @@
 - content_for :page_header_title, 'Configuration'
 
 #integration-tabs
-  .SettingsBox
-
-  .integration data-state="open"
+  .integration
     - case @service.deployment_option
     - when /^plugin_/
       = render 'api/integrations/plugin/plugin'

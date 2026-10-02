@@ -2,8 +2,11 @@
 - content_for :page_header_annotation do
   = render partial: 'shared/annotations', locals: { resource: service, plain: true }
 
-- content_for :javascripts do
+- content_for :stylesheets do
+  = stylesheet_link_tag 'provider/utilization'
   = stylesheet_link_tag 'provider/admin/apiconfig/services/show'
+
+- content_for :javascripts do
   = stylesheet_packs_chunks_tag 'pf_grid', 'pf_description_list', 'pf_text', 'pf_stack'
 
 div class="pf-l-grid pf-m-gutter"

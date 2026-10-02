@@ -1,4 +1,5 @@
 import { Pagination as PFPagination } from '@patternfly/react-core'
+import '@patternfly/react-styles/css/components/FormControl/form-control.css'
 
 import * as navigation from 'utilities/navigation'
 

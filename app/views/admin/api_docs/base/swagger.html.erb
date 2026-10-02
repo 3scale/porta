@@ -7,17 +7,25 @@
 
 <%= render "menu" -%>
 
-<div class="swagger-section">
-  <div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
-  <div
-    id="swagger-ui-container"
-    class="swagger-ui-wrap"
-    data-url="<%= spec_url(@api_docs_service) %>"
-    data-base-url="<%= base_url %>"
-    data-service-endpoint="<%= @api_docs_service.api_product_production_public_base_url %>"
-  >
+<div class="pf-c-card">
+  <div class="pf-c-card__body swagger-section">
+    <div id="message-bar" class="swagger-ui-wrap"></div>
+    <div
+      id="swagger-ui-container"
+      class="swagger-ui-wrap"
+      data-url="<%= spec_url(@api_docs_service) %>"
+      data-base-url="<%= base_url %>"
+      data-service-endpoint="<%= @api_docs_service.api_product_production_public_base_url %>"
+    >
+    </div>
   </div>
 </div>
+
+<style type="text/css">
+  #message-bar:empty {
+    display: none;
+  }
+</style>
 
 <div class='apidocs-param-tips apidocs-signin-message' style='display:none;'>
   <p><a href='#'>Sign in</a> to your account for quick access to useful values.</p>

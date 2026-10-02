@@ -1,5 +1,5 @@
 section.Configuration class=('Configuration--is-promoted' unless deployment_option_is_service_mesh?(@service))
-  article.Configuration-summary data-state="open"
+  article.Configuration-summary
     h3.Configuration-title = deployment_option_is_service_mesh?(@service) ? 'Service mesh Configuration' : 'APIcast Configuration'
 
     dl.u-dl
@@ -31,16 +31,17 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
             dd.u-dl-definition = proxy_rules_preview(backend_api, path: backend_api_config.path)
       dt.u-dl-term Promote
       dd.u-dl-definition.Configuration-promote-button
-        = semantic_form_for @proxy, url: admin_service_integration_path(@service) do |f|
+        = semantic_form_for @proxy, url: admin_service_integration_path(@service),
+                                    html: { class: 'pf-c-form' } do |f|
           = f.hidden_field :lock_version
           = f.button *promote_to_staging_button_options(@show_presenter)
 
 - unless deployment_option_is_service_mesh?(@service)
   section style="margin-top: 48px;"
 
-    .SettingsBox.Environment class=('Environment--is-promoted' if @show_presenter.environments_have_same_config?)
+    .Environment class=('Environment--is-promoted' if @show_presenter.environments_have_same_config?)
       = pf_link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'staging'), class: 'SettingsBox-toggle'
-      article.Environment-summary data-state="open"
+      article.Environment-summary
         h3.Environment-title Staging APIcast
         - if @show_presenter.any_sandbox_configs?
           dl.u-dl
@@ -64,15 +65,16 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
               = @show_presenter.last_sandbox_config.version
             dt.u-dl-term Promote
             dd.u-dl-definition.Configuration-promote-button
-              = semantic_form_for @proxy, url: promote_to_production_admin_service_integration_path(@service, anchor: 'production') do |f|
+              = semantic_form_for @proxy, url: promote_to_production_admin_service_integration_path(@service, anchor: 'production'),
+                                          html: { class: 'pf-c-form' } do |f|
                 = f.button *promote_to_production_button_options(@show_presenter)
         - else
           | no configuration has been saved for APIcast staging yet
 
-    .SettingsBox.Environment
+    .Environment
       - if @show_presenter.any_production_configs?
         = pf_link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'production'), class: 'SettingsBox-toggle'
-      article.Environment-summary data-state="open" style="margin-top: 24px;"
+      article.Environment-summary style="margin-top: 24px;"
         h3.Environment-title Production APIcast
         - if @show_presenter.any_production_configs?
           dl.u-dl

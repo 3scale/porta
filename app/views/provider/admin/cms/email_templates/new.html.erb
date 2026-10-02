@@ -2,7 +2,10 @@
 
 <% content_for :page_header_title, "Override email #{@page.name}" %>
 
-<%= javascript_packs_with_chunks_tag 'cms', 'pf_spacing' %>
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'cms' %>
+  <%= stylesheet_packs_chunks_tag 'pf_spacing' %>
+<% end %>
 
 <%= cms_form_for(@page) do |f| %>
   <%= render 'form', :f => f %>
@@ -10,7 +13,7 @@
     <%= f.input :system_name, :as => :hidden %>
   <% end %>
 
-  <%= f.input :draft, :as => :codemirror, :input_html => { :value => f.object.current } %>
+  <%= f.input :draft, as: :codemirror, label: false, input_html: { value: f.object.current } %>
 
   <%= render 'buttons', f: f %>
 <% end %>

@@ -1,16 +1,15 @@
 @use 'provider/colors' as *;
-@use 'provider/layouts/main' as *;
 @use 'provider/typography' as *;
+@use 'utils';
 
 .SettingsBox {
-  @include white-box-shadow;
+  @include utils.white-box-shadow;
 
   position: relative;
 
   &-toggle {
     color: $link-color;
     cursor: pointer;
-    display: block !important;
     float: right;
     font-size: $caption-font-size;
     margin-right: line-height-times(1);
@@ -45,7 +44,7 @@
   }
 
   & + .integration {
-    @include white-box-shadow;
+    @include utils.white-box-shadow;
 
     overflow: hidden;
     padding: line-height-times(1);
@@ -67,10 +66,6 @@
   }
 }
 
-#integration-tabs .integration .SettingsBox {
-  box-shadow: none;
-}
-
 .Environment,
 .Configuration {
   background-color: $body-background;
@@ -83,7 +78,7 @@
 
   &--is-promoted::after {
     border-left: $border-width-lg solid $border-color;
-    bottom: -100%;
+    bottom: -90%;
     content: '';
     left: 50%;
     position: absolute;
@@ -114,9 +109,5 @@
 
   &-promote-button {
     border-top: $border-width solid $border-color;
-  }
-
-  &-title {
-    margin: 0 !important;
   }
 }

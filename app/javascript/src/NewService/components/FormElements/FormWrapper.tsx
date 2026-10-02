@@ -10,6 +10,7 @@ const FormWrapper: FunctionComponent<Props> = ({
   id,
   formActionPath,
   hasHiddenServiceDiscoveryInput,
+  isSubmitDisabled = false,
   submitText,
   children
 }) => (
@@ -32,6 +33,7 @@ const FormWrapper: FunctionComponent<Props> = ({
         <Button
           className="create"
           data-testid="newProductCreateProduct-buttonSubmit"
+          isDisabled={isSubmitDisabled}
           name="commit"
           type="submit"
         >

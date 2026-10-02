@@ -4,7 +4,7 @@
   = javascript_packs_with_chunks_tag 'table_toolbar'
 
 div class="pf-c-card"
-  table id="mapping_rules" class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Mapping rules table" data-toolbar-props=@presenter.toolbar_props.to_json
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Mapping rules table" data-toolbar-props=@presenter.toolbar_props.to_json
     thead
       tr role="row"
         = th_sortable('proxy_rules.http_method', 'Verb')

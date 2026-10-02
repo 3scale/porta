@@ -1,7 +1,6 @@
-@use 'provider/colors' as *;
-@use 'provider/layouts/main' as *;
 @use 'provider/typography' as *;
 @use 'provider/legacy_theme';
+@use 'utils';
 
 #account-column-wrapper {
   overflow: hidden;
@@ -9,51 +8,30 @@
 
   #account-overview,
   #plan-overview {
+    /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder -- will disappear when implementing grid layout */
     @extend .left-column;
-
-    table tr {
-      border-bottom: $border-width solid $border-color;
-    }
   }
 
   #plan-overview {
+    /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder -- will disappear when implementing grid layout */
     @extend .right-column;
   }
 
   .overview-box {
-    table.list {
-      @include white-box-shadow;
-
-      margin: 1px;
-
-      tr:last-child {
-        th,
-        td {
-          border-bottom: 2px solid transparent;
-        }
-      }
-    }
-
     #account-redhat-connect p,
     #account-cancellation p {
-      @include white-box-shadow;
+      @include utils.white-box-shadow;
 
       margin: 1px;
     }
-
-    /* stylelint-disable-next-line no-descending-specificity -- FIXME */
-    table.list th, table.list td {
-      padding: line-height-times(1);
-    }
   }
-
 }
 
 #key-overview {
   margin-bottom: line-height-times(2);
 
   .info {
-    @include white-box-shadow;
+    @include utils.white-box-shadow;
   }
 
   .key {
@@ -67,17 +45,7 @@
   }
 }
 
-
 #account-redhat-connect,
-#account-cancellation,
-#account-upgrade {
+#account-cancellation {
   margin-top: 5em;
-}
-
-.included {
-  color: $success-color;
-}
-
-.excluded {
-  color: $error-color;
 }
