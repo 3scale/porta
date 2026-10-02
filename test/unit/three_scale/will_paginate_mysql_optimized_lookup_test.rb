@@ -21,21 +21,19 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
     end
     relation = nil
 
-    queries = capture_sql_queries do
+    assert_number_of_queries(0) do
       relation = Country.unscoped.where(id: countries.map(&:id)).order(name: :desc).paginate(page: 2, per_page: 2)
     end
 
-    assert_empty queries
     assert_not relation.loaded?
 
     page = nil
-    queries = capture_sql_queries { page = relation.to_a }
-    optimized_lookup_query = queries.find { |sql| sql.include?('will_paginate_page_ids') }
 
-    assert_not_nil optimized_lookup_query
-    assert_match(/\bLIMIT\s+2\s+OFFSET\s+2\b/i, optimized_lookup_query)
-    assert_equal 1, optimized_lookup_query.scan(/\bLIMIT\b/i).length
-    assert_equal 1, optimized_lookup_query.scan(/\bOFFSET\b/i).length
+    assert_number_of_queries([
+                               [1, /\bWITH.+will_paginate_page_ids.+\sLIMIT\s+2\s+OFFSET\s+2.+\sSELECT\b/i],
+                               [1, /\A(?![\s\S]*will_paginate_page_ids)[\s\S]*?\bCOUNT\s*\(/i]
+                             ]) { page = relation.to_a }
+
     assert_equal countries.sort_by(&:name).reverse.drop(2).take(2).map(&:id), page.map(&:id)
     assert relation.loaded?
 
@@ -45,11 +43,7 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
     assert_equal 5, page.total_entries
     assert_equal 3, page.total_pages
 
-    count_query = queries.find { |sql| sql.match?(/\bCOUNT\s*\(/i) }
-    assert_not_nil count_query
-    assert_not_includes count_query, 'will_paginate_page_ids'
-
-    assert_empty(capture_sql_queries { relation.to_a })
+    assert_number_of_queries(0) { relation.to_a }
   end
 
   test 'preloaded associations remain loaded after optimized lookup' do
@@ -59,9 +53,8 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
     relation = User.where(id: user.id).includes(:account).paginate(page: 1, per_page: 1, total_entries: 1)
     page = nil
 
-    queries = capture_sql_queries { page = relation.to_a }
+    assert_number_of_queries(1, matching: /will_paginate_page_ids/) { page = relation.to_a }
 
-    assert(queries.any? { |sql| sql.include?('will_paginate_page_ids') })
     assert relation.loaded?
     assert page.first.association(:account).loaded?
     assert_equal user.account_id, page.first.account.id
@@ -84,14 +77,13 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
     }
     unsafe_relations['existing CTE'] = User.with(other_users: User.select(:id)) if User.connection.supports_common_table_expressions?
 
-    unsafe_relations.each do |description, base_relation|
+    unsafe_relations.each_value do |base_relation|
       relation = base_relation.where(id: user.id).paginate(page: 1, per_page: 1, total_entries: 1)
-      queries = capture_sql_queries { relation.to_a }
-      select_query = queries.find { |sql| sql.match?(/\b(?:WITH|SELECT)\b/i) }
 
-      assert_not_nil select_query, "#{description} should execute a query"
-      assert_not_includes select_query, 'will_paginate_page_ids', description
-      assert_match(/\bLIMIT\s+1\s+OFFSET\s+0\b/i, select_query, description)
+      assert_number_of_queries(
+        1,
+        matching: /\A(?![\s\S]*will_paginate_page_ids)[\s\S]*\b(?:WITH|SELECT)\b[\s\S]*\bLIMIT\s+1\s+OFFSET\s+0\b/i
+      ) { relation.to_a }
     end
   end
 
@@ -102,12 +94,10 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
     relation = User.where(id: user.id).paginate(page: 1, per_page: 1, total_entries: 1)
     relation.connection.stubs(:supports_common_table_expressions?).returns(false)
 
-    queries = capture_sql_queries { relation.to_a }
-    select_query = queries.find { |sql| sql.match?(/\bSELECT\b/i) }
-
-    assert_not_nil select_query
-    assert_not_includes select_query, 'will_paginate_page_ids'
-    assert_match(/\bLIMIT\s+1\s+OFFSET\s+0\b/i, select_query)
+    assert_number_of_queries(
+      1,
+      matching: /\A(?![\s\S]*will_paginate_page_ids)[\s\S]*\bSELECT\b[\s\S]*\bLIMIT\s+1\s+OFFSET\s+0\b/i
+    ) { relation.to_a }
   end
 
   private
@@ -119,16 +109,5 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
   def skip_unless_mysql_with_cte
     skip_unless_mysql
     skip 'requires CTE support' unless ActiveRecord::Base.connection.supports_common_table_expressions?
-  end
-
-  def capture_sql_queries(&)
-    queries = []
-    callback = ->(_name, _start, _finish, _id, payload) do
-      name, sql = payload.values_at(:name, :sql)
-      queries << sql unless name == 'SCHEMA'
-    end
-
-    ActiveSupport::Notifications.subscribed(callback, 'sql.active_record', &)
-    queries
   end
 end
