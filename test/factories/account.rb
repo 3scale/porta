@@ -70,6 +70,12 @@ FactoryBot.define do
         account.users << FactoryBot.build(:admin, :account => account, :username => username)
       end
     end
+
+    trait :with_payment_detail do
+      after(:create) do |account|
+        FactoryBot.create(:payment_detail, account: account)
+      end
+    end
   end
 
   factory(:buyer_account_without_billing_address, :parent => :buyer_account) do

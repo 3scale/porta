@@ -196,6 +196,37 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
         assert_response :success
         assert_not_equal etag, response.header['ETag'], 'ETag should be different after modification'
       end
+
+      test '#index orders accounts by created_at' do
+        assert_number_of_queries(1, matching: /ORDER BY.*`created_at`/i) do
+          get admin_api_accounts_path(format: :json), params: params
+        end
+        assert_response :success
+      end
+
+      test '#index (JSON) has no N+1 queries' do
+        populate = ->(n) { FactoryBot.create_list(:buyer_account, n, :with_payment_detail, provider_account: @provider) }
+        assert_perform_constant_number_of_queries(populate: populate) do
+          get admin_api_accounts_path(format: :json), params: params
+          assert_response :success
+        end
+      end
+
+      test '#index (JSON) preloads payment_detail — no per-account query' do
+        FactoryBot.create_list(:buyer_account, 3, :with_payment_detail, provider_account: @provider)
+        assert_number_of_queries(1, matching: /FROM.*payment_details/i) do
+          get admin_api_accounts_path(format: :json), params: params
+        end
+        assert_response :success
+      end
+
+      test '#index (XML) has no N+1 queries' do
+        populate = ->(n) { FactoryBot.create_list(:buyer_account, n, :with_payment_detail, provider_account: @provider) }
+        assert_perform_constant_number_of_queries(populate: populate) do
+          get admin_api_accounts_path(format: :xml), params: params
+          assert_response :success
+        end
+      end
     end
 
     class MemberUserTest < AccessTokenTest

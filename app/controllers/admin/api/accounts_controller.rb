@@ -12,7 +12,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
       accounts = accounts.where(:state => state.to_s)
     end
 
-    accounts = accounts.paginate(pagination_params).to_a
+    accounts = accounts.order(:created_at).paginate(pagination_params).to_a
 
     return unless stale?(accounts)
 
@@ -143,7 +143,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   end
 
   def preload_presentation_associations(records)
-    associations = %i[annotations settings] +
+    associations = %i[annotations settings payment_detail] +
       (current_account.defined_builtin_fields_names_for(Account).include?('country') ? [:country] : []) +
       (request.format.xml? ? %i[users bought_plans] : [])
 
@@ -156,8 +156,6 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
     preload_associations(plans.grep(AccountPlan), { issuer: :default_account_plan })
     preload_associations(plans.grep(ServicePlan), [:service, { issuer: %i[default_service_plan account] }])
     preload_associations(plans.grep(ApplicationPlan), [:original, { issuer: %i[default_application_plan account] }])
-
-    preload_associations(accounts, :payment_detail)
   end
 
   def preload_associations(records, associations)
