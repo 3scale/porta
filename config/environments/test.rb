@@ -118,7 +118,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "AccountPlan", type: :n_plus_one_query, association: :customizations
       Bullet.add_safelist class_name: "AccountPlan", type: :n_plus_one_query, association: :issuer
       Bullet.add_safelist class_name: "AccountPlan", type: :n_plus_one_query, association: :pricing_rules
-      Bullet.add_safelist class_name: "AccountPlan", type: :unused_eager_loading, association: :original
       Bullet.add_safelist class_name: "Alert", type: :n_plus_one_query, association: :cinstance
       Bullet.add_safelist class_name: "ApiDocs::Service", type: :unused_eager_loading, association: :service
       Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :customizations

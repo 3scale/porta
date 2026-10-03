@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
+  include NPlusOneControl::MinitestHelper
   class MasterHostTest < Admin::Api::ServicesControllerTest
     setup do
       @token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).plaintext_value
@@ -67,6 +68,22 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     attr_reader :provider, :service
+
+    test 'index returns 304 when services have not been modified' do
+      get admin_api_services_path(access_token: access_token_value, format: :json)
+      assert_response :success
+      etag = response.header['ETag']
+      last_modified = response.header['Last-Modified']
+
+      assert_not_nil etag, 'ETag header should be present'
+      assert_not_nil last_modified, 'Last-Modified header should be present'
+
+      headers = { 'HTTP_IF_NONE_MATCH' => etag, 'HTTP_IF_MODIFIED_SINCE' => last_modified }
+      assert_number_of_queries(11) do
+        get admin_api_services_path(access_token: access_token_value, format: :json), headers: headers
+      end
+      assert_response :not_modified
+    end
 
     test 'index can be paginated' do
       FactoryBot.create_list(:simple_service, 5, account: provider)
