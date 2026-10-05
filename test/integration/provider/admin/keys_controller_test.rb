@@ -116,6 +116,25 @@ class Provider::Admin::KeysControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'create oauth secret renders oauth_secret partial' do
+    login! @admin.account, user: @admin
+
+    oauth_service = FactoryBot.create(:service, account: @admin.account, backend_version: 'oauth')
+    oauth_plan = FactoryBot.create(:application_plan, issuer: oauth_service)
+    oauth_app = FactoryBot.create(:cinstance, plan: oauth_plan)
+
+    # Ensure no keys exist initially
+    oauth_app.application_keys.clear
+
+    post provider_admin_application_keys_path(oauth_app), params: { format: :js }
+
+    assert_response :success
+    # Verify the oauth_secret partial was rendered (escaped in JS string)
+    assert_match(/id=\\"oauth_secret\\"/, response.body)
+    assert_match(/Regenerate/, response.body)
+    assert_match(/regenerate-oauth-key/, response.body)
+  end
+
   private
 
   def assert_only_qualified_members_have_access(verb, path, format)
