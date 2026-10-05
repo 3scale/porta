@@ -198,7 +198,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
       end
 
       test '#index orders accounts by created_at' do
-        assert_number_of_queries(1, matching: /ORDER BY.*`created_at`/i) do
+        assert_number_of_queries(1, matching: /ORDER BY.*created_at/i) do
           get admin_api_accounts_path(format: :json), params: params
         end
         assert_response :success
