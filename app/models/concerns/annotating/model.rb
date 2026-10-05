@@ -15,7 +15,11 @@ module Annotating
     end
 
     def annotations_hash
-      annotations.pluck(:name, :value).to_h
+      if annotations.loaded?
+        annotations.map { [_1.name, _1.value] }.to_h
+      else
+        annotations.pluck(:name, :value).to_h
+      end
     end
 
     def annotations_xml(options = {})
