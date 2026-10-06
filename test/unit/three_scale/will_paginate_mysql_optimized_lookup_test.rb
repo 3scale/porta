@@ -48,26 +48,71 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
   test 'preloaded associations remain loaded after optimized lookup' do
     skip_unless_mysql_with_cte
 
-    user = FactoryBot.create(:user_with_account)
-    relation = User.where(id: user.id).includes(:account).paginate(page: 1, per_page: 1, total_entries: 1)
+    users = FactoryBot.create_list(:user_with_account, 2)
+    # Order by id so page 2 (per_page: 1) deterministically returns the second user.
+    second_user = users.max_by(&:id)
+    relation = User.where(id: users.map(&:id)).order(:id).includes(:account).paginate(page: 2, per_page: 1, total_entries: 2)
     page = nil
 
     assert_number_of_queries(1, matching: /will_paginate_page_ids/) { page = relation.to_a }
 
     assert relation.loaded?
     assert page.first.association(:account).loaded?
-    assert_equal user.account_id, page.first.account.id
+    # Verify the correct account was loaded for the user that belongs on page 2.
+    assert_equal second_user.account_id, page.first.account.id
+  end
+
+  test 'eager_load associations remain loaded after optimized lookup' do
+    skip_unless_mysql_with_cte
+
+    users = FactoryBot.create_list(:user_with_account, 2)
+    # Order by id so page 2 (per_page: 1) deterministically returns the second user.
+    second_user = users.max_by(&:id)
+    relation = User.where(id: users.map(&:id)).eager_load(:account).order(:id).paginate(page: 2, per_page: 1, total_entries: 2)
+    page = nil
+
+    assert_number_of_queries(1, matching: /will_paginate_page_ids/) { page = relation.to_a }
+
+    assert relation.loaded?
+    assert page.first.association(:account).loaded?
+    # Verify the correct account was loaded for the user that belongs on page 2.
+    assert_equal second_user.account_id, page.first.account.id
+  end
+
+  test 'custom select is preserved on the outer query and the optimized lookup is still used' do
+    skip_unless_mysql_with_cte
+
+    prefix = "optimized-lookup-select-#{SecureRandom.hex(8)}"
+    countries = (1..3).map { |n| FactoryBot.create(:country, name: "#{prefix}-#{n}") }
+    relation = Country.unscoped.where(id: countries.map(&:id)).select(:id, :name).order(:name).paginate(page: 2, per_page: 1)
+    page = nil
+
+    queries = capture_sql_queries { page = relation.to_a }
+
+    assert_equal 1, queries.grep(/\bWITH.+will_paginate_page_ids/i).size
+    assert_equal [countries.second.id], page.map(&:id)
+    assert_equal [countries.second.name], page.map(&:name)
+  end
+
+  test 'the optimized lookup is not used on page 1 (zero offset)' do
+    skip_unless_mysql_with_cte
+
+    user = FactoryBot.create(:user_with_account)
+    relation = User.where(id: user.id).paginate(page: 1, per_page: 1, total_entries: 1)
+
+    queries = capture_sql_queries { relation.to_a }
+
+    assert_equal 0, queries.grep(/will_paginate_page_ids/i).size
   end
 
   test 'the optimized lookup is not used for unsafe query shapes' do
     skip_unless_mysql
 
-    user = FactoryBot.create(:user_with_account)
+    users = FactoryBot.create_list(:user_with_account, 2)
     unsafe_relations = {
-      'custom select' => User.select(:id),
       'inner join' => User.joins(:account),
       'left outer join' => User.left_joins(:account),
-      'eager load' => User.eager_load(:account),
+      'references' => User.includes(:account).references(:account),
       'grouping' => User.select(:state).group(:state),
       'having' => User.select(:state).group(:state).having('COUNT(*) > 0'),
       'distinct' => User.distinct,
@@ -77,11 +122,11 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
     unsafe_relations['existing CTE'] = User.with(other_users: User.select(:id)) if User.connection.supports_common_table_expressions?
 
     unsafe_relations.each_value do |base_relation|
-      relation = base_relation.where(id: user.id).paginate(page: 1, per_page: 1, total_entries: 1)
+      relation = base_relation.where(id: users.map(&:id)).paginate(page: 2, per_page: 1, total_entries: 2)
 
       assert_number_of_queries(
         1,
-        matching: /\A(?![\s\S]*will_paginate_page_ids)[\s\S]*\b(?:WITH|SELECT)\b[\s\S]*\bLIMIT\s+1\s+OFFSET\s+0\b/i
+        matching: /\A(?![\s\S]*will_paginate_page_ids)[\s\S]*\b(?:WITH|SELECT)\b[\s\S]*\bLIMIT\s+1\s+OFFSET\s+1\b/i
       ) { relation.to_a }
     end
   end
@@ -89,13 +134,13 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
   test 'the optimized lookup is not used without CTE support' do
     skip_unless_mysql
 
-    user = FactoryBot.create(:user_with_account)
-    relation = User.where(id: user.id).paginate(page: 1, per_page: 1, total_entries: 1)
+    users = FactoryBot.create_list(:user_with_account, 2)
+    relation = User.where(id: users.map(&:id)).paginate(page: 2, per_page: 1, total_entries: 2)
     relation.connection.stubs(:supports_common_table_expressions?).returns(false)
 
     assert_number_of_queries(
       1,
-      matching: /\A(?![\s\S]*will_paginate_page_ids)[\s\S]*\bSELECT\b[\s\S]*\bLIMIT\s+1\s+OFFSET\s+0\b/i
+      matching: /\A(?![\s\S]*will_paginate_page_ids)[\s\S]*\bSELECT\b[\s\S]*\bLIMIT\s+1\s+OFFSET\s+1\b/i
     ) { relation.to_a }
   end
 
