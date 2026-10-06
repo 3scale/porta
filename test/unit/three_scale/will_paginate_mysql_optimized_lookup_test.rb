@@ -28,11 +28,10 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
     assert_not relation.loaded?
 
     page = nil
+    queries = capture_sql_queries { page = relation.to_a }
 
-    assert_number_of_queries([
-                               [1, /\bWITH.+will_paginate_page_ids.+\sLIMIT\s+2\s+OFFSET\s+2.+\sSELECT\b/i],
-                               [1, /\A(?![\s\S]*will_paginate_page_ids)[\s\S]*?\bCOUNT\s*\(/i]
-                             ]) { page = relation.to_a }
+    assert_equal 1, queries.grep(/\bWITH.+will_paginate_page_ids.+\sLIMIT\s+2\s+OFFSET\s+2.+\sSELECT\b/i).size
+    assert_equal 1, queries.grep(/\A(?![\s\S]*will_paginate_page_ids)[\s\S]*?\bCOUNT\s*\(/i).size
 
     assert_equal countries.sort_by(&:name).reverse.drop(2).take(2).map(&:id), page.map(&:id)
     assert relation.loaded?
