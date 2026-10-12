@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
-  include ThreeScale
   include TestHelpers::BackendClientStubs
 
   test 'generates application_id when created' do

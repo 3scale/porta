@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module ThreeScale
-  module TestHelpers
+module TestHelpers
+  module CaptureSqlQueries
     # Runs the block once and returns the SQL strings of every query executed.
     # Use Array#grep to filter by pattern, e.g.:
     #
@@ -17,4 +17,4 @@ module ThreeScale
   end
 end
 
-ActiveSupport::TestCase.include ThreeScale::TestHelpers
+ActiveSupport::TestCase.send(:include, TestHelpers::CaptureSqlQueries)
