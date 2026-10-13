@@ -23,27 +23,31 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
     params.permit(:active_since, :inactive_since)
   end
 
+  def accessible_service_ids
+    @accessible_service_ids ||= accessible_services.select(:id)
+  end
+
   def applications
-    @applications ||= current_account.provided_cinstances.merge(accessible_services)
+    # Use a subquery instead of a JOIN to enable the CTE-based paginator
+    # optimization, see WillPaginateMysqlOptimizedLookup.
+    @applications ||= Cinstance.where(service_id: accessible_service_ids)
   end
 
   def application
     return @application if defined?(@application)
 
-    scope = params[:service_id] ? applications.where(service_id: params[:service_id]) : applications
+    svc_ids = accessible_service_ids
+    svc_ids = svc_ids.where(id: params[:service_id]) if params[:service_id]
 
     @application = case
-
                      when param_key = params[:user_key]
-      # TODO: these scopes should be in model layer
-      # but there is scope named by_user_key already
-      scope.where.has { (service.backend_version == '1') & (user_key == param_key) }.first!
+      Cinstance.where(service_id: svc_ids.where(backend_version: '1'), user_key: param_key).first!
 
                    when app_id = params[:app_id]
-      scope.where.has { (service.backend_version != '1') & (application_id == app_id) }.first!
+      Cinstance.where(service_id: svc_ids.where.not(backend_version: '1')).where(application_id: app_id).first!
 
                      else
-      scope.find(params[:application_id] || params[:id])
+      Cinstance.where(service_id: svc_ids).find(params[:application_id] || params[:id])
     end
   end
 
