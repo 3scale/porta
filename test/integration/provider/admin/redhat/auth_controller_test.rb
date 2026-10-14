@@ -38,6 +38,22 @@ class Provider::Admin::Redhat::AuthControllerTest < ActionDispatch::IntegrationT
     end
   end
 
+  test 'callback decodes referrer url' do
+    login_provider @provider
+    host! @provider.external_admin_domain
+    user_data = ThreeScale::OAuth2::UserData.new(username: 'redhat_user')
+    ThreeScale::OAuth2::KeycloakClient.any_instance.stubs(:authenticate!).returns(user_data)
+
+    get @callback_url, params: { referrer: '/p/admin/dashboard%3Ffoo%3Dbar' }
+    assert_redirected_to '/p/admin/dashboard?foo=bar'
+
+    get @callback_url, params: { referrer: '/p/admin/search?q=hello+world' }
+    assert_redirected_to '/p/admin/search?q=hello+world'
+
+    get @callback_url, params: { referrer: '/p/admin/hello+world' }
+    assert_redirected_to '/p/admin/hello+world'
+  end
+
   test 'Red Hat Customer Portal disabled' do
     ThreeScale.config.redhat_customer_portal.stubs(enabled: false)
 

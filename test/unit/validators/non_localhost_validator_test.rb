@@ -25,7 +25,7 @@ class NonLocalhostValidatorTest < ActiveSupport::TestCase
 
     error = validator.validate_each(record, :api_backend, ' http://34.210.51.155:8181')
     assert_equal ActiveModel::Error, error.class
-    assert_equal ["Invalid URL format"], record.errors.messages_for(:api_backend)
+    assert record.errors.added?(:api_backend, :invalid_url)
 
     error = validator.validate_each(record, :api_backend, 'hrdt://smth')
     assert_nil error
@@ -40,7 +40,7 @@ class NonLocalhostValidatorTest < ActiveSupport::TestCase
     assert record.errors.present?
 
     error = validator.validate_each(record, :api_backend, 'https://<yours>')
-    assert_equal "Invalid URL format", error.message
+    assert_equal :invalid_url, error.type
     assert record.errors.present?
   end
 end
