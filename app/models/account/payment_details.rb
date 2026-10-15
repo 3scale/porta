@@ -32,6 +32,15 @@ module Account::PaymentDetails
 
   private
 
+  def payment_details_available?
+    return true if association(:payment_detail).reader.present?
+
+    # Preserve the existing migration path for payment data in account columns.
+    CREDIT_CARD_ATTRIBUTES.any? do |attribute|
+      has_attribute?(attribute) && self[attribute].present?
+    end
+  end
+
   def create_or_build_payment_detail
     run_callbacks :create_or_build_payment_detail do
       payment_detail_attributes = attributes.symbolize_keys.slice(*CREDIT_CARD_ATTRIBUTES)
