@@ -49,10 +49,12 @@ class ThreeScale::RepresenterWrapperTest < ActiveSupport::TestCase
   end
 
   test 'uses the wrapper from collection items' do
-    collection = InlineCollectionRepresenter.new([
-      Record.new(id: 1, name: 'First'),
-      Record.new(id: 2, name: 'Second')
-    ])
+    collection = InlineCollectionRepresenter.new(
+      [
+        Record.new(id: 1, name: 'First'),
+        Record.new(id: 2, name: 'Second')
+      ]
+    )
 
     assert_equal '{"records":[{"record":{"id":1,"name":"First"}},{"record":{"id":2,"name":"Second"}}]}', collection.to_json
   end
