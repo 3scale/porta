@@ -212,7 +212,7 @@ class Cinstance < Contract
       service_includes << :default_application_plan
       plan_includes << :original
     end
-    includes(:user_account, service: service_includes, plan: plan_includes)
+    includes(user_account: :provider_account, service: service_includes, plan: plan_includes)
   end
 
 

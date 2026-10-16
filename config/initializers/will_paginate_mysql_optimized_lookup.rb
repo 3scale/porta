@@ -5,5 +5,6 @@ ActiveSupport.on_load(:active_record) do
     require 'three_scale/will_paginate_mysql_optimized_lookup'
 
     WillPaginate::ActiveRecord::RelationMethods.prepend(ThreeScale::WillPaginateMysqlOptimizedLookup)
+    WillPaginate::ActiveRecord::Pagination.prepend(ThreeScale::WillPaginateMysqlOptimizedLookup::EagerLoadToPreload)
   end
 end
