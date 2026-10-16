@@ -18,7 +18,7 @@ module ThreeScale
       end
 
       def method_missing(method, *args, &block)
-        method = method.to_s.sub(/_\Z/, '')
+        method = method.to_s.delete_suffix('_')
 
         tag!(method, *args, &block)
       end
@@ -57,7 +57,7 @@ module ThreeScale
       # makes namespaced elements and we are passing some symbol values
 
       def __normalized_args__(args)
-        args.map do |arg|
+        args.map! do |arg|
           case arg
           when ::Symbol
             arg.to_s
@@ -67,8 +67,8 @@ module ThreeScale
         end
       end
 
-      def __tag__(*args, &block)
-        @builder.__send__(:method_missing, *args, &block)
+      def __tag__(...)
+        @builder.tag!(...)
       end
 
     end
