@@ -22,7 +22,7 @@ class BackendApiTest < ActiveSupport::TestCase
     @account.expects(:provider_can_use?).with(:proxy_private_base_path).at_least_once.returns(false)
     @backend_api.private_endpoint = 'https://example.org:3/path'
     @backend_api.valid?
-    assert_equal [@backend_api.errors.generate_message(:private_endpoint, :invalid)], @backend_api.errors.messages[:private_endpoint]
+    assert_equal [@backend_api.errors.generate_message(:private_endpoint, :invalid_url)], @backend_api.errors.messages[:private_endpoint]
 
     @account.expects(:provider_can_use?).with(:proxy_private_base_path).at_least_once.returns(true)
     @backend_api.private_endpoint = 'https://example.org:3/path'

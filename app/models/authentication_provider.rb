@@ -31,8 +31,9 @@ class AuthenticationProvider < ApplicationRecord
 
   validates :client_id, :client_secret, presence: true, if: :oauth_config_required?
 
-  with_options format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true, message: :invalid_url } do |ops|
-    ops.validates :site
+  with_options uri: { path: true, query: true, fragment: true }, allow_blank: true do |ops|
+    # Skip uri: for whitespace URLs — each subclass whitespace validator handles these
+    ops.validates :site, unless: -> { site.to_s.match?(/\s/) }
     ops.validates :token_url
     ops.validates :authorize_url
     ops.validates :user_info_url

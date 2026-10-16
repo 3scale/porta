@@ -29,12 +29,11 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded, presence: true
 
-  uri_pattern = URI::DEFAULT_PARSER.pattern
+  OPTIONAL_QUERY_FORMAT = "(?:\\?(#{UriPatterns::QUERY}))?"
+  URI_PATH_PART = Regexp.new('\A' + UriPatterns::ABS_PATH + OPTIONAL_QUERY_FORMAT + '\z')
+  HOST = Regexp.new('\A' + UriPatterns::HOSTNAME + '(:\d+)?' + '\z')
 
   URI_OR_LOCALHOST  = /\A(https?:\/\/([a-zA-Z0-9._:\/?-])+|.*localhost.*)\Z/
-  OPTIONAL_QUERY_FORMAT = "(?:\\?(#{uri_pattern.fetch(:QUERY)}))?"
-  URI_PATH_PART = Regexp.new('\A' + uri_pattern.fetch(:ABS_PATH) + OPTIONAL_QUERY_FORMAT + '\z')
-  HOST = Regexp.new('\A' + uri_pattern.fetch(:HOSTNAME) + '(:\d+)?' + '\z')
 
   OAUTH_PARAMS = /(\?|&)(scope=|state=|tok=)/
 
@@ -675,7 +674,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
       begin
         uri = URI.parse(attribute_value)
-        value = URI::Generic.new(uri.scheme, uri.userinfo, uri.host, uri.port, uri.registry, uri.path, uri.opaque, uri.query, uri.fragment).to_s
+        value = URI::Generic.new(uri.scheme, uri.userinfo, uri.host, uri.port, nil, uri.path, uri.opaque, uri.query, uri.fragment).to_s
         @model[attribute] = value unless @model[attribute] == value
       rescue URI::InvalidURIError
         @model.errors.add(attribute, 'Invalid domain')

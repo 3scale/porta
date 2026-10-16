@@ -40,7 +40,7 @@ class UriValidatorTest < ActiveSupport::TestCase
     record = ModelWithURIValidation.new
     record.uri = "http://domain.test/path"
     refute record.valid?
-    assert_equal 'is invalid', record.errors[:uri].to_sentence
+    assert_equal 'Invalid URL format', record.errors[:uri].to_sentence
 
     with_clean_validators ModelWithURIValidation do
       [true, false].each do |valid_path|
@@ -78,6 +78,18 @@ class UriValidatorTest < ActiveSupport::TestCase
       assert record.valid?
       record.uri = "tftp://domain.test"
       refute record.valid?
+    end
+  end
+
+  test 'sub-delimiter characters are valid' do
+    with_clean_validators ModelWithURIValidation do
+      klass = Class.new(ModelWithURIValidation) { validates :uri, uri: { path: true } }
+      record = klass.new
+
+      %w[! ' ( ) *].each do |char|
+        record.uri = "http://domain.test/path#{char}"
+        assert record.valid?, "Expected URI with '#{char}' to be valid"
+      end
     end
   end
 
