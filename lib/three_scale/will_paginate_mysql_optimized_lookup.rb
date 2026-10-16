@@ -22,6 +22,8 @@ module ThreeScale
   # primary key. The relation must have no joins, references, grouping, HAVING,
   # DISTINCT, custom FROM, existing CTE, or lock. Other relation shapes use
   # WillPaginate's usual query.
+  #
+  # You can also see https://bugs.mysql.com/bug.php?id=109173
   module WillPaginateMysqlOptimizedLookup
     CTE_NAME = :will_paginate_page_ids
 
@@ -44,6 +46,9 @@ module ThreeScale
         connection.supports_common_table_expressions? &&
         # A nil PK (no primary key) or an Array PK (composite key) cannot be aliased as a single CTE column.
         klass.primary_key.is_a?(String) &&
+        # Skip the CTE when the caller already selected only the PK — a plain
+        # LIMIT/OFFSET on a narrow index-only scan is already optimal.
+        !(select_values.size == 1 && select_values.first.to_s == klass.primary_key) &&
         # Paginating over a JOIN is an unusual pattern in Rails (AR collapses join rows into one object
         # per PK anyway), so it is not a use case we want to spend engineering effort on right now.
         # Whether the CTE rewrite would even be correct or faster depends heavily on join cardinality
