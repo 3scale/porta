@@ -1,3 +1,5 @@
+require 'test_helper'
+
 class ApiAuthentication::SuspendedAccountTest < SimpleMiniTest
   include ActiveSupport::Callbacks
   define_callbacks :action
