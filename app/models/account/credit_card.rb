@@ -37,6 +37,8 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
   end
 
   def credit_card_stored?
+    return false unless payment_details_available?
+
     public_send(credit_card_stored_attribute).present?
   end
 
