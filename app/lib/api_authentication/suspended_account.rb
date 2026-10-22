@@ -12,7 +12,10 @@ module ApiAuthentication
 
     def forbid_suspended_account_api_access
       if (account = current_account)
-        head(:forbidden) unless account.approved?
+        return if account.approved?
+        return (account.scheduled_for_deletion? ? head(:not_found) : nil) if account.provider? && authenticated_request.zync?
+
+        head(:forbidden)
       end
     end
   end
