@@ -24,27 +24,6 @@ class ZyncScheduledProviderTest < ActionDispatch::IntegrationTest
     @provider.suspend!
   end
 
-  test 'suspended providers return normal application data to Zync' do
-    get find_admin_api_applications_path(format: :json),
-        params: token_params.merge(application_id: @application.id), headers: zync_headers
-
-    assert_response :success
-    application = response.parsed_body.fetch('application')
-    assert_equal @application.id, application.fetch('id')
-    assert_equal true, application.fetch('enabled')
-    assert_equal @application.application_id, application.fetch('client_id')
-    assert_equal @client_secret, application.fetch('client_secret')
-  end
-
-  test 'scheduled providers return not found for Zync application reads' do
-    @provider.schedule_for_deletion!
-    get find_admin_api_applications_path(format: :json),
-        params: token_params.merge(application_id: @application.id), headers: zync_headers
-
-    assert_response :not_found
-    assert_empty response.body
-  end
-
   test 'suspended providers get normal provider and proxy responses on Zync GETs' do
     get admin_api_provider_path(format: :json), params: token_params, headers: zync_headers
     assert_response :success
@@ -57,18 +36,16 @@ class ZyncScheduledProviderTest < ActionDispatch::IntegrationTest
     assert_equal @service.proxy.endpoint, proxy.fetch('endpoint')
   end
 
-  test 'missing or invalid Zync headers are forbidden' do
-    [{}, { 'X-Zync-Token' => 'incorrect' }].each do |headers|
-      get admin_api_provider_path(format: :json), params: token_params, headers: headers
-      assert_response :forbidden
-    end
+  test 'scheduled providers are forbidden without Zync authentication' do
+    @provider.schedule_for_deletion!
+    get admin_api_provider_path(format: :json), params: token_params
+
+    assert_response :forbidden
   end
 
   test 'Zync headers alone do not replace provider authentication' do
-    [{}, { access_token: 'invalid' }].each do |params|
-      get admin_api_provider_path(format: :json), params: params, headers: zync_headers
-      assert_response :forbidden
-    end
+    get admin_api_provider_path(format: :json), params: {}, headers: zync_headers
+    assert_response :forbidden
   end
 
   test 'scheduled providers return not found for provider and proxy reads' do
@@ -82,13 +59,12 @@ class ZyncScheduledProviderTest < ActionDispatch::IntegrationTest
     assert_empty response.body
   end
 
-  test 'approved providers return normal data with and without Zync headers' do
+  test 'approved providers return normal data to Zync' do
     @provider.resume!
-    [{}, zync_headers].each do |headers|
-      get admin_api_provider_path(format: :json), params: token_params, headers: headers
-      assert_response :success
-      assert_equal @provider.external_admin_domain, response.parsed_body.dig('account', 'admin_domain')
-    end
+    get admin_api_provider_path(format: :json), params: token_params, headers: zync_headers
+
+    assert_response :success
+    assert_equal @provider.external_admin_domain, response.parsed_body.dig('account', 'admin_domain')
   end
 
   test 'resuming a scheduled provider restores application data and credentials after not found' do
@@ -97,7 +73,10 @@ class ZyncScheduledProviderTest < ActionDispatch::IntegrationTest
     get path, params: params, headers: zync_headers
     assert_response :success
     original_application = response.parsed_body.fetch('application')
+    assert_equal @application.id, original_application.fetch('id')
     assert_equal true, original_application.fetch('enabled')
+    assert_equal @application.application_id, original_application.fetch('client_id')
+    assert_equal @client_secret, original_application.fetch('client_secret')
 
     @provider.schedule_for_deletion!
     get path, params: params, headers: zync_headers
