@@ -235,20 +235,51 @@ module Abilities
         @member.member_permission_ids = [:partners]
         buyer = FactoryBot.create(:buyer_account, provider_account: @account, state: previous_state)
 
-        assert_can ability, :suspend, buyer
+        assert_can ability, action, buyer
       end
 
       test "can't #{action} a buyer if it doesn't have :partners permission" do
         buyer = FactoryBot.create(:buyer_account, provider_account: @account, state: previous_state)
 
-        assert_cannot ability, :suspend, buyer
+        assert_cannot ability, action, buyer
       end
 
       test "can't #{action} a buyer if it belongs to another provider" do
         @member.member_permission_ids = [:partners]
         buyer = FactoryBot.create(:buyer_account, state: previous_state)
 
-        assert_cannot ability, :suspend, buyer
+        assert_cannot ability, action, buyer
+      end
+    end
+
+    %w[suspended scheduled_for_deletion].each do |state|
+      test "can resume an owned #{state} buyer with partners permission" do
+        @member.member_permission_ids = [:partners]
+        buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: @account, state: state)
+
+        assert_can ability, :resume, buyer
+      end
+
+      test "cannot resume an owned #{state} buyer without partners permission" do
+        buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: @account, state: state)
+
+        assert_cannot ability, :resume, buyer
+      end
+
+      test "cannot resume another provider's #{state} buyer" do
+        @member.member_permission_ids = [:partners]
+        buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: FactoryBot.build_stubbed(:simple_provider), state: state)
+
+        assert_cannot ability, :resume, buyer
+      end
+    end
+
+    %w[created pending approved rejected].each do |state|
+      test "cannot resume an owned #{state} buyer with partners permission" do
+        @member.member_permission_ids = [:partners]
+        buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: @account, state: state)
+
+        assert_cannot ability, :resume, buyer
       end
     end
 

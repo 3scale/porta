@@ -24,7 +24,7 @@ Ability.define do |user|
       can :manage, :provider_plans unless ThreeScale.config.onpremises
 
       if user.account.provider_can_use?(:service_permissions)
-        can :resume, Account
+        can(:resume, Account) { |account| account.can_resume? }
         can(:update, Account) { |account| !account.scheduled_for_deletion? }
       end
     end
