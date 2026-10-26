@@ -57,6 +57,71 @@ Start the rails server by running the following command:
 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
 ```
 
+## Rails 7.2 / 8.0 dual boot
+
+The default bundle uses Rails 7.2. `Gemfile.next` is a symlink to `Gemfile`;
+selecting it activates the Rails 8.0 dependency constraints and its separate
+`Gemfile.next.lock`. Both bundles use Ruby 3.3, Rack 2.2, and the existing
+framework defaults.
+
+Install both bundles:
+
+```sh
+bundle install
+BUNDLE_GEMFILE=Gemfile.next bundle install
+```
+
+Select the bundle for each command, including database preparation, asset
+compilation, the server, and tests:
+
+```sh
+# Current Rails
+bundle exec rails runner 'puts Rails.version'
+bundle exec rails test
+bundle exec rspec
+bundle exec cucumber
+
+# Next Rails
+BUNDLE_GEMFILE=Gemfile.next bundle exec rails runner 'puts Rails.version'
+BUNDLE_GEMFILE=Gemfile.next bundle exec rails test
+BUNDLE_GEMFILE=Gemfile.next bundle exec rspec
+BUNDLE_GEMFILE=Gemfile.next bundle exec cucumber
+BUNDLE_GEMFILE=Gemfile.next bundle exec rails server -b 0.0.0.0
+```
+
+Prefix any existing development command with `BUNDLE_GEMFILE=Gemfile.next` to
+use Rails 8.0. Use `NextRails.next?` in application code only when compatibility
+requires different implementations for the two versions. Keep changes that work
+on both versions unconditional. Update each lockfile with its matching bundle;
+do not overwrite `Gemfile.next.lock` with the current lockfile after initial setup.
+
+Rails deprecation warnings remain visible. CircleCI automatically sets
+`DEPRECATION_TRACKER=save` in the `_rails80` test jobs, so Minitest and RSpec save
+per-test inventories. Tracking remains opt-in for Rails 7.2 and local runs:
+
+```sh
+DEPRECATION_TRACKER=save bundle exec rails test
+BUNDLE_GEMFILE=Gemfile.next DEPRECATION_TRACKER=save bundle exec rspec
+```
+
+Inventories are written to `log/deprecations-<runner>-<Rails version>-<node>.json`,
+separating Rails versions and CircleCI nodes. CircleCI collects these files with
+its log artifacts. These inventories record warnings
+emitted during tests; also review warnings emitted while the application boots.
+
+CircleCI keeps the existing Rails 7.2 workflows and adds `_rails80` counterparts
+for MySQL, PostgreSQL, and Oracle, including nightly builds. Approve the desired
+database/version workflow using its existing manual approval step. Each version
+runs asset compilation, Minitest, RSpec, and Cucumber with the same bundle, in a
+separate workspace with separate gem and asset caches. The Rails 8.0 workflows
+expose remaining upgrade failures; adding dual boot does not mean the application
+or its full test suite is already compatible with Rails 8.0.
+
+Before switching the default bundle, update Rails 7.2 to its latest patch,
+establish a green baseline, resolve deprecations, and fix the failures exposed by
+Rails 8.0 on all databases. Change `config.load_defaults` separately after the
+version upgrade is complete.
+
 ## Sphinx server
 
 Some models are indexed by [Sphinx](http://sphinxsearch.com/) (see app/indices). The search server needs to be running in the background to enable searching through these models. Start it in a separate terminal by running:
