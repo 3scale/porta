@@ -25,6 +25,15 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'minitest/autorun'
 
 require 'rails/test_help'
+
+if ENV['DEPRECATION_TRACKER']
+  DeprecationTracker.track_minitest(
+    mode: ENV.fetch('DEPRECATION_TRACKER'),
+    shitlist_path: Rails.root.join('log', "deprecations-minitest-#{Rails.version}-#{ENV.fetch('CIRCLE_NODE_INDEX', 'local')}.json"),
+    transform_message: ->(message) { message.gsub("#{Rails.root}/", '') }
+  )
+end
+
 require "paperclip/matchers"
 
 require File.expand_path('../lib/developer_portal/test/test_helper.rb', __dir__)

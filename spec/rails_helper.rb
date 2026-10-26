@@ -68,6 +68,15 @@ require 'database_cleaner'
 
 
 RSpec.configure do |config|
+  if ENV['DEPRECATION_TRACKER']
+    DeprecationTracker.track_rspec(
+      config,
+      mode: ENV.fetch('DEPRECATION_TRACKER'),
+      shitlist_path: Rails.root.join('log', "deprecations-rspec-#{Rails.version}-#{ENV.fetch('CIRCLE_NODE_INDEX', 'local')}.json"),
+      transform_message: ->(message) { message.gsub("#{Rails.root}/", '') }
+    )
+  end
+
   config.include RSpecHtmlMatchers
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.file_fixture_path = "#{::Rails.root}/test/fixtures"

@@ -271,6 +271,15 @@ commands: # reusable commands with parameters
             set -o pipefail
             bundle exec rake ci:db:ready db:create db:test:prepare
 
+  enable-deprecation-tracking:
+    steps:
+      - run:
+          name: Enable deprecation tracking for Rails 8.0 tests
+          command: |
+            if [ "$BUNDLE_GEMFILE" = "Gemfile.next" ]; then
+              echo 'export DEPRECATION_TRACKER=save' >> "$BASH_ENV"
+            fi
+
   rspec-tests:
     parameters:
       extra-deps:
@@ -283,6 +292,7 @@ commands: # reusable commands with parameters
       - *use-example-config-files
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
+      - enable-deprecation-tracking
       - run:
           name: jemalloc availability
           command: ldd /bin/bash | grep "$LD_PRELOAD" || ( ldconfig -p && exit 1 )
@@ -306,6 +316,7 @@ commands: # reusable commands with parameters
       - *attach-to-workspace
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
+      - enable-deprecation-tracking
       - *disable-internet-access
       - run:
           name: Check internet access is disabled
@@ -339,6 +350,7 @@ commands: # reusable commands with parameters
       - *use-example-config-files
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
+      - enable-deprecation-tracking
       - run:
           name: Run Rails tests
           command: |
