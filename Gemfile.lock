@@ -564,6 +564,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     netrc (0.11.0)
+    next_rails (1.7.0)
     nio4r (2.7.5)
     nkf (0.2.0)
     nokogiri (1.18.9)
@@ -1103,6 +1104,7 @@ DEPENDENCIES
   mutex_m
   mysql2 (~> 0.5.3)
   n_plus_one_control
+  next_rails (~> 1.7)
   nkf
   nokogiri (~> 1.18.9)
   non-digest-assets (~> 2.4.0)

@@ -1,7 +1,13 @@
+def next?
+  File.basename(__FILE__) == "Gemfile.next"
+end
+
 # on servers we don't have proper LANG
 Encoding.default_external = Encoding::UTF_8
 
 source 'https://rubygems.org'
+
+gem 'next_rails', '~> 1.7'
 
 # to not use insecure git protocol
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
@@ -12,7 +18,7 @@ gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 7.2.3'
+gem 'rails', next? ? '~> 8.0.0' : '~> 7.2.3'
 
 gem 'mail', '~> 2.8.1'
 
@@ -29,7 +35,7 @@ gem 'sprockets-rails'
 group :assets do
   gem 'coffee-rails', '~> 5.0'
   gem 'cssbundling-rails', '~> 1.4.3'
-  gem 'non-digest-assets', '~> 2.4.0'
+  gem 'non-digest-assets', next? ? '~> 2.5' : '~> 2.4.0'
 end
 
 gem 'bcrypt', '~> 3.1.7'
@@ -90,7 +96,7 @@ gem 'nokogiri', '~> 1.18.9', force_ruby_platform: true
 gem 'secure_headers', '~> 6.3.0'
 gem 'redlock'
 
-gem 'acts-as-taggable-on', '~> 11.0'
+gem 'acts-as-taggable-on', next? ? '~> 12.0' : '~> 11.0'
 gem 'baby_squeel', '~> 4.0.0'
 gem 'browser'
 gem 'diff-lcs', '~> 1.2'
@@ -184,7 +190,7 @@ group :test do
 
   gem 'chronic'
   gem 'cucumber', '~> 7.0'
-  gem 'cucumber-rails', '~> 3.0.0', require: false
+  gem 'cucumber-rails', next? ? '~> 3.1' : '~> 3.0.0', require: false
   gem 'email_spec', require: false
   gem 'fakefs', require: 'fakefs/safe'
   gem 'launchy'
@@ -228,7 +234,7 @@ group :development, :test do
   gem 'active_record_query_trace'
 
   gem 'bootsnap', '~> 1.16'
-  gem 'bullet', '~> 7.2.0'
+  gem 'bullet', next? ? '~> 8.0' : '~> 7.2.0'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
@@ -254,7 +260,7 @@ group :oracle do
   oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
   # ENV['NLS_LANG'] ||= 'AMERICAN_AMERICA.AL32UTF8' if oracle
   ENV['NLS_LANG'] ||= 'AMERICAN_AMERICA.UTF8' if oracle
-  gem 'activerecord-oracle_enhanced-adapter', '~> 7.2.0', install_if: oracle
+  gem 'activerecord-oracle_enhanced-adapter', next? ? '~> 8.0.0' : '~> 7.2.0', install_if: oracle
   gem 'ruby-oci8', require: false, install_if: oracle
 end
 
