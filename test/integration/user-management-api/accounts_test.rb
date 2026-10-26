@@ -227,6 +227,28 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
           assert_response :success
         end
       end
+
+      # The accounts index has no joins, so page 2 and later are loaded by a single query with the ID query
+      # as a CTE.  The pagination total is a separate COUNT.
+      test '#index page 2 runs the ID query as a CTE in a single data query' do
+        skip 'the CTE is used only with MySQL 8.0+' unless System::Database.mysql? && ActiveRecord::Base.connection.supports_common_table_expressions?
+
+        FactoryBot.create_list(:buyer_account, 3, provider_account: @provider)
+
+        queries = nil
+        messages = capture_log_messages do
+          queries = capture_sql_queries do
+            get admin_api_accounts_path(format: :json), params: params.merge(page: 2, per_page: 2)
+            assert_response :success
+          end
+        end
+        assert_empty messages.grep(/WillPaginateMysqlOptimizedLookup/), messages.join("\n")
+        account_queries = queries.grep(/FROM `accounts`/)
+
+        assert_equal 1, account_queries.grep(/\AWITH `will_paginate_page_ids`/).size, queries.join("\n")
+        assert_equal 1, account_queries.grep(/\ASELECT COUNT\(\*\) FROM `accounts`/).size, queries.join("\n")
+        assert_equal 2, response.parsed_body['accounts'].size
+      end
     end
 
     class MemberUserTest < AccessTokenTest
