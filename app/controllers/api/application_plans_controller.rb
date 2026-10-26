@@ -37,7 +37,7 @@ class Api::ApplicationPlansController < Api::PlansBaseController
   end
 
   def collection
-    @collection ||= scope.application_plans.includes(:issuer)
+    @collection ||= scope.application_plans
   end
 
   def presenter
