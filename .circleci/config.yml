@@ -26,8 +26,8 @@ store-log-artifacts: &store-log-artifacts
     destination: log
 
 npm-cache-key: &npm-cache-key stream9-{{ .Environment.CACHE_VERSION }}-node-modules-{{ checksum "yarn.lock" }}
-bundle-cache-key: &bundle-cache-key stream9-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "/tmp/db" }}
-assets-cache-key: &assets-cache-key stream9-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
+bundle-cache-key: &bundle-cache-key stream9-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ .Environment.BUNDLE_GEMFILE }}-{{ checksum "/tmp/bundle-lockfile" }}-{{ checksum "/tmp/db" }}
+assets-cache-key: &assets-cache-key stream9-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ .Environment.BUNDLE_GEMFILE }}-{{ checksum "tmp/assets_related_checksums" }}
 oracle-libs-cache-key: &oracle-libs-cache-key ora1-{{ .Environment.CACHE_VERSION }}-oracle-libs-cache-{{ checksum "script/oracle/install-instantclient-packages.sh" }}
 
 restore-npm-cache: &restore-npm-cache
@@ -65,7 +65,9 @@ restore-assets-cache: &restore-assets-cache
 generate-assets-checksums: &generate-assets-checksums
   run:
     name: Generate assets precompilation checksum data
-    command: git ls-tree -r HEAD $(<.circleci/asset_paths) > tmp/assets_related_checksums
+    command: |
+      git ls-tree -r HEAD $(<.circleci/asset_paths) > tmp/assets_related_checksums
+      sha256sum "${BUNDLE_GEMFILE}.lock" >> tmp/assets_related_checksums
 
 use-example-config-files: &use-example-config-files
   run:
@@ -164,17 +166,17 @@ nightly-trigger: &nightly-trigger
 
 build-envs:
   mysql: &build-envs-mysql
-    environment:
+    environment: &mysql-environment
       DB: mysql
       DATABASE_URL: mysql2://root:@127.0.0.1:3306/3scale_system_test
 
   postgresql: &build-envs-postgresql
-    environment:
+    environment: &postgresql-environment
       DB: postgresql
       DATABASE_URL: postgresql://postgres:@127.0.0.1:5432/systemdb
 
   oracle: &build-envs-oracle
-    environment:
+    environment: &oracle-environment
       DB: oracle
       DATABASE_URL: oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb
       CAPYBARA_MAX_WAIT_TIME: 30
@@ -225,8 +227,10 @@ commands: # reusable commands with parameters
     steps:
       - checkout
       - run:
-          name: Make $DB Available for cache keys
-          command: echo $DB > /tmp/db
+          name: Prepare bundle cache keys
+          command: |
+            echo "$DB" > /tmp/db
+            cp "${BUNDLE_GEMFILE}.lock" /tmp/bundle-lockfile
       - restore-gem-cache
       - steps: << parameters.extra-deps >>
       - run:
@@ -467,9 +471,15 @@ executors:
 jobs:
   dependencies_bundler:
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
       database: mysql
@@ -479,9 +489,15 @@ jobs:
 
   deps_bundler_postgres:
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
       database: postgresql
@@ -491,9 +507,15 @@ jobs:
 
   deps_bundler_oracle:
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
       database: oracle
@@ -528,9 +550,15 @@ jobs:
   assets_precompile:
     resource_class: large
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -555,9 +583,15 @@ jobs:
 
   licenses:
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -592,9 +626,15 @@ jobs:
   unit:
     parallelism: 8
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-mysql-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -604,9 +644,15 @@ jobs:
   unit-postgres:
     parallelism: 8
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-postgres-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -616,9 +662,15 @@ jobs:
   unit-oracle:
     parallelism: 6
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-oracle-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -630,9 +682,15 @@ jobs:
   functional:
     parallelism: 2
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-mysql-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -642,9 +700,15 @@ jobs:
   functional-postgres:
     parallelism: 2
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-postgres-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -654,9 +718,15 @@ jobs:
   functional-oracle:
     parallelism: 2
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-oracle-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -668,9 +738,15 @@ jobs:
   integration:
     parallelism: 8
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-mysql-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -680,9 +756,15 @@ jobs:
   integration-postgres:
     parallelism: 8
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-postgres-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -692,9 +774,15 @@ jobs:
   integration-oracle:
     parallelism: 6
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-oracle-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -706,9 +794,15 @@ jobs:
   rspec:
     parallelism: 3
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-mysql-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -718,9 +812,15 @@ jobs:
   rspec-postgres:
     parallelism: 3
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-postgres-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -730,9 +830,15 @@ jobs:
   rspec-oracle:
     parallelism: 4
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: builder-with-oracle-ruby33
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -742,12 +848,18 @@ jobs:
       - notify_failure
 
   cucumber:
-    <<: *build-envs-mysql
     parallelism: 30
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: cucumber-with-mysql-ruby33
+    environment:
+      <<: *mysql-environment
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -755,12 +867,18 @@ jobs:
       - notify_failure
 
   cucumber-postgres:
-    <<: *build-envs-postgresql
     parallelism: 30
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: cucumber-with-postgres-ruby33
+    environment:
+      <<: *postgresql-environment
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -768,12 +886,18 @@ jobs:
       - notify_failure
 
   cucumber-oracle:
-    <<: *build-envs-oracle
     parallelism: 30
     parameters:
+      gemfile:
+        type: enum
+        enum: [Gemfile, Gemfile.next]
+        default: Gemfile
       executor:
         type: string
         default: cucumber-with-oracle-ruby33
+    environment:
+      <<: *oracle-environment
+      BUNDLE_GEMFILE: << parameters.gemfile >>
     executor:
       name: << parameters.executor >>
     steps:
@@ -1190,5 +1314,326 @@ workflows:
           requires:
             - licenses
             - jest
+          <<: *only-master-filter
+    <<: *nightly-trigger
+
+  ######## Rails 8.0 dual-boot workflows (separate workspaces)
+
+  mysql_build_rails80:
+    jobs:
+      - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+      - notify_start:
+          <<: *only-master-filter
+          requires:
+            - manual_approval
+      - dependencies_bundler:
+          gemfile: Gemfile.next
+          requires:
+            - manual_approval
+      - dependencies_npm:
+          requires:
+            - manual_approval
+      - assets_precompile:
+          gemfile: Gemfile.next
+          requires:
+            - dependencies_bundler
+            - dependencies_npm
+      - unit:
+          gemfile: Gemfile.next
+          requires:
+            - dependencies_bundler
+      - functional:
+          gemfile: Gemfile.next
+          requires:
+            - assets_precompile
+      - integration:
+          gemfile: Gemfile.next
+          requires:
+            - assets_precompile
+      - rspec:
+          gemfile: Gemfile.next
+          requires:
+            - dependencies_bundler
+      - cucumber:
+          gemfile: Gemfile.next
+          requires:
+            - assets_precompile
+      - notify_success:
+          requires:
+            - rspec
+            - unit
+            - cucumber
+            - integration
+            - functional
+          <<: *only-master-filter
+
+  postgres_build_rails80:
+    jobs:
+      - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+          # On approval of the `hold` job, any successive job that requires the `hold` job will run.
+      - notify_start:
+          requires:
+            - manual_approval
+          <<: *only-master-filter
+      - deps_bundler_postgres:
+          gemfile: Gemfile.next
+          requires:
+            - manual_approval
+      - dependencies_npm:
+          requires:
+            - manual_approval
+      - assets_precompile:
+          gemfile: Gemfile.next
+          requires:
+            - deps_bundler_postgres
+            - dependencies_npm
+      - unit-postgres:
+          gemfile: Gemfile.next
+          requires:
+            - deps_bundler_postgres
+      - functional-postgres:
+          gemfile: Gemfile.next
+          requires:
+            - assets_precompile
+      - integration-postgres:
+          gemfile: Gemfile.next
+          requires:
+            - assets_precompile
+      - rspec-postgres:
+          gemfile: Gemfile.next
+          requires:
+            - deps_bundler_postgres
+      - cucumber-postgres:
+          gemfile: Gemfile.next
+          requires:
+            - assets_precompile
+      - notify_success:
+          requires:
+            - rspec-postgres
+            - unit-postgres
+            - cucumber-postgres
+            - integration-postgres
+            - functional-postgres
+          <<: *only-master-filter
+
+  oracle_build_rails80:
+    jobs:
+      - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+        # On approval of the `hold` job, any successive job that requires the `hold` job will run.
+      - notify_start:
+          requires:
+            - manual_approval
+          <<: *only-master-filter
+      - deps_bundler_oracle:
+          gemfile: Gemfile.next
+          requires:
+            - manual_approval
+      - dependencies_npm:
+          requires:
+            - manual_approval
+      - assets_precompile:
+          gemfile: Gemfile.next
+          requires:
+            - deps_bundler_oracle
+            - dependencies_npm
+      - unit-oracle:
+          gemfile: Gemfile.next
+          requires:
+            - deps_bundler_oracle
+          context:
+            - quay
+      - functional-oracle:
+          gemfile: Gemfile.next
+          requires:
+            - assets_precompile
+          context:
+            - quay
+      - integration-oracle:
+          gemfile: Gemfile.next
+          requires:
+            - assets_precompile
+          context:
+            - quay
+      - rspec-oracle:
+          gemfile: Gemfile.next
+          requires:
+            - deps_bundler_oracle
+          context:
+            - quay
+      - cucumber-oracle:
+          gemfile: Gemfile.next
+          requires:
+            - assets_precompile
+          context:
+            - quay
+      - notify_success:
+          requires:
+            - rspec-oracle
+            - unit-oracle
+            - cucumber-oracle
+            - integration-oracle
+            - functional-oracle
+          <<: *only-master-filter
+
+  mysql_nightly_build_ruby33_rails80:
+    jobs:
+      - notify_start:
+          <<: *only-master-filter
+      - dependencies_bundler:
+          gemfile: Gemfile.next
+          executor: builder-ruby33
+      - dependencies_npm:
+          executor: builder-ruby33
+      - assets_precompile:
+          gemfile: Gemfile.next
+          executor: builder-ruby33
+          requires:
+            - dependencies_bundler
+            - dependencies_npm
+      - unit:
+          gemfile: Gemfile.next
+          executor: builder-with-mysql-ruby33
+          requires:
+            - dependencies_bundler
+      - functional:
+          gemfile: Gemfile.next
+          executor: builder-with-mysql-ruby33
+          requires:
+            - assets_precompile
+      - integration:
+          gemfile: Gemfile.next
+          executor: builder-with-mysql-ruby33
+          requires:
+            - assets_precompile
+      - rspec:
+          gemfile: Gemfile.next
+          executor: builder-with-mysql-ruby33
+          requires:
+            - dependencies_bundler
+      - cucumber:
+          gemfile: Gemfile.next
+          executor: cucumber-with-mysql-ruby33
+          requires:
+            - assets_precompile
+      - notify_success:
+          requires:
+            - rspec
+            - unit
+            - cucumber
+            - integration
+            - functional
+          <<: *only-master-filter
+    <<: *nightly-trigger
+
+  postgres_nightly_build_ruby33_rails80:
+    jobs:
+      - notify_start:
+          <<: *only-master-filter
+      - deps_bundler_postgres:
+          gemfile: Gemfile.next
+          executor: builder-ruby33
+      - dependencies_npm:
+          executor: builder-ruby33
+      - assets_precompile:
+          gemfile: Gemfile.next
+          executor: builder-ruby33
+          requires:
+            - deps_bundler_postgres
+            - dependencies_npm
+      - unit-postgres:
+          gemfile: Gemfile.next
+          executor: builder-with-postgres-ruby33
+          requires:
+            - deps_bundler_postgres
+      - functional-postgres:
+          gemfile: Gemfile.next
+          executor: builder-with-postgres-ruby33
+          requires:
+            - assets_precompile
+      - integration-postgres:
+          gemfile: Gemfile.next
+          executor: builder-with-postgres-ruby33
+          requires:
+            - assets_precompile
+      - rspec-postgres:
+          gemfile: Gemfile.next
+          executor: builder-with-postgres-ruby33
+          requires:
+            - deps_bundler_postgres
+      - cucumber-postgres:
+          gemfile: Gemfile.next
+          executor: cucumber-with-postgres-ruby33
+          requires:
+            - assets_precompile
+      - notify_success:
+          requires:
+            - rspec-postgres
+            - unit-postgres
+            - cucumber-postgres
+            - integration-postgres
+            - functional-postgres
+          <<: *only-master-filter
+    <<: *nightly-trigger
+
+  oracle_nightly_build_ruby33_rails80:
+    jobs:
+      - notify_start:
+          <<: *only-master-filter
+      - deps_bundler_oracle:
+          gemfile: Gemfile.next
+          executor: builder-ruby33
+      - dependencies_npm:
+          executor: builder-ruby33
+      - assets_precompile:
+          gemfile: Gemfile.next
+          executor: builder-ruby33
+          requires:
+            - deps_bundler_oracle
+            - dependencies_npm
+      - unit-oracle:
+          gemfile: Gemfile.next
+          executor: builder-with-oracle-ruby33
+          context:
+            - quay
+          requires:
+            - deps_bundler_oracle
+      - functional-oracle:
+          gemfile: Gemfile.next
+          executor: builder-with-oracle-ruby33
+          context:
+            - quay
+          requires:
+            - assets_precompile
+      - integration-oracle:
+          gemfile: Gemfile.next
+          executor: builder-with-oracle-ruby33
+          context:
+            - quay
+          requires:
+            - assets_precompile
+      - rspec-oracle:
+          gemfile: Gemfile.next
+          executor: builder-with-oracle-ruby33
+          context:
+            - quay
+          requires:
+            - deps_bundler_oracle
+      - cucumber-oracle:
+          gemfile: Gemfile.next
+          executor: cucumber-with-oracle-ruby33
+          context:
+            - quay
+          requires:
+            - assets_precompile
+      - notify_success:
+          requires:
+            - rspec-oracle
+            - unit-oracle
+            - cucumber-oracle
+            - integration-oracle
+            - functional-oracle
           <<: *only-master-filter
     <<: *nightly-trigger
