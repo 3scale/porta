@@ -232,7 +232,7 @@ without fake Core server your after commit callbacks will crash and you might ge
 
       namespace :registry do
         constraints(id: /((?!\.json\Z)[^\/])+/) do
-          resources :policies, except: %i[show delete]
+          resources :policies, except: :show
         end
       end
 
