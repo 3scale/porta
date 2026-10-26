@@ -48,6 +48,28 @@ class ZyncScheduledProviderTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
+  test 'scheduled providers are forbidden with Zync authentication and no valid access token' do
+    @provider.schedule_for_deletion!
+
+    [{}, { access_token: 'invalid' }].each do |params|
+      get admin_api_provider_path(format: :json), params: params, headers: zync_headers
+
+      assert_response :forbidden
+    end
+  end
+
+  test 'deleted providers return not found with and without Zync authentication' do
+    params = token_params
+    @provider.reload.destroy!
+    assert_not Account.exists?(@provider.id)
+
+    [{}, zync_headers].each do |headers|
+      get admin_api_provider_path(format: :json), params: params, headers: headers
+
+      assert_response :not_found
+    end
+  end
+
   test 'scheduled providers return not found for provider and proxy reads' do
     @provider.schedule_for_deletion!
     get admin_api_provider_path(format: :json), params: token_params, headers: zync_headers
