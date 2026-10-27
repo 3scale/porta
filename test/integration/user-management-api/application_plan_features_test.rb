@@ -72,8 +72,36 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
       assert_xml_404
     end
 
-    pending_test 'security test on buyer side domain'
-    pending_test 'security test on another provider plans'
+    test 'plan features cannot be accessed on the buyer domain' do
+      host! @provider.internal_domain
+      feature = FactoryBot.create(:feature, featurable: @provider.default_service)
+      new_feature = FactoryBot.create(:feature, featurable: @provider.default_service)
+      @app_plan.features << feature
+
+      get admin_api_application_plan_features_path(@app_plan, format: :xml), params: params
+      assert_response :forbidden
+      post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge(feature_id: new_feature.id)
+      assert_response :forbidden
+      delete admin_api_application_plan_feature_path(@app_plan, feature, format: :xml), params: params
+      assert_response :forbidden
+      assert_equal [feature.id], @app_plan.features.reload.pluck(:id)
+    end
+
+    test 'plan features of another provider cannot be read or changed' do
+      other_provider = FactoryBot.create(:provider_account)
+      other_plan = FactoryBot.create(:application_plan, issuer: other_provider.default_service)
+      existing_feature = FactoryBot.create(:feature, featurable: other_provider.default_service)
+      new_feature = FactoryBot.create(:feature, featurable: other_provider.default_service)
+      other_plan.features << existing_feature
+
+      get admin_api_application_plan_features_path(other_plan, format: :xml), params: params
+      assert_response :not_found
+      post admin_api_application_plan_features_path(other_plan, format: :xml), params: params.merge(feature_id: new_feature.id)
+      assert_response :not_found
+      delete admin_api_application_plan_feature_path(other_plan, existing_feature, format: :xml), params: params
+      assert_response :not_found
+      assert_equal [existing_feature.id], other_plan.features.reload.pluck(:id)
+    end
 
     test 'associate new feature' do
       feat = FactoryBot.create(:feature, featurable: @provider.default_service)
