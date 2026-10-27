@@ -93,6 +93,6 @@ Ability.define do |user|
   end
 
   can :resume, Account do | buyer |
-    buyer.can_resume? && buyer.provider_account == account
+    buyer.provider_account == account
   end
 end
