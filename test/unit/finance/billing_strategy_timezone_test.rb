@@ -5,7 +5,7 @@ require 'test_helper'
 class Finance::BillingStrategyTimezoneTest < ActiveSupport::TestCase
   include TestHelpers::FakeHits
 
-  # Pacific Time is UTC-8
+  # Pacific Time is UTC-8 in winter and UTC-7 during daylight saving time.
   setup do
     @original_tz = ENV['TZ']
     @storage = Stats::Base.storage
@@ -129,5 +129,70 @@ class Finance::BillingStrategyTimezoneTest < ActiveSupport::TestCase
 
     Finance::BillingStrategy.daily(only: [@provider.id], skip_notifications: true)
     assert_not_empty @provider.buyer_invoices.reload, 'Invoice not created when now.day should be 1 (UTC)'
+  end
+
+  test 'billing includes the spring DST transition and only the March UTC period once' do
+    # The setup gives both accounts Pacific Time, but usage and billing periods use UTC.
+    # March 1 at 00:30 UTC is still February 28 at 16:30 Pacific; it belongs to March's invoice.
+    # On March 9, Pacific clocks jump from 01:59 to 03:00: the two transition hits
+    # are at 01:30 PST and 03:30 PDT, respectively, even though they are one hour apart in UTC.
+    # The helper records these hits and the month-boundary hits, then bills March twice.
+    assert_billing_across_dst(
+      before_period: Time.utc(2025, 2, 28, 23, 30),
+      start_period: Time.utc(2025, 3, 1, 0, 30),
+      before_transition: Time.utc(2025, 3, 9, 9, 30),
+      after_transition: Time.utc(2025, 3, 9, 10, 30),
+      end_period: Time.utc(2025, 3, 31, 23, 30),
+      after_period: Time.utc(2025, 4, 1, 0, 30),
+      billing_time: Time.utc(2025, 4, 1, 12),
+      period_end: Date.new(2025, 3, 31)
+    )
+  end
+
+  test 'billing includes both occurrences of the fall DST hour and only the November UTC period once' do
+    # The accounts still use Pacific Time, while the invoice covers November in UTC.
+    # November 1 at 00:30 UTC is October 31 at 17:30 Pacific; it belongs to November's invoice.
+    # On November 2, clocks go back from 02:00 to 01:00. The transition hits are
+    # both at 01:30 Pacific: the first is PDT (UTC-7), and the second is PST (UTC-8).
+    # The helper records both occurrences and the month-boundary hits, then bills twice.
+    assert_billing_across_dst(
+      before_period: Time.utc(2025, 10, 31, 23, 30),
+      start_period: Time.utc(2025, 11, 1, 0, 30),
+      before_transition: Time.utc(2025, 11, 2, 8, 30),
+      after_transition: Time.utc(2025, 11, 2, 9, 30),
+      end_period: Time.utc(2025, 11, 30, 23, 30),
+      after_period: Time.utc(2025, 12, 1, 0, 30),
+      billing_time: Time.utc(2025, 12, 1, 12),
+      period_end: Date.new(2025, 11, 30)
+    )
+  end
+
+  private
+
+  def assert_billing_across_dst(before_period:, start_period:, before_transition:, after_transition:, end_period:, after_period:, billing_time:, period_end:)
+    ENV['TZ'] = 'UTC' # The provider and buyer use Pacific Time.
+    # Billing currently uses UTC month boundaries: exclude the 200 and 400 hits
+    # outside the month, and include the 10 + 20 + 40 + 80 hits inside it.
+    { before_period => 200, start_period => 10, before_transition => 20,
+      after_transition => 40, end_period => 80, after_period => 400 }.each do |time, quantity|
+      fake_hit(time, quantity, @contract, @metric)
+    end
+
+    # Running billing twice should not charge for the same usage twice.
+    2.times do
+      Finance::BillingStrategy.daily(only: [@provider.id], now: billing_time, skip_notifications: true)
+    end
+
+    invoices = @provider.buyer_invoices.reload
+    invoice = invoices.find { |item| item.period.end.to_date == period_end }
+    assert_not_nil invoice
+    items = invoice.line_items.where(type: 'LineItem::VariableCost')
+    # The 150 in-period hits cost $1.50 at the $0.01 rate configured in setup.
+    assert_equal 150, items.sum { |item| item.quantity.to_i }
+    assert_equal BigDecimal('1.50'), items.sum(&:cost)
+    # The contract stores the last billed date at midnight UTC. Across all invoices,
+    # the total must remain 150 after the second billing run.
+    assert_equal Time.utc(period_end.year, period_end.month, period_end.day), @contract.reload[:variable_cost_paid_until]
+    assert_equal 150, LineItem::VariableCost.where(invoice_id: invoices.map(&:id)).sum(:quantity).to_i
   end
 end
