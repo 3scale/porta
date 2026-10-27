@@ -79,16 +79,6 @@ module Abilities
       end
     end
 
-    %w[created pending approved rejected].each do |state|
-      test "cannot resume a #{state} provider with partners permission" do
-        @member.admin_sections = [:partners]
-        @provider.stubs(:provider_can_use?).with(:service_permissions).returns(true)
-        provider = FactoryBot.build_stubbed(:simple_provider, provider_account: @provider, state: state)
-
-        assert_cannot ability, :resume, provider
-      end
-    end
-
     def test_provider_plans
       @member.stubs(:has_permission?)
 

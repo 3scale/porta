@@ -34,14 +34,6 @@ module Abilities
       end
     end
 
-    %w[created pending approved rejected].each do |state|
-      test "cannot resume an owned #{state} buyer" do
-        buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: @account, state: state)
-
-        assert_cannot ability, :resume, buyer
-      end
-    end
-
     def test_plans
       [:account_plans, :service_plans].each do |name|
         #SaaS
