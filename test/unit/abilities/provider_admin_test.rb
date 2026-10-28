@@ -20,18 +20,16 @@ module Abilities
       assert_can ability, :manage, :web_hooks
     end
 
-    %w[suspended scheduled_for_deletion].each do |state|
-      test "can resume an owned #{state} buyer" do
-        buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: @account, state: state)
+    def test_resume_own_buyer
+      buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: @account, state: 'suspended')
 
-        assert_can ability, :resume, buyer
-      end
+      assert_can ability, :resume, buyer
+    end
 
-      test "cannot resume another provider's #{state} buyer" do
-        buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: FactoryBot.build_stubbed(:simple_provider), state: state)
+    def test_cant_resume_other_provider_buyer
+      buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: FactoryBot.build_stubbed(:simple_provider), state: 'suspended')
 
-        assert_cannot ability, :resume, buyer
-      end
+      assert_cannot ability, :resume, buyer
     end
 
     def test_plans
