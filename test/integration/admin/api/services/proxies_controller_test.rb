@@ -35,5 +35,26 @@ module Admin::Api::Services
 
       assert_equal 'headers', service.proxy.credentials_location
     end
+
+    def test_updating_proxy_deploys_to_staging_without_leaving_pending_changes
+      FactoryBot.create(:service_token, service: service)
+      proxy = service.proxy
+      proxy.update_columns(apicast_configuration_driven: true)
+      ApicastV2DeploymentService.new(proxy).call(environment: :sandbox)
+
+      assert_difference proxy.proxy_configs.sandbox.method(:count), 1 do
+        with_clock_incrementing_on_each_read do
+          put admin_api_service_proxy_path(service_id: service.id, format: :json, access_token: token.plaintext_value), params: {
+            proxy: { credentials_location: 'headers' }
+          }
+        end
+
+        assert_response :success
+      end
+
+      deployed_config = proxy.proxy_configs.sandbox.newest_first.first!
+      assert_equal 'headers', JSON.parse(deployed_config.content).dig('proxy', 'credentials_location')
+      assert_not_predicate proxy.reload, :pending_affecting_changes?
+    end
   end
 end
