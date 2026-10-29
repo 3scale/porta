@@ -44,6 +44,33 @@ class PoliciesControllerTest < ActionDispatch::IntegrationTest
     assert_equal config.map(&:stringify_keys), @service.reload.proxy.policies_config.as_json
   end
 
+  test 'updating policies deploys to staging without leaving pending changes' do
+    FactoryBot.create(:service_token, service: @service)
+    proxy = @service.proxy
+    proxy.update_columns(apicast_configuration_driven: true)
+    ApicastV2DeploymentService.new(proxy).call(environment: :sandbox)
+
+    config = [
+      { name: 'cors', version: 'builtin', configuration: {}, enabled: true },
+      { name: 'apicast', version: 'builtin', configuration: {}, enabled: true }
+    ]
+
+    assert_difference proxy.proxy_configs.sandbox.method(:count), 1 do
+      with_clock_incrementing_on_each_read do
+        put admin_api_service_proxy_policies_path(@service, access_token: @access_token, format: :json), params: {
+          proxy: { policies_config: config }
+        }, as: :json
+      end
+
+      assert_response :success
+    end
+
+    deployed_config = proxy.proxy_configs.sandbox.newest_first.first!
+    deployed_policies = JSON.parse(deployed_config.content).dig('proxy', 'policy_chain')
+    assert_equal(%w[cors apicast], deployed_policies.map { |policy| policy.fetch('name') })
+    assert_not_predicate proxy.reload, :pending_affecting_changes?
+  end
+
   test 'prints chain level errors' do
     valid_config = { name: 'apicast', configuration: {}, version: 'builtin', enabled: true, removable: false }
 
