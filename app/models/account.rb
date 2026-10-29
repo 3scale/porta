@@ -54,7 +54,6 @@ class Account < ApplicationRecord
   self.background_deletion = %i[
     configuration_values
     account_settings
-    settings
     forum
     users
     mail_dispatch_rules
@@ -223,9 +222,12 @@ class Account < ApplicationRecord
   #TODO: check if the comment below still holds
   # profile is using acts_as_audited and it will not work if :dependent => :destroy
   has_one :profile, dependent: :delete
-  has_one :settings, dependent: :destroy, inverse_of: :account, autosave: true
-  lazy_initialization_for :profile, :settings, if: :should_not_be_deleted?
   has_many :account_settings, dependent: :delete_all, inverse_of: :account, autosave: true
+  lazy_initialization_for :profile, if: :should_not_be_deleted?
+
+  def settings
+    @settings_facade ||= Settings.new(self)
+  end
 
   accepts_nested_attributes_for :profile
 
@@ -424,6 +426,7 @@ class Account < ApplicationRecord
     @buyer_attribute_descriptors = nil
     @signup_form_fields = nil
     @_first_admin = nil
+    @settings_facade = nil
 
     super
   end
