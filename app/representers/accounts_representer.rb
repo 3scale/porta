@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AccountsRepresenter
   include ThreeScale::JSONRepresenter
 

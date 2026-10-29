@@ -43,6 +43,27 @@ describe ThreeScale::XML::Builder do
 
   end
 
+  it "escapes text and attributes while preserving symbol values and tag names" do
+    builder.root do |xml|
+      xml.id_ 42
+      xml.tag!(:custom_field, :week, description: 'A & "B" < C')
+      xml.message 'A & B < C > D'
+    end
+
+    xml_output = builder.to_xml
+
+    assert_includes xml_output, 'description="A &amp; &quot;B&quot; &lt; C"'
+    assert_includes xml_output, '<message>A &amp; B &lt; C &gt; D</message>'
+
+    document = Nokogiri::XML(xml_output)
+
+    assert_equal '42', document.at_xpath('/root/id').text
+    assert_equal 'week', document.at_xpath('/root/custom_field').text
+    assert_equal 'A & "B" < C', document.at_xpath('/root/custom_field')['description']
+    assert_equal 'A & B < C > D', document.at_xpath('/root/message').text
+    assert_empty document.errors
+  end
+
   it "has << method" do
     builder.root do |xml|
       xml << "<element/>"
