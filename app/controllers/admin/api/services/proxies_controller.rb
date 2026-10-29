@@ -16,7 +16,10 @@ class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseContro
   # Proxy Update
   # PATCH /admin/api/services/{service_id}/proxy.xml
   def update
-    ProxyDeploymentService.call(proxy) if proxy.update(proxy_params)
+    if proxy.update(proxy_params)
+      flush_proxy_affecting_changes
+      ProxyDeploymentService.call(proxy)
+    end
 
     respond_with(proxy)
   end
