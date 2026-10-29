@@ -14,11 +14,13 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
     # Reversing this migration would delete all migrated account_settings records.
     # We only remove the rows that were migrated from the settings table; any rows
     # created directly via the new system (e.g. http_headers) are left untouched.
-    migrated_types = (boolean_settings.keys + string_settings + text_settings + switch_settings)
-      .map { |col| col.to_s.camelize }
-    execute <<~SQL.squish
-      DELETE FROM account_settings WHERE type IN (#{migrated_types.map { |t| "'#{t}'" }.join(', ')})
-    SQL
+    safety_assured do
+      migrated_types = (boolean_settings.keys + string_settings + text_settings + switch_settings)
+        .map { |col| col.to_s.camelize }
+      execute <<~SQL.squish
+        DELETE FROM account_settings WHERE type IN (#{migrated_types.map { |t| "'#{t}'" }.join(', ')})
+      SQL
+    end
   end
 
   private
@@ -97,29 +99,32 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+  BOOLEAN_SETTINGS = {
+    forum_enabled: true,
+    app_gallery_enabled: false,
+    anonymous_posts_enabled: false,
+    signups_enabled: true,
+    documentation_enabled: true,
+    useraccountarea_enabled: true,
+    documentation_public: true,
+    forum_public: true,
+    hide_service: false,
+    monthly_charging_enabled: true,
+    monthly_billing_enabled: true,
+    strong_passwords_enabled: false,
+    can_create_service: false,
+    public_search: false,
+    account_plans_ui_visible: false,
+    service_plans_ui_visible: false,
+    setup_fee_enabled: false,
+    cms_escape_draft_html: true,
+    cms_escape_published_html: true,
+    enforce_sso: false
+  }.freeze
+  private_constant :BOOLEAN_SETTINGS
+
   def boolean_settings
-    {
-      forum_enabled: true,
-      app_gallery_enabled: false,
-      anonymous_posts_enabled: false,
-      signups_enabled: true,
-      documentation_enabled: true,
-      useraccountarea_enabled: true,
-      documentation_public: true,
-      forum_public: true,
-      hide_service: false,
-      monthly_charging_enabled: true,
-      monthly_billing_enabled: true,
-      strong_passwords_enabled: false,
-      can_create_service: false,
-      public_search: false,
-      account_plans_ui_visible: false,
-      service_plans_ui_visible: false,
-      setup_fee_enabled: false,
-      cms_escape_draft_html: true,
-      cms_escape_published_html: true,
-      enforce_sso: false
-    }
+    BOOLEAN_SETTINGS
   end
 
   def string_settings
