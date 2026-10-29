@@ -15,6 +15,25 @@ class AccountSetting::SwitchSetting < AccountSetting
     self.value = new_state
   end
 
+  # Switches State Machine
+  #
+  #
+  #  +--------------+                          +--------------+
+  #  |              |                          |              |
+  #  | Visible      |                          |   DENIED     |
+  #  |              |       deny               |              |
+  #  |              o------------------------->+              |
+  #  +------+-------+                          +----+--o------+
+  #         |                                       ^  |
+  #         | hide/show                             |  |
+  #         |                                       |  |
+  #  +------+------+          deny                  |  |
+  #  |             o---------------------------------  |
+  #  |  Hidden     |          allow                    |
+  #  |             +<-----------------------------------
+  #  |             |
+  #  +-------------+
+  #
   state_machine :state, initial: 'denied' do
     before_transition do |record|
       throw :halt if record.globally_denied?
