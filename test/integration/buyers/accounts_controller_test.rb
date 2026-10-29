@@ -400,6 +400,101 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   end
 
+  class ResumeTest < Buyers::AccountsControllerTest
+    def setup
+      ThreeScale.config.stubs(onpremises: false)
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+    end
+
+    %i[master provider].each do |account_type|
+      %i[admin member].each do |role|
+        %w[suspended scheduled_for_deletion].each do |state|
+          test "#{account_type} #{role} can see and resume a #{state} account" do
+            login_for_resume(account_type, role)
+            @target.update_column(:state, state)
+
+            get admin_buyers_account_path(@target)
+            assert_response :success
+            assert_select 'a.action.resume', text: 'Resume', count: 1
+
+            post resume_admin_buyers_account_path(@target)
+
+            assert_redirected_to admin_buyers_account_path(@target)
+            assert_equal 'approved', @target.reload.state
+
+            follow_redirect!
+            assert_response :success
+            assert_select 'a.action.resume', count: 0
+          end
+        end
+
+        %w[created pending approved rejected].each do |state|
+          test "#{account_type} #{role} cannot see Resume for a #{state} account" do
+            login_for_resume(account_type, role)
+            @target.update_column(:state, state)
+
+            get admin_buyers_account_path(@target)
+
+            assert_response :success
+            assert_select 'a.action.resume', count: 0
+          end
+        end
+      end
+
+      test "#{account_type} member cannot access the overview without partners permission" do
+        login_for_resume(account_type, :member)
+        @user.update!(member_permission_ids: [])
+
+        get admin_buyers_account_path(@target)
+
+        assert_response :forbidden
+      end
+    end
+
+    %w[suspended scheduled_for_deletion].each do |state|
+      test "master member cannot see Resume for a #{state} provider without service permissions feature" do
+        login_for_resume(:master, :member)
+        @target.update_column(:state, state)
+        Account.any_instance.stubs(:provider_can_use?).with(:service_permissions).returns(false)
+
+        get admin_buyers_account_path(@target)
+
+        assert_response :success
+        assert_select 'a.action.resume', count: 0
+      end
+
+      %i[admin member].each do |role|
+        test "provider #{role} cannot access or resume another provider's #{state} buyer" do
+          login_for_resume(:provider, role)
+          buyer = FactoryBot.create(:buyer_account)
+          buyer.update_column(:state, state)
+
+          get admin_buyers_account_path(buyer)
+          assert_response :not_found
+
+          post resume_admin_buyers_account_path(buyer)
+          assert_response :not_found
+          assert_equal state, buyer.reload.state
+        end
+      end
+    end
+
+    private
+
+    def login_for_resume(account_type, role)
+      @account = account_type == :master ? master_account : FactoryBot.create(:provider_account)
+      target_factory = account_type == :master ? :provider_account : :buyer_account
+      @target = FactoryBot.create(target_factory, provider_account: @account)
+      @user = if role == :admin
+                @account.admins.first!
+              else
+                FactoryBot.create(:active_user, account: @account, role: :member, member_permission_ids: [:partners])
+              end
+
+      login! @account, user: @user
+    end
+  end
+
   class NotLoggedInTest < ActionDispatch::IntegrationTest
     test "anonymous users can't manage buyer accounts" do
       provider = FactoryBot.create(:provider_account)

@@ -20,6 +20,18 @@ module Abilities
       assert_can ability, :manage, :web_hooks
     end
 
+    def test_resume_own_buyer
+      buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: @account, state: 'suspended')
+
+      assert_can ability, :resume, buyer
+    end
+
+    def test_cant_resume_other_provider_buyer
+      buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: FactoryBot.build_stubbed(:simple_provider), state: 'suspended')
+
+      assert_cannot ability, :resume, buyer
+    end
+
     def test_plans
       [:account_plans, :service_plans].each do |name|
         #SaaS

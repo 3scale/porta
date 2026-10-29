@@ -35,6 +35,22 @@ module Abilities
       assert_can ability, :resume, provider
     end
 
+    %w[suspended scheduled_for_deletion].each do |state|
+      test "can resume a #{state} provider" do
+        provider = FactoryBot.build_stubbed(:simple_provider, provider_account: @account, state: state)
+
+        assert_can ability, :resume, provider
+      end
+    end
+
+    %w[created pending approved rejected].each do |state|
+      test "cannot resume a #{state} provider" do
+        provider = FactoryBot.build_stubbed(:simple_provider, provider_account: @account, state: state)
+
+        assert_cannot ability, :resume, provider
+      end
+    end
+
     def test_user
       assert_can ability, :manage, @admin
 

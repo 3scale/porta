@@ -54,6 +54,31 @@ module Abilities
       assert_can ability, :create, Account
     end
 
+    %w[suspended scheduled_for_deletion].each do |state|
+      test "can resume a #{state} provider with partners permission" do
+        @member.admin_sections = [:partners]
+        @provider.stubs(:provider_can_use?).with(:service_permissions).returns(true)
+        provider = FactoryBot.build_stubbed(:simple_provider, provider_account: @provider, state: state)
+
+        assert_can ability, :resume, provider
+      end
+
+      test "cannot resume a #{state} provider without partners permission" do
+        @provider.stubs(:provider_can_use?).with(:service_permissions).returns(true)
+        provider = FactoryBot.build_stubbed(:simple_provider, provider_account: @provider, state: state)
+
+        assert_cannot ability, :resume, provider
+      end
+
+      test "cannot resume a #{state} provider without service permissions feature" do
+        @member.admin_sections = [:partners]
+        @provider.stubs(:provider_can_use?).with(:service_permissions).returns(false)
+        provider = FactoryBot.build_stubbed(:simple_provider, provider_account: @provider, state: state)
+
+        assert_cannot ability, :resume, provider
+      end
+    end
+
     def test_provider_plans
       @member.stubs(:has_permission?)
 

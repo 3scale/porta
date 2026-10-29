@@ -60,7 +60,7 @@ table.list
                           method: :post,
                           data: { confirm: 'Are you sure?', disable_with: 'suspending…' },
                           class: 'action suspend'
-      - if account.suspended? && can?(:resume, account)
+      - if can?(:resume, account) && account.can_resume?
         = action_link_to 'Resume',
                         resume_admin_buyers_account_path(account),
                         method: :post,
