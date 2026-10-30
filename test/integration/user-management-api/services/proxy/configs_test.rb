@@ -41,6 +41,31 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     assert_response :bad_request
   end
 
+  test 'latest evaluates each conditional request validator' do
+    path = latest_admin_api_service_proxy_configs_path(valid_params)
+    get path
+    assert_response :success
+    etag = response.headers.fetch('ETag')
+    last_modified = response.headers.fetch('Last-Modified')
+    older_date = (Time.httpdate(last_modified) - 60).httpdate
+
+    # Rack::ConditionalGet gives If-None-Match precedence in the final response.
+    [
+      [{ 'HTTP_IF_NONE_MATCH' => etag }, :not_modified],
+      [{ 'HTTP_IF_MODIFIED_SINCE' => last_modified }, :not_modified],
+      [{ 'HTTP_IF_NONE_MATCH' => etag, 'HTTP_IF_MODIFIED_SINCE' => older_date }, :not_modified],
+      [{ 'HTTP_IF_NONE_MATCH' => '"different"', 'HTTP_IF_MODIFIED_SINCE' => last_modified }, :success]
+    ].each do |headers, expected_status|
+      get path, headers: headers
+      assert_response expected_status
+      if expected_status == :not_modified
+        assert_empty response.body
+      else
+        assert response.parsed_body.key?('proxy_config')
+      end
+    end
+  end
+
   def test_show
     params = valid_params.merge(version: @config.version)
 
