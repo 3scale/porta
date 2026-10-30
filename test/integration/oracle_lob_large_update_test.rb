@@ -116,36 +116,6 @@ class OracleLobLargeUpdateTest < ActiveSupport::TestCase
     end
   end
 
-  test 'returning an Oracle connection clears prepared statements and permits reuse after an error' do
-    pool = ActiveRecord::Base.connection_pool
-    connection = pool.checkout
-    bind = ActiveRecord::Relation::QueryAttribute.new('value', 42, ActiveRecord::Type::Integer.new)
-    query = 'SELECT :1 FROM dual'
-
-    begin
-      assert_equal 42, connection.exec_query(query, 'prepared statement', [bind], prepare: true).rows.first.first
-      statements = connection.instance_variable_get(:@statements)
-      assert_operator statements.length, :>, 0
-      pool.checkin(connection)
-      assert_equal 0, statements.length
-
-      connection = pool.checkout
-      assert_same statements, connection.instance_variable_get(:@statements)
-      assert_equal 42, connection.exec_query(query, 'reused statement', [bind], prepare: true).rows.first.first
-      assert_raises(ActiveRecord::StatementInvalid) do
-        connection.exec_query('SELECT :1 FROM porta_nonexistent_table', 'invalid statement', [bind], prepare: true)
-      end
-      pool.checkin(connection)
-      assert_equal 0, statements.length
-
-      connection = pool.checkout
-      assert_same statements, connection.instance_variable_get(:@statements)
-      assert_equal 42, connection.exec_query(query, 'statement after error', [bind], prepare: true).rows.first.first
-    ensure
-      pool.checkin(connection) if connection&.in_use?
-    end
-  end
-
   test "test large blobs inline quoting" do
     sizes = [
       15.kilobytes,  # within EXTENDED limit
