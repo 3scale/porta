@@ -25,24 +25,27 @@ class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal '/refunds', provider.settings.cc_refunds_path
   end
 
-  test 'update with empty values clears settings' do
+  test 'update with empty values shows errors' do
     provider = FactoryBot.create(:provider_account)
-    provider.settings.update(cc_terms_path: '/terms', cc_privacy_path: '/privacy')
     login_provider provider
 
     put admin_site_settings_path, params: {
       settings: {
         cc_terms_path: '',
-        cc_privacy_path: ''
+        cc_privacy_path: '',
+        cc_refunds_path: ''
       }
     }
 
-    assert_redirected_to edit_admin_site_settings_path
+    assert_response :success
+    assert_template :edit
+    assert_equal "Settings could not be updated", flash[:danger]
 
-    provider.settings.reload
-    # Oracle converts empty strings to NULL, so we check for blank (accepts both '' and nil)
-    assert provider.settings.cc_terms_path.blank?
-    assert provider.settings.cc_privacy_path.blank?
+    page = Nokogiri::HTML4::Document.parse(response.body)
+    errors = page.xpath("//p[@class='pf-c-form__helper-text pf-m-error']")
+
+    assert_equal 3, errors.length
+    assert_equal ["can't be blank"], errors.map(&:text).uniq
   end
 
   test 'update with invalid values shows errors' do
