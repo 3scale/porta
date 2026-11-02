@@ -3,6 +3,65 @@
 module Switches
   extend ActiveSupport::Concern
 
+  module ClassMethods
+    def hide_basic_switches?
+      Rails.configuration.three_scale.hide_basic_switches
+    end
+
+    def basic_enabled_switches
+      if hide_basic_switches?
+        %i(multiple_services multiple_applications multiple_users).freeze
+      else
+        [].freeze
+      end
+    end
+
+    def basic_disabled_switches
+      if hide_basic_switches?
+        %i(skip_email_engagement_footer).freeze
+      else
+        [].freeze
+      end
+    end
+
+    def basic_hidden_switches
+      basic_disabled_switches
+    end
+  end
+
+  included do
+    Settings::SWITCH_CLASSES.each do |klass|
+      name = klass.setting_name.to_s.delete_suffix('_switch').to_sym
+
+      # Switch record getter (e.g., settings.finance returns the SwitchSetting record)
+      define_method(name) do
+        find_or_build_switch(name)
+      end
+
+      # State query delegations (e.g., settings.multiple_applications_visible?)
+      %w[visible hidden denied allowed hideable].each do |state|
+        define_method("#{name}_#{state}?") do
+          send(name).send("#{state}?")
+        end
+      end
+
+      # State transition delegations (e.g., settings.allow_finance!, settings.allow_finance)
+      %w[allow show hide deny].each do |event|
+        define_method("#{event}_#{name}!") do
+          find_or_build_switch(name).send("#{event}!")
+        end
+
+        define_method("#{event}_#{name}") do
+          find_or_build_switch(name).send("#{event}")
+        end
+
+        define_method("can_#{event}_#{name}?") do
+          find_or_build_switch(name).send("can_#{event}?")
+        end
+      end
+    end
+  end
+
   SWITCHES = Settings::SWITCH_CLASSES.map { |k| k.setting_name.to_s.delete_suffix('_switch').to_sym }.freeze
 
   PROVIDER_VISIBLE_SWITCHES = Settings::SWITCH_CLASSES
@@ -48,63 +107,6 @@ module Switches
 
     def assign_switches(*switch_names)
       @switches = Hash[switch_names.map { |switch_name| [switch_name, settings.send(switch_name)] }]
-    end
-  end
-
-  included do
-    SWITCHES.each do |name|
-      # Switch record getter (e.g., settings.finance returns the SwitchSetting record)
-      define_method(name) do
-        find_or_build_switch(name)
-      end
-
-      # State query delegations (e.g., settings.multiple_applications_visible?)
-      %w[visible hidden denied allowed hideable].each do |state|
-        define_method("#{name}_#{state}?") do
-          send(name).send("#{state}?")
-        end
-      end
-
-      # State transition delegations (e.g., settings.allow_finance!, settings.allow_finance)
-      %w[allow show hide deny].each do |event|
-        define_method("#{event}_#{name}!") do
-          find_or_build_switch(name).send("#{event}!")
-        end
-
-        define_method("#{event}_#{name}") do
-          find_or_build_switch(name).send("#{event}")
-        end
-
-        define_method("can_#{event}_#{name}?") do
-          find_or_build_switch(name).send("can_#{event}?")
-        end
-      end
-    end
-  end
-
-  module ClassMethods
-    def hide_basic_switches?
-      Rails.configuration.three_scale.hide_basic_switches
-    end
-
-    def basic_enabled_switches
-      if hide_basic_switches?
-        %i(multiple_services multiple_applications multiple_users).freeze
-      else
-        [].freeze
-      end
-    end
-
-    def basic_disabled_switches
-      if hide_basic_switches?
-        %i(skip_email_engagement_footer).freeze
-      else
-        [].freeze
-      end
-    end
-
-    def basic_hidden_switches
-      basic_disabled_switches
     end
   end
 
