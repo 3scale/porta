@@ -17,7 +17,7 @@ class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_redirected_to edit_admin_site_settings_path
-    assert_equal 'Settings updated', flash[:success]
+    assert_equal I18n.t('sites.settings.update.success'), flash[:success]
 
     provider.settings.reload
     assert_equal '/terms', provider.settings.cc_terms_path
@@ -39,13 +39,13 @@ class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_template :edit
-    assert_equal "Settings could not be updated", flash[:danger]
+    assert_equal I18n.t('sites.settings.update.error'), flash[:danger]
 
     page = Nokogiri::HTML4::Document.parse(response.body)
     errors = page.xpath("//p[@class='pf-c-form__helper-text pf-m-error']")
 
     assert_equal 3, errors.length
-    assert_equal ["can't be blank"], errors.map(&:text).uniq
+    assert_equal [I18n.t('errors.messages.blank')], errors.map(&:text).uniq
   end
 
   test 'update with invalid values shows errors' do
@@ -64,12 +64,12 @@ class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_template :edit
-    assert_equal "Settings could not be updated", flash[:danger]
+    assert_equal I18n.t('sites.settings.update.error'), flash[:danger]
 
     page = Nokogiri::HTML4::Document.parse(response.body)
     errors = page.xpath("//p[@class='pf-c-form__helper-text pf-m-error']")
 
     assert_equal 3, errors.length
-    assert_equal ["is too long (maximum is 255 characters)"], errors.map(&:text).uniq
+    assert_equal [I18n.t('errors.messages.too_long', count: 255)], errors.map(&:text).uniq
   end
 end
