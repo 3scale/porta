@@ -130,7 +130,8 @@ resource "Account" do
     context 'buyer account' do
       it do
         should have_properties('id', 'org_name').from(resource)
-        should have_properties('state', 'credit_card_stored').from(resource)
+        should have_properties('state').from(resource)
+        should have_properties(credit_card_stored: resource.credit_card_stored?)
         should have_properties('created_at', 'updated_at')
         should have_links('self', 'users')
       end
