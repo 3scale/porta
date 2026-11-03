@@ -4,33 +4,47 @@ require 'test_helper'
 require Rails.root.join('db/migrate/20260620000000_migrate_settings_to_account_settings')
 
 class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
-  DEFAULT_NOT_NULL_SETTINGS = {
-    multiple_applications_switch: 'hidden',
-    multiple_users_switch: 'hidden',
-    finance_switch: 'hidden',
-    multiple_services_switch: 'hidden',
-    groups_switch: 'hidden',
-    account_plans_switch: 'hidden',
-    service_plans_switch: 'hidden',
-    branding_switch: 'hidden'
-  }.freeze
+  class TestSettingsModel < ApplicationRecord
+    self.table_name = 'settings'
+    belongs_to :account
+
+    DEFAULT_NOT_NULL_SETTINGS = {
+      multiple_applications_switch: 'hidden',
+      multiple_users_switch: 'hidden',
+      finance_switch: 'hidden',
+      multiple_services_switch: 'hidden',
+      groups_switch: 'hidden',
+      account_plans_switch: 'hidden',
+      service_plans_switch: 'hidden',
+      branding_switch: 'hidden'
+    }.freeze
+
+    def self.create_legacy!(account:, **attrs)
+      create!(
+        {
+          account_id: account.id,
+          tenant_id: account.tenant_id
+        }.merge(DEFAULT_NOT_NULL_SETTINGS).merge(attrs)
+      )
+    end
+  end
 
   def setup
     @provider = FactoryBot.create(:provider_account)
     @provider.account_settings.delete_all
     @migration = MigrateSettingsToAccountSettings.new
-    ActiveRecord::Base.connection.execute("DELETE FROM settings WHERE account_id = #{@provider.id}")
+    TestSettingsModel.where(account_id: @provider.id).delete_all
     ActiveRecord::Migration.verbose = false
   end
 
   def teardown
+    TestSettingsModel.where(account_id: @provider.id).delete_all if @provider
     ActiveRecord::Migration.verbose = true
   end
 
   test 'migrates boolean settings with true as 1 and false as 0, ignoring nil' do
-    insert_legacy_settings(
-      account_id: @provider.id,
-      tenant_id: @provider.tenant_id,
+    TestSettingsModel.create_legacy!(
+      account: @provider,
       forum_enabled: true,
       app_gallery_enabled: false,
       signups_enabled: true,
@@ -49,9 +63,8 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
   end
 
   test 'migrates string and text settings, skipping empty strings and nil' do
-    insert_legacy_settings(
-      account_id: @provider.id,
-      tenant_id: @provider.tenant_id,
+    TestSettingsModel.create_legacy!(
+      account: @provider,
       bg_colour: '#abcdef',
       link_colour: '',
       sso_key: 'sso_secret_key_123',
@@ -73,9 +86,8 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
   end
 
   test 'migrates switch settings properly' do
-    insert_legacy_settings(
-      account_id: @provider.id,
-      tenant_id: @provider.tenant_id,
+    TestSettingsModel.create_legacy!(
+      account: @provider,
       finance_switch: 'visible',
       multiple_services_switch: 'hidden',
       account_plans_switch: 'denied',
@@ -95,16 +107,14 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
   test 'handles multiple accounts independently' do
     provider2 = FactoryBot.create(:provider_account)
     provider2.account_settings.delete_all
-    ActiveRecord::Base.connection.execute("DELETE FROM settings WHERE account_id = #{provider2.id}")
+    TestSettingsModel.where(account_id: provider2.id).delete_all
 
-    insert_legacy_settings(
-      account_id: @provider.id,
-      tenant_id: @provider.tenant_id,
+    TestSettingsModel.create_legacy!(
+      account: @provider,
       bg_colour: '#111111'
     )
-    insert_legacy_settings(
-      account_id: provider2.id,
-      tenant_id: provider2.tenant_id,
+    TestSettingsModel.create_legacy!(
+      account: provider2,
       bg_colour: '#222222'
     )
 
@@ -115,12 +125,12 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
 
     assert_equal '#111111', setting1&.value
     assert_equal '#222222', setting2&.value
+  ensure
+    TestSettingsModel.where(account_id: provider2.id).delete_all if provider2
   end
 
   test 'migrates all 64 legacy setting columns and makes them accessible via Settings facade' do
     all_settings = {
-      account_id: @provider.id,
-      tenant_id: @provider.tenant_id,
       # Booleans
       forum_enabled: true,
       app_gallery_enabled: false,
@@ -191,7 +201,7 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
       iam_tools_switch: 'denied'
     }
 
-    insert_legacy_settings(all_settings)
+    TestSettingsModel.create_legacy!(account: @provider, **all_settings)
 
     @migration.up
 
@@ -210,9 +220,8 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
   end
 
   test 'is idempotent and handles existing records via ON DUPLICATE KEY UPDATE' do
-    insert_legacy_settings(
-      account_id: @provider.id,
-      tenant_id: @provider.tenant_id,
+    TestSettingsModel.create_legacy!(
+      account: @provider,
       bg_colour: '#ffffff',
       forum_enabled: true
     )
@@ -229,9 +238,8 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
   end
 
   test 'down removes migrated settings but preserves other account_settings' do
-    insert_legacy_settings(
-      account_id: @provider.id,
-      tenant_id: @provider.tenant_id,
+    TestSettingsModel.create_legacy!(
+      account: @provider,
       bg_colour: '#abcdef',
       forum_enabled: true
     )
@@ -254,25 +262,5 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
     assert_not @provider.account_settings.exists?(type: 'ForumEnabled')
     assert @provider.account_settings.exists?(id: custom_setting.id),
            'down must preserve non-migrated account_settings records'
-  end
-
-  private
-
-  def insert_legacy_settings(attrs)
-    attrs = DEFAULT_NOT_NULL_SETTINGS.merge(attrs)
-    columns = attrs.keys.map(&:to_s)
-    values = attrs.values.map do |val|
-      case val
-      when nil then 'NULL'
-      when true then 'TRUE'
-      when false then 'FALSE'
-      when Numeric then val.to_s
-      else
-        ActiveRecord::Base.connection.quote(val.to_s)
-      end
-    end
-
-    sql = "INSERT INTO settings (#{columns.join(', ')}) VALUES (#{values.join(', ')})"
-    ActiveRecord::Base.connection.execute(sql)
   end
 end
