@@ -71,6 +71,33 @@ class PoliciesControllerTest < ActionDispatch::IntegrationTest
     assert_not_predicate proxy.reload, :pending_affecting_changes?
   end
 
+  test 'updating policies leaves pending changes when deployment fails without a backend' do
+    FactoryBot.create(:service_token, service: @service)
+    proxy = @service.proxy
+    proxy.update_columns(apicast_configuration_driven: true)
+    assert ApicastV2DeploymentService.new(proxy).call(environment: :sandbox)
+    assert_not_predicate proxy.reload, :pending_affecting_changes?
+
+    proxy.backend_api_configs.delete_all
+    config = [
+      { name: 'cors', version: 'builtin', configuration: {}, enabled: true },
+      { name: 'apicast', version: 'builtin', configuration: {}, enabled: true }
+    ]
+
+    assert_no_difference proxy.proxy_configs.sandbox.method(:count) do
+      with_time_now_increment do
+        put admin_api_service_proxy_policies_path(@service, access_token: @access_token, format: :json), params: {
+          proxy: { policies_config: config }
+        }, as: :json
+      end
+
+      assert_response :success
+    end
+
+    assert_equal config.map(&:stringify_keys), proxy.reload.policies_config.as_json
+    assert_predicate proxy, :pending_affecting_changes?
+  end
+
   test 'prints chain level errors' do
     valid_config = { name: 'apicast', configuration: {}, version: 'builtin', enabled: true, removable: false }
 
