@@ -43,7 +43,7 @@ module Admin::Api::Services
       ApicastV2DeploymentService.new(proxy).call(environment: :sandbox)
 
       assert_difference proxy.proxy_configs.sandbox.method(:count), 1 do
-        with_clock_incrementing_on_each_read do
+        with_time_now_increment do
           put admin_api_service_proxy_path(service_id: service.id, format: :json, access_token: token.plaintext_value), params: {
             proxy: { credentials_location: 'headers' }
           }

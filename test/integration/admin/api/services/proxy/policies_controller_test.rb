@@ -56,7 +56,7 @@ class PoliciesControllerTest < ActionDispatch::IntegrationTest
     ]
 
     assert_difference proxy.proxy_configs.sandbox.method(:count), 1 do
-      with_clock_incrementing_on_each_read do
+      with_time_now_increment do
         put admin_api_service_proxy_policies_path(@service, access_token: @access_token, format: :json), params: {
           proxy: { policies_config: config }
         }, as: :json

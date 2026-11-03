@@ -16,7 +16,7 @@ module TestHelpers
     # in the same second end up being recorded in different seconds
     # Useful for time sensitive tests over DB engines which time
     # granularity is a second. e.g. MySQL.
-    def with_clock_incrementing_on_each_read(&)
+    def with_time_now_increment(&)
       time = ::Time.now
 
       ::Time.stub(:now, -> { time += 1.second }, &)
