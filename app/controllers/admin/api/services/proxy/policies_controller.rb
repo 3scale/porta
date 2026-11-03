@@ -16,6 +16,7 @@ class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::Ba
   # PUT /admin/api/services/{service_id}/proxy/policies.json
   def update
     if proxy.update(proxy_params) && proxy.apicast_configuration_driven
+      flush_proxy_affecting_changes
       ApicastV2DeploymentService.new(@proxy).call(environment: :sandbox)
     end
 

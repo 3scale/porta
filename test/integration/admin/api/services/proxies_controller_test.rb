@@ -35,5 +35,49 @@ module Admin::Api::Services
 
       assert_equal 'headers', service.proxy.credentials_location
     end
+
+    def test_updating_proxy_deploys_to_staging_without_leaving_pending_changes
+      FactoryBot.create(:service_token, service: service)
+      proxy = service.proxy
+      proxy.update_columns(apicast_configuration_driven: true)
+      ApicastV2DeploymentService.new(proxy).call(environment: :sandbox)
+
+      assert_difference proxy.proxy_configs.sandbox.method(:count), 1 do
+        with_time_now_increment do
+          put admin_api_service_proxy_path(service_id: service.id, format: :json, access_token: token.plaintext_value), params: {
+            proxy: { credentials_location: 'headers' }
+          }
+        end
+
+        assert_response :success
+      end
+
+      deployed_config = proxy.proxy_configs.sandbox.newest_first.first!
+      assert_equal 'headers', JSON.parse(deployed_config.content).dig('proxy', 'credentials_location')
+      assert_not_predicate proxy.reload, :pending_affecting_changes?
+    end
+
+    def test_updating_proxy_leaves_pending_changes_when_deployment_fails_without_service_token
+      FactoryBot.create(:service_token, service: service)
+      proxy = service.proxy
+      proxy.update_columns(apicast_configuration_driven: true)
+      assert ApicastV2DeploymentService.new(proxy).call(environment: :sandbox)
+      assert_not_predicate proxy.reload, :pending_affecting_changes?
+
+      service.service_tokens.delete_all
+
+      assert_no_difference proxy.proxy_configs.sandbox.method(:count) do
+        with_time_now_increment do
+          put admin_api_service_proxy_path(service_id: service.id, format: :json, access_token: token.plaintext_value), params: {
+            proxy: { credentials_location: 'headers' }
+          }
+        end
+
+        assert_response :success
+      end
+
+      assert_equal 'headers', proxy.reload.credentials_location
+      assert_predicate proxy, :pending_affecting_changes?
+    end
   end
 end
