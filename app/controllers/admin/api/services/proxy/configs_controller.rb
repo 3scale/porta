@@ -58,8 +58,7 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
   end
 
   def host_proxy_configs
-    current_account.accessible_proxy_configs
-      .by_environment(environment).by_host(host).current_versions
+    current_account.accessible_proxy_configs.current_versions(environment).by_host(host)
   end
 
   def host
