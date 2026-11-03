@@ -38,13 +38,28 @@ class ProxyConfig < ApplicationRecord
   scope :by_environment, ->(env) { where(environment: VALID_ENVIRONMENTS[env]) }
   scope :by_host,        ->(host) { where.has { hosts =~ "%|#{host}|%" } if host }
 
-  scope :current_versions, -> do
-    where %(NOT EXISTS (
-      SELECT 1 FROM proxy_configs pc
-      WHERE proxy_configs.environment = environment
-        AND proxy_configs.proxy_id = proxy_id
-        AND proxy_configs.version < version
-      ))
+  scope :current_versions, ->(environment = nil) do
+    latest = ProxyConfig.unscoped.select(:proxy_id, 'MAX(version) AS max_version')
+    environment_join = ''
+
+    if environment
+      latest = latest.by_environment(environment).group(:proxy_id)
+      configs = by_environment(environment)
+    else
+      latest = latest.select(:environment).group(:proxy_id, :environment)
+      environment_join = 'AND latest.environment = proxy_configs.environment'
+      configs = all
+    end
+
+    # Keep Oracle's aggregate separate from the outer joins, including pagination counts.
+    configs = configs.optimizer_hints('NO_MERGE(latest)', 'NO_PUSH_PRED(latest)') if System::Database.oracle?
+
+    configs.joins(<<~SQL.squish).order(:id)
+      INNER JOIN (#{latest.to_sql}) latest
+        ON latest.proxy_id = proxy_configs.proxy_id
+        AND latest.max_version = proxy_configs.version
+        #{environment_join}
+    SQL
   end
 
   scope :by_version, ->(version) do

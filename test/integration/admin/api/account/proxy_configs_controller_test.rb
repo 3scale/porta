@@ -188,6 +188,36 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     assert_empty response_proxy_config_ids
   end
 
+  test '#index for latest counts matching proxies for pagination' do
+    services = FactoryBot.create_list(:simple_service, 3, :with_default_backend_api, account: provider)
+    latest_configs = services.map do |service|
+      FactoryBot.create_list(:proxy_config, 2, proxy: service.proxy, environment: 'production').last
+    end
+
+    queries = capture_sql_queries do
+      get admin_api_account_proxy_configs_path(
+        environment: 'production', access_token: access_token_value(user: provider.admin_user),
+        version: 'latest', per_page: 1, page: 1
+      )
+    end
+
+    assert_response :success
+    assert_equal [latest_configs.first.id], response_proxy_config_ids
+    assert_equal({ 'per_page' => 1, 'total_entries' => 3, 'total_pages' => 3, 'current_page' => 1 }, response.parsed_body['metadata'])
+
+    count_queries = queries.grep(/COUNT\(\*\).*FROM ["`]?proxy_configs["`]?/i)
+    assert_equal 1, count_queries.size
+    assert_match(/\bJOIN\b.*\blatest\b/i, count_queries.first)
+
+    if System::Database.oracle?
+      assert_includes count_queries.first, 'NO_MERGE(latest)'
+      assert_includes count_queries.first, 'NO_PUSH_PRED(latest)'
+    else
+      assert_not_includes count_queries.first, 'NO_MERGE(latest)'
+      assert_not_includes count_queries.first, 'NO_PUSH_PRED(latest)'
+    end
+  end
+
   private
 
   def content_hosts(*hosts)

@@ -114,6 +114,20 @@ class ProxyConfigTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassL
     assert_same_elements production_current_versions, ProxyConfig.by_environment('production').current_versions
   end
 
+  test '#current_versions filters and orders configs for the requested environment' do
+    proxy1 = FactoryBot.create(:proxy)
+    proxy2 = FactoryBot.create(:proxy)
+
+    production1 = create_proxy_configs(2, proxy1, 'production').last
+    production2 = create_proxy_configs(2, proxy2, 'production').last
+    sandbox1 = create_proxy_configs(3, proxy1, 'sandbox').last
+
+    assert_equal [production1, production2], ProxyConfig.current_versions('production').to_a
+    assert_equal [production1], ProxyConfig.where(proxy_id: proxy1.id).current_versions('production').to_a
+    assert_equal [sandbox1], ProxyConfig.current_versions('staging').to_a
+    assert_raises(ProxyConfig::InvalidEnvironmentError) { ProxyConfig.current_versions('invalid') }
+  end
+
   test '#current_versions returns 1 config per proxy and per host, when it is latest' do
     proxy1 = FactoryBot.create(:proxy)
     proxy2 = FactoryBot.create(:proxy)
