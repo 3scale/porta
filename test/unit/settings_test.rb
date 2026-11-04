@@ -163,15 +163,62 @@ class SettingsTest < ActiveSupport::TestCase
   end
 
   test 'boolean setting assignment semantics' do
-    settings.update(public_search: true)
-    assert settings.reload.public_search
+    # Direct Ruby booleans
+    settings.public_search = true
+    assert_equal true, settings.public_search
+    assert_equal true, settings.public_search?
+    settings.save!
+    assert_equal true, settings.reload.public_search
+    assert_equal '1', @provider.account_settings.find_by(type: 'PublicSearch').value
 
-    settings.update(public_search: false)
-    assert_not settings.reload.public_search, "explicit false should change the setting"
+    settings.public_search = false
+    assert_equal false, settings.public_search
+    assert_equal false, settings.public_search?
+    settings.save!
+    assert_equal false, settings.reload.public_search
+    assert_equal '0', @provider.account_settings.find_by(type: 'PublicSearch').value
 
+    # Integer inputs (e.g., from forms/params)
+    settings.update(public_search: 1)
+    assert_equal true, settings.reload.public_search
+
+    settings.update(public_search: 0)
+    assert_equal false, settings.reload.public_search
+
+    # String inputs (e.g., "1"/"0", "true"/"false", "t"/"f")
+    settings.update(public_search: '1')
+    assert_equal true, settings.reload.public_search
+
+    settings.update(public_search: '0')
+    assert_equal false, settings.reload.public_search
+
+    settings.update(public_search: 'true')
+    assert_equal true, settings.reload.public_search
+
+    settings.update(public_search: 'false')
+    assert_equal false, settings.reload.public_search
+
+    settings.update(public_search: 't')
+    assert_equal true, settings.reload.public_search
+
+    settings.update(public_search: 'f')
+    assert_equal false, settings.reload.public_search
+
+    # Clearing via nil returns default value (false)
     settings.update(public_search: true)
     settings.update(public_search: nil)
     assert_equal false, settings.reload.public_search, "nil clears the setting back to default (false)"
+    assert_nil @provider.account_settings.find_by(type: 'PublicSearch')
+
+    # Boolean setting with true default (e.g. forum_public)
+    assert_equal true, settings.forum_public
+    settings.update(forum_public: false)
+    assert_equal false, settings.reload.forum_public
+    assert_equal '0', @provider.account_settings.find_by(type: 'ForumPublic').value
+
+    settings.update(forum_public: nil)
+    assert_equal true, settings.reload.forum_public, "nil clears the setting back to default (true)"
+    assert_nil @provider.account_settings.find_by(type: 'ForumPublic')
   end
 
   test "validate change plan permission values" do
