@@ -129,13 +129,11 @@ class Settings
   end
 
   def update(attrs)
-    attrs = normalize_attrs(attrs)
     assign_attributes(attrs)
     save
   end
 
   def update!(attrs)
-    attrs = normalize_attrs(attrs)
     assign_attributes(attrs)
     save!
   end
