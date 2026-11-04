@@ -60,8 +60,7 @@ FactoryBot.define do
       account.provider = true
       account.stubs(:provider_key).returns("stubbed-#{SecureRandom.hex(16)}")
 
-      settings = Settings.new
-      settings.account = account
+      settings = Settings.new(account)
       account.stubs(:settings).returns(settings)
     end
 

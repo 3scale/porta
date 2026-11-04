@@ -132,8 +132,7 @@ class SettingsTest < ActiveSupport::TestCase
 
   test 'finance globally denied on on-premises master' do
     account = Account.new
-    settings = Settings.new
-    settings.account = account
+    settings = Settings.new(account)
 
     ThreeScale.config.stubs(onpremises: false)
     assert_not settings.finance.globally_denied?

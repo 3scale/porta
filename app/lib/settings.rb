@@ -4,7 +4,7 @@ class Settings
   include ActiveModel::Conversion
   extend ActiveModel::Naming
 
-  attr_accessor :account
+  attr_reader :account
   alias provider account
 
   # The facade is considered persisted when the account exists AND all cached

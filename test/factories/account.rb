@@ -109,8 +109,7 @@ FactoryBot.define do
       # [multiservices] This might not be right
       account.stubs(:service).returns(FactoryBot.build_stubbed(:service, :account => account))
 
-      settings = Settings.new
-      settings.account = account
+      settings = Settings.new(account)
       account.stubs(:settings).returns(settings)
 
       profile = FactoryBot.build_stubbed(:profile, :account => account)
