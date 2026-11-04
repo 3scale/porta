@@ -66,7 +66,7 @@ class AccountSetting::SwitchSetting < AccountSetting
   end
 
   def hideable?
-    !globally_denied? && Settings.basic_hidden_switches.exclude?(setting_name)
+    !globally_denied? && Settings.basic_hidden_switches.exclude?(setting_name.to_sym)
   end
 
   def globally_denied?
@@ -74,6 +74,6 @@ class AccountSetting::SwitchSetting < AccountSetting
   end
 
   def setting_name
-    self.class.sti_name.delete_suffix('Switch').underscore.to_sym
+    self.class.sti_name.delete_suffix('Switch').underscore
   end
 end

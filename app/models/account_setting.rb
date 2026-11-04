@@ -2,7 +2,6 @@
 
 class AccountSetting < ApplicationRecord
   self.store_full_sti_class = false
-  attribute :value, :string
 
   def self.find_sti_class(type_name)
     super
@@ -23,13 +22,13 @@ class AccountSetting < ApplicationRecord
   class_attribute :default_value, instance_writer: false, default: nil
   class_attribute :non_null, instance_writer: false, default: false
 
-  # Derives setting name from class: AccountSetting::BgColour -> :bg_colour
+  # Derives setting name from class: AccountSetting::BgColour -> 'bg_colour'
   def self.setting_name
-    sti_name.underscore.to_sym
+    sti_name.underscore
   end
 
   def self.display_name
-    setting_name.to_s.titleize
+    setting_name.titleize
   end
 
   # Instance methods that delegate to class methods

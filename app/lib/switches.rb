@@ -31,7 +31,7 @@ module Switches
 
   included do
     Settings::SWITCH_CLASSES.each do |klass|
-      name = klass.setting_name.to_s.delete_suffix('_switch').to_sym
+      name = klass.setting_name.delete_suffix('_switch').to_sym
 
       # Switch record getter (e.g., settings.finance returns the SwitchSetting record)
       define_method(name) do
@@ -62,11 +62,11 @@ module Switches
     end
   end
 
-  SWITCHES = Settings::SWITCH_CLASSES.map { |k| k.setting_name.to_s.delete_suffix('_switch').to_sym }.freeze
+  SWITCHES = Settings::SWITCH_CLASSES.map { |k| k.setting_name.delete_suffix('_switch').to_sym }.freeze
 
   PROVIDER_VISIBLE_SWITCHES = Settings::SWITCH_CLASSES
     .select(&:provider_visible)
-    .map { |k| k.setting_name.to_s.delete_suffix('_switch').to_sym }
+    .map { |k| k.setting_name.delete_suffix('_switch').to_sym }
     .freeze
 
   class Collection

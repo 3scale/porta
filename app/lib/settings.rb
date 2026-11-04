@@ -18,7 +18,7 @@ class Settings
   SETTING_CLASSES = AccountSetting.descendants.select { |klass| klass.descendants.empty? }.freeze
   SWITCH_CLASSES, VALUE_CLASSES = SETTING_CLASSES.partition { |k| k < AccountSetting::SwitchSetting }.map(&:freeze)
 
-  SETTING_CLASS_MAP = SETTING_CLASSES.each_with_object({}) { |klass, hash| hash[klass.setting_name] = klass }.freeze
+  SETTING_CLASS_MAP = SETTING_CLASSES.each_with_object({}) { |klass, hash| hash[klass.setting_name.to_sym] = klass }.freeze
   ALL_SETTINGS = SETTING_CLASS_MAP.transform_values(&:default_value).freeze
 
   # --- Define accessor methods that delegate to AccountSetting records ---
@@ -27,7 +27,7 @@ class Settings
     name = klass.setting_name
     define_method(name) do
       record = setting_record_for(name)
-      record ? record.value : klass.default_value
+      record && !record.marked_for_destruction? ? record.value : klass.default_value
     end
     define_method("#{name}=") do |value|
       if value.nil?
@@ -47,10 +47,10 @@ class Settings
   # --- Override special attribute accessors ---
 
   def sso_key
+    return nil unless account&.persisted? && account.provider?
+
     record = setting_record_for(:sso_key)
     return record.value if record
-
-    return nil unless account&.persisted? && account.provider?
 
     # Lazily generate and persist the SSO key on first access (outside any
     # account creation transaction to avoid FK-induced deadlocks)
@@ -63,19 +63,22 @@ class Settings
         account.id, generated, account.tenant_id, Time.current, Time.current
       ])
     )
-    account.account_settings.reset
-    generated
+
+    persisted_record = AccountSetting::SSOKey.find_by!(account_id: account.id)
+    account.account_settings.target&.delete_if { _1.type == 'SSOKey' }
+    account.account_settings << persisted_record
+    persisted_record.value
   end
 
   def authentication_strategy
     record = setting_record_for(:authentication_strategy)
-    val = record ? record.value : ALL_SETTINGS[:authentication_strategy]
+    val = record && !record.marked_for_destruction? ? record.value : ALL_SETTINGS[:authentication_strategy]
     val ? ActiveSupport::StringInquirer.new(val) : val
   end
 
   def spam_protection_level
     record = setting_record_for(:spam_protection_level)
-    val = record ? record.value : ALL_SETTINGS[:spam_protection_level]
+    val = record && !record.marked_for_destruction? ? record.value : ALL_SETTINGS[:spam_protection_level]
     return :none if val.blank?
     level = val.to_sym
     level == :auto ? :captcha : level
@@ -83,7 +86,7 @@ class Settings
 
   def admin_bot_protection_level
     record = setting_record_for(:admin_bot_protection_level)
-    val = record ? record.value : ALL_SETTINGS[:admin_bot_protection_level]
+    val = record && !record.marked_for_destruction? ? record.value : ALL_SETTINGS[:admin_bot_protection_level]
     val.present? ? val.to_sym : :none
   end
 
@@ -96,7 +99,7 @@ class Settings
   # --- Persistence ---
 
   def save
-    return true unless account&.persisted?
+    return false unless account&.persisted?
     results = nil
     AccountSetting.transaction do
       results = account.account_settings.map do |record|
@@ -117,9 +120,12 @@ class Settings
   end
 
   def save!
-    save || raise(ActiveRecord::RecordInvalid.new(
-      account.account_settings.detect { |r| r.errors.any? }
-    ))
+    return true if save
+
+    record = account_settings.detect { _1.errors.any? }
+    raise ActiveRecord::RecordInvalid.new(record) if record
+
+    raise ActiveRecord::RecordNotSaved.new("Failed to save settings", self)
   end
 
   def update(attrs)
@@ -135,11 +141,13 @@ class Settings
   end
 
   def update_attribute(name, value)
-    send("#{name}=", value)
-    record = setting_record_for(name.to_sym)
-    record&.save(validate: false)
+    if value.nil?
+      clear_setting(name, destroy: true)
+    else
+      send("#{name}=", value)
+      setting_record_for(name)&.save(validate: false)
+    end
   end
-  alias update_column update_attribute
 
   def toggle!(name)
     name = name.to_sym
@@ -157,9 +165,9 @@ class Settings
 
   def errors
     errors = ActiveModel::Errors.new(self)
-    account&.account_settings&.each do |record|
+    account_settings.each do |record|
       record.errors.each do |error|
-        errors.add(record.class.setting_name, error.message)
+        errors.add(record.class.setting_name.to_sym, error.message)
       end
     end
     errors
@@ -227,19 +235,25 @@ class Settings
 
   private
 
+  def account_settings
+    return [] unless account
+
+    account.account_settings.reject(&:destroyed?)
+  end
+
   def setting_record_for(name)
     klass = SETTING_CLASS_MAP[name.to_sym]
-    return nil unless klass && account
-    sti_name = klass.sti_name
-    account.account_settings.find { |r| r.type == sti_name && !r.marked_for_destruction? }
+    return nil unless klass
+
+    account_settings.find { _1.type == klass.sti_name }
   end
 
   def find_or_build_setting(name)
     klass = SETTING_CLASS_MAP[name.to_sym]
     return nil unless klass && account
-    sti_name = klass.sti_name
 
-    record = account.account_settings.find { |r| r.type == sti_name }
+    sti_name = klass.sti_name
+    record = account_settings.find { _1.type == sti_name }
     if record
       record.instance_variable_set(:@marked_for_destruction, false) if record.marked_for_destruction?
       return record
@@ -256,11 +270,14 @@ class Settings
     attrs.to_h.symbolize_keys
   end
 
-  def clear_setting(name)
+  def clear_setting(name, destroy: false)
     record = setting_record_for(name)
     return unless record
+
     if record.new_record?
       account.account_settings.delete(record)
+    elsif destroy
+      record.destroy
     else
       record.mark_for_destruction
     end

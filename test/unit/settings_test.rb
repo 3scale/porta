@@ -243,30 +243,105 @@ class SettingsTest < ActiveSupport::TestCase
       "no record should be persisted"
   end
 
-  test "assign nil then a new value on a persisted setting resurrects the record" do
-    settings.update!(bg_colour: '#fff')
-    assert_equal '#fff', settings.reload.bg_colour
+  test "assign value, nil, then new value on a non-existing setting persists only the final value" do
+    assert_nil @provider.account_settings.detect { |r| r.type == 'BgColour' }
+
+    settings.bg_colour = '#111111'
+    assert_equal '#111111', settings.bg_colour
+    assert @provider.account_settings.detect { |r| r.type == 'BgColour' }
+
+    settings.bg_colour = nil
+    assert_nil settings.bg_colour
+    assert_nil @provider.account_settings.detect { |r| r.type == 'BgColour' }
+
+    settings.bg_colour = '#222222'
+    assert_equal '#222222', settings.bg_colour
+
+    settings.save!
+    assert_equal '#222222', settings.reload.bg_colour
+    assert_equal '#222222', @provider.account_settings.find_by(type: 'BgColour').value
+    assert_equal 1, @provider.account_settings.select { |r| r.type == 'BgColour' }.size
+  end
+
+  test "assign value, nil, then new value on a pre-existing setting updates the record without duplicates" do
+    settings.update!(bg_colour: '#111111')
+    assert_equal '#111111', settings.reload.bg_colour
+
+    settings.bg_colour = '#222222'
+    assert_equal '#222222', settings.bg_colour
 
     settings.bg_colour = nil
     assert_nil settings.bg_colour, "getter should return default after nil assignment"
 
-    settings.bg_colour = '#000'
-    assert_equal '#000', settings.bg_colour, "getter should return the new value"
+    settings.bg_colour = '#333333'
+    assert_equal '#333333', settings.bg_colour, "getter should return the new value"
 
     settings.save!
-    assert_equal '#000', settings.reload.bg_colour, "new value should be persisted"
+    assert_equal '#333333', settings.reload.bg_colour, "new value should be persisted"
+    assert_equal '#333333', @provider.account_settings.find_by(type: 'BgColour').value
     assert_equal 1, @provider.account_settings.select { |r| r.type == 'BgColour' }.size,
       "should have exactly one record, not a duplicate"
+  end
+
+  test "update_attribute persists setting immediately" do
+    settings.update_attribute(:bg_colour, '#654321')
+    assert_equal '#654321', settings.reload.bg_colour
+    assert_equal '#654321', @provider.account_settings.find_by(type: 'BgColour').value
+
+    settings.update_attribute(:bg_colour, '#123456')
+    assert_equal '#123456', settings.reload.bg_colour
+    assert_equal '#123456', @provider.account_settings.find_by(type: 'BgColour').value
+  end
+
+  test "update_attribute with nil immediately destroys the persisted record" do
+    settings.update_attribute(:bg_colour, '#654321')
+    assert_equal '#654321', @provider.account_settings.find_by(type: 'BgColour').value
+
+    settings.update_attribute(:bg_colour, nil)
+    assert_nil settings.bg_colour
+    assert_nil settings.reload.bg_colour
+    assert_nil @provider.account_settings.find_by(type: 'BgColour')
+  end
+
+  test "update_attribute with nil on non-existent setting is a safe no-op" do
+    assert_nil @provider.account_settings.find_by(type: 'BgColour')
+    settings.update_attribute(:bg_colour, nil)
+    assert_nil settings.bg_colour
+    assert_nil @provider.account_settings.find_by(type: 'BgColour')
+  end
+
+  test "destroying an AccountSetting directly updates facade to default, and reassigning works cleanly" do
+    settings.update_attribute(:bg_colour, '#123456')
+    assert_equal '#123456', settings.bg_colour
+
+    # Directly destroy the AccountSetting record outside the facade
+    record = @provider.account_settings.detect { |r| r.type == 'BgColour' }
+    record.destroy
+
+    # Facade should immediately return default without reload
+    assert_nil settings.bg_colour
+
+    # Reassigning should build a fresh record, persist, and update getter
+    settings.bg_colour = '#abcdef'
+    assert_equal '#abcdef', settings.bg_colour
+
+    settings.save!
+    assert_equal '#abcdef', settings.reload.bg_colour
+    assert_equal '#abcdef', @provider.account_settings.find_by(type: 'BgColour').value
   end
 
   class PersistedTest < ActiveSupport::TestCase
     test 'false when account is nil' do
       assert_not Settings.new.persisted?
+      assert_not Settings.new.save
+      assert_raises(ActiveRecord::RecordNotSaved) { Settings.new.save! }
     end
 
     test 'false when account is not persisted' do
       provider = FactoryBot.build(:simple_provider)
       assert_not provider.settings.persisted?
+      assert_not provider.settings.save
+      assert_raises(ActiveRecord::RecordNotSaved) { provider.settings.save! }
     end
 
     test 'true when account is persisted' do
