@@ -7,14 +7,8 @@ class Settings
   attr_reader :account
   alias provider account
 
-  # The facade is considered persisted when the account exists AND all cached
-  # AccountSetting records are themselves persisted (none are new or dirty).
-  # If no records are cached yet, there is nothing unsaved so it is persisted.
   def persisted?
-    return false unless account&.persisted?
-    cached = account.account_settings.target  # the in-memory loaded records, nil if not yet loaded
-    return true if cached.nil? || cached.empty?
-    cached.all?(&:persisted?)
+    !!account&.persisted?
   end
 
   # Eager-load all AccountSetting subclasses so we can discover them
@@ -114,6 +108,7 @@ class Settings
           true
         end
       end
+      account.account_settings.target&.reject!(&:destroyed?)
       raise ActiveRecord::Rollback unless results.all?
     end
     results.all?
@@ -164,10 +159,6 @@ class Settings
       end
     end
     errors
-  end
-
-  def dirty?
-    account&.account_settings&.any? { |r| r.changed? || r.new_record? || r.marked_for_destruction? }
   end
 
   def updated_at
