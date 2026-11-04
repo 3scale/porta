@@ -2,6 +2,7 @@
 
 class AccountSetting < ApplicationRecord
   self.store_full_sti_class = false
+  attribute :value, :string
 
   def self.find_sti_class(type_name)
     super
@@ -18,10 +19,6 @@ class AccountSetting < ApplicationRecord
   validates :value, exclusion: { in: [nil], message: "cannot be nil" }
 
   delegate :provider_id_for_audits, to: :account, allow_nil: true
-
-  def typed_assign(raw_value)
-    self.value = self.class.serialize(raw_value)
-  end
 
   class_attribute :default_value, instance_writer: false, default: nil
   class_attribute :non_null, instance_writer: false, default: false

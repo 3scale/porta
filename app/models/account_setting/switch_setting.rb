@@ -73,18 +73,6 @@ class AccountSetting::SwitchSetting < AccountSetting
     false
   end
 
-  def self.cast(value)
-    value&.to_s
-  end
-
-  def self.serialize(value)
-    value.to_s
-  end
-
-  def typed_value
-    value
-  end
-
   def setting_name
     self.class.sti_name.delete_suffix('Switch').underscore.to_sym
   end

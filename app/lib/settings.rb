@@ -27,13 +27,13 @@ class Settings
     name = klass.setting_name
     define_method(name) do
       record = setting_record_for(name)
-      record ? record.typed_value : klass.default_value
+      record ? record.value : klass.default_value
     end
     define_method("#{name}=") do |value|
       if value.nil?
         clear_setting(name)
       else
-        find_or_build_setting(name).typed_assign(klass.cast(value))
+        find_or_build_setting(name).value = value
       end
     end
   end
@@ -48,7 +48,7 @@ class Settings
 
   def sso_key
     record = setting_record_for(:sso_key)
-    return record.typed_value if record
+    return record.value if record
 
     return nil unless account&.persisted? && account.provider?
 
@@ -69,13 +69,13 @@ class Settings
 
   def authentication_strategy
     record = setting_record_for(:authentication_strategy)
-    val = record ? record.typed_value : ALL_SETTINGS[:authentication_strategy]
+    val = record ? record.value : ALL_SETTINGS[:authentication_strategy]
     val ? ActiveSupport::StringInquirer.new(val) : val
   end
 
   def spam_protection_level
     record = setting_record_for(:spam_protection_level)
-    val = record ? record.typed_value : ALL_SETTINGS[:spam_protection_level]
+    val = record ? record.value : ALL_SETTINGS[:spam_protection_level]
     return :none if val.blank?
     level = val.to_sym
     level == :auto ? :captcha : level
@@ -83,7 +83,7 @@ class Settings
 
   def admin_bot_protection_level
     record = setting_record_for(:admin_bot_protection_level)
-    val = record ? record.typed_value : ALL_SETTINGS[:admin_bot_protection_level]
+    val = record ? record.value : ALL_SETTINGS[:admin_bot_protection_level]
     val.present? ? val.to_sym : :none
   end
 
@@ -102,6 +102,8 @@ class Settings
       results = account.account_settings.map do |record|
         if record.marked_for_destruction?
           record.destroy
+        elsif record.new_record? && record.value.nil?
+          true
         elsif record.changed? || record.new_record?
           record.save
         else
@@ -134,8 +136,10 @@ class Settings
 
   def update_attribute(name, value)
     send("#{name}=", value)
-    setting_record_for(name.to_sym).save(validate: false)
+    record = setting_record_for(name.to_sym)
+    record&.save(validate: false)
   end
+  alias update_column update_attribute
 
   def toggle!(name)
     name = name.to_sym

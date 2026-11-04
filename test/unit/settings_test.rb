@@ -168,14 +168,14 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal true, settings.public_search?
     settings.save!
     assert_equal true, settings.reload.public_search
-    assert_equal '1', @provider.account_settings.find_by(type: 'PublicSearch').value
+    assert_equal true, @provider.account_settings.find_by(type: 'PublicSearch').value
 
     settings.public_search = false
     assert_equal false, settings.public_search
     assert_equal false, settings.public_search?
     settings.save!
     assert_equal false, settings.reload.public_search
-    assert_equal '0', @provider.account_settings.find_by(type: 'PublicSearch').value
+    assert_equal false, @provider.account_settings.find_by(type: 'PublicSearch').value
 
     # Integer inputs (e.g., from forms/params)
     settings.update(public_search: 1)
@@ -213,7 +213,7 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal true, settings.forum_public
     settings.update(forum_public: false)
     assert_equal false, settings.reload.forum_public
-    assert_equal '0', @provider.account_settings.find_by(type: 'ForumPublic').value
+    assert_equal false, @provider.account_settings.find_by(type: 'ForumPublic').value
 
     settings.update(forum_public: nil)
     assert_equal true, settings.reload.forum_public, "nil clears the setting back to default (true)"
@@ -279,7 +279,6 @@ class SettingsTest < ActiveSupport::TestCase
       assert settings.persisted?
     end
   end
-
 
   class FinanceDisabledSwitchTest < ActiveSupport::TestCase
     def setup
