@@ -88,6 +88,24 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     assert_equal service.proxy.proxy_configs.order(:id).offset(3).limit(3).select(:id).map(&:id), response_proxy_config_ids
   end
 
+  test '#index loads page IDs before full records with default pagination' do
+    skip 'the split query is used only with MySQL' unless System::Database.mysql?
+
+    service = FactoryBot.create(:simple_service, :with_default_backend_api, account: provider)
+    FactoryBot.create(:proxy_config, proxy: service.proxy, environment: 'production')
+    token = access_token_value(user: provider.admin_user)
+
+    queries = capture_sql_queries do
+      get admin_api_account_proxy_configs_path(environment: 'production', access_token: token)
+    end
+
+    assert_response :success
+    config_queries = queries.grep(/\ASELECT `proxy_configs`\./)
+    assert_equal 2, config_queries.size, queries.join("\n")
+    assert_match(/\ASELECT `proxy_configs`\.`id` FROM/, config_queries.first)
+    assert_match(/\ASELECT `proxy_configs`\.\* FROM/, config_queries.last)
+  end
+
   test '#index can be filtered by version' do
     services = FactoryBot.create_list(:simple_service, 2, :with_default_backend_api, account: provider)
     proxy_configs = services.map { |service| FactoryBot.create_list(:proxy_config, 3, proxy: service.proxy, environment: ProxyConfig::ENVIRONMENTS.first) }.flatten
