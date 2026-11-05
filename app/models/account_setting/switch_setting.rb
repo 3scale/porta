@@ -2,7 +2,6 @@
 
 class AccountSetting::SwitchSetting < AccountSetting
   self.default_value = 'denied'
-  self.non_null = true
   class_attribute :provider_visible, instance_writer: false, default: false
 
   def state
