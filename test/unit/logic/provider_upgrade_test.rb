@@ -46,23 +46,21 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
 
   test 'upgrade through force_upgrade_to_provider_plan! bypasses can_upgrade?' do
     @provider.stubs(:credit_card_stored?).returns(true)
-    PlanRulesCollection.stubs(can_upgrade?: false) do
-      @provider.force_upgrade_to_provider_plan!(@power1M)
-    end
+    PlanRulesCollection.stubs(can_upgrade?: false)
+    @provider.force_upgrade_to_provider_plan!(@power1M)
+    assert_equal 'power1M', @provider.reload.bought_cinstance.plan.system_name
   end
 
   test 'raises if not credit_card_stored?' do
     @provider.stubs(:credit_card_stored?).returns(false)
-    PlanRulesCollection.stubs(can_upgrade?: true) do
-      assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
-    end
+    PlanRulesCollection.stubs(can_upgrade?: true)
+    assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
   end
 
   test 'raises unless can_upgrade?' do
     @provider.stubs(:credit_card_stored?).returns(true)
-    PlanRulesCollection.stubs(can_upgrade?: false) do
-      assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
-    end
+    PlanRulesCollection.stubs(can_upgrade?: false)
+    assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
   end
 
   test 'can call force_upgrade_to_provider_plan! with a master plan system_name' do
