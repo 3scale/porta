@@ -155,7 +155,7 @@ class Settings
   end
 
   def assign_attributes(attrs)
-    normalize_attrs(attrs).each do |key, value|
+    attrs.to_h.each do |key, value|
       send("#{key}=", value) if respond_to?("#{key}=", true)
     end
   end
@@ -262,10 +262,6 @@ class Settings
 
   def find_or_build_switch(name)
     find_or_build_setting(:"#{name}_switch")
-  end
-
-  def normalize_attrs(attrs)
-    attrs.to_h.symbolize_keys
   end
 
   def clear_setting(name, destroy: false)
