@@ -5,11 +5,13 @@ module ThreeScale
   #   SELECT widgets.* FROM widgets ORDER BY widgets.id LIMIT 50 OFFSET 10000
   #
   # The optimized lookup selects page IDs before loading full records:
-  # - The ID query keeps the filters, JOINs and ORDER BY of the relation, but selects nothing except
-  #   IDs.  This lets MySQL apply LIMIT and OFFSET to narrow index data instead of wide rows.
+  # - The ID query keeps the filters, JOINs and ORDER BY of the relation, but selects only IDs.
   # - The data query then loads the actual records, and their associations, for those IDs.
   #
-  # The optimization can also help page 1 when MySQL reads many wide rows before applying the limit.
+  # To find which records belong to a page, MySQL may need to examine and sort many matching
+  # rows, including for page 1. A normal query may load full records for all of them, even though
+  # only a small page is returned. Selecting IDs first can let MySQL use a covering index for
+  # this work and load full records only for the selected page.
   # The caller is still responsible for proper indices on the filter and order columns — without
   # them the ID query will be slow regardless of this optimization.
   #
