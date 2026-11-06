@@ -1,7 +1,5 @@
-- allowed_permissions = can?(:see, :finance) ? Logic::PlanChanges::PERMISSIONS : Logic::PlanChanges::PERMISSIONS[0..1]
-
 div class="pf-c-form__group-control pf-m-stack"
-  - allowed_permissions.each do |permission|
+  - allowed_plan_change_permissions.each do |permission|
     div class="pf-c-radio"
       = form.radio_button setting, permission, class: "pf-c-radio__input"
       = form.label "#{setting}_#{permission}", t("formtastic.labels.settings.change_plan_permission.#{permission}"), class: "pf-c-radio__label"

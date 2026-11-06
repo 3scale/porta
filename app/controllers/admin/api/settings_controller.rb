@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::Api::SettingsController < Admin::Api::BaseController
+  include PermittedAccountSettings
 
   clear_respond_to
   respond_to :json
@@ -41,7 +42,11 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   end
 
   def settings_params
-    @settings_params ||= params.require(:settings).permit(*ALLOWED_PARAMS)
+    @settings_params ||= begin
+      keys = (permitted_settings_keys + [:enforce_sso]) & ALLOWED_PARAMS
+      permitted = params.require(:settings).permit(*keys)
+      filter_plan_change_permissions(permitted, :change_account_plan_permission, :change_service_plan_permission)
+    end
   end
 
   def validate_enforcing_sso_allowed
