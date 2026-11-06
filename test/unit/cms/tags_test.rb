@@ -29,4 +29,34 @@ class CMS::TagsTest < ActiveSupport::TestCase
 
     assert_equal 4, ActsAsTaggableOn::Tag.unscoped.count
   end
+
+  %i[cms_page cms_file].each do |factory|
+    test "#{factory} tags persist, serialize and remain isolated between providers" do
+      first_provider = FactoryBot.create(:provider_account)
+      second_provider = FactoryBot.create(:provider_account)
+      first_admin = FactoryBot.create(:simple_admin, account: first_provider, tenant_id: first_provider.id)
+      second_admin = FactoryBot.create(:simple_admin, account: second_provider, tenant_id: second_provider.id)
+      first_record = FactoryBot.create(factory, provider: first_provider)
+      second_record = FactoryBot.create(factory, provider: second_provider)
+
+      User.current = first_admin
+      first_record.update!(tag_list: 'shared, old')
+      assert_same_elements %w[shared old], first_record.reload.tag_list
+      assert_not first_record.as_json.key?('tag_list')
+
+      User.current = second_admin
+      second_record.update!(tag_list: 'shared, other')
+      assert_same_elements %w[shared other], second_record.reload.tag_list
+      assert_equal [second_record.id], second_record.class.where(provider_id: second_provider.id).tagged_with('shared').pluck(:id)
+
+      User.current = first_admin
+      first_record.update!(tag_list: 'shared, new')
+      assert_same_elements %w[shared new], first_record.reload.tag_list
+      assert_not first_record.as_json.key?('tag_list')
+      assert_equal [first_record.id], first_record.class.where(provider_id: first_provider.id).tagged_with('shared').pluck(:id)
+
+      User.current = second_admin
+      assert_same_elements %w[shared other], second_record.reload.tag_list
+    end
+  end
 end
