@@ -52,21 +52,10 @@ class Settings
     record = setting_record_for(:sso_key)
     return record.value if record
 
-    # Lazily generate and persist the SSO key on first access (outside any
-    # account creation transaction to avoid FK-induced deadlocks)
-    generated = ThreeScale::SSO.generate_sso_key
-    AccountSetting.connection.execute(
-      AccountSetting.sanitize_sql([
-        "INSERT INTO account_settings (account_id, type, value, tenant_id, created_at, updated_at)" \
-        " VALUES (?, 'SSOKey', ?, ?, ?, ?)" \
-        " ON DUPLICATE KEY UPDATE account_settings.updated_at = account_settings.updated_at",
-        account.id, generated, account.tenant_id, Time.current, Time.current
-      ])
-    )
-
-    persisted_record = AccountSetting::SSOKey.find_by!(account_id: account.id)
-    account.account_settings.target&.delete_if { _1.type == 'SSOKey' }
-    account.account_settings << persisted_record
+    persisted_record = account.account_settings.create_or_find_by!(type: 'AccountSetting::SSOKey') do |r|
+      r.value = ThreeScale::SSO.generate_sso_key
+      r.tenant_id = account.tenant_id
+    end
     persisted_record.value
   end
 
@@ -100,12 +89,14 @@ class Settings
 
   def save
     return false unless account&.persisted?
-    results = nil
+    success = false
     AccountSetting.transaction do
-      results = account.account_settings.map do |record|
-        if record.marked_for_destruction?
-          record.destroy
-        elsif record.new_record? && record.value.nil?
+      to_destroy, to_persist = account.account_settings.partition(&:marked_for_destruction?)
+
+      results = to_persist.map do |record|
+        # Switch getters build in-memory records to support state queries (e.g. .visible?);
+        # skip persisting these unless a value was explicitly set.
+        if record.new_record? && record.value.nil?
           true
         elsif record.changed? || record.new_record?
           record.save
@@ -113,13 +104,16 @@ class Settings
           true
         end
       end
-      account.account_settings.target&.reject!(&:destroyed?)
+
       raise ActiveRecord::Rollback unless results.all?
+      account.account_settings.destroy(*to_destroy) if to_destroy.any?
+      success = true
     end
-    results.all?
+    success
   end
 
   def save!
+    raise ActiveRecord::RecordNotSaved.new("Account is not persisted", self) unless account&.persisted?
     return true if save
 
     record = account_settings.detect { _1.errors.any? }
@@ -150,7 +144,6 @@ class Settings
   def toggle!(name)
     name = name.to_sym
     record = find_or_build_setting(name)
-    record.value ||= AccountSetting::BooleanSetting.serialize(ALL_SETTINGS[name])
     record.toggle_value!
   end
 
