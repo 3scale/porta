@@ -1,5 +1,3 @@
 # frozen_string_literal: true
 
-class AccountSetting::ForumPublic < AccountSetting::BooleanSetting
-  self.default_value = false
-end
+class AccountSetting::ForumPublic < AccountSetting::BooleanSetting; end
