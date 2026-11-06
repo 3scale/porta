@@ -151,7 +151,7 @@ class Admin::Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal permitted_apps, all_ids
   end
 
-  # The page is requested with an offset, so that the MySQL optimized lookup is in play.  The page holds
+  # Page 2 exercises the MySQL optimized lookup with an offset. The page holds
   # `current_scale` applications, each with its own account and plan, so any per-record query shows up.
   %w[xml json].each do |format|
     test "no n+1 queries on paginated index in #{format}" do
@@ -170,8 +170,8 @@ class Admin::Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
 
     # THE EXPECTED QUERY SHAPE OF THE APPLICATIONS INDEX, SEE ThreeScale::WillPaginateMysqlOptimizedLookup.
     #
-    # The index joins `services` (to filter by the accessible services), and page 2 and later would read
-    # whole application rows through that JOIN just to skip them.  The optimized lookup splits it into:
+    # The index joins `services` (to filter by the accessible services), which can read whole application
+    # rows before applying LIMIT and OFFSET. The optimized lookup splits it into:
     # 1. an ID query with the JOIN, ORDER BY and OFFSET, that selects only IDs;
     # 2. a data query by those IDs, without the JOIN and the OFFSET (the associations are loaded with
     #    separate preload queries, which this test does not look at);
@@ -264,16 +264,20 @@ class Admin::Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
     assert_not_equal etag, response.headers['ETag']
   end
 
-  test 'paginated index of the first page does not use the split query' do
+  test 'paginated index defaults to the first page and uses the split query' do
     skip_unless_mysql
 
+    other_application = FactoryBot.create(:cinstance, user_account: @buyer, plan: @plan)
     queries = capture_sql_queries do
-      get '/admin/api/applications.json', params: { access_token: @token, page: 1, per_page: 2 }
+      get '/admin/api/applications.json', params: { access_token: @token, per_page: 2 }
       assert_response :success
     end
 
-    assert_empty queries.grep(/FIELD\(/), queries.join("\n")
-    assert_equal 1, queries.grep(/\ASELECT `cinstances`\.\*.*\bJOIN\b.*\bOFFSET 0\b/m).size, queries.join("\n")
+    response_ids = response.parsed_body['applications'].map { _1['application']['id'] }
+    assert_equal [@application.id, other_application.id].sort, response_ids
+    assert_equal 1, queries.grep(/\ASELECT `cinstances`\.`id` FROM .*\bJOIN\b.*\bLIMIT 2 OFFSET 0\b/m).size, queries.join("\n")
+    assert_equal 1, queries.grep(DATA_QUERY).size, queries.join("\n")
+    assert_empty queries.grep(/\ASELECT `cinstances`\.\*.*\bJOIN\b.*\bOFFSET 0\b/m), queries.join("\n")
   end
 
   private

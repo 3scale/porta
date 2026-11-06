@@ -4,20 +4,22 @@ module ThreeScale
   # Normal pagination uses LIMIT/OFFSET to skip rows before returning full records:
   #   SELECT widgets.* FROM widgets ORDER BY widgets.id LIMIT 50 OFFSET 10000
   #
-  # The optimized lookup splits this in two:
-  # - The ID query keeps the filters, JOINs and ORDER BY of the relation, but selects nothing except
-  #   IDs.  This lets MySQL do the large OFFSET on narrow index data instead of wide rows.
+  # The optimized lookup selects page IDs before loading full records:
+  # - The ID query keeps the filters, JOINs and ORDER BY of the relation, but selects only IDs.
   # - The data query then loads the actual records, and their associations, for those IDs.
   #
-  # There is no gain on page 1 (OFFSET 0), so the optimization is skipped there.  Note that the caller
-  # is still responsible for proper indices on the filter and order columns — without them the ID
-  # query will be slow regardless of this optimization.
+  # To find which records belong to a page, MySQL may need to examine and sort many matching
+  # rows, including for page 1. A normal query may load full records for all of them, even though
+  # only a small page is returned. Selecting IDs first can let MySQL use a covering index for
+  # this work and load full records only for the selected page.
+  # The caller is still responsible for proper indices on the filter and order columns — without
+  # them the ID query will be slow regardless of this optimization.
   #
   # It applies to paginated relations of a model with a single-column primary key, without grouping,
   # HAVING, DISTINCT, custom FROM, lock or eager loading (see below).  Relations without joins also
   # need no existing CTE.  Any other relation shape uses WillPaginate's usual query, and a warning
-  # with the reason, the model and the controller action is logged.  No warning is logged for page 1
-  # or for a relation that is not paginated.  Two strategies exist:
+  # with the reason, the model and the controller action is logged.  No warning is logged for a
+  # relation that is not paginated or that already selects only the primary key. Two strategies exist:
   #
   # 1. Without joins, on MySQL 8.0+ (CTE support), a single query using the ID query as a CTE:
   #      WITH will_paginate_page_ids AS (
@@ -122,12 +124,10 @@ module ThreeScale
       joins_values.any? || left_outer_joins_values.any?
     end
 
-    # Relations that are not paginated or gain nothing from the optimization, they are not worth a warning.
+    # Relations that are not paginated or already select only the primary key do not need optimization.
     def optimization_worthwhile?
       # Only paginated relations (WillPaginate sets current_page via .paginate).
       current_page.present? &&
-        # The gain comes from not reading full rows for the skipped OFFSET; page 1 (OFFSET 0) is already fast.
-        offset_value.positive? &&
         # Skip when the caller already selected only the PK — a plain
         # LIMIT/OFFSET on a narrow index-only scan is already optimal.
         !(select_values.size == 1 && select_values.first.to_s == klass.primary_key)

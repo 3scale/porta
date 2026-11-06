@@ -21,8 +21,7 @@ class Master::Api::Proxy::ConfigsControllerTest < ActionDispatch::IntegrationTes
     get master_api_proxy_configs_path(environment: 'production'), params: {access_token: @token.plaintext_value}
     assert_response :success
 
-    assert_same_elements production_current_versions.map(&:id),
-                         proxy_config_ids(response.body)
+    assert_equal production_current_versions.map(&:id), proxy_config_ids(response.body)
   end
 
   test '#index filter by host (among the latest versions)' do
