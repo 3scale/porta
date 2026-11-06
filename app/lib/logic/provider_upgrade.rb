@@ -132,7 +132,7 @@ module Logic
         switches_off = Switches::SWITCHES - switches_on
         switches_off.each do |switch|
           next if settings.send(switch).denied?
-          settings.send("hide_#{switch}!") if Switches::PROVIDER_VISIBLE_SWITCHES.include?(switch)
+          settings.send("hide_#{switch}!") if Switches::PROVIDER_VISIBLE_SWITCHES.include?(switch) && !settings.send(switch).hidden?
           settings.send("deny_#{switch}!")
         end
       end
