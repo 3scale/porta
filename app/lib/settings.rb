@@ -54,7 +54,6 @@ class Settings
 
     persisted_record = account.account_settings.create_or_find_by!(type: 'AccountSetting::SSOKey') do |r|
       r.value = ThreeScale::SSO.generate_sso_key
-      r.tenant_id = account.tenant_id
     end
     persisted_record.value
   end
@@ -113,7 +112,6 @@ class Settings
   end
 
   def save!
-    raise ActiveRecord::RecordNotSaved.new("Account is not persisted", self) unless account&.persisted?
     return true if save
 
     record = account_settings.detect { _1.errors.any? }
@@ -250,7 +248,7 @@ class Settings
       return record
     end
 
-    account.account_settings.build(type: sti_name, tenant_id: account.tenant_id)
+    account.account_settings.build(type: sti_name)
   end
 
   def find_or_build_switch(name)
