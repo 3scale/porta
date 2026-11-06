@@ -12,7 +12,9 @@ class Sites::EmailsController < Sites::BaseController
   def edit; end
 
   def update
-    account_params = params.require(:account).permit(%i[support_email finance_support_email])
+    permitted = %i[support_email]
+    permitted << :finance_support_email if current_account.settings.finance.allowed?
+    account_params = params.require(:account).permit(permitted)
 
     if current_account.update(account_params)
       redirect_to({ action: :edit }, success: t('.success'))

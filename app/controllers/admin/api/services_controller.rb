@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
+  include PermittedServiceSettings
+
   wrap_parameters Service, include: Service.attribute_names | %w[state_event annotations]
   representer Service
 
@@ -21,7 +23,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   def create
     service = current_account.services.build
     create_service = ServiceCreator.new(service: service)
-    create_service.call(service_params.to_h)
+    create_service.call(service_params(service).to_h)
     service.reload if service.persisted? # It has been touched
     respond_with(service)
   end
@@ -56,15 +58,9 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
     head :forbidden unless current_account.can_create_service?
   end
 
-  def service_params
-    permitted_params = [:name, :system_name, :description, :support_email, :deployment_option, :backend_version,
-                        :intentions_required, :buyers_manage_apps, :referrer_filters_required,
-                        :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
-                        :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
-                        :txt_support, :terms,
-                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []],
-                        annotations: {}}]
-    params.require(:service).permit(*permitted_params)
+  def service_params(service_record = service)
+    permitted = params.require(:service).permit(*permitted_service_keys(service_record), annotations: {})
+    filter_plan_change_permissions(permitted, :buyer_plan_change_permission)
   end
 
   def service

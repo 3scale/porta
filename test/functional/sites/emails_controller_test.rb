@@ -48,6 +48,7 @@ class Sites::EmailsControllerTest < ActionController::TestCase
     end
 
     test 'update account and finance support emails' do
+      @provider.settings.finance.allow
       patch :update, params: { account: { support_email: 'support@example.com',
                                           finance_support_email: 'finance@example.com' } }
 
@@ -74,6 +75,14 @@ class Sites::EmailsControllerTest < ActionController::TestCase
 
       assert_redirected_to action: :edit
       assert_equal original_name, @provider.reload.org_name
+    end
+
+    test 'rejects finance_support_email when finance switch denied' do
+      assert @provider.settings.finance.denied?
+      @provider.update_column(:finance_support_email, 'original@example.com')
+      patch :update, params: { account: { support_email: 'ok@example.com', finance_support_email: 'hacked@example.com' } }
+      assert_redirected_to action: :edit
+      assert_equal 'original@example.com', @provider.reload[:finance_support_email]
     end
   end
 end
