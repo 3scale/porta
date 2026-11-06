@@ -52,8 +52,8 @@ class Settings
     record = setting_record_for(:sso_key)
     return record.value if record
 
-    persisted_record = account.account_settings.create_or_find_by!(type: 'AccountSetting::SSOKey') do |r|
-      r.value = ThreeScale::SSO.generate_sso_key
+    persisted_record = account.account_settings.create_or_find_by!(type: AccountSetting::SSOKey.sti_name) do |record|
+      record.value = ThreeScale::SSO.generate_sso_key
     end
     persisted_record.value
   end
@@ -92,19 +92,12 @@ class Settings
     AccountSetting.transaction do
       to_destroy, to_persist = account.account_settings.partition(&:marked_for_destruction?)
 
-      results = to_persist.map do |record|
-        # Switch getters build in-memory records to support state queries (e.g. .visible?);
-        # skip persisting these unless a value was explicitly set.
-        if record.new_record? && record.value.nil?
-          true
-        elsif record.changed? || record.new_record?
-          record.save
-        else
-          true
-        end
-      end
+      results = to_persist.select(&:changed?).map(&:save)
 
       raise ActiveRecord::Rollback unless results.all?
+      # destroy! is used internally by CollectionProxy#destroy, so failures raise
+      # instead of returning false. Acceptable: a destroy failure here means
+      # something is seriously broken (no callbacks exist on AccountSetting).
       account.account_settings.destroy(*to_destroy) if to_destroy.any?
       success = true
     end

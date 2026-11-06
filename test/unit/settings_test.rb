@@ -168,14 +168,14 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal true, settings.public_search?
     settings.save!
     assert_equal true, settings.reload.public_search
-    assert_equal true, @provider.account_settings.find_by(type: 'PublicSearch').value
+    assert_equal true, @provider.account_settings.find_by(type: AccountSetting::PublicSearch.sti_name).value
 
     settings.public_search = false
     assert_equal false, settings.public_search
     assert_equal false, settings.public_search?
     settings.save!
     assert_equal false, settings.reload.public_search
-    assert_equal false, @provider.account_settings.find_by(type: 'PublicSearch').value
+    assert_equal false, @provider.account_settings.find_by(type: AccountSetting::PublicSearch.sti_name).value
 
     # Integer inputs (e.g., from forms/params)
     settings.update(public_search: 1)
@@ -207,17 +207,19 @@ class SettingsTest < ActiveSupport::TestCase
     settings.update(public_search: true)
     settings.update(public_search: nil)
     assert_equal false, settings.reload.public_search, "nil clears the setting back to default (false)"
-    assert_nil @provider.account_settings.find_by(type: 'PublicSearch')
+    assert_nil @provider.account_settings.find_by(type: AccountSetting::PublicSearch.sti_name)
 
-    # Boolean setting with true default (e.g. forum_public)
-    assert_equal true, settings.forum_public
-    settings.update(forum_public: false)
-    assert_equal false, settings.reload.forum_public
-    assert_equal false, @provider.account_settings.find_by(type: 'ForumPublic').value
+    # Boolean setting with true default (documentation_public defaults to true)
+    @provider.account_settings.where(type: AccountSetting::DocumentationPublic.sti_name).delete_all
+    settings.reload
+    assert_equal true, settings.documentation_public
+    settings.update(documentation_public: false)
+    assert_equal false, settings.reload.documentation_public
+    assert_equal false, @provider.account_settings.find_by(type: AccountSetting::DocumentationPublic.sti_name).value
 
-    settings.update(forum_public: nil)
-    assert_equal true, settings.reload.forum_public, "nil clears the setting back to default (true)"
-    assert_nil @provider.account_settings.find_by(type: 'ForumPublic')
+    settings.update(documentation_public: nil)
+    assert_equal true, settings.reload.documentation_public, "nil clears the setting back to default (true)"
+    assert_nil @provider.account_settings.find_by(type: AccountSetting::DocumentationPublic.sti_name)
   end
 
   test "validate change plan permission values" do
@@ -230,37 +232,37 @@ class SettingsTest < ActiveSupport::TestCase
   end
 
   test "assign value then nil on a new setting removes the record" do
-    assert_nil @provider.account_settings.detect { |r| r.type == 'BgColour' }
+    assert_nil @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
 
     settings.bg_colour = '#fff'
-    assert @provider.account_settings.detect { |r| r.type == 'BgColour' }, "record should exist in memory"
+    assert @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }, "record should exist in memory"
 
     settings.bg_colour = nil
     assert_nil settings.bg_colour, "getter should return default after nil assignment"
 
     settings.save!
-    assert_nil @provider.account_settings.reload.detect { |r| r.type == 'BgColour' },
+    assert_nil @provider.account_settings.reload.detect { |r| r.type == AccountSetting::BgColour.sti_name },
       "no record should be persisted"
   end
 
   test "assign value, nil, then new value on a non-existing setting persists only the final value" do
-    assert_nil @provider.account_settings.detect { |r| r.type == 'BgColour' }
+    assert_nil @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
 
     settings.bg_colour = '#111111'
     assert_equal '#111111', settings.bg_colour
-    assert @provider.account_settings.detect { |r| r.type == 'BgColour' }
+    assert @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
 
     settings.bg_colour = nil
     assert_nil settings.bg_colour
-    assert_nil @provider.account_settings.detect { |r| r.type == 'BgColour' }
+    assert_nil @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
 
     settings.bg_colour = '#222222'
     assert_equal '#222222', settings.bg_colour
 
     settings.save!
     assert_equal '#222222', settings.reload.bg_colour
-    assert_equal '#222222', @provider.account_settings.find_by(type: 'BgColour').value
-    assert_equal 1, @provider.account_settings.select { |r| r.type == 'BgColour' }.size
+    assert_equal '#222222', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
+    assert_equal 1, @provider.account_settings.select { |r| r.type == AccountSetting::BgColour.sti_name }.size
   end
 
   test "assign value, nil, then new value on a pre-existing setting updates the record without duplicates" do
@@ -278,36 +280,36 @@ class SettingsTest < ActiveSupport::TestCase
 
     settings.save!
     assert_equal '#333333', settings.reload.bg_colour, "new value should be persisted"
-    assert_equal '#333333', @provider.account_settings.find_by(type: 'BgColour').value
-    assert_equal 1, @provider.account_settings.select { |r| r.type == 'BgColour' }.size,
+    assert_equal '#333333', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
+    assert_equal 1, @provider.account_settings.select { |r| r.type == AccountSetting::BgColour.sti_name }.size,
       "should have exactly one record, not a duplicate"
   end
 
   test "update_attribute persists setting immediately" do
     settings.update_attribute(:bg_colour, '#654321')
     assert_equal '#654321', settings.reload.bg_colour
-    assert_equal '#654321', @provider.account_settings.find_by(type: 'BgColour').value
+    assert_equal '#654321', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
 
     settings.update_attribute(:bg_colour, '#123456')
     assert_equal '#123456', settings.reload.bg_colour
-    assert_equal '#123456', @provider.account_settings.find_by(type: 'BgColour').value
+    assert_equal '#123456', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
   end
 
   test "update_attribute with nil immediately destroys the persisted record" do
     settings.update_attribute(:bg_colour, '#654321')
-    assert_equal '#654321', @provider.account_settings.find_by(type: 'BgColour').value
+    assert_equal '#654321', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
 
     settings.update_attribute(:bg_colour, nil)
     assert_nil settings.bg_colour
     assert_nil settings.reload.bg_colour
-    assert_nil @provider.account_settings.find_by(type: 'BgColour')
+    assert_nil @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name)
   end
 
   test "update_attribute with nil on non-existent setting is a safe no-op" do
-    assert_nil @provider.account_settings.find_by(type: 'BgColour')
+    assert_nil @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name)
     settings.update_attribute(:bg_colour, nil)
     assert_nil settings.bg_colour
-    assert_nil @provider.account_settings.find_by(type: 'BgColour')
+    assert_nil @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name)
   end
 
   test "destroying an AccountSetting directly updates facade to default, and reassigning works cleanly" do
@@ -315,7 +317,7 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal '#123456', settings.bg_colour
 
     # Directly destroy the AccountSetting record outside the facade
-    record = @provider.account_settings.detect { |r| r.type == 'BgColour' }
+    record = @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
     record.destroy
 
     # Facade should immediately return default without reload
@@ -327,7 +329,7 @@ class SettingsTest < ActiveSupport::TestCase
 
     settings.save!
     assert_equal '#abcdef', settings.reload.bg_colour
-    assert_equal '#abcdef', @provider.account_settings.find_by(type: 'BgColour').value
+    assert_equal '#abcdef', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
   end
 
   class PersistedTest < ActiveSupport::TestCase
@@ -352,6 +354,70 @@ class SettingsTest < ActiveSupport::TestCase
       # Remains persisted even when settings have in-memory modifications
       settings.bg_colour = '#fff'
       assert settings.persisted?
+    end
+  end
+
+  class SSOKeyTest < ActiveSupport::TestCase
+    def setup
+      @provider = FactoryBot.create(:provider_account)
+      @settings = @provider.settings
+    end
+
+    test 'returns nil for non-provider accounts' do
+      buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
+      assert_nil buyer.settings.sso_key
+    end
+
+    test 'lazily generates and persists sso_key on first access' do
+      AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).delete_all
+      @provider.account_settings.reload
+
+      key = @settings.sso_key
+      assert_not_nil key
+      assert_kind_of String, key
+      assert key.length > 10, "sso_key should be a non-trivial string"
+
+      db_record = AccountSetting.find_by(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name)
+      assert_not_nil db_record, "sso_key record should be persisted in the database"
+      assert_equal key, db_record.value
+    end
+
+    test 'returns the same key on subsequent reads' do
+      AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).delete_all
+      @provider.account_settings.reload
+
+      key1 = @settings.sso_key
+      key2 = @settings.sso_key
+      assert_equal key1, key2, "sso_key should be stable across reads"
+    end
+
+    test 'returns existing key without generating a new one' do
+      AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).delete_all
+      AccountSetting.create!(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name, value: 'pre_existing_key')
+      @provider.account_settings.reload
+
+      assert_equal 'pre_existing_key', @settings.sso_key
+    end
+
+    test 'tenant_id is set by DB trigger' do
+      AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).delete_all
+      @provider.account_settings.reload
+
+      @settings.sso_key
+      db_tenant_id = ActiveRecord::Base.connection.select_value(
+        "SELECT tenant_id FROM account_settings WHERE account_id = #{@provider.id} AND type = 'SSOKey'"
+      )
+      assert_equal @provider.tenant_id, db_tenant_id.to_i, "tenant_id should be set by DB trigger"
+    end
+
+    test 'handles concurrent creation via create_or_find_by' do
+      AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).delete_all
+      AccountSetting.create!(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name, value: 'winner_key')
+      @provider.account_settings.reload
+
+      key = @settings.sso_key
+      assert_equal 'winner_key', key
+      assert_equal 1, AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).count
     end
   end
 
