@@ -107,7 +107,7 @@ class Settings
   def save!
     return true if save
 
-    record = account_settings.detect { _1.errors.any? }
+    record = active_settings.detect { _1.errors.any? }
     raise ActiveRecord::RecordInvalid.new(record) if record
 
     raise ActiveRecord::RecordNotSaved.new("Failed to save settings", self)
@@ -147,7 +147,7 @@ class Settings
 
   def errors
     errors = ActiveModel::Errors.new(self)
-    account_settings.each do |record|
+    active_settings.each do |record|
       record.errors.each do |error|
         errors.add(record.class.setting_name.to_sym, error.message)
       end
@@ -217,7 +217,7 @@ class Settings
 
   private
 
-  def account_settings
+  def active_settings
     return [] unless account
 
     account.account_settings.reject(&:destroyed?)
@@ -227,7 +227,7 @@ class Settings
     klass = SETTING_CLASS_MAP[name.to_sym]
     return nil unless klass
 
-    account_settings.find { _1.type == klass.sti_name }
+    active_settings.find { _1.type == klass.sti_name }
   end
 
   def find_or_build_setting(name)
@@ -235,7 +235,7 @@ class Settings
     return nil unless klass && account
 
     sti_name = klass.sti_name
-    record = account_settings.find { _1.type == sti_name }
+    record = active_settings.find { _1.type == sti_name }
     if record
       record.instance_variable_set(:@marked_for_destruction, false) if record.marked_for_destruction?
       return record
