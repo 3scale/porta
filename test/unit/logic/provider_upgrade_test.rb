@@ -127,6 +127,14 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     assert other_provider.settings.require_cc_on_signup.hidden?
   end
 
+  test 'force_to_change_plan! denies a hidden switch without raising' do
+    @provider.settings.allow_finance!
+    assert @provider.settings.finance.hidden?, "finance should be hidden (allowed but not shown)"
+
+    @provider.force_to_change_plan!(@base)
+    assert @provider.settings.finance.denied?, "finance should be denied after plan change"
+  end
+
   test 'provider constraint is modified when upgrading' do
     assert constraints = @provider.build_provider_constraints(max_users: 1, max_services: 1)
 
