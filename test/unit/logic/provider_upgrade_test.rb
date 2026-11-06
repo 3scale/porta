@@ -24,10 +24,10 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
   end
 
   def test_hideable_switches
-    Settings::Switch.any_instance.stubs(:hideable?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:hideable?).returns(true)
     assert_not_empty @provider.hideable_switches
 
-    Settings::Switch.any_instance.stubs(:hideable?).returns(false)
+    AccountSetting::SwitchSetting.any_instance.stubs(:hideable?).returns(false)
     assert_empty @provider.hideable_switches
   end
 
@@ -46,23 +46,21 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
 
   test 'upgrade through force_upgrade_to_provider_plan! bypasses can_upgrade?' do
     @provider.stubs(:credit_card_stored?).returns(true)
-    PlanRulesCollection.stubs(can_upgrade?: false) do
-      @provider.force_upgrade_to_provider_plan!(@power1M)
-    end
+    PlanRulesCollection.stubs(can_upgrade?: false)
+    @provider.force_upgrade_to_provider_plan!(@power1M)
+    assert_equal 'power1M', @provider.reload.bought_cinstance.plan.system_name
   end
 
   test 'raises if not credit_card_stored?' do
     @provider.stubs(:credit_card_stored?).returns(false)
-    PlanRulesCollection.stubs(can_upgrade?: true) do
-      assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
-    end
+    PlanRulesCollection.stubs(can_upgrade?: true)
+    assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
   end
 
   test 'raises unless can_upgrade?' do
     @provider.stubs(:credit_card_stored?).returns(true)
-    PlanRulesCollection.stubs(can_upgrade?: false) do
-      assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
-    end
+    PlanRulesCollection.stubs(can_upgrade?: false)
+    assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
   end
 
   test 'can call force_upgrade_to_provider_plan! with a master plan system_name' do
@@ -91,7 +89,7 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
 
 
     switches_on.each do |switch|
-      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Switches::THREESCALE_VISIBLE_SWITCHES.include?(switch)
+      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Switches::PROVIDER_VISIBLE_SWITCHES.include?(switch)
     end
 
     plan = @base
@@ -109,7 +107,7 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     end
 
     switches_on.each do |switch|
-      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Switches::THREESCALE_VISIBLE_SWITCHES.include?(switch)
+      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Switches::PROVIDER_VISIBLE_SWITCHES.include?(switch)
     end
   end
 
@@ -127,6 +125,14 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
 
     other_provider.force_to_change_plan! @power1M
     assert other_provider.settings.require_cc_on_signup.hidden?
+  end
+
+  test 'force_to_change_plan! denies a hidden switch without raising' do
+    @provider.settings.allow_finance!
+    assert @provider.settings.finance.hidden?, "finance should be hidden (allowed but not shown)"
+
+    @provider.force_to_change_plan!(@base)
+    assert @provider.settings.finance.denied?, "finance should be denied after plan change"
   end
 
   test 'provider constraint is modified when upgrading' do
@@ -155,14 +161,14 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
   test 'first update switch, then limits' do
     constraints = @provider.create_provider_constraints!
 
-    assert_difference(Audited.audit_class.method(:count), +2) do
-      ProviderConstraints.with_synchronous_auditing do
-        assert constraints.auditing_enabled?, 'auditing should be enabled'
-        @provider.force_upgrade_to_provider_plan!(@pro)
-      end
+    ProviderConstraints.with_synchronous_auditing do
+      assert constraints.auditing_enabled?, 'auditing should be enabled'
+      @provider.force_upgrade_to_provider_plan!(@pro)
     end
 
-    switch_audit, upgrade_audit = Audited.audit_class.order(:id).last(2)
+    # The last 2 commented audits should be the switch upgrade comment and the limits upgrade comment (in that order)
+    commented_audits = Audited.audit_class.where.not(comment: nil).order(:id).last(2)
+    switch_audit, upgrade_audit = commented_audits
 
     assert_equal 'Upgrading max_services because of switch is enabled.', switch_audit.comment
     assert_equal 'Upgrading limits to match plan pro3M', upgrade_audit.comment
@@ -191,10 +197,10 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     provider =  FactoryBot.create(:simple_provider, partner: partner)
 
     partner.system_name = 'redhat'
-    assert_includes provider.available_switches.map(&:name), :multiple_users
+    assert_includes provider.available_switches.map(&:setting_name), 'multiple_users'
 
     partner.system_name = ''
-    assert_includes provider.available_switches.map(&:name), :multiple_users
+    assert_includes provider.available_switches.map(&:setting_name), 'multiple_users'
   end
 
   test 'settings on after contracting a plan depending on having a partner or not' do

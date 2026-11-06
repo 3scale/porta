@@ -10,7 +10,7 @@ class Switches::CollectionTest < ActiveSupport::TestCase
 
   test 'holds a list of switches' do
     assert_same_elements ::Switches::SWITCHES, @switches.keys
-    @switches.each { |_, switch| assert_kind_of ::Switches::Switch, switch }
+    @switches.each { |_, switch| assert_kind_of AccountSetting::SwitchSetting, switch }
   end
 
   test 'slices keys like a hash' do

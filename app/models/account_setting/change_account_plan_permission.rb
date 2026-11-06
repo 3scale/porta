@@ -1,0 +1,7 @@
+# frozen_string_literal: true
+
+class AccountSetting::ChangeAccountPlanPermission < AccountSetting::StringSetting
+  self.default_value = 'request'
+
+  validates :value, inclusion: { in: %w[request none credit_card request_credit_card direct] }
+end

@@ -19,14 +19,14 @@ class Master::Providers::SwitchesControllerTest < ActionDispatch::IntegrationTes
     put master_provider_switch_path(provider.id, 'web_hooks')
     assert_response :found
 
-    assert switch.reload.allowed?
+    assert settings.reload.web_hooks.allowed?
   end
 
   test 'should disable the switch when hidden' do
     switch = settings.switches.fetch(:finance)
     assert switch.allow
 
-    delete master_provider_switch_path(provider.id, switch.name)
+    delete master_provider_switch_path(provider.id, switch.setting_name)
     assert_response :found
 
     assert switch.reload.denied?
@@ -42,7 +42,7 @@ class Master::Providers::SwitchesControllerTest < ActionDispatch::IntegrationTes
 
   test 'should not change when the same' do
     switch = allowed_switch(:finance)
-    put master_provider_switch_path(provider.id, switch.name)
+    put master_provider_switch_path(provider.id, switch.setting_name)
     assert_response :not_modified
   end
 
@@ -50,7 +50,7 @@ class Master::Providers::SwitchesControllerTest < ActionDispatch::IntegrationTes
     logout!
     switch = settings.switches.fetch(:finance)
 
-    delete master_provider_switch_path(provider.id, switch.name)
+    delete master_provider_switch_path(provider.id, switch.setting_name)
     assert_response :forbidden
   end
 

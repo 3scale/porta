@@ -10,8 +10,8 @@ class Provider::Admin::SecuritiesControllerTest < ActionDispatch::IntegrationTes
     Rails.cache.clear
   end
 
-  test 'edit with nil admin_bot_protection_level' do
-    @provider.settings.update_column(:admin_bot_protection_level, nil)
+  test 'edit with default admin_bot_protection_level' do
+    @provider.account_settings.where(type: 'AdminBotProtectionLevel').destroy_all
     get edit_provider_admin_security_path
     assert_response :success
     assert_xpath '//input[@type="radio"][@name="settings[admin_bot_protection_level]"][@value="none"][@checked]'
