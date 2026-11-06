@@ -149,6 +149,8 @@ class SettingsTest < ActiveSupport::TestCase
     assert settings.finance.denied?
     assert_not settings.finance.visible?
     assert_not settings.finance.allowed?
+    assert_not settings.finance.hidden?
+    assert_not settings.finance.allow
   end
 
   test 'settings autosaved if account saved' do
@@ -231,6 +233,45 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal 'request', settings.reload.change_service_plan_permission
   end
 
+  test "save! raises RecordInvalid with the offending record on validation failure" do
+    settings.change_account_plan_permission = 'invalid'
+    error = assert_raises(ActiveRecord::RecordInvalid) { settings.save! }
+    assert_match(/is not included in the list/, error.message)
+  end
+
+  test "errors aggregates validation errors from AccountSetting records" do
+    settings.change_account_plan_permission = 'invalid'
+    settings.change_service_plan_permission = 'invalid'
+    settings.save
+
+    errors = settings.errors
+    assert errors[:change_account_plan_permission].any?, "should have error on change_account_plan_permission"
+    assert errors[:change_service_plan_permission].any?, "should have error on change_service_plan_permission"
+    assert_match(/is not included in the list/, errors[:change_account_plan_permission].first)
+  end
+
+  test "authentication_strategy returns a StringInquirer" do
+    settings.update!(authentication_strategy: 'oauth2')
+    strategy = settings.authentication_strategy
+    assert_kind_of ActiveSupport::StringInquirer, strategy
+    assert strategy.oauth2?
+    assert_not strategy.internal?
+
+    settings.update!(authentication_strategy: 'internal')
+    strategy = settings.reload.authentication_strategy
+    assert strategy.internal?
+    assert_not strategy.oauth2?
+  end
+
+  test "updated_at returns the latest AccountSetting timestamp" do
+    settings.update!(bg_colour: '#aaa')
+    assert_not_nil settings.updated_at
+    assert_kind_of ActiveSupport::TimeWithZone, settings.updated_at
+
+    ts = @provider.account_settings.maximum(:updated_at)
+    assert_equal ts, settings.updated_at
+  end
+
   test "assign value then nil on a new setting removes the record" do
     assert_nil @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
 
@@ -285,6 +326,17 @@ class SettingsTest < ActiveSupport::TestCase
       "should have exactly one record, not a duplicate"
   end
 
+  test "resurrecting a marked-for-destruction record resets value to default" do
+    settings.update!(monthly_billing_enabled: false)
+    assert_equal false, settings.reload.monthly_billing_enabled
+
+    settings.monthly_billing_enabled = nil
+    record = settings.send(:find_or_build_setting, :monthly_billing_enabled)
+
+    assert_not record.marked_for_destruction?, "record should be unmarked"
+    assert_equal true, record.value, "value should be reset to default (true), not stale (false)"
+  end
+
   test "update_attribute persists setting immediately" do
     settings.update_attribute(:bg_colour, '#654321')
     assert_equal '#654321', settings.reload.bg_colour
@@ -337,6 +389,16 @@ class SettingsTest < ActiveSupport::TestCase
       assert_not Settings.new.persisted?
       assert_not Settings.new.save
       assert_raises(ActiveRecord::RecordNotSaved) { Settings.new.save! }
+    end
+
+    test 'setting a value without an account raises' do
+      assert_raises(RuntimeError, /without an account/) { Settings.new.bg_colour = '#fff' }
+    end
+
+    test 'setting an unknown name raises KeyError' do
+      provider = FactoryBot.create(:simple_provider)
+      settings = provider.settings
+      assert_raises(KeyError) { settings.send(:find_or_build_setting, :nonexistent_setting) }
     end
 
     test 'false when account is not persisted' do
@@ -405,7 +467,7 @@ class SettingsTest < ActiveSupport::TestCase
 
       @settings.sso_key
       db_tenant_id = ActiveRecord::Base.connection.select_value(
-        "SELECT tenant_id FROM account_settings WHERE account_id = #{@provider.id} AND type = 'SSOKey'"
+        "SELECT tenant_id FROM account_settings WHERE account_id = #{@provider.id} AND type = '#{AccountSetting::SSOKey.sti_name}'"
       )
       assert_equal @provider.tenant_id, db_tenant_id.to_i, "tenant_id should be set by DB trigger"
     end
@@ -421,22 +483,4 @@ class SettingsTest < ActiveSupport::TestCase
     end
   end
 
-  class FinanceDisabledSwitchTest < ActiveSupport::TestCase
-    def setup
-      @provider = FactoryBot.build_stubbed(:simple_provider)
-    end
-
-    test 'finance is denied when globally denied' do
-      @provider.stubs(master_on_premises?: true)
-      finance = @provider.settings.finance
-
-      assert finance.globally_denied?
-      assert finance.denied?
-      assert_not finance.allowed?
-      assert_not finance.visible?
-      assert_not finance.hidden?
-      assert_not finance.allow
-    end
-
-  end
 end

@@ -234,13 +234,16 @@ class Settings
   end
 
   def find_or_build_setting(name)
-    klass = SETTING_CLASS_MAP[name.to_sym]
-    return nil unless klass && account
+    klass = SETTING_CLASS_MAP.fetch(name.to_sym)
+    raise "Cannot build setting without an account" unless account
 
     sti_name = klass.sti_name
     record = active_settings.find { _1.type == sti_name }
     if record
-      record.instance_variable_set(:@marked_for_destruction, false) if record.marked_for_destruction?
+      if record.marked_for_destruction?
+        record.instance_variable_set(:@marked_for_destruction, false)
+        record.value = klass.default_value
+      end
       return record
     end
 
