@@ -15,10 +15,10 @@ class Settings
   Rails.autoloaders.main.eager_load_dir(Rails.root.join('app/models/account_setting'))
 
   # Build maps from discovered STI leaf classes
-  SETTING_CLASSES = AccountSetting.descendants.select { |klass| klass.descendants.empty? }.freeze
-  SWITCH_CLASSES, VALUE_CLASSES = SETTING_CLASSES.partition { |k| k < AccountSetting::SwitchSetting }.map(&:freeze)
+  SETTING_CLASSES = AccountSetting.descendants.select { _1.descendants.empty? }.freeze
+  SWITCH_CLASSES, VALUE_CLASSES = SETTING_CLASSES.partition { _1 < AccountSetting::SwitchSetting }.map(&:freeze)
 
-  SETTING_CLASS_MAP = SETTING_CLASSES.each_with_object({}) { |klass, hash| hash[klass.setting_name.to_sym] = klass }.freeze
+  SETTING_CLASS_MAP = SETTING_CLASSES.index_by { _1.setting_name.to_sym }.freeze
   ALL_SETTINGS = SETTING_CLASS_MAP.transform_values(&:default_value).freeze
 
   # --- Define accessor methods that delegate to AccountSetting records ---
@@ -38,7 +38,7 @@ class Settings
     end
   end
 
-  SETTING_CLASSES.select { |k| k < AccountSetting::BooleanSetting }.each do |klass|
+  SETTING_CLASSES.select { _1 < AccountSetting::BooleanSetting }.each do |klass|
     define_method("#{klass.setting_name}?") { !!send(klass.setting_name) }
   end
 
@@ -68,6 +68,7 @@ class Settings
     record = setting_record_for(:spam_protection_level)
     val = record && !record.marked_for_destruction? ? record.value : ALL_SETTINGS[:spam_protection_level]
     return :none if val.blank?
+
     level = val.to_sym
     level == :auto ? :captcha : level
   end
@@ -88,6 +89,7 @@ class Settings
 
   def save
     return false unless account&.persisted?
+
     success = false
     AccountSetting.transaction do
       to_destroy, to_persist = account.account_settings.partition(&:marked_for_destruction?)
@@ -95,6 +97,7 @@ class Settings
       results = to_persist.select(&:changed?).map(&:save)
 
       raise ActiveRecord::Rollback unless results.all?
+
       # destroy! is used internally by CollectionProxy#destroy, so failures raise
       # instead of returning false. Acceptable: a destroy failure here means
       # something is seriously broken (no callbacks exist on AccountSetting).
@@ -108,7 +111,7 @@ class Settings
     return true if save
 
     record = active_settings.detect { _1.errors.any? }
-    raise ActiveRecord::RecordInvalid.new(record) if record
+    raise ActiveRecord::RecordInvalid, record if record
 
     raise ActiveRecord::RecordNotSaved.new("Failed to save settings", self)
   end
@@ -187,11 +190,11 @@ class Settings
   end
 
   def has_privacy_policy?
-    !privacy_policy.blank?
+    privacy_policy.present?
   end
 
   def has_refund_policy?
-    !refund_policy.blank?
+    refund_policy.present?
   end
 
   def password_login_allowed?
