@@ -61,7 +61,8 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
     assert_equal '1', records[AccountSetting::ForumEnabled]&.value_before_type_cast
     assert_equal '0', records[AccountSetting::AppGalleryEnabled]&.value_before_type_cast
     assert_equal '1', records[AccountSetting::SignupsEnabled]&.value_before_type_cast
-    assert_nil records[AccountSetting::HideService]
+    assert_equal false, records[AccountSetting::HideService]&.value, 'NULL boolean should be migrated as false'
+    assert_equal '0', records[AccountSetting::HideService]&.value_before_type_cast
     assert_equal @provider.tenant_id, records[AccountSetting::ForumEnabled].tenant_id
   end
 

@@ -7,124 +7,78 @@
 # rolled back and so existing data is preserved for auditing purposes.
 class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
   def up
-    safety_assured { migrate_data }
+    now = Time.current.to_fs(:db)
+
+    # Booleans: NULL → '0' (false). CASE handles this without a WHERE filter.
+    boolean_settings.each do |col|
+      bool_value = System::Database.oracle? ? "CASE WHEN s.#{col} = 1 THEN '1' ELSE '0' END"
+                                            : "CASE WHEN s.#{col} = TRUE THEN '1' ELSE '0' END"
+      upsert_setting(col, bool_value, now)
+    end
+
+    # Strings, texts, and switches: skip NULLs and empty strings.
+    # On Oracle '' IS NULL, so IS NOT NULL alone covers both.
+    (string_settings + text_settings + switch_settings).each do |col|
+      upsert_setting(col, "s.#{col}", now, where: non_empty_condition(col))
+    end
   end
 
   def down
-    # Reversing this migration would delete all migrated account_settings records.
     # We only remove the rows that were migrated from the settings table; any rows
     # created directly via the new system (e.g. http_headers) are left untouched.
-    safety_assured do
-      migrated_types = (boolean_settings.keys + string_settings + text_settings + switch_settings)
-        .map { |col| col.to_s.camelize }
-      execute <<~SQL.squish
-        DELETE FROM account_settings WHERE type IN (#{migrated_types.map { |t| "'#{t}'" }.join(', ')})
-      SQL
-    end
+    migrated_types = all_columns.map { |col| resolve_sti_name(col) }
+    AccountSetting.where(type: migrated_types).delete_all
   end
 
   private
 
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  def migrate_data
-    now = Time.current.to_fs(:db)
+  def upsert_setting(col, value_expr, now, where: nil)
+    type_name = resolve_sti_name(col)
+    where_clause = where ? "WHERE #{where}" : "WHERE 1=1"
 
-    # Boolean settings: stored as "1"/"0"
-    boolean_settings.each_key do |col|
-      type_name = col.to_s.camelize
+    conflict_clause = if System::Database.mysql?
+                        "ON DUPLICATE KEY UPDATE account_settings.updated_at = account_settings.updated_at"
+                      elsif System::Database.oracle?
+                        "AND NOT EXISTS (SELECT 1 FROM account_settings a WHERE a.account_id = s.account_id AND a.type = '#{type_name}')"
+                      else
+                        "ON CONFLICT (account_id, type) DO NOTHING"
+                      end
+
+    safety_assured do
       execute <<~SQL.squish
         INSERT INTO account_settings (account_id, type, value, tenant_id, created_at, updated_at)
-        SELECT account_id,
-               '#{type_name}',
-               CASE WHEN #{col} = TRUE THEN '1' ELSE '0' END,
-               tenant_id,
-               '#{now}',
-               '#{now}'
-        FROM settings
-        WHERE #{col} IS NOT NULL
-        ON DUPLICATE KEY UPDATE account_settings.updated_at = account_settings.updated_at
-      SQL
-    end
-
-    # String settings: skip NULL and empty strings
-    string_settings.each do |col|
-      type_name = col.to_s.camelize
-      execute <<~SQL.squish
-        INSERT INTO account_settings (account_id, type, value, tenant_id, created_at, updated_at)
-        SELECT account_id,
-               '#{type_name}',
-               #{col},
-               tenant_id,
-               '#{now}',
-               '#{now}'
-        FROM settings
-        WHERE #{col} IS NOT NULL AND #{col} != ''
-        ON DUPLICATE KEY UPDATE account_settings.updated_at = account_settings.updated_at
-      SQL
-    end
-
-    # Text settings: skip NULL and empty strings
-    text_settings.each do |col|
-      type_name = col.to_s.camelize
-      execute <<~SQL.squish
-        INSERT INTO account_settings (account_id, type, value, tenant_id, created_at, updated_at)
-        SELECT account_id,
-               '#{type_name}',
-               #{col},
-               tenant_id,
-               '#{now}',
-               '#{now}'
-        FROM settings
-        WHERE #{col} IS NOT NULL AND #{col} != ''
-        ON DUPLICATE KEY UPDATE account_settings.updated_at = account_settings.updated_at
-      SQL
-    end
-
-    # Switch settings: skip NULL and empty strings
-    switch_settings.each do |col|
-      type_name = col.to_s.camelize
-      execute <<~SQL.squish
-        INSERT INTO account_settings (account_id, type, value, tenant_id, created_at, updated_at)
-        SELECT account_id,
-               '#{type_name}',
-               #{col},
-               tenant_id,
-               '#{now}',
-               '#{now}'
-        FROM settings
-        WHERE #{col} IS NOT NULL AND #{col} != ''
-        ON DUPLICATE KEY UPDATE account_settings.updated_at = account_settings.updated_at
+        SELECT s.account_id, '#{type_name}', #{value_expr}, s.tenant_id, '#{now}', '#{now}'
+        FROM settings s #{where_clause}
+        #{conflict_clause}
       SQL
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-  BOOLEAN_SETTINGS = {
-    forum_enabled: true,
-    app_gallery_enabled: false,
-    anonymous_posts_enabled: false,
-    signups_enabled: true,
-    documentation_enabled: true,
-    useraccountarea_enabled: true,
-    documentation_public: true,
-    forum_public: true,
-    hide_service: false,
-    monthly_charging_enabled: true,
-    monthly_billing_enabled: true,
-    strong_passwords_enabled: false,
-    can_create_service: false,
-    public_search: false,
-    account_plans_ui_visible: false,
-    service_plans_ui_visible: false,
-    setup_fee_enabled: false,
-    cms_escape_draft_html: true,
-    cms_escape_published_html: true,
-    enforce_sso: false
-  }.freeze
-  private_constant :BOOLEAN_SETTINGS
+  # Oracle treats '' as NULL, so IS NOT NULL alone covers both.
+  def non_empty_condition(col)
+    if System::Database.oracle?
+      "s.#{col} IS NOT NULL"
+    else
+      "s.#{col} IS NOT NULL AND s.#{col} != ''"
+    end
+  end
+
+  def resolve_sti_name(col)
+    "AccountSetting::#{col.to_s.camelize}".constantize.sti_name
+  end
+
+  def all_columns
+    boolean_settings + string_settings + text_settings + switch_settings
+  end
 
   def boolean_settings
-    BOOLEAN_SETTINGS
+    %i[
+      forum_enabled app_gallery_enabled anonymous_posts_enabled signups_enabled
+      documentation_enabled useraccountarea_enabled documentation_public forum_public
+      hide_service monthly_charging_enabled monthly_billing_enabled strong_passwords_enabled
+      can_create_service public_search account_plans_ui_visible service_plans_ui_visible
+      setup_fee_enabled cms_escape_draft_html cms_escape_published_html enforce_sso
+    ]
   end
 
   def string_settings
