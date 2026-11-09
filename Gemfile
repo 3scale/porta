@@ -39,7 +39,7 @@ end
 gem 'sass-rails', '~> 5.0.8'
 
 gem 'bcrypt', '~> 3.1.7'
-gem 'oauth2', '~> 2.0'
+gem 'oauth2', '~> 2.0', '>= 2.0.22'
 gem 'open_id_authentication'
 
 gem 'sorted_set', '~> 1.0'
