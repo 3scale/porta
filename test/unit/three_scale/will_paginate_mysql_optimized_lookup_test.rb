@@ -91,6 +91,20 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
   end
 
   PATHS.each do |path, description|
+    test "page 1 is optimized with #{description}" do
+      users = create_users_with_accounts(%w[n-a n-b n-c n-d])
+      relation = base_relation_for(path, users).order(:id).paginate(page: 1, per_page: 2)
+      page = nil
+
+      queries = capture_sql_queries { page = relation.to_a }
+
+      assert_optimized_lookup_used(path, queries)
+      assert_equal users.take(2).map(&:id), page.map(&:id)
+      assert_kind_of WillPaginate::Collection, page
+      assert_equal 1, page.current_page
+      assert_equal 4, page.total_entries
+    end
+
     test "a page past the last one is empty with #{description}" do
       users = create_users_with_accounts(%w[n-a n-b n-c n-d])
       relation = base_relation_for(path, users).order(:id).paginate(page: 5, per_page: 2, total_entries: 4)

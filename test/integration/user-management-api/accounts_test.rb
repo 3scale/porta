@@ -168,7 +168,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
           'HTTP_IF_NONE_MATCH' => etag,
           'HTTP_IF_MODIFIED_SINCE' => last_modified
         }
-        assert_number_of_queries(11) do
+        cte_matching = System::Database.mysql? ? { matching: /^(SELECT|WITH)\b/i } : {}
+        assert_number_of_queries(11, **cte_matching) do
           get admin_api_accounts_path(format: :json), params: params, headers: headers
         end
         assert_response :not_modified

@@ -274,7 +274,7 @@ class Admin::Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     response_ids = response.parsed_body['applications'].map { _1['application']['id'] }
-    assert_equal [@application.id, other_application.id].sort, response_ids
+    assert_equal [@application.id, other_application.id], response_ids
     assert_equal 1, queries.grep(/\ASELECT `cinstances`\.`id` FROM .*\bJOIN\b.*\bLIMIT 2 OFFSET 0\b/m).size, queries.join("\n")
     assert_equal 1, queries.grep(DATA_QUERY).size, queries.join("\n")
     assert_empty queries.grep(/\ASELECT `cinstances`\.\*.*\bJOIN\b.*\bOFFSET 0\b/m), queries.join("\n")

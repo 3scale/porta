@@ -79,7 +79,8 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_not_nil last_modified, 'Last-Modified header should be present'
 
       headers = { 'HTTP_IF_NONE_MATCH' => etag, 'HTTP_IF_MODIFIED_SINCE' => last_modified }
-      assert_number_of_queries(11) do
+      cte_matching = System::Database.mysql? ? { matching: /^(SELECT|WITH)\b/i } : {}
+      assert_number_of_queries(11, **cte_matching) do
         get admin_api_services_path(access_token: access_token_value, format: :json), headers: headers
       end
       assert_response :not_modified

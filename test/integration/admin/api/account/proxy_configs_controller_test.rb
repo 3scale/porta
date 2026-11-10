@@ -92,7 +92,7 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     skip 'the split query is used only with MySQL' unless System::Database.mysql?
 
     service = FactoryBot.create(:simple_service, :with_default_backend_api, account: provider)
-    FactoryBot.create(:proxy_config, proxy: service.proxy, environment: 'production')
+    config = FactoryBot.create(:proxy_config, proxy: service.proxy, environment: 'production')
     token = access_token_value(user: provider.admin_user)
 
     queries = capture_sql_queries do
@@ -100,6 +100,7 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     end
 
     assert_response :success
+    assert_equal [config.id], response_proxy_config_ids
     config_queries = queries.grep(/\ASELECT `proxy_configs`\./)
     assert_equal 2, config_queries.size, queries.join("\n")
     assert_match(/\ASELECT `proxy_configs`\.`id` FROM/, config_queries.first)
