@@ -8,10 +8,11 @@ module ThreeScale
   # - The ID query keeps the filters, JOINs and ORDER BY of the relation, but selects only IDs.
   # - The data query then loads the actual records, and their associations, for those IDs.
   #
-  # To find which records belong to a page, MySQL may need to examine and sort many matching
-  # rows, including for page 1. A normal query may load full records for all of them, even though
-  # only a small page is returned. Selecting IDs first can let MySQL use a covering index for
-  # this work and load full records only for the selected page.
+  # Empirically, some MySQL query plans are up to 2 orders of magnitude faster
+  # when the initial selection is limited to indexed columns (e.g. the primary index).
+  # One possible explanation is that more of the work can be performed within the
+  # storage engine, avoiding additional SQL-layer processing that may otherwise
+  # occur when full records are requested.
   # The caller is still responsible for proper indices on the filter and order columns — without
   # them the ID query will be slow regardless of this optimization.
   #
