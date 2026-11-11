@@ -25,16 +25,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
     end
 
-    test 'settings with finance globally denied' do
-      provider = master_account
-      ThreeScale.config.stubs(onpremises: true)
-
-      logout! && login!(provider)
-      get settings_admin_service_path(provider.default_service)
-
-      assert_select "input[name='service[buyer_plan_change_permission]'][value=credit_card]", 0
-      assert_select "input[name='service[buyer_plan_change_permission]'][value=request_credit_card]", 0
-    end
 
     test 'settings renders the right template and contains the right sections' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
@@ -409,6 +399,18 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       get usage_rules_admin_service_path(service)
       assert_response :success
       assert_select "input[type=radio][name='service[buyer_plan_change_permission]']", count: 5
+    end
+
+    test 'usage rules page hides credit card options when master is on-premises' do
+      master = master_account
+      master.settings.finance.allow
+
+      ThreeScale.config.stubs(onpremises: true)
+
+      logout! && login!(master)
+      get usage_rules_admin_service_path(master.default_service)
+      assert_response :success
+      assert_select "input[type=radio][name='service[buyer_plan_change_permission]']", count: 2
     end
 
     test 'update buyer_plan_change_permission persists the value' do
