@@ -11,7 +11,7 @@ class Sites::UsageRulesControllerIntegrationTest < ActionDispatch::IntegrationTe
 
   attr_reader :provider, :settings
 
-  test 'update account_approval_required when editable applies the value' do
+  test 'update account_approval_required applies the value with a single account plan' do
     plan = provider.account_plans.default
     plan.update!(approval_required: false)
 
@@ -21,7 +21,7 @@ class Sites::UsageRulesControllerIntegrationTest < ActionDispatch::IntegrationTe
     assert plan.reload.approval_required
   end
 
-  test 'update account_approval_required when not editable is ignored' do
+  test 'update account_approval_required is ignored with multiple account plans' do
     FactoryBot.create(:account_plan, issuer: provider)
     assert_not settings.approval_required_editable?
 

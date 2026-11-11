@@ -82,7 +82,7 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_not settings.reload.enforce_sso
   end
 
-  test 'update account_approval_required when editable applies the value' do
+  test 'update account_approval_required applies the value with a single account plan' do
     account = settings.account
     assert_not settings.account_approval_required
 
@@ -103,7 +103,7 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert account.reload.settings.account_approval_required
   end
 
-  test 'update account_approval_required is ignored when not editable (multiple plans)' do
+  test 'update account_approval_required is ignored with multiple account plans' do
     account = settings.account
     FactoryBot.create(:account_plan, issuer: account)
     assert_not settings.approval_required_editable?
