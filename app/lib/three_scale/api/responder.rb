@@ -80,7 +80,8 @@ class ThreeScale::Api::Responder < ActionController::Responder
       resource = options.fetch(:serialize) { self.resource }
       return resource unless resource.is_a?(ActiveRecord::Relation)
 
-      ordered_relation(resource).unscope(:includes, :preload).to_a
+      @primary_relation = ordered_relation(resource).unscope(:includes, :preload)
+      ThreeScale::Api::Pagination.load_records(@primary_relation)
     end
   end
 
@@ -88,6 +89,7 @@ class ThreeScale::Api::Responder < ActionController::Responder
   def serializable
     @serializable ||= begin
       records = primary_records
+      records = @primary_relation.to_a if @primary_relation
       if records.is_a?(Array)
         resource = options.fetch(:serialize) { self.resource }
         if resource.is_a?(ActiveRecord::Relation)
