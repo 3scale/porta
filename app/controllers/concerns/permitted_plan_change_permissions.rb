@@ -10,7 +10,7 @@ module PermittedPlanChangePermissions
   private
 
   def finance_plan_permissions_available?
-    current_account.settings.finance.allowed?
+    current_user ? can?(:see, :finance) : current_account.settings.finance.allowed?
   end
 
   def allowed_plan_change_permissions
