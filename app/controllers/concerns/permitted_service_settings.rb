@@ -10,11 +10,11 @@ module PermittedServiceSettings
 
   private
 
-  def buyers_manage_keys_editable?(service, backend_version: service.backend_version)
+  def buyers_manage_keys_editable?(backend_version)
     backend_version.v2?
   end
 
-  def buyer_key_regenerate_editable?(service, backend_version: service.backend_version)
+  def buyer_key_regenerate_editable?(backend_version)
     backend_version.oauth?
   end
 
@@ -31,8 +31,8 @@ module PermittedServiceSettings
       buyer_can_select_plan buyer_plan_change_permission custom_keys_enabled state_event
       txt_support terms
     ]
-    keys.push(:buyers_manage_keys, :mandatory_app_key) if buyers_manage_keys_editable?(service, backend_version: backend_version)
-    keys << :buyer_key_regenerate_enabled if buyer_key_regenerate_editable?(service, backend_version: backend_version)
+    keys.push(:buyers_manage_keys, :mandatory_app_key) if buyers_manage_keys_editable?(backend_version)
+    keys << :buyer_key_regenerate_enabled if buyer_key_regenerate_editable?(backend_version)
     keys << { notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []] }
     keys
   end

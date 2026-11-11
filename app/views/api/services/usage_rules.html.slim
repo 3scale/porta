@@ -39,11 +39,11 @@ div class="pf-c-card"
 
         = form.input :buyers_manage_apps, as: :patternfly_checkbox
 
-        - if buyers_manage_keys_editable?(@service)
+        - if buyers_manage_keys_editable?(@service.backend_version)
           = form.input :buyers_manage_keys, as: :patternfly_checkbox
           = form.input :mandatory_app_key, as: :patternfly_checkbox
 
-        - if buyer_key_regenerate_editable?(@service)
+        - if buyer_key_regenerate_editable?(@service.backend_version)
           = form.input :buyer_key_regenerate_enabled, as: :patternfly_checkbox
 
         = form.input :referrer_filters_required, as: :patternfly_checkbox
