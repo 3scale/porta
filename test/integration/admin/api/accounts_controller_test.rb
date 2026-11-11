@@ -105,6 +105,31 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   class TenantProviderKeyTest < Admin::Api::AccountsControllerTest
+    %w[xml json].each do |format|
+      test "paginated index in #{format} skips the count on 304" do
+        FactoryBot.create_list(:buyer_account, 3, provider_account: provider)
+        params = { provider_key: provider.api_key, page: 2, per_page: 1 }
+        path = admin_api_accounts_path(format: format)
+
+        queries = capture_sql_queries { get path, params: params }
+        assert_response :success
+        assert_equal 1, queries.grep(/\bCOUNT\s*\(.*\bFROM\s+["`]?accounts\b/i).size, queries.join("\n")
+        if format == 'json'
+          assert_equal 3, response.parsed_body.fetch('metadata').fetch('total_entries')
+        else
+          assert_xml '//accounts[@total_entries="3"]'
+        end
+        etag = response.headers.fetch('ETag')
+
+        queries = capture_sql_queries do
+          get path, params: params, headers: { 'HTTP_IF_NONE_MATCH' => etag }
+        end
+        assert_response :not_modified
+        assert_empty queries.grep(/\bCOUNT\s*\(.*\bFROM\s+["`]?accounts\b/i), queries.join("\n")
+        assert_empty response.body
+      end
+    end
+
     def test_find
       account = FactoryBot.create(:simple_provider, provider: provider)
       service = FactoryBot.create(:simple_service, account: account)

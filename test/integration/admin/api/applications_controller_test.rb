@@ -218,13 +218,7 @@ class Admin::Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # The conditional GET is decided on the records of the page that the ID query and the data query already
-  # loaded, there is no query of its own to check freshness.  So a 304 on page 2 runs the same queries as
-  # the 200, minus the preloads and the rendering.  The COUNT for the pagination total still runs, because
-  # WillPaginate computes it together with the page, before the freshness check.
   test 'paginated index answers 304 from the loaded page without any query of its own, and 200 after a record of the page was modified' do
-    skip_unless_mysql
-
     4.times do
       buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
       FactoryBot.create(:cinstance, user_account: buyer, plan: @plan)
@@ -247,9 +241,13 @@ class Admin::Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
     end
     cinstance_queries = queries.grep(/FROM `cinstances`/)
 
+    assert_empty queries.grep(/\bCOUNT\s*\(.*\bFROM\s+["`]?cinstances\b/i), queries.join("\n")
+
     # The page is loaded once, by the ID query and the data query.
-    assert_equal 1, cinstance_queries.grep(ID_QUERY).size, queries.join("\n")
-    assert_equal 1, cinstance_queries.grep(DATA_QUERY).size, queries.join("\n")
+    if System::Database.mysql?
+      assert_equal 1, cinstance_queries.grep(ID_QUERY).size, queries.join("\n")
+      assert_equal 1, cinstance_queries.grep(DATA_QUERY).size, queries.join("\n")
+    end
     # No query was made for the freshness, such as MAX(updated_at) or a count of the modified records.
     assert_empty queries.grep(/\bMAX\(|\bupdated_at\b.*\bCOUNT\b|\bCOUNT\b.*\bupdated_at\b/i), queries.join("\n")
     # The associations are for the response body only, a 304 does not load them.

@@ -96,11 +96,17 @@ module ThreeScale
     }.freeze
 
     def to_a
+      load_page_records
+      super
+    end
+
+    # API freshness checks need the optimized page without pagination totals.
+    def load_page_records
       unless loaded?
         records = records_via_optimal_strategy
         load_records(records) if records
       end
-      super
+      load
     end
 
     private
