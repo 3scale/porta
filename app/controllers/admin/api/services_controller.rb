@@ -59,8 +59,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   end
 
   def service_params(service_record = service)
-    permitted = params.require(:service).permit(*permitted_service_keys(service_record), annotations: {})
-    filter_plan_change_permissions(permitted, :buyer_plan_change_permission)
+    permitted_service_params(service_record, annotations: {})
   end
 
   def service

@@ -18,6 +18,11 @@ module PermittedServiceSettings
     backend_version.oauth?
   end
 
+  def permitted_service_params(service, **additional_filters)
+    permitted = params.require(:service).permit(*permitted_service_keys(service), **additional_filters)
+    filter_plan_change_permissions(permitted, :buyer_plan_change_permission)
+  end
+
   def permitted_service_keys(service)
     submitted = params.require(:service).permit(:backend_version)
     backend_version = if submitted.key?(:backend_version)

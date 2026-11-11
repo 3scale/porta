@@ -23,7 +23,6 @@ class Sites::UsageRulesController < Sites::BaseController
   end
 
   def settings_params
-    permitted = params.require(:settings).permit(*permitted_settings_keys)
-    filter_plan_change_permissions(permitted, :change_account_plan_permission, :change_service_plan_permission)
+    permitted_account_settings_params
   end
 end

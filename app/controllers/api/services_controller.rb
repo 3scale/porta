@@ -92,13 +92,11 @@ class Api::ServicesController < Api::BaseController
   end
 
   def create_params
-    permitted = params.require(:service).permit(*permitted_service_keys(@service), proxy_attributes: Proxy.user_attribute_names)
-    filter_plan_change_permissions(permitted, :buyer_plan_change_permission)
+    permitted_service_params(@service, proxy_attributes: Proxy.user_attribute_names)
   end
 
   def service_params
-    permitted = params.require(:service).permit(*permitted_service_keys(@service))
-    filter_plan_change_permissions(permitted, :buyer_plan_change_permission)
+    permitted_service_params(@service)
   end
 
   DEFAULT_PARAMS = [

@@ -27,6 +27,13 @@ module PermittedAccountSettings
     !current_account.master_on_premises? && current_account.settings.switches[:service_plans].allowed?
   end
 
+  def permitted_account_settings_params(additional_keys: [], only: nil)
+    keys = permitted_settings_keys + additional_keys
+    keys &= only if only
+    permitted = params.require(:settings).permit(*keys)
+    filter_plan_change_permissions(permitted, :change_account_plan_permission, :change_service_plan_permission)
+  end
+
   def permitted_settings_keys
     keys = %i[useraccountarea_enabled signups_enabled public_search account_approval_required]
     keys << :hide_service if hide_service_editable?

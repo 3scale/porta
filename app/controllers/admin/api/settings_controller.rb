@@ -42,11 +42,7 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   end
 
   def settings_params
-    @settings_params ||= begin
-      keys = (permitted_settings_keys + [:enforce_sso]) & ALLOWED_PARAMS
-      permitted = params.require(:settings).permit(*keys)
-      filter_plan_change_permissions(permitted, :change_account_plan_permission, :change_service_plan_permission)
-    end
+    @settings_params ||= permitted_account_settings_params(additional_keys: [:enforce_sso], only: ALLOWED_PARAMS)
   end
 
   def validate_enforcing_sso_allowed
