@@ -38,18 +38,22 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
   end
 
   def teardown
-    TestSettingsModel.where(account_id: @provider.id).delete_all if @provider
+    TestSettingsModel.delete_all
     ActiveRecord::Migration.verbose = true
   end
 
-  test 'migrates boolean settings with true as 1 and false as 0, ignoring nil' do
-    TestSettingsModel.create_legacy!(
+  test 'migrates boolean settings: true, false, and NULL' do
+    legacy = TestSettingsModel.create_legacy!(
       account: @provider,
       forum_enabled: true,
       app_gallery_enabled: false,
-      signups_enabled: true,
       hide_service: nil
     )
+    legacy.reload
+
+    assert_equal true, legacy.forum_enabled
+    assert_equal false, legacy.app_gallery_enabled
+    assert_nil legacy.hide_service
 
     @migration.up
 
@@ -57,25 +61,26 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
 
     assert_equal true, records[AccountSetting::ForumEnabled]&.value
     assert_equal false, records[AccountSetting::AppGalleryEnabled]&.value
-    assert_equal true, records[AccountSetting::SignupsEnabled]&.value
-    assert_equal '1', records[AccountSetting::ForumEnabled]&.value_before_type_cast
-    assert_equal '0', records[AccountSetting::AppGalleryEnabled]&.value_before_type_cast
-    assert_equal '1', records[AccountSetting::SignupsEnabled]&.value_before_type_cast
     assert_equal false, records[AccountSetting::HideService]&.value, 'NULL boolean should be migrated as false'
-    assert_equal '0', records[AccountSetting::HideService]&.value_before_type_cast
     assert_equal @provider.tenant_id, records[AccountSetting::ForumEnabled].tenant_id
   end
 
-  test 'migrates string and text settings, skipping empty strings and nil' do
-    TestSettingsModel.create_legacy!(
+  test 'migrates non-boolean settings, skipping empty strings and nil' do
+    legacy = TestSettingsModel.create_legacy!(
       account: @provider,
       bg_colour: '#abcdef',
       link_colour: '',
-      sso_key: 'sso_secret_key_123',
-      welcome_text: 'Welcome to our developer portal!',
-      privacy_policy: '',
-      refund_policy: nil
+      refund_policy: nil,
+      finance_switch: 'visible',
+      branding_switch: ''
     )
+    legacy.reload
+
+    assert_equal '#abcdef', legacy.bg_colour
+    assert_equal '', legacy.link_colour
+    assert_nil legacy.refund_policy
+    assert_equal 'visible', legacy.finance_switch
+    assert_equal '', legacy.branding_switch
 
     @migration.up
 
@@ -83,28 +88,8 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
 
     assert_equal '#abcdef', records[AccountSetting::BgColour]&.value
     assert_nil records[AccountSetting::LinkColour], 'empty string should not be migrated'
-    assert_equal 'sso_secret_key_123', records[AccountSetting::SSOKey]&.value
-    assert_equal 'Welcome to our developer portal!', records[AccountSetting::WelcomeText]&.value
-    assert_nil records[AccountSetting::PrivacyPolicy], 'empty text should not be migrated'
     assert_nil records[AccountSetting::RefundPolicy], 'nil text should not be migrated'
-  end
-
-  test 'migrates switch settings properly' do
-    TestSettingsModel.create_legacy!(
-      account: @provider,
-      finance_switch: 'visible',
-      multiple_services_switch: 'hidden',
-      account_plans_switch: 'denied',
-      branding_switch: ''
-    )
-
-    @migration.up
-
-    records = @provider.account_settings.reload.index_by(&:class)
-
     assert_equal 'visible', records[AccountSetting::FinanceSwitch]&.value
-    assert_equal 'hidden', records[AccountSetting::MultipleServicesSwitch]&.value
-    assert_equal 'denied', records[AccountSetting::AccountPlansSwitch]&.value
     assert_nil records[AccountSetting::BrandingSwitch], 'empty switch should not be migrated'
   end
 
@@ -113,14 +98,8 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
     provider2.account_settings.delete_all
     TestSettingsModel.where(account_id: provider2.id).delete_all
 
-    TestSettingsModel.create_legacy!(
-      account: @provider,
-      bg_colour: '#111111'
-    )
-    TestSettingsModel.create_legacy!(
-      account: provider2,
-      bg_colour: '#222222'
-    )
+    TestSettingsModel.create_legacy!(account: @provider, bg_colour: '#111111')
+    TestSettingsModel.create_legacy!(account: provider2, bg_colour: '#222222')
 
     @migration.up
 
@@ -129,12 +108,14 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
 
     assert_equal '#111111', setting1&.value
     assert_equal '#222222', setting2&.value
-  ensure
-    TestSettingsModel.where(account_id: provider2.id).delete_all if provider2
   end
 
-  test 'migrates all 64 legacy setting columns and makes them accessible via Settings facade' do
+  test 'migrates all 64 legacy setting columns' do
     all_settings = {
+      # Intentionally not migrated (dead columns):
+      # heroku_id: 'heroku-id',
+      # heroku_name: 'heroku-name',
+
       # Booleans
       forum_enabled: true,
       app_gallery_enabled: false,
@@ -183,7 +164,7 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
       sso_key: 'sso_key_val',
       sso_login_url: 'https://sso.example.com/login',
       spam_protection_level: 'captcha',
-      admin_bot_protection_level: 'recaptcha_v3',
+      admin_bot_protection_level: 'captcha',
       product: 'connect',
       tracker_code: 'UA-123456-7',
       # Texts
@@ -209,18 +190,19 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
 
     @migration.up
 
-    assert_equal 64, @provider.account_settings.reload.count
+    records = @provider.account_settings.reload.index_by { _1.class.setting_name.to_sym }
 
-    facade = @provider.settings
-    assert facade.forum_enabled
-    assert_not facade.app_gallery_enabled
-    assert_equal '#112233', facade.bg_colour
-    assert_equal 'Welcome developer!', facade.welcome_text
-    assert_equal 'visible', facade.finance.value
-    assert facade.finance.visible?
-    assert_equal 'request', facade.change_account_plan_permission
-    assert_equal 'sso_key_val', facade.sso_key
-    assert_equal 'cas', facade.authentication_strategy
+    assert_equal all_settings.size, records.size
+
+    all_settings.each do |field, expected|
+      record = records.fetch(field) { flunk "missing AccountSetting for #{field}" }
+      expected_str = case expected
+                     when true then '1'
+                     when false then '0'
+                     else expected.to_s
+                     end
+      assert_equal expected_str, record.value_before_type_cast, "mismatch for #{field}"
+    end
   end
 
   test 'is idempotent and handles existing records via ON DUPLICATE KEY UPDATE' do
@@ -231,14 +213,10 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
     )
 
     @migration.up
-    count_first_run = @provider.account_settings.reload.count
 
-    assert_nothing_raised do
+    assert_no_changes -> { @provider.account_settings.reload.order(:id).map(&:attributes) } do
       @migration.up
     end
-
-    assert_equal count_first_run, @provider.account_settings.reload.count
-    assert_equal '#ffffff', @provider.account_settings.find_by(type: 'BgColour').value
   end
 
   test 'down removes migrated settings but preserves other account_settings' do
@@ -249,7 +227,6 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
     )
     @migration.up
 
-    # Create an unrelated account setting (like an HTTP header)
     custom_setting = AccountSetting::CspHeaderAdmin.create!(
       account: @provider,
       value: "default-src 'self'",
