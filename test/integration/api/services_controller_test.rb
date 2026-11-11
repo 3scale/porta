@@ -328,6 +328,51 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   class ServiceCreateTest < self
+    [false, true].each do |finance_allowed|
+      test "create plan change values follow finance availability: #{finance_allowed}" do
+        @provider.settings.allow_multiple_services!
+        Account.any_instance.stubs(:can_create_service?).returns(true)
+        provider.settings.finance.allow if finance_allowed
+
+        %w[credit_card request_credit_card none].each do |value|
+          assert_difference(provider.services.method(:count)) do
+            post admin_services_path, params: { service: { name: "Service #{value}", buyer_plan_change_permission: value } }
+            assert_response :redirect
+          end
+          created_service = provider.services.order(:id).last!
+          expected = finance_allowed ? value : 'request'
+          assert_equal expected, created_service.buyer_plan_change_permission
+        end
+      end
+    end
+
+    {
+      '1' => { buyers_manage_keys: true, mandatory_app_key: true, buyer_key_regenerate_enabled: true },
+      '2' => { buyers_manage_keys: false, mandatory_app_key: false, buyer_key_regenerate_enabled: true },
+      'oauth' => { buyers_manage_keys: true, mandatory_app_key: true, buyer_key_regenerate_enabled: false },
+      'oidc' => { buyers_manage_keys: true, mandatory_app_key: true, buyer_key_regenerate_enabled: false }
+    }.each do |backend_version, expected_settings|
+      test "create filters key settings for #{backend_version} authentication" do
+        @provider.settings.allow_multiple_services!
+        Account.any_instance.stubs(:provider_can_use?).returns(true) if %w[oauth oidc].include?(backend_version)
+
+        assert_difference(provider.services.method(:count)) do
+          post admin_services_path, params: { service: {
+            name: 'New service', backend_version: backend_version,
+            buyers_manage_keys: false, mandatory_app_key: false, buyer_key_regenerate_enabled: false
+          } }
+          assert_response :redirect
+        end
+
+        created_service = provider.services.order(:id).last!
+        assert_equal backend_version == 'oidc' ? 'oauth' : backend_version, created_service.backend_version.to_s
+        assert created_service.oidc? if backend_version == 'oidc'
+        expected_settings.each do |attribute, expected_value|
+          assert_equal expected_value, created_service.public_send(attribute), attribute.to_s
+        end
+      end
+    end
+
     test 'create error shows the right flash message' do
       post admin_services_path, params: { service: { name: '' } }
       assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:danger]
@@ -398,6 +443,87 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   class UsageRulesTest < self
+    [false, true].each do |finance_allowed|
+      test "update plan change values follow finance availability: #{finance_allowed}" do
+        provider.settings.finance.allow if finance_allowed
+
+        %w[request direct credit_card request_credit_card none].each do |value|
+          service.update!(buyer_plan_change_permission: 'direct')
+          put admin_service_path(service), params: { service: { buyer_plan_change_permission: value } }
+
+          assert_response :redirect
+          expected = finance_allowed || %w[request direct].include?(value) ? value : 'direct'
+          assert_equal expected, service.reload.buyer_plan_change_permission
+        end
+      end
+    end
+
+    test 'accepts key settings for existing v2 service without submitting backend_version' do
+      service.update_columns(backend_version: '2', buyers_manage_keys: true, mandatory_app_key: false)
+
+      put admin_service_path(service), params: { service: { buyers_manage_keys: false, mandatory_app_key: true } }
+
+      assert_response :redirect
+      assert_not service.reload.buyers_manage_keys
+      assert service.mandatory_app_key
+    end
+
+    test 'accepts key settings when switching to v2 in the same request' do
+      assert_equal '1', service.backend_version.to_s
+      service.update_columns(buyers_manage_keys: true, mandatory_app_key: false)
+
+      put admin_service_path(service), params: { service: { backend_version: '2', buyers_manage_keys: false, mandatory_app_key: true } }
+
+      assert_response :redirect
+      assert_equal '2', service.reload.backend_version.to_s
+      assert_not service.buyers_manage_keys
+      assert service.mandatory_app_key
+    end
+
+    test 'ignores key settings when switching away from v2 in the same request' do
+      service.update_columns(backend_version: '2', buyers_manage_keys: true, mandatory_app_key: false)
+
+      put admin_service_path(service), params: { service: { backend_version: '1', buyers_manage_keys: false, mandatory_app_key: true } }
+
+      assert_response :redirect
+      assert_equal '1', service.reload.backend_version.to_s
+      assert service.buyers_manage_keys
+      assert_not service.mandatory_app_key
+    end
+
+    test 'accepts key regeneration when switching to oauth in the same request' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      service.update_columns(backend_version: '2', buyer_key_regenerate_enabled: true)
+
+      put admin_service_path(service), params: { service: { backend_version: 'oauth', buyer_key_regenerate_enabled: false } }
+
+      assert_response :redirect
+      assert_equal 'oauth', service.reload.backend_version.to_s
+      assert_not service.buyer_key_regenerate_enabled
+    end
+
+    test 'accepts key regeneration when switching to OIDC in the same request' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      service.update_columns(backend_version: '2', buyer_key_regenerate_enabled: true)
+
+      put admin_service_path(service), params: { service: { backend_version: 'oidc', buyer_key_regenerate_enabled: false } }
+
+      assert_response :redirect
+      assert_equal 'oauth', service.reload.backend_version.to_s
+      assert service.oidc?
+      assert_not service.buyer_key_regenerate_enabled
+    end
+
+    test 'ignores key regeneration when switching away from oauth in the same request' do
+      service.update_columns(backend_version: 'oauth', buyer_key_regenerate_enabled: true)
+
+      put admin_service_path(service), params: { service: { backend_version: '2', buyer_key_regenerate_enabled: false } }
+
+      assert_response :redirect
+      assert_equal '2', service.reload.backend_version.to_s
+      assert service.buyer_key_regenerate_enabled
+    end
+
     test 'usage rules page renders plan change radio buttons with correct param name' do
       get usage_rules_admin_service_path(service)
       assert_response :success

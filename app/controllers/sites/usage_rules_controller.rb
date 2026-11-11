@@ -1,4 +1,6 @@
 class Sites::UsageRulesController < Sites::BaseController
+  include PermittedAccountSettings
+
   provider_required
   before_action :find_settings
   activate_menu :audience, :accounts, :usage_rules
@@ -21,12 +23,6 @@ class Sites::UsageRulesController < Sites::BaseController
   end
 
   def settings_params
-    allowed_attrs = %i[
-      useraccountarea_enabled signups_enabled public_search
-      account_plans_ui_visible change_account_plan_permission
-      service_plans_ui_visible change_service_plan_permission
-      account_approval_required hide_service cas_server_url
-    ]
-    params.require(:settings).permit(*allowed_attrs)
+    permitted_account_settings_params
   end
 end

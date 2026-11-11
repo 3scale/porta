@@ -12,13 +12,13 @@ div class="pf-c-card"
       = form.inputs 'User account management zone' do
         = form.input :useraccountarea_enabled, as: :patternfly_checkbox
 
-      - if current_account.master? && !ThreeScale.config.onpremises
+      - if hide_service_editable?
         = form.inputs 'Hide services' do
           = form.input :hide_service, as: :patternfly_checkbox
 
       = form.inputs 'Signup'
         = form.input :signups_enabled, as: :patternfly_checkbox
-        - if settings.authentication_strategy.cas?
+        - if cas_server_url_editable?
           = form.input :cas_server_url, as: :patternfly_checkbox,
                                         checked_value: 'on',
                                         unchecked_value: '0'
@@ -30,7 +30,7 @@ div class="pf-c-card"
       = form.inputs 'Search'
         = form.input :public_search, as: :patternfly_checkbox
 
-      - if can?(:see, :account_plans)
+      - if account_plans_visible?
         = form.inputs 'Account plans'
           = form.input :account_plans_ui_visible, as: :patternfly_checkbox do
             div class="pf-c-form__group use-account-plans pf-u-mt-sm" role="radiogroup" aria-labelledby="account-plan-radio-group"
@@ -44,7 +44,7 @@ div class="pf-c-card"
                 = render 'shared/plan_change_settings', setting: :change_account_plan_permission,
                                                         form: form
 
-      - if can?(:see, :service_plans)
+      - if service_plans_visible?
         = form.inputs 'Service plans'
           = form.input :service_plans_ui_visible, as: :patternfly_checkbox do
             div class="pf-c-form__group use-service-plans pf-u-mt-sm" role="radiogroup" aria-labelledby="service-plan-radio-group"

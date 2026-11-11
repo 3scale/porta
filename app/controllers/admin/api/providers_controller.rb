@@ -20,6 +20,8 @@ class Admin::Api::ProvidersController < Admin::Api::BaseController
   protected
 
   def provider_params
-    params.required(:account).permit(:from_email, :support_email, :finance_support_email, :site_access_code)
+    permitted = %i[from_email support_email site_access_code]
+    permitted << :finance_support_email if current_account.settings.finance.allowed?
+    params.required(:account).permit(permitted)
   end
 end
