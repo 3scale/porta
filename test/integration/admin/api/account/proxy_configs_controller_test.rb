@@ -88,6 +88,25 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     assert_equal service.proxy.proxy_configs.order(:id).offset(3).limit(3).select(:id).map(&:id), response_proxy_config_ids
   end
 
+  test '#index loads page IDs before full records with default pagination' do
+    skip 'the split query is used only with MySQL' unless System::Database.mysql?
+
+    service = FactoryBot.create(:simple_service, :with_default_backend_api, account: provider)
+    config = FactoryBot.create(:proxy_config, proxy: service.proxy, environment: 'production')
+    token = access_token_value(user: provider.admin_user)
+
+    queries = capture_sql_queries do
+      get admin_api_account_proxy_configs_path(environment: 'production', access_token: token)
+    end
+
+    assert_response :success
+    assert_equal [config.id], response_proxy_config_ids
+    config_queries = queries.grep(/\ASELECT `proxy_configs`\./)
+    assert_equal 2, config_queries.size, queries.join("\n")
+    assert_match(/\ASELECT `proxy_configs`\.`id` FROM/, config_queries.first)
+    assert_match(/\ASELECT `proxy_configs`\.\* FROM/, config_queries.last)
+  end
+
   test '#index can be filtered by version' do
     services = FactoryBot.create_list(:simple_service, 2, :with_default_backend_api, account: provider)
     proxy_configs = services.map { |service| FactoryBot.create_list(:proxy_config, 3, proxy: service.proxy, environment: ProxyConfig::ENVIRONMENTS.first) }.flatten
@@ -186,6 +205,36 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     }
 
     assert_empty response_proxy_config_ids
+  end
+
+  test '#index for latest counts matching proxies for pagination' do
+    services = FactoryBot.create_list(:simple_service, 3, :with_default_backend_api, account: provider)
+    latest_configs = services.map do |service|
+      FactoryBot.create_list(:proxy_config, 2, proxy: service.proxy, environment: 'production').last
+    end
+
+    queries = capture_sql_queries do
+      get admin_api_account_proxy_configs_path(
+        environment: 'production', access_token: access_token_value(user: provider.admin_user),
+        version: 'latest', per_page: 1, page: 1
+      )
+    end
+
+    assert_response :success
+    assert_equal [latest_configs.first.id], response_proxy_config_ids
+    assert_equal({ 'per_page' => 1, 'total_entries' => 3, 'total_pages' => 3, 'current_page' => 1 }, response.parsed_body['metadata'])
+
+    count_queries = queries.grep(/COUNT\(\*\).*FROM ["`]?proxy_configs["`]?/i)
+    assert_equal 1, count_queries.size
+    assert_match(/\bJOIN\b.*\blatest\b/i, count_queries.first)
+
+    if System::Database.oracle?
+      assert_includes count_queries.first, 'NO_MERGE(latest)'
+      assert_includes count_queries.first, 'NO_PUSH_PRED(latest)'
+    else
+      assert_not_includes count_queries.first, 'NO_MERGE(latest)'
+      assert_not_includes count_queries.first, 'NO_PUSH_PRED(latest)'
+    end
   end
 
   private

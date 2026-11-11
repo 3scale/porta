@@ -66,17 +66,6 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
     assert_number_of_queries(0, matching: /./) { relation.to_a }
   end
 
-  test 'the optimized lookup is not used on page 1 (zero offset)' do
-    user = FactoryBot.create(:user_with_account)
-    relation = User.where(id: user.id).paginate(page: 1, per_page: 1, total_entries: 1)
-
-    Rails.logger.expects(:warn).never
-    queries = capture_sql_queries { relation.to_a }
-    User.distinct.paginate(page: 1, per_page: 1).to_a # page 1 gains nothing, so it is not a miss
-
-    assert_equal 0, queries.grep(/will_paginate_page_ids|\bFIELD\(/i).size, queries.join("\n")
-  end
-
   test 'left outer join paginated relations use the two-query strategy and keep rows without a match' do
     users = create_users_with_accounts(ACCOUNT_NAMES)
     # A user without an account is only returned by the LEFT OUTER JOIN.
@@ -102,6 +91,20 @@ class ThreeScale::WillPaginateMysqlOptimizedLookupTest < ActiveSupport::TestCase
   end
 
   PATHS.each do |path, description|
+    test "page 1 is optimized with #{description}" do
+      users = create_users_with_accounts(%w[n-a n-b n-c n-d])
+      relation = base_relation_for(path, users).order(:id).paginate(page: 1, per_page: 2)
+      page = nil
+
+      queries = capture_sql_queries { page = relation.to_a }
+
+      assert_optimized_lookup_used(path, queries)
+      assert_equal users.take(2).map(&:id), page.map(&:id)
+      assert_kind_of WillPaginate::Collection, page
+      assert_equal 1, page.current_page
+      assert_equal 4, page.total_entries
+    end
+
     test "a page past the last one is empty with #{description}" do
       users = create_users_with_accounts(%w[n-a n-b n-c n-d])
       relation = base_relation_for(path, users).order(:id).paginate(page: 5, per_page: 2, total_entries: 4)
