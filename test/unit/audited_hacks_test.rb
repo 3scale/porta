@@ -22,6 +22,45 @@ class AuditedHacksTest < ActiveSupport::TestCase
     assert_equal User.current, audit.user
   end
 
+  class SensitiveAuditTest < self
+    test 'sensitive account settings filter value in audit on create' do
+      [AccountSetting::SSOKey, AccountSetting::JanrainApiKey, AccountSetting::CMSToken].each do |klass|
+        record = nil
+        klass.with_synchronous_auditing do
+          record = klass.create!(account: @provider, value: 'super_secret', tenant_id: @provider.tenant_id)
+        end
+
+        audit = record.audits.last!
+        assert_equal 'create', audit.action
+        assert_equal '[FILTERED]', audit.audited_changes['value'], "#{klass} should filter value on create"
+        assert_not_includes audit.audited_changes.values.flatten, 'super_secret'
+      end
+    end
+
+    test 'sensitive account settings filter value in audit on update' do
+      record = AccountSetting::SSOKey.create!(account: @provider, value: 'old_secret', tenant_id: @provider.tenant_id)
+
+      AccountSetting::SSOKey.with_synchronous_auditing do
+        record.update!(value: 'new_secret')
+      end
+
+      audit = record.audits.where(action: 'update').last!
+      assert_equal ['[FILTERED]', '[FILTERED]'], audit.audited_changes['value']
+      assert_not_includes audit.audited_changes.values.flatten, 'old_secret'
+      assert_not_includes audit.audited_changes.values.flatten, 'new_secret'
+    end
+
+    test 'non-sensitive account settings keep value in audit' do
+      record = nil
+      AccountSetting::BgColour.with_synchronous_auditing do
+        record = AccountSetting::BgColour.create!(account: @provider, value: '#abcdef', tenant_id: @provider.tenant_id)
+      end
+
+      audit = record.audits.last!
+      assert_equal '#abcdef', audit.audited_changes['value']
+    end
+  end
+
   class LoggingTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
@@ -93,14 +132,13 @@ class AuditedHacksTest < ActiveSupport::TestCase
       assert_equal expected_hash_persisted(audit).to_json, audit.send(:log_trail)
     end
 
-    test 'obfuscated audit' do
+    test 'obfuscated audit filters sensitive keys' do
       provider_id = provider.id
-      settings = Settings.new(provider)
-      audit = FactoryBot.build(:audit, auditable_type: settings.class.name, auditable_id: 123, provider_id: provider_id, audited_changes: { 'welcome_text' => 'hello', 'sso_key' => 'sensitive' })
+      audit = FactoryBot.build(:audit, auditable_type: 'Account', auditable_id: 123, provider_id: provider_id, audited_changes: { 'org_name' => 'hello', 'site_access_code' => 'sensitive' })
       audit_obfuscated = audit.obfuscated
       assert_not_equal audit.object_id, audit_obfuscated.object_id
-      assert_equal({ 'welcome_text' => 'hello', 'sso_key' => 'sensitive' }, audit.audited_changes)
-      assert_equal({ 'welcome_text' => 'hello', 'sso_key' => '[FILTERED]' }, audit_obfuscated.audited_changes)
+      assert_equal({ 'org_name' => 'hello', 'site_access_code' => 'sensitive' }, audit.audited_changes)
+      assert_equal({ 'org_name' => 'hello', 'site_access_code' => '[FILTERED]' }, audit_obfuscated.audited_changes)
     end
 
     protected

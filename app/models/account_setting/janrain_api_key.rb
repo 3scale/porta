@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-class AccountSetting::JanrainApiKey < AccountSetting::StringSetting; end
+class AccountSetting::JanrainApiKey < AccountSetting::StringSetting
+  include Concerns::SensitiveAudit
+end
