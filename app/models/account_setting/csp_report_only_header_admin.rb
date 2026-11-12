@@ -31,5 +31,5 @@ class AccountSetting::CspReportOnlyHeaderAdmin < AccountSetting::HttpHeader
     sources.map { |directive, values| "#{directive.to_s.tr('_', '-')} #{values.join(' ')}" }.join("; ")
   end
 
-  self.default_value = build_default_value
+  attribute :value, default: build_default_value
 end

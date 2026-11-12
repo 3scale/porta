@@ -384,6 +384,14 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal '#abcdef', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
   end
 
+  test 'toggle! flips a true-default boolean when no record is stored' do
+    assert_not settings.value_set?(:monthly_charging_enabled)
+    assert settings.monthly_charging_enabled
+
+    assert_equal false, settings.toggle!(:monthly_charging_enabled)
+    assert_equal false, settings.reload.monthly_charging_enabled
+  end
+
   class PersistedTest < ActiveSupport::TestCase
     test 'false when account is nil' do
       assert_not Settings.new.persisted?

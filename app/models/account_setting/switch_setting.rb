@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AccountSetting::SwitchSetting < AccountSetting
-  self.default_value = 'denied'
+  attribute :value, default: 'denied'
   class_attribute :provider_visible, instance_writer: false, default: false
 
   def state

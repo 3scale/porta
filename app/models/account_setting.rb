@@ -19,7 +19,12 @@ class AccountSetting < ApplicationRecord
 
   delegate :provider_id_for_audits, to: :account, allow_nil: true
 
-  class_attribute :default_value, instance_writer: false, default: nil
+  # Per-class default comes from the `value` attribute default declared in each subclass.
+  def self.default_value
+    return @default_value if defined?(@default_value)
+
+    @default_value = column_defaults['value'].freeze
+  end
 
   # Derives setting name from class: AccountSetting::BgColour -> 'bg_colour'
   def self.setting_name
