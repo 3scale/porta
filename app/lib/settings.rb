@@ -166,6 +166,12 @@ class Settings
     account&.account_settings&.maximum(:updated_at)
   end
 
+  # True when the setting has an explicit value (saved or not yet saved), as opposed to the getter falling back to the default.
+  def value_set?(name)
+    record = setting_record_for(name)
+    !!record && !record.marked_for_destruction?
+  end
+
   def reset
     @not_custom_account_plans = nil
     self

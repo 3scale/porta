@@ -108,6 +108,35 @@ class Sites::SecuritiesControllerTest < ActionDispatch::IntegrationTest
     assert_match 'Content-Security-Policy Header', response.body
   end
 
+  test 'edit prefills a stored header value and enables its input' do
+    AccountSetting::CspHeaderDeveloper.create!(account: @provider, value: "default-src 'self'")
+
+    get edit_admin_site_security_path
+
+    assert_response :success
+    assert_select 'input#override_csp_header_developer[checked]'
+    assert_select 'input#csp_header_developer[value=?]:not([disabled])', "default-src 'self'"
+  end
+
+  test 'edit shows the default as placeholder and disables the input when no header value is stored' do
+    get edit_admin_site_security_path
+
+    assert_response :success
+    assert_select 'input#override_permissions_policy_header_developer:not([checked])'
+    assert_select 'input#permissions_policy_header_developer[disabled]:not([value])[placeholder=?]',
+                  AccountSetting::PermissionsPolicyHeaderDeveloper.default_value
+  end
+
+  test 'edit selects the stored spam_protection_level' do
+    AccountSetting::SpamProtectionLevel.create!(account: @provider, value: 'captcha')
+
+    get edit_admin_site_security_path
+
+    assert_response :success
+    assert_select 'input[type=radio][name=?][value=captcha][checked]', 'settings[spam_protection_level]'
+    assert_select 'input[type=radio][name=?][value=none]:not([checked])', 'settings[spam_protection_level]'
+  end
+
   test 'updates Content-Security-Policy header' do
     csp_value = "default-src 'self'"
 

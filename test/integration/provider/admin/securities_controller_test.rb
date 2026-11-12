@@ -116,6 +116,35 @@ class Provider::Admin::SecuritiesControllerTest < ActionDispatch::IntegrationTes
     assert_match 'Content-Security-Policy Header', response.body
   end
 
+  test 'edit prefills a stored header value and enables its input' do
+    AccountSetting::CspHeaderAdmin.create!(account: @provider, value: "default-src 'self'")
+
+    get edit_provider_admin_security_path
+
+    assert_response :success
+    assert_select 'input#override_csp_header_admin[checked]'
+    assert_select 'input#csp_header_admin[value=?]:not([disabled])', "default-src 'self'"
+  end
+
+  test 'edit shows the default as placeholder and disables the input when no header value is stored' do
+    get edit_provider_admin_security_path
+
+    assert_response :success
+    assert_select 'input#override_permissions_policy_header_admin:not([checked])'
+    assert_select 'input#permissions_policy_header_admin[disabled]:not([value])[placeholder=?]',
+                  AccountSetting::PermissionsPolicyHeaderAdmin.default_value
+  end
+
+  test 'edit selects the stored admin_bot_protection_level' do
+    AccountSetting::AdminBotProtectionLevel.create!(account: @provider, value: 'captcha')
+
+    get edit_provider_admin_security_path
+
+    assert_response :success
+    assert_select 'input[type=radio][name=?][value=captcha][checked]', 'settings[admin_bot_protection_level]'
+    assert_select 'input[type=radio][name=?][value=none]:not([checked])', 'settings[admin_bot_protection_level]'
+  end
+
   test 'updates Content-Security-Policy header' do
     csp_value = "default-src 'self'; script-src 'self'"
 
