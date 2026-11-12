@@ -387,7 +387,8 @@ class SettingsTest < ActiveSupport::TestCase
   test 'exposes attribute types and error messages to form builders' do
     assert_equal :boolean, Settings.type_for_attribute(:forum_enabled).type
     assert_equal :string, Settings.type_for_attribute(:bg_colour).type
-    assert_nil Settings.type_for_attribute(:finance)
+    assert_nil Settings.type_for_attribute(:finance).type
+    assert_equal 'finance', Settings.type_for_attribute(:finance) { |name| name }
 
     settings.product = 'invalid'
     assert_not settings.save

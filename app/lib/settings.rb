@@ -195,8 +195,12 @@ class Settings
   end
 
   # Lets form builders infer input types (e.g. boolean checkboxes) like they did for the old ActiveRecord model.
-  def self.type_for_attribute(name)
-    setting_class_for(name)&.type_for_attribute('value')
+  # Same contract as ActiveRecord: unknown names yield to the block, or return a generic type.
+  def self.type_for_attribute(name, &block)
+    klass = setting_class_for(name)
+    return klass.type_for_attribute('value') if klass
+
+    block ? yield(name.to_s) : ActiveModel::Type::Value.new
   end
 
   # --- Business logic ---
