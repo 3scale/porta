@@ -26,7 +26,7 @@
               as: :patternfly_input,
               label: setting_class.display_name,
               hint: hint,
-              input_html: { id: setting_name, placeholder: setting_class.default_value, value: (settings.public_send(setting_name) if value_set), disabled: !value_set }
+              input_html: { id: setting_name, placeholder: setting_class.default_value, value: settings.public_send(setting_name), disabled: !value_set }
 
   = form.actions do
     = form.commit_button t('provider.admin.securities.form.submit')

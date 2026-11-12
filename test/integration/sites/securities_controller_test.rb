@@ -118,12 +118,12 @@ class Sites::SecuritiesControllerTest < ActionDispatch::IntegrationTest
     assert_select 'input#csp_header_developer[value=?]:not([disabled])', "default-src 'self'"
   end
 
-  test 'edit shows the default as placeholder and disables the input when no header value is stored' do
+  test 'edit shows the default in a disabled input when no header value is stored' do
     get edit_admin_site_security_path
 
     assert_response :success
     assert_select 'input#override_permissions_policy_header_developer:not([checked])'
-    assert_select 'input#permissions_policy_header_developer[disabled]:not([value])[placeholder=?]',
+    assert_select 'input#permissions_policy_header_developer[disabled][value=?]',
                   AccountSetting::PermissionsPolicyHeaderDeveloper.default_value
   end
 
