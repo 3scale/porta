@@ -18,7 +18,7 @@ div class="pf-c-card"
               | (#{description})
 
           td
-            => switch.status.capitalize
+            => switch.state.capitalize
           td
             - if switch.denied?
               = fancy_button_to 'enable', master_provider_switch_path(provider, switch.setting_name), method: :put, data: { confirm: 'Really?', disable_with: true }
