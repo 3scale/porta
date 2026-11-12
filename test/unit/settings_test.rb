@@ -450,8 +450,7 @@ class SettingsTest < ActiveSupport::TestCase
     end
 
     test 'lazily generates and persists sso_key on first access' do
-      AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).delete_all
-      @provider.account_settings.reload
+      assert_not @settings.value_set?(:sso_key)
 
       key = @settings.sso_key
       assert_not_nil key
@@ -464,8 +463,7 @@ class SettingsTest < ActiveSupport::TestCase
     end
 
     test 'returns the same key on subsequent reads' do
-      AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).delete_all
-      @provider.account_settings.reload
+      assert_not @settings.value_set?(:sso_key)
 
       key1 = @settings.sso_key
       key2 = @settings.sso_key
@@ -473,7 +471,6 @@ class SettingsTest < ActiveSupport::TestCase
     end
 
     test 'returns existing key without generating a new one' do
-      AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).delete_all
       AccountSetting.create!(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name, value: 'pre_existing_key')
       @provider.account_settings.reload
 
@@ -481,8 +478,7 @@ class SettingsTest < ActiveSupport::TestCase
     end
 
     test 'tenant_id is set by DB trigger' do
-      AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).delete_all
-      @provider.account_settings.reload
+      assert_not @settings.value_set?(:sso_key)
 
       @settings.sso_key
       db_tenant_id = ActiveRecord::Base.connection.select_value(
@@ -492,9 +488,8 @@ class SettingsTest < ActiveSupport::TestCase
     end
 
     test 'uses a key created concurrently after account settings were loaded' do
+      assert_not @settings.value_set?(:sso_key)
       sso_keys = AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name)
-      sso_keys.delete_all
-      @provider.account_settings.reload
       AccountSetting.create!(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name, value: 'winner_key')
 
       assert_equal 'winner_key', @settings.sso_key
