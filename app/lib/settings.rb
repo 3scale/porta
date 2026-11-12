@@ -55,6 +55,10 @@ class Settings
     persisted_record = account.account_settings.create_or_find_by!(type: AccountSetting::SSOKey.sti_name) do |record|
       record.value = ThreeScale::SSO.generate_sso_key
     end
+    # Rails 7.2 doesn't add the found record to the loaded association when create_or_find_by! hits
+    # RecordNotUnique and falls back to find_by!; still present as of Rails 8.1.4.1.
+    association = account.account_settings.proxy_association
+    association.add_to_target(persisted_record) unless association.target.include?(persisted_record)
     persisted_record.value
   end
 

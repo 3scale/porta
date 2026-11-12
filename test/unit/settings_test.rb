@@ -472,14 +472,19 @@ class SettingsTest < ActiveSupport::TestCase
       assert_equal @provider.tenant_id, db_tenant_id.to_i, "tenant_id should be set by DB trigger"
     end
 
-    test 'handles concurrent creation via create_or_find_by' do
-      AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).delete_all
-      AccountSetting.create!(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name, value: 'winner_key')
+    test 'uses a key created concurrently after account settings were loaded' do
+      sso_keys = AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name)
+      sso_keys.delete_all
       @provider.account_settings.reload
+      AccountSetting.create!(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name, value: 'winner_key')
 
-      key = @settings.sso_key
-      assert_equal 'winner_key', key
-      assert_equal 1, AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name).count
+      assert_equal 'winner_key', @settings.sso_key
+      assert_equal 1, sso_keys.count
+
+      @settings.sso_key = 'new_key'
+      @settings.save!
+
+      assert_equal %w[new_key], sso_keys.pluck(:value)
     end
   end
 
