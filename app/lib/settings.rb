@@ -3,6 +3,7 @@
 class Settings
   include ActiveModel::Conversion
   extend ActiveModel::Naming
+  extend ActiveModel::Translation
 
   attr_reader :account
   alias provider account
@@ -191,6 +192,11 @@ class Settings
 
   def self.setting_class_for(name)
     SETTING_CLASS_MAP[name.to_sym]
+  end
+
+  # Lets form builders infer input types (e.g. boolean checkboxes) like they did for the old ActiveRecord model.
+  def self.type_for_attribute(name)
+    setting_class_for(name)&.type_for_attribute('value')
   end
 
   # --- Business logic ---

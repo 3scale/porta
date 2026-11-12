@@ -384,6 +384,16 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal '#abcdef', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
   end
 
+  test 'exposes attribute types and error messages to form builders' do
+    assert_equal :boolean, Settings.type_for_attribute(:forum_enabled).type
+    assert_equal :string, Settings.type_for_attribute(:bg_colour).type
+    assert_nil Settings.type_for_attribute(:finance)
+
+    settings.product = 'invalid'
+    assert_not settings.save
+    assert_includes settings.errors.full_messages.join, 'Product'
+  end
+
   test 'toggle! flips a true-default boolean when no record is stored' do
     assert_not settings.value_set?(:monthly_charging_enabled)
     assert settings.monthly_charging_enabled
