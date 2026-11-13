@@ -441,6 +441,9 @@ class SettingsTest < ActiveSupport::TestCase
   class SSOKeyTest < ActiveSupport::TestCase
     def setup
       @provider = FactoryBot.create(:provider_account)
+      # Provider creation generates a key; these tests exercise the lazy generation for a missing key.
+      AccountSetting::SSOKey.where(account_id: @provider.id).delete_all
+      @provider.account_settings.reload
       @settings = @provider.settings
     end
 
@@ -457,7 +460,7 @@ class SettingsTest < ActiveSupport::TestCase
       assert_kind_of String, key
       assert key.length > 10, "sso_key should be a non-trivial string"
 
-      db_record = AccountSetting.find_by(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name)
+      db_record = AccountSetting::SSOKey.find_by(account_id: @provider.id)
       assert_not_nil db_record, "sso_key record should be persisted in the database"
       assert_equal key, db_record.value
     end
@@ -471,7 +474,7 @@ class SettingsTest < ActiveSupport::TestCase
     end
 
     test 'returns existing key without generating a new one' do
-      AccountSetting.create!(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name, value: 'pre_existing_key')
+      AccountSetting::SSOKey.create!(account_id: @provider.id, value: 'pre_existing_key')
       @provider.account_settings.reload
 
       assert_equal 'pre_existing_key', @settings.sso_key
@@ -489,8 +492,8 @@ class SettingsTest < ActiveSupport::TestCase
 
     test 'uses a key created concurrently after account settings were loaded' do
       assert_not @settings.value_set?(:sso_key)
-      sso_keys = AccountSetting.where(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name)
-      AccountSetting.create!(account_id: @provider.id, type: AccountSetting::SSOKey.sti_name, value: 'winner_key')
+      sso_keys = AccountSetting::SSOKey.where(account_id: @provider.id)
+      AccountSetting::SSOKey.create!(account_id: @provider.id, value: 'winner_key')
 
       assert_equal 'winner_key', @settings.sso_key
       assert_equal 1, sso_keys.count

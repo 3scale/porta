@@ -24,6 +24,8 @@ class AuditedHacksTest < ActiveSupport::TestCase
 
   class SensitiveAuditTest < self
     test 'sensitive account settings filter value in audit on create' do
+      AccountSetting::SSOKey.where(account_id: @provider.id).delete_all # generated on provider creation
+
       [AccountSetting::SSOKey, AccountSetting::JanrainApiKey, AccountSetting::CMSToken].each do |klass|
         record = nil
         klass.with_synchronous_auditing do
@@ -38,7 +40,8 @@ class AuditedHacksTest < ActiveSupport::TestCase
     end
 
     test 'sensitive account settings filter value in audit on update' do
-      record = AccountSetting::SSOKey.create!(account: @provider, value: 'old_secret', tenant_id: @provider.tenant_id)
+      record = AccountSetting::SSOKey.find_by!(account_id: @provider.id)
+      old_secret = record.value
 
       AccountSetting::SSOKey.with_synchronous_auditing do
         record.update!(value: 'new_secret')
@@ -46,7 +49,7 @@ class AuditedHacksTest < ActiveSupport::TestCase
 
       audit = record.audits.where(action: 'update').last!
       assert_equal ['[FILTERED]', '[FILTERED]'], audit.audited_changes['value']
-      assert_not_includes audit.audited_changes.values.flatten, 'old_secret'
+      assert_not_includes audit.audited_changes.values.flatten, old_secret
       assert_not_includes audit.audited_changes.values.flatten, 'new_secret'
     end
 
