@@ -152,7 +152,9 @@ class Settings
 
   def assign_attributes(attrs)
     attrs.to_h.each do |key, value|
-      send("#{key}=", value) if respond_to?("#{key}=", true)
+      raise ActiveModel::UnknownAttributeError.new(self, key) unless respond_to?("#{key}=")
+
+      public_send("#{key}=", value)
     end
   end
   alias attributes= assign_attributes

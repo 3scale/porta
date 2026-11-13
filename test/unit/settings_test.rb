@@ -76,15 +76,8 @@ class SettingsTest < ActiveSupport::TestCase
     assert_not @settings.account_approval_required
   end
 
-  test "account_approval_required passed to settings.update is silently ignored" do
-    # The facade has no write path for account_approval_required —
-    # controllers must handle it explicitly before calling settings.update.
-    plan = @provider.account_plans.default
-    plan.update!(approval_required: false)
-
-    assert_nothing_raised { @settings.update(account_approval_required: true, signups_enabled: false) }
-    assert_not plan.reload.approval_required, "facade must not write account_approval_required"
-    assert_not @settings.signups_enabled, "other params still applied"
+  test 'update raises for keys without a setter, like ActiveRecord' do
+    assert_raises(ActiveModel::UnknownAttributeError) { @settings.update(account_approval_required: true) }
   end
 
   test "accessing account_approval_required with hidden plan" do
