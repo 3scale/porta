@@ -102,6 +102,31 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
         assert_response :success
       end
 
+      test '#index evaluates each conditional request validator' do
+        path = admin_api_accounts_path(format: :json)
+        get path, params: params
+        assert_response :success
+        etag = response.headers.fetch('ETag')
+        last_modified = response.headers.fetch('Last-Modified')
+        older_date = (Time.httpdate(last_modified) - 60).httpdate
+
+        # Rack::ConditionalGet gives If-None-Match precedence in the final response.
+        [
+          [{ 'HTTP_IF_NONE_MATCH' => etag }, :not_modified],
+          [{ 'HTTP_IF_MODIFIED_SINCE' => last_modified }, :not_modified],
+          [{ 'HTTP_IF_NONE_MATCH' => etag, 'HTTP_IF_MODIFIED_SINCE' => older_date }, :not_modified],
+          [{ 'HTTP_IF_NONE_MATCH' => '"different"', 'HTTP_IF_MODIFIED_SINCE' => last_modified }, :success]
+        ].each do |headers, expected_status|
+          get path, params: params, headers: headers
+          assert_response expected_status
+          if expected_status == :not_modified
+            assert_empty response.body
+          else
+            assert response.parsed_body.key?('accounts')
+          end
+        end
+      end
+
       test '#find returns 304 when account has not been modified' do
         buyer_user = @buyer.users.last!
 

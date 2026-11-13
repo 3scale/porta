@@ -67,6 +67,55 @@ class OracleLobLargeUpdateTest < ActiveSupport::TestCase
     assert_equal large_binary_data, retrieved_value,"Updated service_ids should match new binary data"
   end
 
+  test 'a real MemberPermission retains its serialized BLOB through updates and rollback' do
+    permission = FactoryBot.create(:member_permission, service_ids: [1, 2])
+    original_section = permission.admin_section
+    large_ids = (1..30_000).to_a
+
+    permission.update!(service_ids: large_ids)
+    assert_equal large_ids, permission.reload.service_ids
+    assert_equal original_section, permission.admin_section
+
+    MemberPermission.transaction(requires_new: true) do
+      permission.update!(service_ids: [99])
+      assert_equal [99], permission.reload.service_ids
+      raise ActiveRecord::Rollback
+    end
+    assert_equal large_ids, permission.reload.service_ids
+    assert_equal original_section, permission.admin_section
+
+    permission.update!(service_ids: [])
+    assert_empty permission.reload.service_ids
+  end
+
+  test 'a service retains its CLOB and unrelated attributes after rollback' do
+    description = "A service's € description\n" * 2_000
+    original_name = @service.name
+    @service.update!(description: description)
+    assert_equal description, @service.reload.description
+
+    Service.transaction(requires_new: true) do
+      @service.update!(description: 'temporary description')
+      assert_equal 'temporary description', @service.reload.description
+      raise ActiveRecord::Rollback
+    end
+
+    assert_equal description, @service.reload.description
+    assert_equal original_name, @service.name
+  end
+
+  test 'large inline BLOB quoting works in an update as well as an insert' do
+    permission = FactoryBot.create(:member_permission)
+    data = Random.bytes(160.kilobytes)
+
+    ActiveRecord::Base.connection_pool.with_connection do |connection|
+      quoted = connection.quote(ActiveModel::Type::Binary::Data.new(data))
+      connection.execute("UPDATE member_permissions SET service_ids = #{quoted} WHERE id = #{permission.id}")
+      actual = connection.select_value("SELECT service_ids FROM member_permissions WHERE id = #{permission.id}")
+      assert_equal data, actual
+    end
+  end
+
   test "test large blobs inline quoting" do
     sizes = [
       15.kilobytes,  # within EXTENDED limit
