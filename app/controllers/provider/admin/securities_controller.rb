@@ -23,7 +23,7 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
 
   # An omitted header means its "use custom value" checkbox was unchecked, so the stored value is cleared.
   def settings_params
-    permitted = params.permit(settings: [:admin_bot_protection_level, *HEADER_SETTINGS]).fetch(:settings, {})
+    permitted = params.fetch(:settings, {}).permit(:admin_bot_protection_level, *HEADER_SETTINGS)
     HEADER_SETTINGS.index_with(nil).merge(permitted.to_h.symbolize_keys)
   end
 
