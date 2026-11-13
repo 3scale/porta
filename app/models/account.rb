@@ -477,9 +477,10 @@ class Account < ApplicationRecord
           xml.monthly_charging_enabled settings.monthly_charging_enabled
         end
 
-        xml.credit_card_stored credit_card_stored?
+        card_stored = credit_card_stored?
+        xml.credit_card_stored card_stored
 
-        if credit_card_stored?
+        if card_stored
           xml.credit_card_partial_number payment_detail.credit_card_partial_number
           xml.credit_card_expires_on payment_detail.credit_card_expires_on
         end

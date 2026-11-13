@@ -3,7 +3,36 @@ require 'test_helper'
 class Account::CreditCardTest < ActiveSupport::TestCase
 
   test 'credit_card_stored? return false by default' do
-    refute Account.new.credit_card_stored?
+    account = Account.new
+
+    assert_not account.credit_card_stored?
+    assert_nil account.association(:payment_detail).target
+  end
+
+  test 'checking preloaded missing payment details does not query or build a record' do
+    account = FactoryBot.create(:simple_account)
+    PaymentDetail.where(account_id: account.id).delete_all
+    account.reload
+    ActiveRecord::Associations::Preloader.new(records: [account], associations: :payment_detail).call
+
+    queries = capture_sql_queries { assert_not account.credit_card_stored? }
+
+    assert_empty queries
+    assert_nil account.association(:payment_detail).target
+  end
+
+  test 'checking a stored card still migrates legacy account payment attributes' do
+    account = FactoryBot.create(:simple_account)
+    PaymentDetail.where(account_id: account.id).delete_all
+    account.update_columns(credit_card_auth_code: 'legacy-auth-code')
+    account.reload
+
+    assert_difference 'PaymentDetail.count', 1 do
+      assert account.credit_card_stored?
+    end
+
+    assert_equal 'legacy-auth-code', account.payment_detail.credit_card_auth_code
+    assert_nil account[:credit_card_auth_code]
   end
 
   test 'credit_card_stored? return true for authorize.net users iff have credit_card_auth_code and cc_token' do

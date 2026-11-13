@@ -342,8 +342,8 @@ module Fields::Fields
 
   def fields_to_xml(xml)
     defined_builtin_fields.each do |field|
-      next if field_value(field.name).blank?
       value = field_value(field.name)
+      next if value.blank?
 
       if value.respond_to?(:to_xml)
         value.to_xml(builder: xml, root: field.name)
