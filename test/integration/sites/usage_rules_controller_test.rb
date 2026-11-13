@@ -34,24 +34,27 @@ class Sites::UsageRulesControllerIntegrationTest < ActionDispatch::IntegrationTe
     assert_not plan.reload.approval_required
   end
 
-  test 'update account_approval_required with empty string is ignored' do
+  test 'update with blank account_approval_required saves nothing' do
     plan = provider.account_plans.default
     plan.update!(approval_required: true)
+    assert settings.signups_enabled
 
-    put admin_site_usage_rules_path, params: { settings: { account_approval_required: '' } }
+    put admin_site_usage_rules_path, params: { settings: { account_approval_required: '', signups_enabled: '0' } }
 
-    assert_redirected_to admin_site_settings_url
+    assert_response :success
+    assert_equal I18n.t('sites.usage_rules.update.error'), flash[:danger]
     assert plan.reload.approval_required
+    assert settings.reload.signups_enabled
   end
 
-  test 'update account_approval_required with nil is ignored' do
-    plan = provider.account_plans.default
-    plan.update!(approval_required: true)
+  test 'update with blank boolean setting saves nothing' do
+    assert settings.signups_enabled
 
-    put admin_site_usage_rules_path, params: { settings: { account_approval_required: nil } }
+    put admin_site_usage_rules_path, params: { settings: { signups_enabled: '' } }
 
-    assert_redirected_to admin_site_settings_url
-    assert plan.reload.approval_required
+    assert_response :success
+    assert_equal I18n.t('sites.usage_rules.update.error'), flash[:danger]
+    assert settings.reload.signups_enabled
   end
 
   test 'update account_approval_required with an empty array is ignored' do

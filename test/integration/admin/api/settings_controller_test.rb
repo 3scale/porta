@@ -114,24 +114,38 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_not account.reload.settings.account_approval_required
   end
 
-  test 'update account_approval_required is ignored when empty string' do
+  test 'update with blank account_approval_required is rejected and saves nothing' do
     account = settings.account
     account.account_plans.default.update!(approval_required: true)
 
-    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: '' }
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: '', public_search: true }
 
-    assert_response :success
+    assert_response :unprocessable_entity
+    assert_equal({ 'account_approval_required' => ['is not included in the list'] }, response.parsed_body['errors'])
+    assert account.reload.settings.account_approval_required
+    assert_not account.settings.public_search
+  end
+
+  test 'update with null account_approval_required is rejected' do
+    account = settings.account
+    account.account_plans.default.update!(approval_required: true)
+
+    put admin_api_settings_path(format: :json, access_token: token), params: { account_approval_required: nil }, as: :json
+
+    assert_response :unprocessable_entity
     assert account.reload.settings.account_approval_required
   end
 
-  test 'update account_approval_required is ignored when nil' do
-    account = settings.account
-    account.account_plans.default.update!(approval_required: true)
+  test 'update with blank boolean or enum setting is rejected' do
+    { signups_enabled: 'cannot be nil', change_account_plan_permission: 'is not included in the list' }.each do |name, message|
+      before = settings.reload.public_send(name)
 
-    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: nil }
+      put admin_api_settings_path(format: :json), params: { access_token: token, name => '' }
 
-    assert_response :success
-    assert account.reload.settings.account_approval_required
+      assert_response :unprocessable_entity
+      assert_equal({ name.to_s => [message] }, response.parsed_body['errors'])
+      assert_equal before, settings.reload.public_send(name)
+    end
   end
 
   test 'update account_approval_required is ignored when an empty array' do

@@ -30,8 +30,9 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   # Settings Update
   # PUT /admin/api/settings.json
   def update
-    update_approval_required
-    settings.update(settings_params)
+    AccountSetting.transaction do
+      (settings.update(settings_params) & update_approval_required) || raise(ActiveRecord::Rollback)
+    end
     respond_with(settings)
   end
 
@@ -42,14 +43,18 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   end
 
   def settings_params
-    @settings_params ||= params.require(:settings).permit(*ALLOWED_PARAMS).reject { |_, v| v.to_s.empty? }
+    @settings_params ||= params.require(:settings).permit(*ALLOWED_PARAMS)
   end
 
   def update_approval_required
-    return unless settings.approval_required_editable?
-    value = params.require(:settings).permit(:account_approval_required)[:account_approval_required]
-    return if value.blank?
-    current_account.account_plans.default.update_attribute(:approval_required, value)
+    approval = params.require(:settings).permit(:account_approval_required)
+    return true unless approval.key?(:account_approval_required) && settings.approval_required_editable?
+
+    plan = current_account.account_plans.default
+    return true if plan.update(approval_required: approval[:account_approval_required])
+
+    plan.errors[:approval_required].each { settings.errors.add(:account_approval_required, _1) }
+    false
   end
 
   def validate_enforcing_sso_allowed

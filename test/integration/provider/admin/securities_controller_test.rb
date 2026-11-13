@@ -63,6 +63,15 @@ class Provider::Admin::SecuritiesControllerTest < ActionDispatch::IntegrationTes
     assert_equal 'There were problems saving the settings', flash[:danger]
   end
 
+  test 'update with invalid header value shows the error next to the field' do
+    put provider_admin_security_path, params: { settings: { csp_header_admin: "bad\u0001value" } }
+
+    assert_response :success
+    assert_equal 'There were problems saving the settings', flash[:danger]
+    field_group = css_select('input#csp_header_admin').first.ancestors('.pf-c-form__group').first
+    assert_includes field_group.css('.pf-m-error').text, 'RFC 7230 allows only printable ASCII header values'
+  end
+
   test 'displays Permissions-Policy header field' do
     get edit_provider_admin_security_path
     assert_response :success

@@ -93,6 +93,7 @@ class Settings
   # --- Persistence ---
 
   def save
+    errors.clear
     return false unless account&.persisted?
 
     success = false
@@ -101,7 +102,10 @@ class Settings
 
       results = to_persist.select(&:changed?).map(&:save)
 
-      raise ActiveRecord::Rollback unless results.all?
+      unless results.all?
+        to_persist.each { |record| record.errors.each { errors.add(record.class.setting_name.to_sym, _1.message) } }
+        raise ActiveRecord::Rollback
+      end
 
       # destroy! is used internally by CollectionProxy#destroy, so failures raise
       # instead of returning false. Acceptable: a destroy failure here means
@@ -154,13 +158,7 @@ class Settings
   alias attributes= assign_attributes
 
   def errors
-    errors = ActiveModel::Errors.new(self)
-    active_settings.each do |record|
-      record.errors.each do |error|
-        errors.add(record.class.setting_name.to_sym, error.message)
-      end
-    end
-    errors
+    @errors ||= ActiveModel::Errors.new(self)
   end
 
   def updated_at
@@ -175,6 +173,7 @@ class Settings
 
   def reset
     @not_custom_account_plans = nil
+    @errors = nil
     self
   end
 

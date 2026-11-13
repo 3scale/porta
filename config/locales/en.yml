@@ -1336,6 +1336,7 @@ en:
           so sign ups through trusted SSO integrations will always be approved.
       update:
         success: Settings updated
+        error: Settings could not be updated
     dns:
       open_portal:
         success: Developer portal opened

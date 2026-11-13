@@ -7,10 +7,14 @@ class Sites::UsageRulesController < Sites::BaseController
   end
 
   def update
-    update_approval_required
-    if @settings.update(settings_params)
+    saved = AccountSetting.transaction do
+      (@settings.update(settings_params) & update_approval_required) || raise(ActiveRecord::Rollback)
+    end
+
+    if saved
       redirect_back_or_to admin_site_settings_url, success: t('.success')
     else
+      flash.now[:danger] = t('.error')
       render :edit
     end
   end
@@ -33,9 +37,13 @@ class Sites::UsageRulesController < Sites::BaseController
   end
 
   def update_approval_required
-    return unless @settings.approval_required_editable?
-    value = params.require(:settings).permit(:account_approval_required)[:account_approval_required]
-    return if value.blank?
-    current_account.account_plans.default.update_attribute(:approval_required, value)
+    approval = params.require(:settings).permit(:account_approval_required)
+    return true unless approval.key?(:account_approval_required) && @settings.approval_required_editable?
+
+    plan = current_account.account_plans.default
+    return true if plan.update(approval_required: approval[:account_approval_required])
+
+    plan.errors[:approval_required].each { @settings.errors.add(:account_approval_required, _1) }
+    false
   end
 end
