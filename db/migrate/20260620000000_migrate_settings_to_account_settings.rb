@@ -9,17 +9,18 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
   def up
     now = Time.current.to_fs(:db)
 
-    # Booleans: NULL → '0' (false). CASE handles this without a WHERE filter.
+    # Booleans: NULL → '0' (false), handled by CASE.
+    # Buyers only use the monthly billing settings, migrated only when they differ from the default.
     boolean_settings.each do |col|
-      bool_value = System::Database.oracle? ? "CASE WHEN s.#{col} = 1 THEN '1' ELSE '0' END"
-                                            : "CASE WHEN s.#{col} = TRUE THEN '1' ELSE '0' END"
-      upsert_setting(col, bool_value, now)
+      bool_value = "CASE WHEN s.#{col} = #{true_value} THEN '1' ELSE '0' END"
+      where = provider_condition
+      where = "(#{where} OR #{bool_value} <> '#{resolve_class(col).default_value ? 1 : 0}')" if col.in?(buyer_settings)
+      upsert_setting(col, bool_value, now, where:)
     end
 
     # Strings, texts, and switches: skip NULLs and empty strings.
-    # On Oracle '' IS NULL, so IS NOT NULL alone covers both.
     (string_settings + text_settings + switch_settings).each do |col|
-      upsert_setting(col, "s.#{col}", now, where: non_empty_condition(col))
+      upsert_setting(col, "s.#{col}", now, where: "#{provider_condition} AND #{non_empty_condition(col)}")
     end
   end
 
@@ -32,9 +33,8 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
 
   private
 
-  def upsert_setting(col, value_expr, now, where: nil)
+  def upsert_setting(col, value_expr, now, where:)
     type_name = resolve_sti_name(col)
-    where_clause = where ? "WHERE #{where}" : "WHERE 1=1"
 
     conflict_clause = if System::Database.mysql?
                         "ON DUPLICATE KEY UPDATE account_settings.updated_at = account_settings.updated_at"
@@ -51,10 +51,19 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
       execute <<~SQL.squish
         INSERT INTO account_settings (#{id_column}account_id, type, value, tenant_id, created_at, updated_at)
         SELECT #{id_value}s.account_id, '#{type_name}', #{value_expr}, s.tenant_id, '#{now}', '#{now}'
-        FROM settings s #{where_clause}
+        FROM settings s WHERE #{where}
         #{conflict_clause}
       SQL
     end
+  end
+
+  def true_value
+    System::Database.oracle? ? '1' : 'TRUE'
+  end
+
+  # Settings rows of providers and master; everything else is a buyer
+  def provider_condition
+    "s.account_id IN (SELECT id FROM accounts WHERE provider = #{true_value} OR master = #{true_value})"
   end
 
   # Oracle treats '' as NULL, so IS NOT NULL alone covers both.
@@ -66,8 +75,12 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
     end
   end
 
+  def resolve_class(col)
+    "AccountSetting::#{col.to_s.camelize}".constantize
+  end
+
   def resolve_sti_name(col)
-    "AccountSetting::#{col.to_s.camelize}".constantize.sti_name
+    resolve_class(col).sti_name
   end
 
   def all_columns
@@ -77,6 +90,10 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
   # Deliberately not migrated: heroku_id, heroku_name and unused settings (app_gallery_enabled, documentation_enabled,
   # documentation_public, strong_passwords_enabled, can_create_service, setup_fee_enabled, *_colour, link_label,
   # link_url, token_api, cms_token, janrain_api_key, janrain_relying_party, product, welcome_text).
+  def buyer_settings
+    %i[monthly_billing_enabled monthly_charging_enabled]
+  end
+
   def boolean_settings
     %i[
       forum_enabled anonymous_posts_enabled signups_enabled useraccountarea_enabled forum_public

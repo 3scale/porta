@@ -207,6 +207,38 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
     end
   end
 
+  test 'migrates only non-default monthly billing settings of buyers' do
+    buyer = FactoryBot.create(:buyer_account)
+    assert_empty buyer.account_settings
+    TestSettingsModel.create_legacy!(
+      account: buyer,
+      monthly_billing_enabled: true,
+      monthly_charging_enabled: nil,
+      signups_enabled: false,
+      tracker_code: 'UA-buyer'
+    )
+
+    @migration.up
+
+    records = buyer.account_settings.reload
+    assert_equal [AccountSetting::MonthlyChargingEnabled], records.map(&:class)
+    assert_equal false, records.first.value, 'NULL boolean should be migrated as false'
+  end
+
+  test 'migrates all settings of master, which is not flagged as provider' do
+    master = master_account
+    assert_not master[:provider]
+    master.account_settings.delete_all
+    TestSettingsModel.where(account_id: master.id).delete_all
+    TestSettingsModel.create_legacy!(account: master, monthly_billing_enabled: true, tracker_code: 'UA-master')
+
+    @migration.up
+
+    records = master.account_settings.reload.index_by(&:class)
+    assert_equal true, records[AccountSetting::MonthlyBillingEnabled]&.value
+    assert_equal 'UA-master', records[AccountSetting::TrackerCode]&.value
+  end
+
   test 'is idempotent and handles existing records via ON DUPLICATE KEY UPDATE' do
     TestSettingsModel.create_legacy!(
       account: @provider,
