@@ -47,33 +47,13 @@ class SettingsTest < ActiveSupport::TestCase
     assert_not switch.hideable?
   end
 
-  def test_approval_required
-    @settings.expects(:not_custom_account_plans).returns([]).at_least_once
-
-    assert_not @settings.approval_required_editable?
-    assert_not @settings.approval_required_disabled?
-
-    account_plan_1 = FactoryBot.build_stubbed(:simple_account_plan)
-    @settings.expects(:not_custom_account_plans).returns([account_plan_1]).at_least_once
-
-    assert @settings.approval_required_editable?
-    assert_not @settings.approval_required_disabled?
-
-    account_plan_2 = FactoryBot.build_stubbed(:simple_account_plan)
-    @settings.expects(:not_custom_account_plans).returns([account_plan_1, account_plan_2]).at_least_once
-    @settings.expects(:account_plans_ui_visible?).returns(true).at_least_once
-
-    assert_not @settings.approval_required_editable?
-    assert @settings.approval_required_disabled?
-  end
-
-  test "account_approval_required getter delegates to default account plan" do
+  test "account_approval_required reads the single stock plan's flag" do
     plan = @provider.account_plans.default
     plan.update!(approval_required: true)
     assert @settings.account_approval_required
 
     plan.update!(approval_required: false)
-    assert_not @settings.account_approval_required
+    assert_not @settings.reload.account_approval_required
   end
 
   test 'update follows ActiveRecord mass assignment rules' do

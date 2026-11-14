@@ -38,12 +38,8 @@ class Sites::UsageRulesController < Sites::BaseController
 
   def update_approval_required
     approval = params.require(:settings).permit(:account_approval_required)
-    return true unless approval.key?(:account_approval_required) && @settings.approval_required_editable?
+    return true unless approval.key?(:account_approval_required)
 
-    plan = current_account.account_plans.default
-    return true if plan.update(approval_required: approval[:account_approval_required])
-
-    plan.errors[:approval_required].each { @settings.errors.add(:account_approval_required, _1) }
-    false
+    @settings.account_approval_required_facade.update(approval[:account_approval_required])
   end
 end

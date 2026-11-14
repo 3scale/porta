@@ -113,6 +113,33 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert account.reload.settings.account_approval_required
   end
 
+  test 'update account_approval_required applies to the only account plan when no default is set' do
+    account = settings.account
+    plan = account.account_plans.default
+    assert_not plan.approval_required
+    account.update_column(:default_account_plan_id, nil)
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true }
+
+    assert_response :success
+    assert plan.reload.approval_required
+  end
+
+  test 'update account_approval_required is saved when the plan is invalid on another attribute' do
+    account = settings.account
+    plan = account.account_plans.default
+    plan.update_column(:name, '')
+    assert_not plan.valid?
+    assert_not plan.approval_required
+    assert settings.signups_enabled
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true, signups_enabled: false }
+
+    assert_response :success
+    assert plan.reload.approval_required
+    assert_not account.reload.settings.signups_enabled
+  end
+
   test 'update account_approval_required is not reset when omitted from subsequent request' do
     account = settings.account
     put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true }
@@ -126,7 +153,7 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
   test 'update account_approval_required is ignored with multiple account plans' do
     account = settings.account
     FactoryBot.create(:account_plan, issuer: account)
-    assert_not settings.approval_required_editable?
+    assert settings.account_approval_required_facade.locked?
 
     put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true }
 
@@ -180,7 +207,7 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
 
   test 'update account_approval_required is ignored when a non-empty array' do
     account = settings.account
-    account.account_plans.default.update!(approval_required: false)
+    assert_not account.account_plans.default.approval_required
 
     put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: ['true'] }
 

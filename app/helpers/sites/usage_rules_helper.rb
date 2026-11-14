@@ -2,7 +2,7 @@
 
 module Sites::UsageRulesHelper
   def account_approval_required_hint(account)
-    hint = if account.settings.approval_required_editable?
+    hint = if account.settings.account_approval_required_facade.editable?
              t('formtastic.hints.settings.account_approval_required')
            else
              t('formtastic.hints.settings.approval_required_referer', link: link_to('Account Plans', admin_buyers_account_plans_path))

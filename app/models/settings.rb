@@ -146,7 +146,7 @@ class Settings
   end
 
   def reset
-    @not_custom_account_plans = nil
+    @account_approval_required_facade = nil
     errors.clear
     self
   end
@@ -196,20 +196,12 @@ class Settings
     true
   end
 
-  def approval_required_editable?
-    not_custom_account_plans.size == 1
+  def account_approval_required_facade
+    @account_approval_required_facade ||= PlanAccountApprovalRequiredFacade.new(self)
   end
 
-  def approval_required_disabled?
-    not_custom_account_plans.size > 1 && account_plans_ui_visible?
-  end
-
-  # Read-only delegation to the default account plan — not a stored setting.
-  # Controllers that allow this parameter must handle it explicitly before
-  # calling settings.update; the facade has no write path for it.
-  def account_approval_required
-    default_account_plan.approval_required
-  end
+  # Not a stored setting, and not mass-assignable; controllers write it with account_approval_required_facade.update
+  def account_approval_required = account_approval_required_facade.value
 
   private
 
@@ -270,14 +262,6 @@ class Settings
     else
       record.mark_for_destruction
     end
-  end
-
-  def not_custom_account_plans
-    @not_custom_account_plans ||= provider.account_plans.not_custom
-  end
-
-  def default_account_plan
-    provider.account_plans.default || not_custom_account_plans.first!
   end
 
 end
