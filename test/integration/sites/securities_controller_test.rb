@@ -102,6 +102,15 @@ class Sites::SecuritiesControllerTest < ActionDispatch::IntegrationTest
     assert_nil @provider.account_settings.find_by(type: 'PermissionsPolicyHeaderDeveloper')
   end
 
+  test 'submitting no settings at all deletes existing header settings' do
+    AccountSetting::PermissionsPolicyHeaderDeveloper.create!(account: @provider, value: 'camera=()')
+
+    put admin_site_security_path
+
+    assert_redirected_to edit_admin_site_security_path
+    assert_not AccountSetting::PermissionsPolicyHeaderDeveloper.exists?(account_id: @provider.id)
+  end
+
   test 'omitting header field when no setting exists does not break' do
     put admin_site_security_path, params: {
       settings: { spam_protection_level: 'none' }

@@ -110,6 +110,15 @@ class Provider::Admin::SecuritiesControllerTest < ActionDispatch::IntegrationTes
     assert_nil @provider.account_settings.find_by(type: 'PermissionsPolicyHeaderAdmin')
   end
 
+  test 'submitting no settings at all deletes existing header settings' do
+    AccountSetting::PermissionsPolicyHeaderAdmin.create!(account: @provider, value: 'camera=()')
+
+    put provider_admin_security_path
+
+    assert_redirected_to edit_provider_admin_security_path
+    assert_not AccountSetting::PermissionsPolicyHeaderAdmin.exists?(account_id: @provider.id)
+  end
+
   test 'omitting header field when no setting exists does not break' do
     put provider_admin_security_path, params: {
       settings: { admin_bot_protection_level: 'none' }
