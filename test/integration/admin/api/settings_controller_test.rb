@@ -32,6 +32,26 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal expected_response, JSON.parse(response.body)
   end
 
+  test 'show returns 304 for unchanged settings and the new values after a change' do
+    get admin_api_settings_path(access_token: token, format: :json)
+    etag = response.headers['ETag']
+
+    get admin_api_settings_path(access_token: token, format: :json), headers: { 'If-None-Match' => etag }
+    assert_response :not_modified
+
+    settings.update!(public_search: true)
+    get admin_api_settings_path(access_token: token, format: :json), headers: { 'If-None-Match' => etag }
+    assert_response :success
+    assert response.parsed_body.dig('settings', 'public_search')
+    etag = response.headers['ETag']
+
+    settings.update!(public_search: nil) # back to default, deletes the stored record
+    assert_not settings.value_set?(:public_search)
+    get admin_api_settings_path(access_token: token, format: :json), headers: { 'If-None-Match' => etag }
+    assert_response :success
+    assert_not response.parsed_body.dig('settings', 'public_search')
+  end
+
   test 'update' do
     params = { access_token: token, signups_enabled: false, change_account_plan_permission: 'invalid', change_service_plan_permission: 'invalid'}
     assert_equal 'request', settings.change_account_plan_permission

@@ -137,10 +137,6 @@ class Settings
     record.toggle_value!
   end
 
-  def updated_at
-    account&.account_settings&.maximum(:updated_at)
-  end
-
   # True when the setting has an explicit value (saved or not yet saved), as opposed to the getter falling back to the default.
   def value_set?(name)
     record = setting_record_for(name)
@@ -176,6 +172,12 @@ class Settings
     return klass.type_for_attribute('value') if klass
 
     block ? yield(name.to_s) : ActiveModel::Type::Value.new
+  end
+
+  # ETag source for the API conditional GET; changes when a stored setting is created, updated or deleted
+  def cache_key_with_version
+    stored = account.account_settings.select(&:persisted?)
+    "settings/#{account.id}-#{stored.size}-#{stored.map(&:updated_at).max&.utc&.to_fs(:usec)}"
   end
 
   # --- Business logic ---

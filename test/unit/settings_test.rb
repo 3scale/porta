@@ -258,15 +258,6 @@ class SettingsTest < ActiveSupport::TestCase
     assert_not strategy.oauth2?
   end
 
-  test "updated_at returns the latest AccountSetting timestamp" do
-    settings.update!(bg_colour: '#aaa')
-    assert_not_nil settings.updated_at
-    assert_kind_of ActiveSupport::TimeWithZone, settings.updated_at
-
-    ts = @provider.account_settings.maximum(:updated_at)
-    assert_equal ts, settings.updated_at
-  end
-
   test "assign value then nil on a new setting removes the record" do
     assert_nil @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
 
