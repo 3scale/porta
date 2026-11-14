@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class Settings
-  include ActiveModel::Conversion
-  include ActiveModel::AttributeAssignment
-  extend ActiveModel::Naming
-  extend ActiveModel::Translation
+  include ActiveModel::API
+
+  validate :setting_records_valid
 
   attr_reader :account
   alias provider account
@@ -94,34 +93,23 @@ class Settings
   # --- Persistence ---
 
   def save
-    errors.clear
-    return false unless account&.persisted?
+    return false unless account&.persisted? && valid?
 
-    success = false
     AccountSetting.transaction do
       to_destroy, to_persist = account.account_settings.partition(&:marked_for_destruction?)
-
-      results = to_persist.select(&:changed?).map(&:save)
-
-      unless results.all?
-        to_persist.each { |record| record.errors.each { errors.add(record.class.setting_name.to_sym, _1.message) } }
-        raise ActiveRecord::Rollback
-      end
+      to_persist.select(&:changed?).each(&:save!)
 
       # destroy! is used internally by CollectionProxy#destroy, so failures raise
       # instead of returning false. Acceptable: a destroy failure here means
       # something is seriously broken (no callbacks exist on AccountSetting).
       account.account_settings.destroy(*to_destroy) if to_destroy.any?
-      success = true
     end
-    success
+    true
   end
 
   def save!
     return true if save
-
-    record = active_settings.detect { _1.errors.any? }
-    raise ActiveRecord::RecordInvalid, record if record
+    raise ActiveModel::ValidationError, self if errors.any?
 
     raise ActiveRecord::RecordNotSaved.new("Failed to save settings", self)
   end
@@ -149,10 +137,6 @@ class Settings
     name = name.to_sym
     record = find_or_build_setting(name)
     record.toggle_value!
-  end
-
-  def errors
-    @errors ||= ActiveModel::Errors.new(self)
   end
 
   def updated_at
@@ -232,6 +216,16 @@ class Settings
   delegate :provider_id_for_audits, to: :account, allow_nil: true
 
   private
+
+  def setting_records_valid
+    return unless account
+
+    account.account_settings.each do |record|
+      next if record.marked_for_destruction? || !record.changed? || record.valid?
+
+      record.errors.each { errors.add(record.class.setting_name.to_sym, _1.message) }
+    end
+  end
 
   def active_settings
     return [] unless account

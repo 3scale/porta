@@ -228,9 +228,9 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal 'request', settings.reload.change_service_plan_permission
   end
 
-  test "save! raises RecordInvalid with the offending record on validation failure" do
+  test "save! raises ValidationError on validation failure" do
     settings.change_account_plan_permission = 'invalid'
-    error = assert_raises(ActiveRecord::RecordInvalid) { settings.save! }
+    error = assert_raises(ActiveModel::ValidationError) { settings.save! }
     assert_match(/is not included in the list/, error.message)
   end
 
