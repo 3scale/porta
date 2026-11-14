@@ -11,7 +11,7 @@ class AccountSetting < ApplicationRecord
     self
   end
 
-  belongs_to :account, inverse_of: :account_settings
+  belongs_to :account, inverse_of: :account_settings, optional: false
 
   audited associated_with: :account
 
@@ -19,9 +19,14 @@ class AccountSetting < ApplicationRecord
 
   delegate :provider_id_for_audits, to: :account, allow_nil: true
 
-  class_attribute :default_value, instance_writer: false, default: nil
+  # Per-class default comes from the `value` attribute default declared in each subclass.
+  def self.default_value
+    return @default_value if defined?(@default_value)
 
-  # Derives setting name from class: AccountSetting::BgColour -> 'bg_colour'
+    @default_value = column_defaults['value'].freeze
+  end
+
+  # Derives setting name from class: AccountSetting::TrackerCode -> 'tracker_code'
   def self.setting_name
     sti_name.underscore
   end
@@ -35,7 +40,7 @@ class AccountSetting < ApplicationRecord
 
   # Look up a setting class by its snake_case name
   # Dynamically constantizes the setting name under AccountSetting namespace
-  # Example: :bg_colour -> AccountSetting::BgColour
+  # Example: :tracker_code -> AccountSetting::TrackerCode
   def self.class_for_setting(setting_name)
     class_name = setting_name.to_s.camelize
     "AccountSetting::#{class_name}".constantize

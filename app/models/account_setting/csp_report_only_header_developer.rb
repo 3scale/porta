@@ -3,5 +3,5 @@
 class AccountSetting::CspReportOnlyHeaderDeveloper < AccountSetting::HttpHeader
   def self.display_name = "Content-Security-Policy-Report-Only Header"
 
-  self.default_value = ""
+  attribute :value, default: ""
 end

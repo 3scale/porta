@@ -27,7 +27,7 @@
           <%= t("switches.#{switch_name}.name") %>
         </td>
         <td role="cell" data-label="Current Setting">
-          <%= @provider.settings.send(switch_name).status.capitalize %>
+          <%= @provider.settings.send(switch_name).state.capitalize %>
         </td>
         <td role="cell" data-label="<%= plan_col_name %>">
           <%= @new_switches.include?(switch_name) ? 'Allowed' : 'Denied' %>

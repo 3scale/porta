@@ -26,13 +26,15 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     include InvoiceHelpers
 
     def setup
+      # Allow finance while not on-premises, so the switch is enabled but globally denied once on-premises
+      master_account.settings.allow_finance!
+      assert master_account.settings.finance.allowed?
       ThreeScale.config.stubs(onpremises: true)
       @access_token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[finance]).plaintext_value
       @provider = master_account
       @now = Time.zone.now
       @later = @now + 2.months
       @buyer = FactoryBot.create(:simple_provider, created_at: @now)
-      master_account.settings.allow_finance!
       host! master_account.internal_admin_domain
       [@now, @later].each { |datetime| FactoryBot.create(:invoice_counter, provider_account: @provider, invoice_prefix: datetime.strftime('%Y-%m')) }
     end

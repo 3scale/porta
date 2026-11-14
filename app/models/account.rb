@@ -54,7 +54,6 @@ class Account < ApplicationRecord
   self.background_deletion = %i[
     configuration_values
     account_settings
-    settings
     forum
     users
     mail_dispatch_rules
@@ -106,6 +105,7 @@ class Account < ApplicationRecord
   before_validation(on: :create, if: :provider?) { generate_s3_prefix }
   before_validation(on: :create, if: :provider?) { generate_domains }
   before_create :generate_site_access_code
+  after_create :generate_sso_key, if: :provider?
 
   belongs_to :partner
   has_many :users, inverse_of: :account, dependent: :destroy
@@ -223,9 +223,12 @@ class Account < ApplicationRecord
   #TODO: check if the comment below still holds
   # profile is using acts_as_audited and it will not work if :dependent => :destroy
   has_one :profile, dependent: :delete
-  has_one :settings, dependent: :destroy, inverse_of: :account, autosave: true
-  lazy_initialization_for :profile, :settings, if: :should_not_be_deleted?
   has_many :account_settings, dependent: :delete_all, inverse_of: :account, autosave: true
+  lazy_initialization_for :profile, if: :should_not_be_deleted?
+
+  def settings
+    @settings_facade ||= Settings.new(self)
+  end
 
   accepts_nested_attributes_for :profile
 
@@ -424,6 +427,7 @@ class Account < ApplicationRecord
     @buyer_attribute_descriptors = nil
     @signup_form_fields = nil
     @_first_admin = nil
+    @settings_facade = nil
 
     super
   end
@@ -553,6 +557,14 @@ class Account < ApplicationRecord
 
   def generate_site_access_code
     self.site_access_code ||= SecureRandom.hex(5) if provider?
+  end
+
+  # TODO: sso_key is generated eagerly only so that SSO/impersonation tokens can be minted with a read-only
+  #   access token before the key is first read (the lazy write fails in a read-only transaction).
+  #   Impersonation should not depend on the provider's sso_key (use a purpose-scoped global secret, as CMS
+  #   edit mode does), and read-only tokens should not be able to mint impersonation/SSO tokens at all.
+  def generate_sso_key
+    settings.sso_key
   end
 
   def destroy_all_users

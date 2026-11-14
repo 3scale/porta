@@ -43,7 +43,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
       end
 
       def test_signup_with_oauth_if_account_requires_approval
-        @provider.settings.update(account_approval_required: true) # rubocop:disable Rails/ActiveRecordAliases) This method is being overriden
+        @provider.account_plans.default.update!(approval_required: true)
 
         @auth = FactoryBot.create(:authentication_provider, published: true, account: @provider)
         stub_user_data(:authenticate!, uid: '12345', email: ACCOUNT_EMAIL, email_verified: true)

@@ -23,7 +23,7 @@ class DeveloperPortal::AbstractPaymentGatewaysControllerTest < DeveloperPortal::
 
     FactoryBot.create(:postpaid_billing, charging_enabled: true, account: @provider)
 
-    @provider.settings.update_attribute(:finance_switch, 'visible')
+    @provider.settings.finance.update!(value: 'visible')
     @service = @provider.default_service
     @service.update_attribute :buyer_plan_change_permission, 'request_credit_card'
 

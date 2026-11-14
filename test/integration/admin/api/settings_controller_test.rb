@@ -17,6 +17,7 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     expected_response = {
       settings: {
         useraccountarea_enabled: true,
+        hide_service: false,
         signups_enabled: true,
         account_approval_required: false,
         public_search: false,
@@ -29,6 +30,26 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     }.as_json
     assert_response :success
     assert_equal expected_response, JSON.parse(response.body)
+  end
+
+  test 'show returns 304 for unchanged settings and the new values after a change' do
+    get admin_api_settings_path(access_token: token, format: :json)
+    etag = response.headers['ETag']
+
+    get admin_api_settings_path(access_token: token, format: :json), headers: { 'If-None-Match' => etag }
+    assert_response :not_modified
+
+    settings.update!(public_search: true)
+    get admin_api_settings_path(access_token: token, format: :json), headers: { 'If-None-Match' => etag }
+    assert_response :success
+    assert response.parsed_body.dig('settings', 'public_search')
+    etag = response.headers['ETag']
+
+    settings.update!(public_search: nil) # back to default, deletes the stored record
+    assert_not settings.value_set?(:public_search)
+    get admin_api_settings_path(access_token: token, format: :json), headers: { 'If-None-Match' => etag }
+    assert_response :success
+    assert_not response.parsed_body.dig('settings', 'public_search')
   end
 
   test 'update' do
@@ -81,18 +102,116 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_not settings.reload.enforce_sso
   end
 
-  test 'update account_approval_required' do
+  test 'update account_approval_required applies the value with a single account plan' do
+    account = settings.account
     assert_not settings.account_approval_required
 
     put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true }
 
     assert_response :success
     assert JSON.parse(response.body)['settings']['account_approval_required']
-    assert settings.reload.account_approval_required
+    assert account.reload.settings.account_approval_required
+  end
 
-    put admin_api_settings_path(format: :json), params: { access_token: token, public_search: true }
+  test 'update account_approval_required applies to the only account plan when no default is set' do
+    account = settings.account
+    plan = account.account_plans.default
+    plan.update!(approval_required: false)
+    account.update_column(:default_account_plan_id, nil)
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true }
 
     assert_response :success
-    assert settings.reload.account_approval_required
+    assert plan.reload.approval_required
+  end
+
+  test 'update account_approval_required is saved when the plan is invalid on another attribute' do
+    account = settings.account
+    plan = account.account_plans.default
+    plan.update_column(:name, '')
+    assert_not plan.valid?
+    assert_not plan.approval_required
+    assert settings.signups_enabled
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true, signups_enabled: false }
+
+    assert_response :success
+    assert plan.reload.approval_required
+    assert_not account.reload.settings.signups_enabled
+  end
+
+  test 'update account_approval_required is not reset when omitted from subsequent request' do
+    account = settings.account
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true }
+    assert account.reload.settings.account_approval_required
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, public_search: true }
+    assert_response :success
+    assert account.reload.settings.account_approval_required
+  end
+
+  test 'update account_approval_required is ignored with multiple account plans' do
+    account = settings.account
+    FactoryBot.create(:account_plan, issuer: account)
+    assert_not settings.approval_required_editable?
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true }
+
+    assert_response :success
+    assert_not account.reload.settings.account_approval_required
+  end
+
+  test 'update with blank account_approval_required is rejected and saves nothing' do
+    account = settings.account
+    account.account_plans.default.update!(approval_required: true)
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: '', public_search: true }
+
+    assert_response :unprocessable_entity
+    assert_equal({ 'account_approval_required' => ['is not included in the list'] }, response.parsed_body['errors'])
+    assert account.reload.settings.account_approval_required
+    assert_not account.settings.public_search
+  end
+
+  test 'update with null account_approval_required is rejected' do
+    account = settings.account
+    account.account_plans.default.update!(approval_required: true)
+
+    put admin_api_settings_path(format: :json, access_token: token), params: { account_approval_required: nil }, as: :json
+
+    assert_response :unprocessable_entity
+    assert account.reload.settings.account_approval_required
+  end
+
+  test 'update with blank boolean or enum setting is rejected' do
+    { signups_enabled: 'cannot be nil', change_account_plan_permission: 'is not included in the list' }.each do |name, message|
+      before = settings.reload.public_send(name)
+
+      put admin_api_settings_path(format: :json), params: { access_token: token, name => '' }
+
+      assert_response :unprocessable_entity
+      assert_equal({ name.to_s => [message] }, response.parsed_body['errors'])
+      assert_equal before, settings.reload.public_send(name)
+    end
+  end
+
+  test 'update account_approval_required is ignored when an empty array' do
+    account = settings.account
+    account.account_plans.default.update!(approval_required: true)
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: [] }
+
+    assert_response :success
+    assert account.reload.settings.account_approval_required
+  end
+
+  test 'update account_approval_required is ignored when a non-empty array' do
+    account = settings.account
+    account.account_plans.default.update!(approval_required: false)
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: ['true'] }
+
+    assert_response :success
+    assert_not account.reload.settings.account_approval_required
   end
 end

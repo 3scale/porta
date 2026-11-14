@@ -135,7 +135,7 @@ Given "{provider} has an sso integration for the admin portal" do |provider|
 end
 
 Given "{provider} has sso {enabled} for all users" do |provider, enabled|
-  provider.settings.update_column(:enforce_sso, enabled)
+  provider.settings.update_attribute(:enforce_sso, enabled)
 end
 
 And /^the sso integration is (published|hidden)$/ do |state|

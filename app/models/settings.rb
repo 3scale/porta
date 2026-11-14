@@ -1,32 +1,195 @@
-class Settings < ApplicationRecord
-  include Symbolize
-  belongs_to :account, inverse_of: :settings
+# frozen_string_literal: true
 
-  audited
+class Settings
+  include ActiveModel::API
 
-  validates :product, inclusion: { in: %w[connect enterprise].freeze }
-  validates :change_account_plan_permission, :change_service_plan_permission, inclusion: { in: %w[request none credit_card request_credit_card direct].freeze }
-  validates :bg_colour, :link_colour, :text_colour, :menu_bg_colour, :link_label, :link_url, :menu_link_colour, :token_api,
-            :content_bg_colour, :tracker_code, :favicon, :plans_tab_bg_colour, :plans_bg_colour, :content_border_colour,
-            :cc_privacy_path, :cc_terms_path, :cc_refunds_path, :change_service_plan_permission, :spam_protection_level,
-            :authentication_strategy, :janrain_api_key, :janrain_relying_party, :cas_server_url, :sso_key,
-            :admin_bot_protection_level, :sso_login_url, length: { maximum: 255 }
+  validates :account, presence: true
+  validate :account_persisted, :setting_records_valid, if: :account
 
-  symbolize :spam_protection_level, :admin_bot_protection_level
+  attr_reader :account
+  alias provider account
+
+  def persisted?
+    !!account&.persisted?
+  end
+
+  # Eager-load all AccountSetting subclasses so we can discover them
+  Rails.autoloaders.main.eager_load_dir(Rails.root.join('app/models/account_setting'))
+
+  # Build maps from discovered STI leaf classes
+  SETTING_CLASSES = AccountSetting.descendants.select { _1.descendants.empty? }.freeze
+  SWITCH_CLASSES, VALUE_CLASSES = SETTING_CLASSES.partition { _1 < AccountSetting::SwitchSetting }.map(&:freeze)
+
+  SETTING_CLASS_MAP = SETTING_CLASSES.index_by { _1.setting_name.to_sym }.freeze
+  ALL_SETTINGS = SETTING_CLASS_MAP.transform_values(&:default_value).freeze
+  private_constant :VALUE_CLASSES, :SETTING_CLASS_MAP, :ALL_SETTINGS
+
+  # --- Define accessor methods that delegate to AccountSetting records ---
+
+  # Generated in a module, as ActiveRecord does for attributes, so overrides below can call super
+  module GeneratedSettingMethods; end
+  include GeneratedSettingMethods
+
+  VALUE_CLASSES.each do |klass|
+    name = klass.setting_name
+    GeneratedSettingMethods.define_method(name) do
+      record = setting_record_for(name)
+      record && !record.marked_for_destruction? ? record.value : klass.default_value
+    end
+    GeneratedSettingMethods.define_method("#{name}=") do |value|
+      if value.nil?
+        clear_setting(name)
+      else
+        find_or_build_setting(name).value = value
+      end
+    end
+  end
+
+  SETTING_CLASSES.select { _1 < AccountSetting::BooleanSetting }.each do |klass|
+    GeneratedSettingMethods.define_method("#{klass.setting_name}?") { !!send(klass.setting_name) }
+  end
 
   include Switches
 
-  before_create :generate_sso_key
-  before_create :set_forum_enabled
+  # --- Override special attribute accessors ---
 
-  alias provider account
+  def sso_key
+    return nil unless account&.persisted? && account.provider?
 
-  def self.columns
-    super.reject {|column| /\Aheroku_(id|name)|log_requests_switch\Z/ =~ column.name }
+    key = super
+    return key if key
+
+    persisted_record = account.account_settings.create_or_find_by!(type: AccountSetting::SSOKey.sti_name) do |record|
+      record.value = ThreeScale::SSO.generate_sso_key
+    end
+    # Rails 7.2 doesn't add the found record to the loaded association when create_or_find_by! hits
+    # RecordNotUnique and falls back to find_by!; still present as of Rails 8.1.4.1.
+    association = account.account_settings.proxy_association
+    association.add_to_target(persisted_record) unless association.target.include?(persisted_record)
+    persisted_record.value
   end
 
-  def self.non_null_columns_names
-    columns.select { |column| !column.null }.map(&:name)
+  def authentication_strategy
+    ActiveSupport::StringInquirer.new(super)
+  end
+
+  def spam_protection_level
+    level = super.presence&.to_sym || :none
+    level == :auto ? :captcha : level
+  end
+
+  def admin_bot_protection_level
+    super.presence&.to_sym || :none
+  end
+
+  # --- Initialization ---
+
+  def initialize(account = nil)
+    @account = account
+  end
+
+  # --- Persistence ---
+
+  def save
+    return false unless valid?
+
+    AccountSetting.transaction do
+      to_destroy, to_persist = account.account_settings.partition(&:marked_for_destruction?)
+      to_persist.select(&:changed?).each(&:save!)
+
+      # destroy! is used internally by CollectionProxy#destroy, so failures raise
+      # instead of returning false. Acceptable: a destroy failure here means
+      # something is seriously broken (no callbacks exist on AccountSetting).
+      account.account_settings.destroy(*to_destroy) if to_destroy.any?
+    end
+    true
+  end
+
+  def save!
+    save || raise(ActiveModel::ValidationError, self)
+  end
+
+  def update(attrs)
+    assign_attributes(attrs)
+    save
+  end
+
+  def update!(attrs)
+    assign_attributes(attrs)
+    save!
+  end
+
+  def update_attribute(name, value)
+    if value.nil?
+      clear_setting(name, destroy: true)
+      true
+    else
+      send("#{name}=", value)
+      setting_record_for(name)&.save(validate: false)
+    end
+  end
+
+  def toggle!(name)
+    name = name.to_sym
+    record = find_or_build_setting(name)
+    record.toggle_value!
+  end
+
+  # True when the setting has an explicit value (saved or not yet saved), as opposed to the getter falling back to the default.
+  def value_set?(name)
+    record = setting_record_for(name)
+    !!record && !record.marked_for_destruction?
+  end
+
+  def reset
+    @not_custom_account_plans = nil
+    errors.clear
+    self
+  end
+
+  def reload
+    reset
+    account.account_settings.reload if account&.persisted?
+    self
+  end
+
+  # --- Class methods ---
+
+  def self.attribute_names
+    ALL_SETTINGS.keys.map(&:to_s)
+  end
+
+  def self.setting_class_for(name)
+    SETTING_CLASS_MAP[name.to_sym]
+  end
+
+  # Lets form builders infer input types (e.g. boolean checkboxes) like they did for the old ActiveRecord model.
+  # Same contract as ActiveRecord: unknown names yield to the block, or return a generic type.
+  def self.type_for_attribute(name, &block)
+    klass = setting_class_for(name)
+    return klass.type_for_attribute('value') if klass
+
+    block ? yield(name.to_s) : ActiveModel::Type::Value.new
+  end
+
+  # ETag source for the API conditional GET; changes when a stored setting is created, updated or deleted
+  def cache_key_with_version
+    stored = account.account_settings.select(&:persisted?)
+    "settings/#{account.id}-#{stored.size}-#{stored.map(&:updated_at).max&.utc&.to_fs(:usec)}"
+  end
+
+  # --- Business logic ---
+
+  def has_privacy_policy?
+    privacy_policy.present?
+  end
+
+  def has_refund_policy?
+    refund_policy.present?
+  end
+
+  def password_login_allowed?
+    true
   end
 
   def approval_required_editable?
@@ -37,85 +200,81 @@ class Settings < ApplicationRecord
     not_custom_account_plans.size > 1 && account_plans_ui_visible?
   end
 
-  def assign_attributes(attrs)
-    super(sanitize_attributes(attrs))
-  end
-
-  def update(attrs)
-    update_approval_required(attrs) if approval_required_editable?
-
-    super(attrs)
-  end
-
-  def set_forum_enabled
-    self.forum_public = false if account
-
-    true
-  end
-
+  # Read-only delegation to the default account plan — not a stored setting.
+  # Controllers that allow this parameter must handle it explicitly before
+  # calling settings.update; the facade has no write path for it.
   def account_approval_required
-    @account_approval_required = default_account_plan.approval_required
+    default_account_plan.approval_required
   end
 
-  def account_approval_required=(value)
-    @account_approval_required = value
+  # The provider's default account plan, or its first non-custom plan when no default is set (as on master)
+  def default_account_plan
+    provider.account_plans.default || not_custom_account_plans.first!
   end
-
-  def generate_sso_key
-    self.sso_key = ThreeScale::SSO.generate_sso_key if account && account.provider?
-  end
-
-  def authentication_strategy
-    ActiveSupport::StringInquirer.new(super)
-  end
-
-  def has_privacy_policy?
-    !privacy_policy.blank?
-  end
-
-  def has_refund_policy?
-    !refund_policy.blank?
-  end
-
-  def enterprise?
-    self.product == 'enterprise'
-  end
-
-  def password_login_allowed?
-    true
-  end
-
-  def spam_protection_level
-    # `:auto` is the old 'Suspicious only' mode which is deprecated and replaced by `:captcha`.
-    # We accept it only for backwards compatibility with clients still having 'auto' in the DB
-    level = super.to_sym
-    level == :auto ? :captcha : level
-  end
-
-  # To avoid a dangerous DB migration, we allow empty values in the column and assume empty means `:none`
-  def admin_bot_protection_level
-    super&.to_sym || :none
-  end
-
-  delegate :provider_id_for_audits, :to => :account, :allow_nil => true
 
   private
+
+  def account_persisted
+    errors.add(:account, 'must be persisted') unless account.persisted?
+  end
+
+  def setting_records_valid
+    account.account_settings.each do |record|
+      next if record.marked_for_destruction? || !record.changed? || record.valid?
+
+      record.errors.each { errors.import(_1, attribute: record.class.setting_name.to_sym) }
+    end
+  end
+
+  def active_settings
+    return [] unless account
+
+    account.account_settings.reject(&:destroyed?)
+  end
+
+  def setting_record_for(name)
+    klass = SETTING_CLASS_MAP[name.to_sym]
+    return nil unless klass
+
+    active_settings.find { _1.type == klass.sti_name }
+  end
+
+  def find_or_build_setting(name)
+    klass = SETTING_CLASS_MAP.fetch(name.to_sym)
+    raise "Cannot build setting without an account" unless account
+
+    sti_name = klass.sti_name
+    record = active_settings.find { _1.type == sti_name }
+    if record
+      if record.marked_for_destruction?
+        record.instance_variable_set(:@marked_for_destruction, false)
+        record.value = klass.default_value
+      end
+      return record
+    end
+
+    account.account_settings.build(type: sti_name)
+  end
+
+  def find_or_build_switch(name)
+    find_or_build_setting(:"#{name}_switch")
+  end
+
+  def clear_setting(name, destroy: false)
+    record = setting_record_for(name)
+    return unless record
+
+    if record.new_record?
+      account.account_settings.delete(record)
+    elsif destroy
+      account.account_settings.destroy(record)
+    else
+      record.mark_for_destruction
+    end
+  end
 
   def not_custom_account_plans
     @not_custom_account_plans ||= provider.account_plans.not_custom
   end
 
-  def default_account_plan
-    provider.account_plans.default || not_custom_account_plans.first!
-  end
-
-  def update_approval_required(attrs)
-    value = attrs.delete(:account_approval_required)
-    default_account_plan.update_attribute(:approval_required, value) unless value.to_s.empty?
-  end
-
-  # Remove attributes with empty strings and nil for non-null columns
-  def sanitize_attributes(attrs)
-    attrs.reject { |key, value| self.class.non_null_columns_names.include?(key.to_s) && value.to_s.empty? }
-  end
 end

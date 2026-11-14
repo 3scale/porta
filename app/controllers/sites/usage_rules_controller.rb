@@ -7,9 +7,14 @@ class Sites::UsageRulesController < Sites::BaseController
   end
 
   def update
-    if @settings.update(settings_params)
+    saved = AccountSetting.transaction do
+      (@settings.update(settings_params) & update_approval_required) || raise(ActiveRecord::Rollback)
+    end
+
+    if saved
       redirect_back_or_to admin_site_settings_url, success: t('.success')
     else
+      flash.now[:danger] = t('.error')
       render :edit
     end
   end
@@ -20,13 +25,27 @@ class Sites::UsageRulesController < Sites::BaseController
     @settings = current_account.settings
   end
 
+  ALLOWED_PARAMS = %i[
+    useraccountarea_enabled signups_enabled public_search
+    account_plans_ui_visible change_account_plan_permission
+    service_plans_ui_visible change_service_plan_permission
+    hide_service cas_server_url
+  ].freeze
+
   def settings_params
-    allowed_attrs = %i[
-      useraccountarea_enabled signups_enabled public_search
-      account_plans_ui_visible change_account_plan_permission
-      service_plans_ui_visible change_service_plan_permission
-      account_approval_required hide_service cas_server_url
-    ]
-    params.require(:settings).permit(*allowed_attrs)
+    params.require(:settings).permit(*ALLOWED_PARAMS)
+  end
+
+  def update_approval_required
+    approval = params.require(:settings).permit(:account_approval_required)
+    return true unless approval.key?(:account_approval_required) && @settings.approval_required_editable?
+
+    plan = @settings.default_account_plan
+    plan.approval_required = approval[:account_approval_required]
+    plan.validate
+    errors = plan.errors[:approval_required]
+    errors.each { @settings.errors.add(:account_approval_required, _1) }
+    # Like master's update_attribute, invalid unrelated plan attributes don't block this change
+    errors.empty? && plan.save!(validate: false)
   end
 end

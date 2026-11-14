@@ -3,7 +3,6 @@
 module Logic
   module ProviderUpgrade
     ENTERPRISE_PLAN = 'enterprise'
-    ENTERPRISE_PRODUCT = 'enterprise'
 
     module Provider
       # @return [Hash<Symbol,Array<Symbol>>]
@@ -11,7 +10,7 @@ module Logic
         available_plans? ? PlanRulesCollection.all_plan_rules_with_switches : {}
       end
 
-      # @return [::Array<::Settings::Switch>]
+      # @return [::Array<::AccountSetting::SwitchSetting>]
       def available_switches
         settings.switches.values
       end
@@ -103,12 +102,6 @@ module Logic
 
       def change_plan!(new_plan)
         bought_cinstance.change_plan!(new_plan)
-        enterprise_plan_product(new_plan)
-      end
-
-      def enterprise_plan_product(new_plan)
-        return unless new_plan.system_name.include? ENTERPRISE_PLAN
-        settings.update_attribute :product, ENTERPRISE_PRODUCT
       end
 
       def make_switches_on(switches_on)
@@ -120,7 +113,7 @@ module Logic
 
       def show_switch!(switch)
         return if switch == :require_cc_on_signup && provider_can_use?(switch)
-        return unless Switches::THREESCALE_VISIBLE_SWITCHES.include?(switch)
+        return unless Switches::PROVIDER_VISIBLE_SWITCHES.include?(switch)
         settings.public_method("show_#{switch}!").call
       end
 
@@ -132,7 +125,7 @@ module Logic
         switches_off = Switches::SWITCHES - switches_on
         switches_off.each do |switch|
           next if settings.send(switch).denied?
-          settings.send("hide_#{switch}!") if Switches::THREESCALE_VISIBLE_SWITCHES.include?(switch)
+          settings.send("hide_#{switch}!") if Switches::PROVIDER_VISIBLE_SWITCHES.include?(switch) && !settings.send(switch).hidden?
           settings.send("deny_#{switch}!")
         end
       end

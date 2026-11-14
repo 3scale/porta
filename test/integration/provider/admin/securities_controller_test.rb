@@ -10,8 +10,8 @@ class Provider::Admin::SecuritiesControllerTest < ActionDispatch::IntegrationTes
     Rails.cache.clear
   end
 
-  test 'edit with nil admin_bot_protection_level' do
-    @provider.settings.update_column(:admin_bot_protection_level, nil)
+  test 'edit with default admin_bot_protection_level' do
+    @provider.account_settings.where(type: 'AdminBotProtectionLevel').destroy_all
     get edit_provider_admin_security_path
     assert_response :success
     assert_xpath '//input[@type="radio"][@name="settings[admin_bot_protection_level]"][@value="none"][@checked]'
@@ -63,6 +63,15 @@ class Provider::Admin::SecuritiesControllerTest < ActionDispatch::IntegrationTes
     assert_equal 'There were problems saving the settings', flash[:danger]
   end
 
+  test 'update with invalid header value shows the error next to the field' do
+    put provider_admin_security_path, params: { settings: { csp_header_admin: "bad\u0001value" } }
+
+    assert_response :success
+    assert_equal 'There were problems saving the settings', flash[:danger]
+    field_group = css_select('input#csp_header_admin').first.ancestors('.pf-c-form__group').first
+    assert_includes field_group.css('.pf-m-error').text, 'RFC 7230 allows only printable ASCII header values'
+  end
+
   test 'displays Permissions-Policy header field' do
     get edit_provider_admin_security_path
     assert_response :success
@@ -101,6 +110,15 @@ class Provider::Admin::SecuritiesControllerTest < ActionDispatch::IntegrationTes
     assert_nil @provider.account_settings.find_by(type: 'PermissionsPolicyHeaderAdmin')
   end
 
+  test 'submitting no settings at all deletes existing header settings' do
+    AccountSetting::PermissionsPolicyHeaderAdmin.create!(account: @provider, value: 'camera=()')
+
+    put provider_admin_security_path
+
+    assert_redirected_to edit_provider_admin_security_path
+    assert_not AccountSetting::PermissionsPolicyHeaderAdmin.exists?(account_id: @provider.id)
+  end
+
   test 'omitting header field when no setting exists does not break' do
     put provider_admin_security_path, params: {
       settings: { admin_bot_protection_level: 'none' }
@@ -114,6 +132,35 @@ class Provider::Admin::SecuritiesControllerTest < ActionDispatch::IntegrationTes
     get edit_provider_admin_security_path
     assert_response :success
     assert_match 'Content-Security-Policy Header', response.body
+  end
+
+  test 'edit prefills a stored header value and enables its input' do
+    AccountSetting::CspHeaderAdmin.create!(account: @provider, value: "default-src 'self'")
+
+    get edit_provider_admin_security_path
+
+    assert_response :success
+    assert_select 'input#override_csp_header_admin[checked]'
+    assert_select 'input#csp_header_admin[value=?]:not([disabled])', "default-src 'self'"
+  end
+
+  test 'edit shows the default in a disabled input when no header value is stored' do
+    get edit_provider_admin_security_path
+
+    assert_response :success
+    assert_select 'input#override_permissions_policy_header_admin:not([checked])'
+    assert_select 'input#permissions_policy_header_admin[disabled][value=?]',
+                  AccountSetting::PermissionsPolicyHeaderAdmin.default_value
+  end
+
+  test 'edit selects the stored admin_bot_protection_level' do
+    AccountSetting::AdminBotProtectionLevel.create!(account: @provider, value: 'captcha')
+
+    get edit_provider_admin_security_path
+
+    assert_response :success
+    assert_select 'input[type=radio][name=?][value=captcha][checked]', 'settings[admin_bot_protection_level]'
+    assert_select 'input[type=radio][name=?][value=none]:not([checked])', 'settings[admin_bot_protection_level]'
   end
 
   test 'updates Content-Security-Policy header' do
