@@ -3,7 +3,6 @@
 module Logic
   module ProviderUpgrade
     ENTERPRISE_PLAN = 'enterprise'
-    ENTERPRISE_PRODUCT = 'enterprise'
 
     module Provider
       # @return [Hash<Symbol,Array<Symbol>>]
@@ -103,12 +102,6 @@ module Logic
 
       def change_plan!(new_plan)
         bought_cinstance.change_plan!(new_plan)
-        enterprise_plan_product(new_plan)
-      end
-
-      def enterprise_plan_product(new_plan)
-        return unless new_plan.system_name.include? ENTERPRISE_PLAN
-        settings.update_attribute :product, ENTERPRISE_PRODUCT
       end
 
       def make_switches_on(switches_on)
