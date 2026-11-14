@@ -336,15 +336,16 @@ class SettingsTest < ActiveSupport::TestCase
     settings.update_attribute(:bg_colour, '#654321')
     assert_equal '#654321', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
 
-    settings.update_attribute(:bg_colour, nil)
+    assert_equal true, settings.update_attribute(:bg_colour, nil)
     assert_nil settings.bg_colour
+    assert_not(@provider.account_settings.target.any? { _1.is_a?(AccountSetting::BgColour) })
     assert_nil settings.reload.bg_colour
     assert_nil @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name)
   end
 
   test "update_attribute with nil on non-existent setting is a safe no-op" do
     assert_nil @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name)
-    settings.update_attribute(:bg_colour, nil)
+    assert_equal true, settings.update_attribute(:bg_colour, nil)
     assert_nil settings.bg_colour
     assert_nil @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name)
   end

@@ -125,6 +125,7 @@ class Settings
   def update_attribute(name, value)
     if value.nil?
       clear_setting(name, destroy: true)
+      true
     else
       send("#{name}=", value)
       setting_record_for(name)&.save(validate: false)
@@ -264,7 +265,7 @@ class Settings
     if record.new_record?
       account.account_settings.delete(record)
     elsif destroy
-      record.destroy
+      account.account_settings.destroy(record)
     else
       record.mark_for_destruction
     end
