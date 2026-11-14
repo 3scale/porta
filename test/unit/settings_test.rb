@@ -239,10 +239,9 @@ class SettingsTest < ActiveSupport::TestCase
     settings.change_service_plan_permission = 'invalid'
     settings.save
 
-    errors = settings.errors
-    assert errors[:change_account_plan_permission].any?, "should have error on change_account_plan_permission"
-    assert errors[:change_service_plan_permission].any?, "should have error on change_service_plan_permission"
-    assert_match(/is not included in the list/, errors[:change_account_plan_permission].first)
+    assert settings.errors.of_kind?(:change_account_plan_permission, :inclusion)
+    assert settings.errors.of_kind?(:change_service_plan_permission, :inclusion)
+    assert_equal ['is not included in the list'], settings.errors[:change_account_plan_permission]
   end
 
   test "authentication_strategy returns a StringInquirer" do

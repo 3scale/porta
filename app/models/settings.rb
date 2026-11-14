@@ -182,10 +182,6 @@ class Settings
 
   # --- Business logic ---
 
-  def enterprise?
-    product == 'enterprise'
-  end
-
   def has_privacy_policy?
     privacy_policy.present?
   end
@@ -213,8 +209,6 @@ class Settings
     default_account_plan.approval_required
   end
 
-  delegate :provider_id_for_audits, to: :account, allow_nil: true
-
   private
 
   def account_persisted
@@ -225,7 +219,7 @@ class Settings
     account.account_settings.each do |record|
       next if record.marked_for_destruction? || !record.changed? || record.valid?
 
-      record.errors.each { errors.add(record.class.setting_name.to_sym, _1.message) }
+      record.errors.each { errors.import(_1, attribute: record.class.setting_name.to_sym) }
     end
   end
 
