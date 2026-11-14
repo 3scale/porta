@@ -67,7 +67,7 @@ class Sites::UsageRulesControllerTest < ActionController::TestCase
   end
 
   test 'update with valid params' do
-    @settings.update(strong_passwords_enabled: true, public_search: true)
+    @settings.update(public_search: true)
     %i[useraccountarea_enabled signups_enabled public_search
        account_plans_ui_visible service_plans_ui_visible].each do |setting|
       assert @settings.send(setting), "#{setting} setting is not true as expected"

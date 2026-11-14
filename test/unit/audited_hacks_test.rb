@@ -26,17 +26,15 @@ class AuditedHacksTest < ActiveSupport::TestCase
     test 'sensitive account settings filter value in audit on create' do
       AccountSetting::SSOKey.where(account_id: @provider.id).delete_all # generated on provider creation
 
-      [AccountSetting::SSOKey, AccountSetting::JanrainApiKey, AccountSetting::CMSToken].each do |klass|
-        record = nil
-        klass.with_synchronous_auditing do
-          record = klass.create!(account: @provider, value: 'super_secret', tenant_id: @provider.tenant_id)
-        end
-
-        audit = record.audits.last!
-        assert_equal 'create', audit.action
-        assert_equal '[FILTERED]', audit.audited_changes['value'], "#{klass} should filter value on create"
-        assert_not_includes audit.audited_changes.values.flatten, 'super_secret'
+      record = nil
+      AccountSetting::SSOKey.with_synchronous_auditing do
+        record = AccountSetting::SSOKey.create!(account: @provider, value: 'super_secret', tenant_id: @provider.tenant_id)
       end
+
+      audit = record.audits.last!
+      assert_equal 'create', audit.action
+      assert_equal '[FILTERED]', audit.audited_changes['value'], "SSOKey should filter value on create"
+      assert_not_includes audit.audited_changes.values.flatten, 'super_secret'
     end
 
     test 'sensitive account settings filter value in audit on update' do
@@ -55,12 +53,12 @@ class AuditedHacksTest < ActiveSupport::TestCase
 
     test 'non-sensitive account settings keep value in audit' do
       record = nil
-      AccountSetting::BgColour.with_synchronous_auditing do
-        record = AccountSetting::BgColour.create!(account: @provider, value: '#abcdef', tenant_id: @provider.tenant_id)
+      AccountSetting::TrackerCode.with_synchronous_auditing do
+        record = AccountSetting::TrackerCode.create!(account: @provider, value: 'UA-abcdef', tenant_id: @provider.tenant_id)
       end
 
       audit = record.audits.last!
-      assert_equal '#abcdef', audit.audited_changes['value']
+      assert_equal 'UA-abcdef', audit.audited_changes['value']
     end
   end
 

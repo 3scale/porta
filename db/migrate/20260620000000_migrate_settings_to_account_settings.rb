@@ -71,31 +71,29 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
     boolean_settings + string_settings + text_settings + switch_settings
   end
 
+  # Deliberately not migrated: heroku_id, heroku_name and unused settings (app_gallery_enabled, documentation_enabled,
+  # documentation_public, strong_passwords_enabled, can_create_service, setup_fee_enabled, *_colour, link_label,
+  # link_url, token_api, cms_token, janrain_api_key, janrain_relying_party, product, welcome_text).
   def boolean_settings
     %i[
-      forum_enabled app_gallery_enabled anonymous_posts_enabled signups_enabled
-      documentation_enabled useraccountarea_enabled documentation_public forum_public
-      hide_service monthly_charging_enabled monthly_billing_enabled strong_passwords_enabled
-      can_create_service public_search account_plans_ui_visible service_plans_ui_visible
-      setup_fee_enabled cms_escape_draft_html cms_escape_published_html enforce_sso
+      forum_enabled anonymous_posts_enabled signups_enabled useraccountarea_enabled forum_public
+      hide_service monthly_charging_enabled monthly_billing_enabled public_search
+      account_plans_ui_visible service_plans_ui_visible
+      cms_escape_draft_html cms_escape_published_html enforce_sso
     ]
   end
 
   def string_settings
     %i[
-      bg_colour link_colour text_colour menu_bg_colour menu_link_colour
-      content_bg_colour plans_tab_bg_colour plans_bg_colour content_border_colour
-      link_label link_url favicon token_api cms_token
-      cc_terms_path cc_privacy_path cc_refunds_path
+      favicon cc_terms_path cc_privacy_path cc_refunds_path
       change_account_plan_permission change_service_plan_permission
-      authentication_strategy janrain_api_key janrain_relying_party
-      cas_server_url sso_key sso_login_url
-      spam_protection_level admin_bot_protection_level product tracker_code
+      authentication_strategy cas_server_url sso_key sso_login_url
+      spam_protection_level admin_bot_protection_level tracker_code
     ]
   end
 
   def text_settings
-    %i[welcome_text refund_policy privacy_policy]
+    %i[refund_policy privacy_policy]
   end
 
   def switch_settings

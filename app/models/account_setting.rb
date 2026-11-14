@@ -26,7 +26,7 @@ class AccountSetting < ApplicationRecord
     @default_value = column_defaults['value'].freeze
   end
 
-  # Derives setting name from class: AccountSetting::BgColour -> 'bg_colour'
+  # Derives setting name from class: AccountSetting::TrackerCode -> 'tracker_code'
   def self.setting_name
     sti_name.underscore
   end
@@ -40,7 +40,7 @@ class AccountSetting < ApplicationRecord
 
   # Look up a setting class by its snake_case name
   # Dynamically constantizes the setting name under AccountSetting namespace
-  # Example: :bg_colour -> AccountSetting::BgColour
+  # Example: :tracker_code -> AccountSetting::TrackerCode
   def self.class_for_setting(setting_name)
     class_name = setting_name.to_s.camelize
     "AccountSetting::#{class_name}".constantize

@@ -206,17 +206,17 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal false, settings.reload.public_search, "nil clears the setting back to default (false)"
     assert_nil @provider.account_settings.find_by(type: AccountSetting::PublicSearch.sti_name)
 
-    # Boolean setting with true default (documentation_public defaults to true)
-    @provider.account_settings.where(type: AccountSetting::DocumentationPublic.sti_name).delete_all
+    # Boolean setting with true default (useraccountarea_enabled defaults to true)
+    @provider.account_settings.where(type: AccountSetting::UseraccountareaEnabled.sti_name).delete_all
     settings.reload
-    assert_equal true, settings.documentation_public
-    settings.update(documentation_public: false)
-    assert_equal false, settings.reload.documentation_public
-    assert_equal false, @provider.account_settings.find_by(type: AccountSetting::DocumentationPublic.sti_name).value
+    assert_equal true, settings.useraccountarea_enabled
+    settings.update(useraccountarea_enabled: false)
+    assert_equal false, settings.reload.useraccountarea_enabled
+    assert_equal false, @provider.account_settings.find_by(type: AccountSetting::UseraccountareaEnabled.sti_name).value
 
-    settings.update(documentation_public: nil)
-    assert_equal true, settings.reload.documentation_public, "nil clears the setting back to default (true)"
-    assert_nil @provider.account_settings.find_by(type: AccountSetting::DocumentationPublic.sti_name)
+    settings.update(useraccountarea_enabled: nil)
+    assert_equal true, settings.reload.useraccountarea_enabled, "nil clears the setting back to default (true)"
+    assert_nil @provider.account_settings.find_by(type: AccountSetting::UseraccountareaEnabled.sti_name)
   end
 
   test "validate change plan permission values" do
@@ -258,56 +258,56 @@ class SettingsTest < ActiveSupport::TestCase
   end
 
   test "assign value then nil on a new setting removes the record" do
-    assert_nil @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
+    assert_nil @provider.account_settings.detect { |r| r.type == AccountSetting::TrackerCode.sti_name }
 
-    settings.bg_colour = '#fff'
-    assert @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }, "record should exist in memory"
+    settings.tracker_code = 'UA-fff'
+    assert @provider.account_settings.detect { |r| r.type == AccountSetting::TrackerCode.sti_name }, "record should exist in memory"
 
-    settings.bg_colour = nil
-    assert_nil settings.bg_colour, "getter should return default after nil assignment"
+    settings.tracker_code = nil
+    assert_nil settings.tracker_code, "getter should return default after nil assignment"
 
     settings.save!
-    assert_nil @provider.account_settings.reload.detect { |r| r.type == AccountSetting::BgColour.sti_name },
+    assert_nil @provider.account_settings.reload.detect { |r| r.type == AccountSetting::TrackerCode.sti_name },
       "no record should be persisted"
   end
 
   test "assign value, nil, then new value on a non-existing setting persists only the final value" do
-    assert_nil @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
+    assert_nil @provider.account_settings.detect { |r| r.type == AccountSetting::TrackerCode.sti_name }
 
-    settings.bg_colour = '#111111'
-    assert_equal '#111111', settings.bg_colour
-    assert @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
+    settings.tracker_code = 'UA-111111'
+    assert_equal 'UA-111111', settings.tracker_code
+    assert @provider.account_settings.detect { |r| r.type == AccountSetting::TrackerCode.sti_name }
 
-    settings.bg_colour = nil
-    assert_nil settings.bg_colour
-    assert_nil @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
+    settings.tracker_code = nil
+    assert_nil settings.tracker_code
+    assert_nil @provider.account_settings.detect { |r| r.type == AccountSetting::TrackerCode.sti_name }
 
-    settings.bg_colour = '#222222'
-    assert_equal '#222222', settings.bg_colour
+    settings.tracker_code = 'UA-222222'
+    assert_equal 'UA-222222', settings.tracker_code
 
     settings.save!
-    assert_equal '#222222', settings.reload.bg_colour
-    assert_equal '#222222', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
-    assert_equal 1, @provider.account_settings.select { |r| r.type == AccountSetting::BgColour.sti_name }.size
+    assert_equal 'UA-222222', settings.reload.tracker_code
+    assert_equal 'UA-222222', @provider.account_settings.find_by(type: AccountSetting::TrackerCode.sti_name).value
+    assert_equal 1, @provider.account_settings.select { |r| r.type == AccountSetting::TrackerCode.sti_name }.size
   end
 
   test "assign value, nil, then new value on a pre-existing setting updates the record without duplicates" do
-    settings.update!(bg_colour: '#111111')
-    assert_equal '#111111', settings.reload.bg_colour
+    settings.update!(tracker_code: 'UA-111111')
+    assert_equal 'UA-111111', settings.reload.tracker_code
 
-    settings.bg_colour = '#222222'
-    assert_equal '#222222', settings.bg_colour
+    settings.tracker_code = 'UA-222222'
+    assert_equal 'UA-222222', settings.tracker_code
 
-    settings.bg_colour = nil
-    assert_nil settings.bg_colour, "getter should return default after nil assignment"
+    settings.tracker_code = nil
+    assert_nil settings.tracker_code, "getter should return default after nil assignment"
 
-    settings.bg_colour = '#333333'
-    assert_equal '#333333', settings.bg_colour, "getter should return the new value"
+    settings.tracker_code = 'UA-333333'
+    assert_equal 'UA-333333', settings.tracker_code, "getter should return the new value"
 
     settings.save!
-    assert_equal '#333333', settings.reload.bg_colour, "new value should be persisted"
-    assert_equal '#333333', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
-    assert_equal 1, @provider.account_settings.select { |r| r.type == AccountSetting::BgColour.sti_name }.size,
+    assert_equal 'UA-333333', settings.reload.tracker_code, "new value should be persisted"
+    assert_equal 'UA-333333', @provider.account_settings.find_by(type: AccountSetting::TrackerCode.sti_name).value
+    assert_equal 1, @provider.account_settings.select { |r| r.type == AccountSetting::TrackerCode.sti_name }.size,
       "should have exactly one record, not a duplicate"
   end
 
@@ -323,62 +323,62 @@ class SettingsTest < ActiveSupport::TestCase
   end
 
   test "update_attribute persists setting immediately" do
-    settings.update_attribute(:bg_colour, '#654321')
-    assert_equal '#654321', settings.reload.bg_colour
-    assert_equal '#654321', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
+    settings.update_attribute(:tracker_code, 'UA-654321')
+    assert_equal 'UA-654321', settings.reload.tracker_code
+    assert_equal 'UA-654321', @provider.account_settings.find_by(type: AccountSetting::TrackerCode.sti_name).value
 
-    settings.update_attribute(:bg_colour, '#123456')
-    assert_equal '#123456', settings.reload.bg_colour
-    assert_equal '#123456', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
+    settings.update_attribute(:tracker_code, 'UA-123456')
+    assert_equal 'UA-123456', settings.reload.tracker_code
+    assert_equal 'UA-123456', @provider.account_settings.find_by(type: AccountSetting::TrackerCode.sti_name).value
   end
 
   test "update_attribute with nil immediately destroys the persisted record" do
-    settings.update_attribute(:bg_colour, '#654321')
-    assert_equal '#654321', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
+    settings.update_attribute(:tracker_code, 'UA-654321')
+    assert_equal 'UA-654321', @provider.account_settings.find_by(type: AccountSetting::TrackerCode.sti_name).value
 
-    assert_equal true, settings.update_attribute(:bg_colour, nil)
-    assert_nil settings.bg_colour
-    assert_not(@provider.account_settings.target.any? { _1.is_a?(AccountSetting::BgColour) })
-    assert_nil settings.reload.bg_colour
-    assert_nil @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name)
+    assert_equal true, settings.update_attribute(:tracker_code, nil)
+    assert_nil settings.tracker_code
+    assert_not(@provider.account_settings.target.any? { _1.is_a?(AccountSetting::TrackerCode) })
+    assert_nil settings.reload.tracker_code
+    assert_nil @provider.account_settings.find_by(type: AccountSetting::TrackerCode.sti_name)
   end
 
   test "update_attribute with nil on non-existent setting is a safe no-op" do
-    assert_nil @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name)
-    assert_equal true, settings.update_attribute(:bg_colour, nil)
-    assert_nil settings.bg_colour
-    assert_nil @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name)
+    assert_nil @provider.account_settings.find_by(type: AccountSetting::TrackerCode.sti_name)
+    assert_equal true, settings.update_attribute(:tracker_code, nil)
+    assert_nil settings.tracker_code
+    assert_nil @provider.account_settings.find_by(type: AccountSetting::TrackerCode.sti_name)
   end
 
   test "destroying an AccountSetting directly updates facade to default, and reassigning works cleanly" do
-    settings.update_attribute(:bg_colour, '#123456')
-    assert_equal '#123456', settings.bg_colour
+    settings.update_attribute(:tracker_code, 'UA-123456')
+    assert_equal 'UA-123456', settings.tracker_code
 
     # Directly destroy the AccountSetting record outside the facade
-    record = @provider.account_settings.detect { |r| r.type == AccountSetting::BgColour.sti_name }
+    record = @provider.account_settings.detect { |r| r.type == AccountSetting::TrackerCode.sti_name }
     record.destroy
 
     # Facade should immediately return default without reload
-    assert_nil settings.bg_colour
+    assert_nil settings.tracker_code
 
     # Reassigning should build a fresh record, persist, and update getter
-    settings.bg_colour = '#abcdef'
-    assert_equal '#abcdef', settings.bg_colour
+    settings.tracker_code = 'UA-abcdef'
+    assert_equal 'UA-abcdef', settings.tracker_code
 
     settings.save!
-    assert_equal '#abcdef', settings.reload.bg_colour
-    assert_equal '#abcdef', @provider.account_settings.find_by(type: AccountSetting::BgColour.sti_name).value
+    assert_equal 'UA-abcdef', settings.reload.tracker_code
+    assert_equal 'UA-abcdef', @provider.account_settings.find_by(type: AccountSetting::TrackerCode.sti_name).value
   end
 
   test 'exposes attribute types and error messages to form builders' do
     assert_equal :boolean, Settings.type_for_attribute(:forum_enabled).type
-    assert_equal :string, Settings.type_for_attribute(:bg_colour).type
+    assert_equal :string, Settings.type_for_attribute(:tracker_code).type
     assert_nil Settings.type_for_attribute(:finance).type
     assert_equal 'finance', Settings.type_for_attribute(:finance) { |name| name }
 
-    settings.product = 'invalid'
+    settings.spam_protection_level = 'invalid'
     assert_not settings.save
-    assert_includes settings.errors.full_messages.join, 'Product'
+    assert_includes settings.errors.full_messages.join, 'Spam protection level'
   end
 
   test 'toggle! flips a true-default boolean when no record is stored' do
@@ -399,7 +399,7 @@ class SettingsTest < ActiveSupport::TestCase
     end
 
     test 'setting a value without an account raises' do
-      assert_raises(RuntimeError, /without an account/) { Settings.new.bg_colour = '#fff' }
+      assert_raises(RuntimeError, /without an account/) { Settings.new.tracker_code = 'UA-fff' }
     end
 
     test 'setting an unknown name raises KeyError' do
@@ -422,7 +422,7 @@ class SettingsTest < ActiveSupport::TestCase
       assert settings.persisted?
 
       # Remains persisted even when settings have in-memory modifications
-      settings.bg_colour = '#fff'
+      settings.tracker_code = 'UA-fff'
       assert settings.persisted?
     end
   end
