@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 # Temporary script to compare legacy settings (from the `settings` table) against
-# the new AccountSetting records for a given provider. Safe to delete once we are
-# confident the migration is solid.
+# the new AccountSetting records for a given provider. Can be removed after 2.17 is released.
 #
 # Usage: rails runner script/compare_old_settings.rb <provider_id>
 
