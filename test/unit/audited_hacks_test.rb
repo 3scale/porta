@@ -35,6 +35,7 @@ class AuditedHacksTest < ActiveSupport::TestCase
       assert_equal 'create', audit.action
       assert_equal '[FILTERED]', audit.audited_changes['value'], "SSOKey should filter value on create"
       assert_not_includes audit.audited_changes.values.flatten, 'super_secret'
+      assert_equal @provider.id, audit.audited_changes['account_id']
     end
 
     test 'sensitive account settings filter value in audit on update' do
