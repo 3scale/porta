@@ -400,9 +400,11 @@ class SettingsTest < ActiveSupport::TestCase
 
   class PersistedTest < ActiveSupport::TestCase
     test 'false when account is nil' do
-      assert_not Settings.new.persisted?
-      assert_not Settings.new.save
-      assert_raises(ActiveRecord::RecordNotSaved) { Settings.new.save! }
+      settings = Settings.new
+      assert_not settings.persisted?
+      assert_not settings.save
+      assert_equal ["can't be blank"], settings.errors[:account]
+      assert_raises(ActiveModel::ValidationError) { settings.save! }
     end
 
     test 'setting a value without an account raises' do
@@ -419,7 +421,8 @@ class SettingsTest < ActiveSupport::TestCase
       provider = FactoryBot.build(:simple_provider)
       assert_not provider.settings.persisted?
       assert_not provider.settings.save
-      assert_raises(ActiveRecord::RecordNotSaved) { provider.settings.save! }
+      assert_equal ['must be persisted'], provider.settings.errors[:account]
+      assert_raises(ActiveModel::ValidationError) { provider.settings.save! }
     end
 
     test 'true when account is persisted' do

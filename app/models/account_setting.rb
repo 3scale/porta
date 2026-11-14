@@ -11,7 +11,7 @@ class AccountSetting < ApplicationRecord
     self
   end
 
-  belongs_to :account, inverse_of: :account_settings
+  belongs_to :account, inverse_of: :account_settings, optional: false
 
   audited associated_with: :account
 

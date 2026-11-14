@@ -3,7 +3,8 @@
 class Settings
   include ActiveModel::API
 
-  validate :setting_records_valid
+  validates :account, presence: true
+  validate :account_persisted, :setting_records_valid, if: :account
 
   attr_reader :account
   alias provider account
@@ -93,7 +94,7 @@ class Settings
   # --- Persistence ---
 
   def save
-    return false unless account&.persisted? && valid?
+    return false unless valid?
 
     AccountSetting.transaction do
       to_destroy, to_persist = account.account_settings.partition(&:marked_for_destruction?)
@@ -108,10 +109,7 @@ class Settings
   end
 
   def save!
-    return true if save
-    raise ActiveModel::ValidationError, self if errors.any?
-
-    raise ActiveRecord::RecordNotSaved.new("Failed to save settings", self)
+    save || raise(ActiveModel::ValidationError, self)
   end
 
   def update(attrs)
@@ -217,9 +215,11 @@ class Settings
 
   private
 
-  def setting_records_valid
-    return unless account
+  def account_persisted
+    errors.add(:account, 'must be persisted') unless account.persisted?
+  end
 
+  def setting_records_valid
     account.account_settings.each do |record|
       next if record.marked_for_destruction? || !record.changed? || record.valid?
 
