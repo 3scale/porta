@@ -211,6 +211,11 @@ class Settings
     default_account_plan.approval_required
   end
 
+  # The provider's default account plan, or its first non-custom plan when no default is set (as on master)
+  def default_account_plan
+    provider.account_plans.default || not_custom_account_plans.first!
+  end
+
   private
 
   def account_persisted
@@ -274,10 +279,6 @@ class Settings
 
   def not_custom_account_plans
     @not_custom_account_plans ||= provider.account_plans.not_custom
-  end
-
-  def default_account_plan
-    provider.account_plans.default || not_custom_account_plans.first!
   end
 
 end

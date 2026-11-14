@@ -50,7 +50,7 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
     approval = params.require(:settings).permit(:account_approval_required)
     return true unless approval.key?(:account_approval_required) && settings.approval_required_editable?
 
-    plan = current_account.account_plans.default
+    plan = settings.default_account_plan
     return true if plan.update(approval_required: approval[:account_approval_required])
 
     plan.errors[:approval_required].each { settings.errors.add(:account_approval_required, _1) }

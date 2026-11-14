@@ -113,6 +113,18 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert account.reload.settings.account_approval_required
   end
 
+  test 'update account_approval_required applies to the only account plan when no default is set' do
+    account = settings.account
+    plan = account.account_plans.default
+    plan.update!(approval_required: false)
+    account.update_column(:default_account_plan_id, nil) # rubocop:disable Rails/SkipsModelValidations
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true }
+
+    assert_response :success
+    assert plan.reload.approval_required
+  end
+
   test 'update account_approval_required is not reset when omitted from subsequent request' do
     account = settings.account
     put admin_api_settings_path(format: :json), params: { access_token: token, account_approval_required: true }

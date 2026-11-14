@@ -21,6 +21,17 @@ class Sites::UsageRulesControllerIntegrationTest < ActionDispatch::IntegrationTe
     assert plan.reload.approval_required
   end
 
+  test 'update account_approval_required applies to the only account plan when no default is set' do
+    plan = provider.account_plans.default
+    plan.update!(approval_required: false)
+    provider.update_column(:default_account_plan_id, nil) # rubocop:disable Rails/SkipsModelValidations
+
+    put admin_site_usage_rules_path, params: { settings: { account_approval_required: '1' } }
+
+    assert_redirected_to admin_site_settings_url
+    assert plan.reload.approval_required
+  end
+
   test 'update account_approval_required is ignored with multiple account plans' do
     FactoryBot.create(:account_plan, issuer: provider)
     assert_not settings.approval_required_editable?
