@@ -149,7 +149,7 @@ class Settings
 
   def reset
     @not_custom_account_plans = nil
-    @errors = nil
+    errors.clear
     self
   end
 
