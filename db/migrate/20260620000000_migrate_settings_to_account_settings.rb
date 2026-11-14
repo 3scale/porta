@@ -44,10 +44,13 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
                         "ON CONFLICT (account_id, type) DO NOTHING"
                       end
 
+    # Oracle has no id column default, ActiveRecord takes ids from the table's sequence
+    id_column, id_value = System::Database.oracle? ? ['id, ', "#{AccountSetting.sequence_name}.NEXTVAL, "] : []
+
     safety_assured do
       execute <<~SQL.squish
-        INSERT INTO account_settings (account_id, type, value, tenant_id, created_at, updated_at)
-        SELECT s.account_id, '#{type_name}', #{value_expr}, s.tenant_id, '#{now}', '#{now}'
+        INSERT INTO account_settings (#{id_column}account_id, type, value, tenant_id, created_at, updated_at)
+        SELECT #{id_value}s.account_id, '#{type_name}', #{value_expr}, s.tenant_id, '#{now}', '#{now}'
         FROM settings s #{where_clause}
         #{conflict_clause}
       SQL
