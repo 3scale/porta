@@ -26,13 +26,17 @@ class Settings
 
   # --- Define accessor methods that delegate to AccountSetting records ---
 
+  # Generated in a module, as ActiveRecord does for attributes, so overrides below can call super
+  module GeneratedSettingMethods; end
+  include GeneratedSettingMethods
+
   VALUE_CLASSES.each do |klass|
     name = klass.setting_name
-    define_method(name) do
+    GeneratedSettingMethods.define_method(name) do
       record = setting_record_for(name)
       record && !record.marked_for_destruction? ? record.value : klass.default_value
     end
-    define_method("#{name}=") do |value|
+    GeneratedSettingMethods.define_method("#{name}=") do |value|
       if value.nil?
         clear_setting(name)
       else
@@ -42,7 +46,7 @@ class Settings
   end
 
   SETTING_CLASSES.select { _1 < AccountSetting::BooleanSetting }.each do |klass|
-    define_method("#{klass.setting_name}?") { !!send(klass.setting_name) }
+    GeneratedSettingMethods.define_method("#{klass.setting_name}?") { !!send(klass.setting_name) }
   end
 
   include Switches
@@ -52,8 +56,8 @@ class Settings
   def sso_key
     return nil unless account&.persisted? && account.provider?
 
-    record = setting_record_for(:sso_key)
-    return record.value if record
+    key = super
+    return key if key
 
     persisted_record = account.account_settings.create_or_find_by!(type: AccountSetting::SSOKey.sti_name) do |record|
       record.value = ThreeScale::SSO.generate_sso_key
@@ -66,24 +70,16 @@ class Settings
   end
 
   def authentication_strategy
-    record = setting_record_for(:authentication_strategy)
-    val = record && !record.marked_for_destruction? ? record.value : ALL_SETTINGS[:authentication_strategy]
-    val ? ActiveSupport::StringInquirer.new(val) : val
+    ActiveSupport::StringInquirer.new(super)
   end
 
   def spam_protection_level
-    record = setting_record_for(:spam_protection_level)
-    val = record && !record.marked_for_destruction? ? record.value : ALL_SETTINGS[:spam_protection_level]
-    return :none if val.blank?
-
-    level = val.to_sym
+    level = super.presence&.to_sym || :none
     level == :auto ? :captcha : level
   end
 
   def admin_bot_protection_level
-    record = setting_record_for(:admin_bot_protection_level)
-    val = record && !record.marked_for_destruction? ? record.value : ALL_SETTINGS[:admin_bot_protection_level]
-    val.present? ? val.to_sym : :none
+    super.presence&.to_sym || :none
   end
 
   # --- Initialization ---
