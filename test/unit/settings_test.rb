@@ -76,7 +76,9 @@ class SettingsTest < ActiveSupport::TestCase
     assert_not @settings.account_approval_required
   end
 
-  test 'update raises for keys without a setter, like ActiveRecord' do
+  test 'update follows ActiveRecord mass assignment rules' do
+    assert @settings.update(ActionController::Parameters.new({}))
+    assert_raises(ActiveModel::ForbiddenAttributesError) { @settings.update(ActionController::Parameters.new(signups_enabled: false)) }
     assert_raises(ActiveModel::UnknownAttributeError) { @settings.update(account_approval_required: true) }
   end
 

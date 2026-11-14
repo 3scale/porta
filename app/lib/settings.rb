@@ -2,6 +2,7 @@
 
 class Settings
   include ActiveModel::Conversion
+  include ActiveModel::AttributeAssignment
   extend ActiveModel::Naming
   extend ActiveModel::Translation
 
@@ -149,15 +150,6 @@ class Settings
     record = find_or_build_setting(name)
     record.toggle_value!
   end
-
-  def assign_attributes(attrs)
-    attrs.to_h.each do |key, value|
-      raise ActiveModel::UnknownAttributeError.new(self, key) unless respond_to?("#{key}=")
-
-      public_send("#{key}=", value)
-    end
-  end
-  alias attributes= assign_attributes
 
   def errors
     @errors ||= ActiveModel::Errors.new(self)
