@@ -24,12 +24,26 @@ class Sites::UsageRulesControllerIntegrationTest < ActionDispatch::IntegrationTe
   test 'update account_approval_required applies to the only account plan when no default is set' do
     plan = provider.account_plans.default
     plan.update!(approval_required: false)
-    provider.update_column(:default_account_plan_id, nil) # rubocop:disable Rails/SkipsModelValidations
+    provider.update_column(:default_account_plan_id, nil)
 
     put admin_site_usage_rules_path, params: { settings: { account_approval_required: '1' } }
 
     assert_redirected_to admin_site_settings_url
     assert plan.reload.approval_required
+  end
+
+  test 'update account_approval_required is saved when the plan is invalid on another attribute' do
+    plan = provider.account_plans.default
+    plan.update_column(:name, '')
+    assert_not plan.valid?
+    assert_not plan.approval_required
+    assert settings.signups_enabled
+
+    put admin_site_usage_rules_path, params: { settings: { account_approval_required: '1', signups_enabled: '0' } }
+
+    assert_redirected_to admin_site_settings_url
+    assert plan.reload.approval_required
+    assert_not provider.reload.settings.signups_enabled
   end
 
   test 'update account_approval_required is ignored with multiple account plans' do

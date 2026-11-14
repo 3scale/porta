@@ -41,9 +41,11 @@ class Sites::UsageRulesController < Sites::BaseController
     return true unless approval.key?(:account_approval_required) && @settings.approval_required_editable?
 
     plan = @settings.default_account_plan
-    return true if plan.update(approval_required: approval[:account_approval_required])
-
-    plan.errors[:approval_required].each { @settings.errors.add(:account_approval_required, _1) }
-    false
+    plan.approval_required = approval[:account_approval_required]
+    plan.validate
+    errors = plan.errors[:approval_required]
+    errors.each { @settings.errors.add(:account_approval_required, _1) }
+    # Like master's update_attribute, invalid unrelated plan attributes don't block this change
+    errors.empty? && plan.save!(validate: false)
   end
 end
