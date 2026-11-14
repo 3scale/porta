@@ -22,6 +22,7 @@ class Settings
 
   SETTING_CLASS_MAP = SETTING_CLASSES.index_by { _1.setting_name.to_sym }.freeze
   ALL_SETTINGS = SETTING_CLASS_MAP.transform_values(&:default_value).freeze
+  private_constant :VALUE_CLASSES, :SETTING_CLASS_MAP, :ALL_SETTINGS
 
   # --- Define accessor methods that delegate to AccountSetting records ---
 
