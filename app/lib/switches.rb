@@ -106,7 +106,7 @@ module Switches
     private
 
     def assign_switches(*switch_names)
-      @switches = Hash[switch_names.map { |switch_name| [switch_name, settings.public_send(switch_name)] }]
+      @switches = switch_names.index_with { settings.public_send(_1) }
     end
   end
 
