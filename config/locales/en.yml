@@ -1946,6 +1946,10 @@ en:
         state: State
     errors:
       models:
+        settings:
+          attributes:
+            account:
+              not_persisted: must be persisted
         policies_config:
           attributes:
             policies_config:

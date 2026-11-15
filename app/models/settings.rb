@@ -203,7 +203,7 @@ class Settings
   private
 
   def account_persisted
-    errors.add(:account, :not_persisted, message: 'must be persisted') unless account.persisted?
+    errors.add(:account, :not_persisted) unless account.persisted?
   end
 
   def setting_records_valid
