@@ -41,22 +41,22 @@ module Switches
       # State query delegations (e.g., settings.multiple_applications_visible?)
       %w[visible hidden denied allowed hideable].each do |state|
         define_method("#{name}_#{state}?") do
-          send(name).send("#{state}?")
+          public_send(name).public_send("#{state}?")
         end
       end
 
       # State transition delegations (e.g., settings.allow_finance!, settings.allow_finance)
       %w[allow show hide deny].each do |event|
         define_method("#{event}_#{name}!") do
-          find_or_build_switch(name).send("#{event}!")
+          find_or_build_switch(name).public_send("#{event}!")
         end
 
         define_method("#{event}_#{name}") do
-          find_or_build_switch(name).send("#{event}")
+          find_or_build_switch(name).public_send("#{event}")
         end
 
         define_method("can_#{event}_#{name}?") do
-          find_or_build_switch(name).send("can_#{event}?")
+          find_or_build_switch(name).public_send("can_#{event}?")
         end
       end
     end
@@ -92,7 +92,7 @@ module Switches
 
     %i[allowed denied visible hidden hideable].each do |method_sym|
       define_method(method_sym) do
-        switch_names = switches.select { |_, switch| switch.send("#{method_sym}?") }.keys
+        switch_names = switches.select { |_, switch| switch.public_send("#{method_sym}?") }.keys
         slice(*switch_names)
       end
     end
@@ -106,7 +106,7 @@ module Switches
     private
 
     def assign_switches(*switch_names)
-      @switches = Hash[switch_names.map { |switch_name| [switch_name, settings.send(switch_name)] }]
+      @switches = Hash[switch_names.map { |switch_name| [switch_name, settings.public_send(switch_name)] }]
     end
   end
 
@@ -117,7 +117,7 @@ module Switches
   def visible_ui?(switch)
     setting_name = "#{switch}_ui_visible"
     if respond_to?(setting_name)
-      send(setting_name)
+      public_send(setting_name)
     elsif switch == :require_cc_on_signup # visible only for existing providers as of 2016-07-05
       account.provider_can_use?(switch)
     else
