@@ -379,7 +379,8 @@ class SettingsTest < ActiveSupport::TestCase
     end
 
     test 'setting a value without an account raises' do
-      assert_raises(RuntimeError, /without an account/) { Settings.new.tracker_code = 'UA-fff' }
+      error = assert_raises(ArgumentError) { Settings.new.tracker_code = 'UA-fff' }
+      assert_match(/without an account/, error.message)
     end
 
     test 'setting an unknown name raises KeyError' do

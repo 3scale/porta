@@ -229,7 +229,7 @@ class Settings
 
   def find_or_build_setting(name)
     klass = SETTING_CLASS_MAP.fetch(name.to_sym)
-    raise "Cannot build setting without an account" unless account
+    raise ArgumentError, "Cannot build setting without an account" unless account
 
     record = setting_record_for(name)
     if record
