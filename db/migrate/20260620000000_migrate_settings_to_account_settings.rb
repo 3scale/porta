@@ -53,7 +53,7 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
         INSERT INTO account_settings (#{id_column}account_id, type, value, tenant_id, created_at, updated_at)
         SELECT #{id_value}s.account_id, '#{type_name}', #{value_expr}, s.tenant_id,
                COALESCE(s.created_at, TIMESTAMP '#{now}'), COALESCE(s.updated_at, TIMESTAMP '#{now}')
-        FROM settings s WHERE #{where}
+        FROM settings s JOIN accounts a ON a.id = s.account_id WHERE #{where}
         #{conflict_clause}
       SQL
     end
@@ -63,9 +63,9 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
     System::Database.oracle? ? '1' : 'TRUE'
   end
 
-  # Settings rows of providers and master; everything else is a buyer
+  # Settings rows of providers and master; everything else is a buyer. Rows without an account are skipped by the join.
   def provider_condition
-    "s.account_id IN (SELECT id FROM accounts WHERE provider = #{true_value} OR master = #{true_value})"
+    "(a.provider = #{true_value} OR a.master = #{true_value})"
   end
 
   # Oracle treats '' as NULL, so IS NOT NULL alone covers both.

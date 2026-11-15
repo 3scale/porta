@@ -224,6 +224,16 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
     assert_equal false, records.first.value, 'NULL boolean should be migrated as false'
   end
 
+  test 'skips legacy rows without an account' do
+    missing_id = Account.maximum(:id) + 1
+    TestSettingsModel.create!(account_id: missing_id, monthly_billing_enabled: false, tracker_code: 'UA-orphan',
+                              **TestSettingsModel::DEFAULT_NOT_NULL_SETTINGS)
+
+    @migration.up
+
+    assert_not AccountSetting.exists?(account_id: missing_id)
+  end
+
   test 'migrates all settings of master, which is not flagged as provider' do
     master = master_account
     assert_not master[:provider]
