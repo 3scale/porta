@@ -95,7 +95,6 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
 
   test 'handles multiple accounts independently' do
     provider2 = FactoryBot.create(:provider_account)
-    provider2.account_settings.delete_all
     TestSettingsModel.where(account_id: provider2.id).delete_all
 
     TestSettingsModel.create_legacy!(account: @provider, tracker_code: 'UA-111111')
@@ -237,6 +236,25 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
     records = master.account_settings.reload.index_by(&:class)
     assert_equal true, records[AccountSetting::MonthlyBillingEnabled]&.value
     assert_equal 'UA-master', records[AccountSetting::TrackerCode]&.value
+  end
+
+  test 'copies timestamps from the legacy row, falling back to the migration time for NULLs' do
+    legacy = TestSettingsModel.create_legacy!(account: @provider, tracker_code: 'UA-time', forum_enabled: true)
+    legacy.update_columns(created_at: Time.utc(2020, 1, 2, 3, 4, 5), updated_at: Time.utc(2021, 6, 7, 8, 9, 10))
+    provider2 = FactoryBot.create(:provider_account)
+    TestSettingsModel.create_legacy!(account: provider2, tracker_code: 'UA-null').update_columns(created_at: nil, updated_at: nil)
+
+    freeze_time do
+      @migration.up
+
+      @provider.account_settings.reload.each do |record|
+        assert_equal Time.utc(2020, 1, 2, 3, 4, 5), record.created_at, record.type
+        assert_equal Time.utc(2021, 6, 7, 8, 9, 10), record.updated_at, record.type
+      end
+      record = provider2.account_settings.reload.find_by!(type: 'TrackerCode')
+      assert_equal Time.current.change(usec: 0), record.created_at
+      assert_equal Time.current.change(usec: 0), record.updated_at
+    end
   end
 
   test 'is idempotent and handles existing records via ON DUPLICATE KEY UPDATE' do

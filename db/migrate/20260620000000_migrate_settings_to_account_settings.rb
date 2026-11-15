@@ -7,7 +7,8 @@
 # rolled back and so existing data is preserved for auditing purposes.
 class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
   def up
-    now = Time.current.to_fs(:db)
+    # Timestamps are copied from the legacy row, so later changes to it can be detected; the fallback is for NULLs
+    now = Time.current.utc.to_fs(:db)
 
     # Booleans: NULL → '0' (false), handled by CASE.
     # Buyers only use the monthly billing settings, migrated only when they differ from the default.
@@ -50,7 +51,8 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
     safety_assured do
       execute <<~SQL.squish
         INSERT INTO account_settings (#{id_column}account_id, type, value, tenant_id, created_at, updated_at)
-        SELECT #{id_value}s.account_id, '#{type_name}', #{value_expr}, s.tenant_id, '#{now}', '#{now}'
+        SELECT #{id_value}s.account_id, '#{type_name}', #{value_expr}, s.tenant_id,
+               COALESCE(s.created_at, TIMESTAMP '#{now}'), COALESCE(s.updated_at, TIMESTAMP '#{now}')
         FROM settings s WHERE #{where}
         #{conflict_clause}
       SQL
