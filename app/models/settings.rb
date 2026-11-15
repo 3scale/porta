@@ -84,8 +84,9 @@ class Settings
 
   # --- Initialization ---
 
-  def initialize(account = nil)
+  def initialize(account = nil, attributes = {})
     @account = account
+    super(attributes)
   end
 
   # --- Persistence ---
@@ -95,7 +96,8 @@ class Settings
 
     AccountSetting.transaction do
       to_destroy, to_persist = account.account_settings.partition(&:marked_for_destruction?)
-      to_persist.select(&:changed?).each(&:save!)
+      # Records were validated by valid? above, as ActiveRecord autosave does
+      to_persist.select(&:changed?).each { _1.save!(validate: false) }
 
       # destroy! is used internally by CollectionProxy#destroy, so failures raise
       # instead of returning false. Acceptable: a destroy failure here means
