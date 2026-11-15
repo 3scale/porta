@@ -393,6 +393,7 @@ class SettingsTest < ActiveSupport::TestCase
       assert_not provider.settings.persisted?
       assert_not provider.settings.save
       assert_equal ['must be persisted'], provider.settings.errors[:account]
+      assert provider.settings.errors.added?(:account, :not_persisted)
       assert_raises(ActiveModel::ValidationError) { provider.settings.save! }
     end
 

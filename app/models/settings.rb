@@ -21,8 +21,7 @@ class Settings
   SWITCH_CLASSES, VALUE_CLASSES = SETTING_CLASSES.partition { _1 < AccountSetting::SwitchSetting }.map(&:freeze)
 
   SETTING_CLASS_MAP = SETTING_CLASSES.index_by { _1.setting_name.to_sym }.freeze
-  ALL_SETTINGS = SETTING_CLASS_MAP.transform_values(&:default_value).freeze
-  private_constant :VALUE_CLASSES, :SETTING_CLASS_MAP, :ALL_SETTINGS
+  private_constant :VALUE_CLASSES, :SETTING_CLASS_MAP
 
   # --- Define accessor methods that delegate to AccountSetting records ---
 
@@ -46,7 +45,7 @@ class Settings
   end
 
   SETTING_CLASSES.select { _1 < AccountSetting::BooleanSetting }.each do |klass|
-    GeneratedSettingMethods.define_method("#{klass.setting_name}?") { !!send(klass.setting_name) }
+    GeneratedSettingMethods.define_method("#{klass.setting_name}?") { !!public_send(klass.setting_name) }
   end
 
   include Switches
@@ -158,7 +157,7 @@ class Settings
   # --- Class methods ---
 
   def self.attribute_names
-    ALL_SETTINGS.keys.map(&:to_s)
+    SETTING_CLASS_MAP.keys.map(&:to_s)
   end
 
   def self.setting_class_for(name)
@@ -204,7 +203,7 @@ class Settings
   private
 
   def account_persisted
-    errors.add(:account, 'must be persisted') unless account.persisted?
+    errors.add(:account, :not_persisted, message: 'must be persisted') unless account.persisted?
   end
 
   def setting_records_valid
@@ -232,8 +231,7 @@ class Settings
     klass = SETTING_CLASS_MAP.fetch(name.to_sym)
     raise "Cannot build setting without an account" unless account
 
-    sti_name = klass.sti_name
-    record = active_settings.find { _1.type == sti_name }
+    record = setting_record_for(name)
     if record
       if record.marked_for_destruction?
         record.instance_variable_set(:@marked_for_destruction, false)
@@ -242,7 +240,7 @@ class Settings
       return record
     end
 
-    account.account_settings.build(type: sti_name)
+    account.account_settings.build(type: klass.sti_name)
   end
 
   def find_or_build_switch(name)
