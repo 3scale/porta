@@ -66,21 +66,25 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
   end
 
   test 'migrates non-boolean settings, skipping empty strings and nil' do
+    # Oracle stores '' as NULL in VARCHAR2 columns, which the NOT NULL switch columns reject; an empty CLOB stays empty
+    empty_switch = System::Database.oracle? ? {} : { branding_switch: '' }
     legacy = TestSettingsModel.create_legacy!(
       account: @provider,
       tracker_code: 'UA-abcdef',
       favicon: '',
       refund_policy: nil,
+      privacy_policy: '',
       finance_switch: 'visible',
-      branding_switch: ''
+      **empty_switch
     )
     legacy.reload
 
     assert_equal 'UA-abcdef', legacy.tracker_code
-    assert_equal '', legacy.favicon
+    assert_equal (System::Database.oracle? ? nil : ''), legacy.favicon
     assert_nil legacy.refund_policy
+    assert_equal '', legacy.privacy_policy
     assert_equal 'visible', legacy.finance_switch
-    assert_equal '', legacy.branding_switch
+    assert_equal '', legacy.branding_switch unless System::Database.oracle?
 
     @migration.up
 
@@ -89,8 +93,9 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
     assert_equal 'UA-abcdef', records[AccountSetting::TrackerCode]&.value
     assert_nil records[AccountSetting::Favicon], 'empty string should not be migrated'
     assert_nil records[AccountSetting::RefundPolicy], 'nil text should not be migrated'
+    assert_nil records[AccountSetting::PrivacyPolicy], 'empty text should not be migrated'
     assert_equal 'visible', records[AccountSetting::FinanceSwitch]&.value
-    assert_nil records[AccountSetting::BrandingSwitch], 'empty switch should not be migrated'
+    assert_nil records[AccountSetting::BrandingSwitch], 'empty switch should not be migrated' unless System::Database.oracle?
   end
 
   test 'handles multiple accounts independently' do
