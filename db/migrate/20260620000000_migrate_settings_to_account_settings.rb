@@ -6,22 +6,35 @@
 # The `settings` table is intentionally left intact so the migration can be safely
 # rolled back and so existing data is preserved for auditing purposes.
 class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
+  # Each statement commits on its own on every database; a failed run leaves a partial copy that a re-run completes
+  disable_ddl_transaction! if System::Database.postgres?
+
+  BATCH_SIZE = 10_000
+
   def up
     # Timestamps are copied from the legacy row, so later changes to it can be detected; the fallback is for NULLs
     now = Time.current.utc.to_fs(:db)
+    min_id, max_id = select_rows("SELECT MIN(id), MAX(id) FROM settings").first
+    return unless min_id
 
-    # Booleans: NULL → '0' (false), handled by CASE.
-    # Buyers only use the monthly billing settings, migrated only when they differ from the default.
-    boolean_settings.each do |col|
-      bool_value = "CASE WHEN s.#{col} = #{true_value} THEN '1' ELSE '0' END"
-      where = provider_condition
-      where = "(#{where} OR #{bool_value} <> '#{resolve_class(col).default_value ? 1 : 0}')" if col.in?(buyer_settings)
-      upsert_setting(col, bool_value, now, where:)
-    end
+    (min_id.to_i..max_id.to_i).step(BATCH_SIZE) do |from|
+      batch = "s.id BETWEEN #{from} AND #{from + BATCH_SIZE - 1}"
 
-    # Strings, texts, and switches: skip NULLs and empty strings.
-    (string_settings + text_settings + switch_settings).each do |col|
-      upsert_setting(col, "s.#{col}", now, where: "#{provider_condition} AND #{non_empty_condition(col)}")
+      # Booleans: NULL → '0' (false), handled by CASE.
+      # Buyers only use the monthly billing settings, migrated only when they differ from the default.
+      boolean_settings.each do |col|
+        bool_value = "CASE WHEN s.#{col} = #{true_value} THEN '1' ELSE '0' END"
+        where = provider_condition
+        where = "(#{where} OR #{bool_value} <> '#{resolve_class(col).default_value ? 1 : 0}')" if col.in?(buyer_settings)
+        upsert_setting(col, bool_value, now, where: "#{batch} AND #{where}")
+      end
+
+      # Strings, texts, and switches: skip NULLs and empty strings.
+      (string_settings + text_settings + switch_settings).each do |col|
+        upsert_setting(col, "s.#{col}", now, where: "#{batch} AND #{provider_condition} AND #{non_empty_condition(col)}")
+      end
+
+      sleep(0.1)
     end
   end
 

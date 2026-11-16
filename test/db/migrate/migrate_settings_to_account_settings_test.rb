@@ -109,6 +109,17 @@ class MigrateSettingsToAccountSettingsTest < ActiveSupport::TestCase
     assert_equal 'UA-222222', setting2&.value
   end
 
+  test 'copies every row when the settings span several batches' do
+    providers = [@provider, *FactoryBot.create_list(:provider_account, 2)]
+    providers.each { TestSettingsModel.create_legacy!(account: _1, tracker_code: "UA-#{_1.id}") }
+
+    MigrateSettingsToAccountSettings.stub_const(:BATCH_SIZE, 1) { @migration.up }
+
+    providers.each do |provider|
+      assert_equal "UA-#{provider.id}", provider.account_settings.reload.find_by(type: 'TrackerCode')&.value
+    end
+  end
+
   test 'migrates all 41 legacy setting columns' do
     all_settings = {
       # Intentionally not migrated (dead columns):
