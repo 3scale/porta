@@ -81,10 +81,10 @@ class MigrateSettingsToAccountSettings < ActiveRecord::Migration[7.2]
     "(a.provider = #{true_value} OR a.master = #{true_value})"
   end
 
-  # Oracle treats '' as NULL, so IS NOT NULL alone covers both.
+  # Oracle stores '' as NULL in VARCHAR2 columns, so IS NOT NULL covers both there; an empty CLOB (the text columns) is not NULL.
   def non_empty_condition(col)
     if System::Database.oracle?
-      "s.#{col} IS NOT NULL"
+      col.in?(text_settings) ? "s.#{col} IS NOT NULL AND DBMS_LOB.GETLENGTH(s.#{col}) > 0" : "s.#{col} IS NOT NULL"
     else
       "s.#{col} IS NOT NULL AND s.#{col} != ''"
     end
