@@ -128,6 +128,15 @@ class Provider::Admin::SecuritiesControllerTest < ActionDispatch::IntegrationTes
     assert_nil @provider.account_settings.find_by(type: 'PermissionsPolicyHeaderAdmin')
   end
 
+  test 'edit limits header inputs to the header length validation' do
+    get edit_provider_admin_security_path
+
+    assert_response :success
+    %w[permissions_policy_header_admin csp_header_admin csp_report_only_header_admin].each do |name|
+      assert_select "input[name='settings[#{name}]'][maxlength='#{AccountSetting::HttpHeader::MAX_LENGTH}']"
+    end
+  end
+
   test 'displays Content-Security-Policy Header field' do
     get edit_provider_admin_security_path
     assert_response :success
