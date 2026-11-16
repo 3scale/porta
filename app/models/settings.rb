@@ -173,6 +173,11 @@ class Settings
     block ? yield(name.to_s) : ActiveModel::Type::Value.new
   end
 
+  # Formtastic reads an input's maxlength from the column limit, as it did for the old ActiveRecord model
+  def column_for_attribute(name)
+    self.class.type_for_attribute(name)
+  end
+
   # ETag source for the API conditional GET; changes when a stored setting is created, updated or deleted
   def cache_key_with_version
     stored = account.account_settings.select(&:persisted?)

@@ -4,6 +4,17 @@ require 'test_helper'
 
 class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
 
+  test 'edit limits the credit card policies paths to 255 characters' do
+    login_provider FactoryBot.create(:provider_account)
+
+    get edit_admin_site_settings_path
+
+    assert_response :success
+    %w[cc_terms_path cc_privacy_path cc_refunds_path].each do |name|
+      assert_select "input[name='settings[#{name}]'][maxlength='255']"
+    end
+  end
+
   test 'update credit card policies paths successfully' do
     provider = FactoryBot.create(:provider_account)
     login_provider provider
