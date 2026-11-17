@@ -427,7 +427,7 @@ class Account < ApplicationRecord
     @buyer_attribute_descriptors = nil
     @signup_form_fields = nil
     @_first_admin = nil
-    @settings_facade = nil
+    @settings_facade&.reset # keeps references to the facade valid; super reloads its account_settings
 
     super
   end

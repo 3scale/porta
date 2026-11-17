@@ -846,6 +846,19 @@ class AccountTest < ActiveSupport::TestCase
       assert buyer.destroyable?
     end
   end
+
+  test 'reload keeps the settings facade and refreshes its values' do
+    provider = FactoryBot.create(:simple_provider)
+    settings = provider.settings
+    assert_not settings.public_search
+    AccountSetting::PublicSearch.create!(account: provider, value: true)
+    assert_not settings.public_search # account_settings is already loaded
+
+    provider.reload
+
+    assert_same settings, provider.settings
+    assert settings.public_search
+  end
 end
 
 #TODO: test scopes chained, and with nil params
