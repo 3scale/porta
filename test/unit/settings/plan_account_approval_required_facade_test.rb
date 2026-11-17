@@ -66,7 +66,7 @@ class Settings::PlanAccountApprovalRequiredFacadeTest < ActiveSupport::TestCase
     assert facade.update(true)
   end
 
-  test 'loads at most two stock plans in one query' do
+  test 'tells several stock plans apart with a single query when the plans are not loaded' do
     FactoryBot.create_list(:account_plan, 2, issuer: provider)
     facade = self.facade
 
