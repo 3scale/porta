@@ -36,6 +36,7 @@ class AuditedHacksTest < ActiveSupport::TestCase
       assert_equal '[FILTERED]', audit.audited_changes['value'], "SSOKey should filter value on create"
       assert_not_includes audit.audited_changes.values.flatten, 'super_secret'
       assert_equal @provider.id, audit.audited_changes['account_id']
+      assert_equal 'AccountSetting::SSOKey', audit.kind
     end
 
     test 'sensitive account settings filter value in audit on update' do
@@ -50,6 +51,7 @@ class AuditedHacksTest < ActiveSupport::TestCase
       assert_equal ['[FILTERED]', '[FILTERED]'], audit.audited_changes['value']
       assert_not_includes audit.audited_changes.values.flatten, old_secret
       assert_not_includes audit.audited_changes.values.flatten, 'new_secret'
+      assert_equal 'AccountSetting::SSOKey', audit.kind
     end
 
     test 'non-sensitive account settings keep value in audit' do
@@ -60,6 +62,7 @@ class AuditedHacksTest < ActiveSupport::TestCase
 
       audit = record.audits.last!
       assert_equal 'UA-abcdef', audit.audited_changes['value']
+      assert_equal 'AccountSetting::TrackerCode', audit.kind
     end
   end
 
