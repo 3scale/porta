@@ -13,7 +13,7 @@ class Sites::UsageRulesControllerTest < ActionController::TestCase
     get :edit
     assert_response :success
     assert_select 'title', 'Usage Rules | Red Hat 3scale API Management'
-    assert_select 'input#settings_account_approval_required'
+    assert_select 'input#settings_account_approval_required:not([disabled])'
     assert_select '.pf-c-check__description', 'Approval is required by you before developer accounts are activated.'
   end
 
@@ -35,7 +35,7 @@ class Sites::UsageRulesControllerTest < ActionController::TestCase
   test 'defer to account plan when multiple account plans and ui visible' do
     FactoryBot.create(:account_plan, issuer: @provider)
     get :edit
-    assert_select 'input#settings_account_approval_required'
+    assert_select 'input#settings_account_approval_required[disabled]'
     assert_select '.pf-c-check__description', 'Set per account plan from Account Plans.'
   end
 
@@ -67,7 +67,7 @@ class Sites::UsageRulesControllerTest < ActionController::TestCase
   end
 
   test 'update with valid params' do
-    @settings.update(strong_passwords_enabled: true, public_search: true)
+    @settings.update(public_search: true)
     %i[useraccountarea_enabled signups_enabled public_search
        account_plans_ui_visible service_plans_ui_visible].each do |setting|
       assert @settings.send(setting), "#{setting} setting is not true as expected"

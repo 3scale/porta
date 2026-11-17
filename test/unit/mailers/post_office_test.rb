@@ -38,7 +38,7 @@ class PostOfficeTest < ActionMailer::TestCase
 
     assert_match email.body, /3scale API/
 
-    @provider.settings.update_attribute :skip_email_engagement_footer_switch, 'visible'
+    @provider.settings.skip_email_engagement_footer.update!(value: 'visible')
 
     PostOffice.message_notification(message, recipient).deliver_now
 

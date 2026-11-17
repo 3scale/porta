@@ -2,13 +2,17 @@
 
 module Stale
   # The API responder performs conditional GET and only produces the response for stale objects,
-  # but calling `stale?` for controllers that deal with objects that are not ActiveRecord descendants fails
-  # because it relies on `updated_at` field which is not available
-  # In such cases the object will always be considered stale
+  # but `stale?` only works for objects that implement the cache key protocol or have `updated_at`.
+  # Other objects are always considered stale.
   def stale?(object = nil, **freshness_kwargs)
-    has_updated_at = object.respond_to?(:updated_at) || object&.all? { _1.respond_to? :updated_at }
-    return super if has_updated_at
+    return super if cacheable?(object) || (object.respond_to?(:all?) && object.all? { cacheable?(_1) })
 
     true
+  end
+
+  private
+
+  def cacheable?(object)
+    object.respond_to?(:cache_key_with_version) || object.respond_to?(:updated_at)
   end
 end

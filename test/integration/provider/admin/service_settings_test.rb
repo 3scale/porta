@@ -25,7 +25,6 @@ class Provider::Admin::ServiceSettingsTest < ActionDispatch::IntegrationTest
     assert_response 200
 
     @provider.settings.deny_service_plans!
-    @provider.settings.service_plans.hide!
     get settings_admin_service_path(service)
     assert_response 200
   end

@@ -6,17 +6,17 @@ class Provider::Admin::CMS::SwitchesController < Provider::Admin::CMS::BaseContr
   before_action :find_switch, only: [ :update, :destroy ]
 
   def index
-    @allowed, @denied = current_account.hideable_switches.partition { |switch,status| status.allowed? }
+    @allowed, @denied = current_account.hideable_switches.partition { |_switch, status| status.allowed? }
 
-    @allowed = @allowed.select { |switch, plan| plan.settings.visible_ui?(switch) }
+    @allowed = @allowed.select { |switch, _status| current_account.settings.visible_ui?(switch) }
   end
 
   def update
-    @switch.show!
+    @switch.show! if @switch.hidden?
   end
 
   def destroy
-    @switch.hide!
+    @switch.hide! if @switch.visible?
     render action: :update
   end
 

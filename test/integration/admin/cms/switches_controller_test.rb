@@ -32,8 +32,21 @@ class Provider::Admin::CMS::SwitchesControllerTest < ActionDispatch::Integration
     assert provider.reload.settings.switches[switch_name].visible?
   end
 
+  test 'destroy hides the visible switch and is a safe no-op if already hidden' do
+    @provider.settings.show_account_plans!
+    assert @provider.settings.account_plans.visible?
+
+    delete provider_admin_cms_switch_path('account_plans', format: :js)
+    assert_response :success
+    assert @provider.reload.settings.account_plans.hidden?
+
+    delete provider_admin_cms_switch_path('account_plans', format: :js)
+    assert_response :success
+    assert @provider.reload.settings.account_plans.hidden?
+  end
+
   test "show a  switch" do
-    @provider.settings.update_attribute(:account_plans_switch,'hidden')
+    assert @provider.settings.account_plans.hidden?
 
     put provider_admin_cms_switch_path('account_plans', format: :js), xhr: true
     assert_response :success

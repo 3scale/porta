@@ -232,6 +232,9 @@ ActiveSupport.on_load(:active_record) do
     # With the OCIConnectionCursorLobFix above, we can safely use both mappings
     # because LOBs are bound as OCI8::CLOB/BLOB objects, not LONG data
     # Note: disable temporary for issues with NLS_LANG=AMERICAN_AMERICA.UTF8
+    # Caution before enabling: with the LONG mapping an empty CLOB comes back as NULL (nil), like '' in a VARCHAR2
+    # column, instead of "". Inspect every CLOB reader first, e.g. a blank AccountSetting value (an empty HTTP header
+    # turns a header off) would read as nil, which the getters and the not-nil validation don't expect.
     # OCI8::BindType::Mapping[:clob] = OCI8::BindType::Long
     # OCI8::BindType::Mapping[:blob] = OCI8::BindType::LongRaw
   end

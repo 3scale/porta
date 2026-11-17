@@ -8,7 +8,7 @@ class Logic::ProviderSettingsTest < ActiveSupport::TestCase
 
     refute provider.has_visible_services_with_plans?
 
-    provider.settings.service_plans_ui_visible = false
+    provider.settings.update(service_plans_ui_visible: false)
     provider.settings.allow_multiple_services!
     provider.settings.show_multiple_services!
     refute provider.has_visible_services_with_plans?

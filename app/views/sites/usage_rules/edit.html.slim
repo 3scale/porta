@@ -22,9 +22,10 @@ div class="pf-c-card"
           = form.input :cas_server_url, as: :patternfly_checkbox,
                                         checked_value: 'on',
                                         unchecked_value: '0'
-        - if settings.approval_required_editable? || settings.approval_required_disabled?
+        - approval_facade = settings.account_approval_required_facade
+        - if approval_facade.editable? || (approval_facade.locked? && settings.account_plans_ui_visible?)
           = form.input :account_approval_required, as: :patternfly_checkbox,
-                                                   input_html: { disabled: settings.approval_required_disabled? },
+                                                   input_html: { disabled: approval_facade.locked? },
                                                    hint: account_approval_required_hint(current_account)
 
       = form.inputs 'Search'

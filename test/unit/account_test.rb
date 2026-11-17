@@ -292,20 +292,22 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'settings be created lazily for existing account' do
-    assert_no_difference 'Settings.count' do
+    assert_no_difference 'AccountSetting.count' do
       @account = Account.create!(org_name: 'Organization')
     end
 
-    assert_difference 'Settings.count', 1 do
+    assert_no_difference 'AccountSetting.count' do
       @account.settings
     end
+
+    assert_instance_of Settings, @account.settings
   end
 
   test 'settings be build lazily for new account' do
     account = Account.new
 
     assert_not_nil account.settings
-    assert account.settings.new_record?
+    assert_instance_of Settings, account.settings
   end
 
   test 'profile is lazily created' do
@@ -843,6 +845,19 @@ class AccountTest < ActiveSupport::TestCase
       assert provider.destroyable?
       assert buyer.destroyable?
     end
+  end
+
+  test 'reload keeps the settings facade and refreshes its values' do
+    provider = FactoryBot.create(:simple_provider)
+    settings = provider.settings
+    assert_not settings.public_search
+    AccountSetting::PublicSearch.create!(account: provider, value: true)
+    assert_not settings.public_search # account_settings is already loaded
+
+    provider.reload
+
+    assert_same settings, provider.settings
+    assert settings.public_search
   end
 end
 

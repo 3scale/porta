@@ -49,7 +49,7 @@ class Provider::SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "does not redirect users to SSO even with enforce_sso and single provider" do
-    @provider.settings.update_column(:enforce_sso, true)
+    @provider.settings.update_attribute(:enforce_sso, true)
     get new_provider_sessions_path
     assert_response :success
 

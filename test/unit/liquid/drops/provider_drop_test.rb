@@ -23,18 +23,18 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
   end
 
   test "multiple_users_allowed?" do
-    @provider.settings.update_attribute(:multiple_users_switch, 'visible')
+    @provider.settings.multiple_users.update!(value: 'visible')
     assert_equal true, @drop.multiple_users_allowed?
 
-    @provider.settings.update_attribute(:multiple_users_switch, 'denied')
+    @provider.settings.multiple_users.update!(value: 'denied')
     assert_equal false, @drop.multiple_users_allowed?
   end
 
   test 'multiple_applications_allowed?' do
-    @provider.settings.update_attribute(:multiple_applications_switch, 'visible')
+    @provider.settings.multiple_applications.update!(value: 'visible')
     assert_equal true, @drop.multiple_applications_allowed?
 
-    @provider.settings.update_attribute(:multiple_applications_switch, 'denied')
+    @provider.settings.multiple_applications.update!(value: 'denied')
     assert_equal false, @drop.multiple_applications_allowed?
   end
 
@@ -59,19 +59,19 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
     plans = FactoryBot.create_list(:account_plan, 2, issuer: @provider)
 
     plans.map(&:publish!)
-    @provider.settings.update_attribute(:account_plans_switch, 'visible')
+    @provider.settings.account_plans.update!(value: 'visible')
     assert @drop.account_plans_allowed?
 
     plans.map(&:hide!)
-    @provider.settings.update_attribute(:account_plans_switch, 'visible')
+    @provider.settings.account_plans.update!(value: 'visible')
     refute @drop.account_plans_allowed?
 
     plans.map(&:publish!)
-    @provider.settings.update_attribute(:account_plans_switch, 'hidden')
+    @provider.settings.account_plans.update!(value: 'hidden')
     refute @drop.account_plans_allowed?
 
     plans.map(&:hide!)
-    @provider.settings.update_attribute(:account_plans_switch, 'hidden')
+    @provider.settings.account_plans.update!(value: 'hidden')
     refute @drop.account_plans_allowed?
   end
 

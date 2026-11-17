@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 class AccountSetting::HttpHeader < AccountSetting
+  # The value keeps the column's (CLOB) type: Oracle binds a declared :string or :text type as VARCHAR2, which turns ''
+  # into NULL and limits it to 4000 bytes
+  MAX_LENGTH = 5000
+
   validates :value,
-            length: { maximum: 5000 },
+            length: { maximum: MAX_LENGTH },
             format: {
               with: /\A[\x20-\x7E]*\z/n,
               message: 'RFC 7230 allows only printable ASCII header values',

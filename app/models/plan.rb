@@ -53,6 +53,7 @@ class Plan < ApplicationRecord
                          :message => 'is invalid' }
 
   validates :name, presence: true
+  validates :approval_required, inclusion: { in: [true, false] }
 
   validates :setup_fee, :cost_per_month, numericality: { allow_nil: false, allow_blank: false, greater_than_or_equal_to: 0.00 }
   validates :trial_period_days, numericality: { allow_nil: true, greater_than_or_equal_to: 0 }
