@@ -1,6 +1,6 @@
 (function($) {
   var form  = $("#referrer_filters").find('form').first();
-  var error = $("<label class=\"error\"><%= escape_javascript(@error) %></label>");
+  var error = $('<p class="pf-c-form__helper-text pf-m-error"><%= escape_javascript(@error) %></p>');
 
-  form.find('.error').remove().end().append(error);
+  form.find('.pf-c-form__helper-text').remove().end().append(error);
 })(jQuery);

@@ -96,7 +96,7 @@ module HtmlSelectorsHelper
     when /the account details card/
       '[aria-label="Account details"], div.dashboard_card'
 
-    when /the referrer filters/
+    when /the Referrer filters card|the referrer filters/
       '#referrer_filters'
 
     when /the referrer filter "(.*)"/
