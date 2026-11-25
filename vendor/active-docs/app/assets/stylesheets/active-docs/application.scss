@@ -1,12 +1,12 @@
-@import "prettify";
+@use "prettify";
 
-@import "reset";
-@import "variables";
-@import "zass";
-@import "fonts";
-@import "global";
-@import "operation";
-@import "button";
+@use "reset";
+@use "variables" as *;
+@use "zass" as *;
+@use "fonts" as *;
+@use "global";
+@use "operation";
+@use "button";
 
 .api-docs-wrap {
   font-family: 'Helvetica Neue',Arial,'Liberation Sans',FreeSans,sans-serif;
@@ -318,10 +318,10 @@
     }
   }
   a.remove {
-    background: transparent image-url('active-docs/remove.png') no-repeat 0 0;
+    background: transparent url('active-docs/remove.png') no-repeat 0 0;
   }
   a.add {
-    background: transparent image-url('active-docs/add.png')  no-repeat 0 0;
+    background: transparent url('active-docs/add.png')  no-repeat 0 0;
   }
 }
 

@@ -15,6 +15,8 @@ module Liquid
       def render(context)
         if flash = context.registers[:controller].flash
           render_erb(context, 'shared/flash_message', :flash => flash)
+        else
+          ''
         end
       end
 

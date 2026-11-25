@@ -1,4 +1,6 @@
-@import 'provider/layouts/main';
+@use 'sass:math';
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
 
 div.dashboard_card {
   @include white-box-shadow;
@@ -11,11 +13,11 @@ div.dashboard_card {
   }
 
   &> table.list:first-child {
-    margin-top: line-height-times(-1/2);
+    margin-top: line-height-times(math.div(-1, 2));
   }
 
   &> table.list:last-child {
-    margin-bottom: line-height-times(-1/2);
+    margin-bottom: line-height-times(math.div(-1, 2));
 
     tr:last-child th,
     tr:last-child td {
@@ -24,13 +26,15 @@ div.dashboard_card {
   }
 }
 
-div.left {
+div.left,
+%left-column {
   float: left;
   width: calc(50% - #{line-height-times(1)});
 }
 
 div.right,
-div.right_narrow {
+div.right_narrow,
+%right-column {
   float: right;
   width: calc(50% - #{line-height-times(1)});
 }

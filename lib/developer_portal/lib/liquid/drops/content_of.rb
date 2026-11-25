@@ -4,7 +4,7 @@ module Liquid
 
       allowed_name :content_of
 
-      def before_method(name)
+      def liquid_method_missing(name)
         content_for[name]
       end
 

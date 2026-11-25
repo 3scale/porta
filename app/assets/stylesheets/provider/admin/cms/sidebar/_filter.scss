@@ -1,8 +1,27 @@
+@use 'sass:math';
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 %toolbar {
-  @include horizontal-list;
-  //line-height: 2em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  list-style: none;
 
   li {
+    white-space: nowrap;
+    float: left;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    display: inline;
     margin: 0;
     padding: 0;
     text-align: center;
@@ -61,9 +80,9 @@
    box-sizing: border-box;
    height: line-height-times(2);
    vertical-align: middle;
-   padding-top: line-height-times(1/2);
+   padding-top: line-height-times(math.div(1, 2));
    $items: 3;
-   width: 100% / $items;
+   width: math.div(100%, $items);
    border-left: $border-width solid $border-color;
 
    &.active {
@@ -80,7 +99,7 @@
   li {
     box-sizing: border-box;
     $items: 7;
-    width: 100% / $items;
+    width: math.div(100%, $items);
     border-left: $border-width solid $border-color;
   }
 }

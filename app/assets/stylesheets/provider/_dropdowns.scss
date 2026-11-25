@@ -1,4 +1,9 @@
-$dropdown-bg-color: lighten(black, 85%);
+@use 'sass:color';
+@use 'sass:math';
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
+$dropdown-bg-color: color.adjust(black, $lightness: 85%);
 
 .dropdown {
   position: absolute !important;
@@ -10,7 +15,7 @@ $dropdown-bg-color: lighten(black, 85%);
 
   &.expanded {
     display: block !important;
-    @include box-shadow(0 0 6px $box-shadow-color);
+    box-shadow: 0 0 6px $box-shadow-color;
     background-color: $white;
     border: $border-width solid $border-color;
     border-radius: $border-radius;
@@ -43,10 +48,10 @@ $dropdown-bg-color: lighten(black, 85%);
       text-shadow: none;
       text-align: left !important;
       margin: 0;
-      padding: line-height-times(1/2) !important;
+      padding: line-height-times(math.div(1, 2)) !important;
       font-size: $font-size-base !important;
       width: 100% !important;
-      @include border-radius(0);
+      border-radius: 0;
       border: none;
       cursor: pointer;
       border-bottom: $border-width solid $border-color;
@@ -95,6 +100,6 @@ $dropdown-bg-color: lighten(black, 85%);
   }
 
   & > input[type=submit], & > button {
-    margin-right: line-height-times(1/4);
+    margin-right: line-height-times(math.div(1, 4));
   }
 }

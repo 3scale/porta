@@ -12,7 +12,7 @@ gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 7.0.0'
+gem 'rails', '7.0.8.7'
 
 # Fixing "uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger"
 # that fails after upgrading to 1.3.5. Can be removed after upgrading to Rails 7.1
@@ -30,13 +30,13 @@ gem 'rails-observers'
 
 gem 'strong_migrations', '~> 2.1.0'
 
+gem 'sprockets-rails'
+
 group :assets do
   gem 'coffee-rails', '~> 5.0'
-  gem 'non-stupid-digest-assets', '~> 1.0'
-  gem 'sprockets-rails'
+  gem 'cssbundling-rails', '~> 1.4.3'
+  gem 'non-digest-assets', '~> 2.4.0'
 end
-
-gem 'sass-rails', '~> 5.0.8'
 
 gem 'bcrypt', '~> 3.1.7'
 gem 'oauth2', '~> 2.0', '>= 2.0.22'
@@ -70,7 +70,7 @@ gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can no
 
 gem 'acts_as_list', '~> 0.9.17'
 gem 'braintree', '~> 4.25.0'
-gem 'libxml-ruby', '~> 5.0' # Optional, makes braintree faster
+gem 'libxml-ruby', '~> 5.0.5' # Optional, makes braintree faster
 gem 'bugsnag', '~> 6.26'
 gem 'cancancan', '~> 3.6.0'
 gem 'formtastic', '~> 4.0'
@@ -144,8 +144,6 @@ group :assets do
 
   gem 'active-docs', path: 'vendor/active-docs'
 end
-
-gem 'compass-rails', '~> 3.0.2'
 
 gem 'after_commit_queue', '~> 1.1.0'
 gem 'state_machines', '~> 0.5.0'
@@ -244,7 +242,7 @@ group :development, :test do
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
-  gem 'pry-byebug', '>= 3.7.0'
+  gem 'pry-byebug', '>= 3.11.0'
   gem 'pry-doc', '>= 0.8', require: false
   gem 'pry-rails'
   gem 'pry-shell'
@@ -269,5 +267,5 @@ group :oracle do
 end
 
 gem 'kubeclient'
-
+gem 'nkf'
 gem 'pg', '~> 1.3.5'

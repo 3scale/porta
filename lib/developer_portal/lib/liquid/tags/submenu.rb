@@ -15,6 +15,8 @@ module Liquid
       def render(context)
         if context.registers[:controller].send(:logged_in?)
           render_erb context, "shared/buyer_submenu"
+        else
+          ''
         end
       end
 

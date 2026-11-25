@@ -1,10 +1,14 @@
+@use 'sass:math';
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 #flashWrapper {
-  @include animation(fadeInRight 0.5s ease-in-out);
+  animation: fadeInRight 0.5s ease-in-out;
   background-color: $white;
   box-shadow: 0 0 line-height-times(1) 0 $whiteBoxShadowColor;
   display: block;
   margin-top: line-height-times(1);
-  padding: line-height-times(1 / 2);
+  padding: line-height-times(math.div(1, 2));
   position: fixed;
   right: line-height-times(1);
   z-index: 2000;
@@ -23,34 +27,34 @@
 .flash-message--error,
 .flash-message--alert {
   color: $error-color;
-  @include animation(shake 0.5s ease-in-out 0.7s);
+  animation: shake 0.5s ease-in-out 0.7s;
 }
 
 // shake animation
-@include keyframes(shake) {
+@keyframes shake {
   0%, 100% {
-    @include transform(translate3d(0, 0, 0));
+    transform: translate3d(0, 0, 0);
   }
 
   20%, 60% {
-    @include transform(translate3d(-10px, 0, 0));
+    transform: translate3d(-10px, 0, 0);
   }
 
   40%, 80% {
-    @include transform(translate3d(10px, 0, 0));
+    transform: translate3d(10px, 0, 0);
   }
 }
 
 
 // fade in from right animation
-@include keyframes(fadeInRight) {
+@keyframes fadeInRight {
   0% {
-    @include opacity(0);
-    @include transform(translate3d(100%, 0, 0));
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
   }
 
   100% {
-    @include opacity(1);
-    @include transform(none);
+    opacity: 1;
+    transform: none;
   }
 }

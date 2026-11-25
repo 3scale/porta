@@ -1,3 +1,7 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+@use 'sass:math';
+
 .Dashboard {
   clear: both;
 }
@@ -43,7 +47,7 @@
     margin: 0 0 0 0;
     padding: 0 0 0 0;
     cursor: pointer;
-    margin-right: line-height-times(1 / 2);
+    margin-right: line-height-times(.5);
   }
 
   &.is-closed {
@@ -79,7 +83,7 @@
   float: left;
   height: line-height-times(10);
   overflow: hidden;
-  padding: line-height-times(1/2);
+  padding: line-height-times(math.div(1, 2));
   position: relative;
   width: 50%;
 
@@ -123,8 +127,8 @@
 
   &-spinner {
     position: absolute;
-    top: calc(50% - #{line-height-times(1/2)});
-    left: calc(50% - #{line-height-times(1/2)});
+    top: calc(50% - #{line-height-times(math.div(1, 2))});
+    left: calc(50% - #{line-height-times(math.div(1, 2))});
   }
 
   &-title {
@@ -159,7 +163,7 @@
     font-size: $font-size-sm;
     font-style: italic;
     color: $light-color;
-    margin-bottom: line-height-times(1/2);
+    margin-bottom: line-height-times(math.div(1, 2));
     clear: both;
 
     &--primary {
@@ -195,8 +199,7 @@
   }
 
   &-values{
-    @include transition-property(opacity);
-    @include transition-duration(0.5s);
+    transition: opacity 0.5s;
     opacity: 1;
     float: left;
 
@@ -258,7 +261,7 @@
     @include ellipsis;
     display: block;
     color: $font-color;
-    padding: line-height-times(1/4, true) 0 line-height-times(1/4) 0;
+    padding: line-height-times(math.div(1, 4), true) 0 line-height-times(math.div(1, 4)) 0;
     border-bottom: $border-width solid $border-color;
 
     &:hover,
@@ -314,7 +317,7 @@
 
   &-listItem {
     border-top: $border-width solid $border-color;
-    padding: line-height-times(1/4, true) 0 line-height-times(1/4) 0;
+    padding: line-height-times(math.div(1, 4), true) 0 line-height-times(math.div(1, 4)) 0;
     font-size: $font-size-sm;
 
     &--empty {
@@ -358,19 +361,11 @@
   float: right;
 
   #api_filter + &--services {
-    margin-top: line-height-times(2/3);
+    margin-top: line-height-times(math.div(2, 3));
   }
 
   &--services ul li:last-child {
     float: right;
-  }
-
-  &-list {
-    @include horizontal-list();
-
-    li {
-      padding: 0;
-    }
   }
 
   &-list-item {
@@ -383,6 +378,18 @@
 
     &:first-child {
       border-left: 0;
+    }
+  }
+
+  &-list {
+    border: 0;
+    overflow: hidden;
+
+    li {
+      margin-left: 0;
+      white-space: nowrap;
+      float: left;
+      padding: 0;
     }
   }
 

@@ -6,7 +6,9 @@
 module Liquid
   module Tags
     class OgoneForm < Liquid::Tags::PaymentGatewayBaseForm
-      def render(context); end
+      def render(context)
+        ''
+      end
     end
   end
 end

@@ -1,3 +1,7 @@
+@use 'sass:math';
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 p a {
   text-decoration: underline;
   color: $font-color;
@@ -34,7 +38,7 @@ input[type='submit'].action {
     width: auto;
     white-space: nowrap;
     border-radius: $border-radius-sm;
-    padding: 0 line-height-times(1/8);
+    padding: 0 line-height-times(math.div(1, 8));
     cursor: pointer;
     border-bottom: 0;
     border: none;
@@ -91,26 +95,26 @@ input[type='submit'].action {
       }
     }
 
-    &.view    { background-image: image-url('xmag_16.png'); }
+    &.view    { background-image: url('xmag_16.png'); }
 
-    &.more { background-image: image-url('dashboard_arrow.gif'); }
+    &.more { background-image: url('dashboard_arrow.gif'); }
 }
 
-button.edit        { @include iconic("\f040\0000a0"); } // background-image: image-url('pencil.png');
-button.suspend     { background-image: image-url('cross.png'); }
-button.unsuspend   { background-image: image-url('tick.png'); }
-button.resume      { background-image: image-url('tick.png'); }
+button.edit        { @include iconic("\f040\0000a0"); } // background-image: url('pencil.png');
+button.suspend     { background-image: url('cross.png'); }
+button.unsuspend   { background-image: url('tick.png'); }
+button.resume      { background-image: url('tick.png'); }
 
 button.publish, button.hide {
-    padding-left: line-height-times(1/4);
+    padding-left: line-height-times(math.div(1, 4));
 }
 
-button.up          { background-image: image-url('up_green.png'); }
-button.down        { background-image: image-url('down_green.png'); }
-button.reset       { background-image: image-url('clear-left.png'); }
+button.up          { background-image: url('up_green.png'); }
+button.down        { background-image: url('down_green.png'); }
+button.reset       { background-image: url('clear-left.png'); }
 
 button.create_key {
-  background-image: image-url('key.png');
+  background-image: url('key.png');
   padding-left: line-height-times(1);
 }
 

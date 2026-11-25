@@ -35,7 +35,11 @@ module Liquid
       desc "Renders a link that sorts the column of table based on current params"
       def render(context)
         action_view = context.registers[:controller].view_context
-        action_view.sortable(@column, @label) if action_view.respond_to?(:sort_column)
+        if action_view.respond_to?(:sort_column)
+          action_view.sortable(@column, @label)
+        else
+          ''
+        end
       end
     end
   end

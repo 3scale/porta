@@ -82,6 +82,8 @@ module Liquid
         value.to_s
       end
 
+      alias to_s to_str
+
       class Choice < Drops::Base
         def initialize(label, id = nil)
           @label, @id = label, id

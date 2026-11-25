@@ -8,7 +8,11 @@ class Liquid::Tags::CdnAssetTest < ActiveSupport::TestCase
       '/swagger-ui/2.2.10/swagger-ui.js' => '/dev-portal-assets/swagger-ui/2.2.10/swagger-ui.js',
       '/swagger-ui/2.2.10/swagger-ui.min.js' => '/dev-portal-assets/swagger-ui/2.2.10/swagger-ui.min.js',
     }.each do |params, expected|
-      assert_equal expected, Liquid::Tags::CdnAsset.parse('cdn_asset', params, [], {}).file
+      template = Liquid::Template.parse("{% cdn_asset #{params} %}")
+      tag = template.root.nodelist.first
+
+      assert_instance_of Liquid::Tags::CdnAsset, tag
+      assert_equal expected, tag.file
     end
   end
 end

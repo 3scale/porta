@@ -41,8 +41,7 @@ module Liquid
         end
       end
 
-      # Like method missing; not called before a defined method.
-      def before_method(name)
+      def liquid_method_missing(name)
         drops.find {|drop| drop.name == name }
       end
 
