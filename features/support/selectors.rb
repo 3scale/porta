@@ -97,10 +97,10 @@ module HtmlSelectorsHelper
       '[aria-label="Account details"], div.dashboard_card'
 
     when /the Referrer filters card|the referrer filters/
-      '#referrer_filters'
+      '#referrer_filters_widget'
 
     when /the referrer filter "(.*)"/
-      find('#referrer_filters tr[id^="referrer_filter_"] td', text: $1)
+      find('#referrer_filters_widget td', text: $1)
         .sibling('td')
 
     #

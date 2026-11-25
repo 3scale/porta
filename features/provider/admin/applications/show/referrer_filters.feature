@@ -37,7 +37,7 @@ Feature: Provider's application referrer filters
     Scenario: Creating a referrer filter
       Given they go to the application's admin page
       When they fill in "referrer_filter" with "foo.example.org" within the Referrer filters card
-      And press "Add Filter" within the Referrer filters card
+      And press "Add filter" within the Referrer filters card
       And wait a moment
       Then they should see "foo.example.org" within the Referrer filters card
 
@@ -47,6 +47,7 @@ Feature: Provider's application referrer filters
       And they go to the application's admin page
       When they should see "foo.example.org" within the Referrer filters card
       And they press "Delete" that belongs to the referrer filter "foo.example.org"
+      And confirm the dialog
       Then they should not see "foo.example.org" within the Referrer filters card
 
     Scenario: Can't create more than 5 referrer filters
@@ -56,11 +57,11 @@ Feature: Provider's application referrer filters
         | foo3.example.org |
         | foo4.example.org |
       And they go to the application's admin page
-      And there should be a button to "Add Filter" within the Referrer filters card
+      And there should be a button to "Add filter" within the Referrer filters card
       When they fill in "referrer_filter" with "foo5.example.org" within the Referrer filters card
-      And press "Add Filter" within the Referrer filters card
-      Then there should not be a button to "Add Filter" within the Referrer filters card
-      And they should see "At most 5 referrer filters are allowed" within the Referrer filters card
+      And press "Add filter" within the Referrer filters card
+      Then there should not be a button to "Add filter" within the Referrer filters card
+      And they should see "5 of 5" within the Referrer filters card
 
     Scenario: Remove filter after reaching the limit
       Given the application has the following referrer filters:
@@ -70,8 +71,33 @@ Feature: Provider's application referrer filters
         | foo4.example.org |
         | foo5.example.org |
       And they go to the application's admin page
-      And there should not be a button to "Add Filter" within the Referrer filters card
-      And they should see "At most 5 referrer filters are allowed" within the Referrer filters card
+      And there should not be a button to "Add filter" within the Referrer filters card
+      And they should see "5 of 5" within the Referrer filters card
       When they press "Delete" that belongs to the referrer filter "foo1.example.org"
-      Then there should be a button to "Add Filter" within the Referrer filters card
-      And they should not see "At most 5 referrer filters are allowed" within the Referrer filters card
+      And confirm the dialog
+      Then there should be a button to "Add filter" within the Referrer filters card
+      And they should see "4 of 5" within the Referrer filters card
+
+    Scenario: Submitting an empty referrer filter shows an inline error
+      Given they go to the application's admin page
+      When press "Add filter" within the Referrer filters card
+      And wait a moment
+      Then they should see "referrer filter can't be blank and referrer filter invalid" within the Referrer filters card
+
+    Scenario: Submitting an invalid referrer filter shows an inline error
+      Given they go to the application's admin page
+      When they fill in "referrer_filter" with "not valid!" within the Referrer filters card
+      And press "Add filter" within the Referrer filters card
+      And wait a moment
+      Then they should see "referrer filter invalid" within the Referrer filters card
+
+    Scenario: Error clears after a successful submission
+      Given they go to the application's admin page
+      When they fill in "referrer_filter" with "not valid!" within the Referrer filters card
+      And press "Add filter" within the Referrer filters card
+      And wait a moment
+      And they fill in "referrer_filter" with "foo.example.org" within the Referrer filters card
+      And press "Add filter" within the Referrer filters card
+      And wait a moment
+      Then they should see "foo.example.org" within the Referrer filters card
+      And they should not see "referrer filter invalid" within the Referrer filters card
