@@ -1,2 +1,0 @@
-window.ThreeScale.hideSpinner(); <%# HACK: since the original form gets replace, on ajax:complete is not triggered %>
-document.querySelector('#referrer_filters .pf-c-card__body').innerHTML = <%= render_to_js_string("provider/admin/referrer_filters/widget", cinstance: @cinstance ) %>;

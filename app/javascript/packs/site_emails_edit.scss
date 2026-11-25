@@ -1,7 +1,7 @@
 @import "app/javascript/packs/pf_form";
 @import "~@patternfly/patternfly/components/ClipboardCopy/clipboard-copy.css";
 @import "~@patternfly/patternfly/components/InputGroup/input-group.css";
-@import "~@patternfly/patternfly/components/InlineEdit/inline-edit.css";
+@import "app/javascript/packs/pf_inline_edit";
 
 .pf-c-clipboard-copy input {
   font-family: var(--pf-global--FontFamily--monospace);

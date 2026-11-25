@@ -80,16 +80,20 @@ module PatternflyComponentsHelper # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def pf_delete_table_action(url, button_options = {})
-    confirm = button_options.delete(:confirm) || I18n.t('shared.delete_button_confirm')
-    title = button_options.delete(:title) || I18n.t('shared.delete_button_title')
+  def pf_delete_table_action(url, remote: false,
+                                  confirm: I18n.t('shared.delete_button_confirm'),
+                                  title: I18n.t('shared.delete_button_title'),
+                                  **button_options)
+    form_attributes = { method: :delete }
+    form_attributes['data-remote'] = true if remote
 
     button_attributes = { type: :submit,
                           class: 'pf-c-button pf-m-link pf-m-danger',
                           title:,
-                          'data-confirm': confirm }.merge(button_options)
+                          'data-confirm': confirm,
+                          **button_options }
 
-    form_tag(url, method: :delete) do
+    form_tag(url, form_attributes) do
       tag.button(**button_attributes) do
         tag.span class: 'pf-c-button__icon pf-m-start' do
           tag.i class: 'fas fa-trash', 'aria-hidden': 'true'
