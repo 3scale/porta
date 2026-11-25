@@ -62,6 +62,7 @@ gem 'sidekiq-throttled', '~> 1.4.0'
 # Yabeda metrics
 gem 'webrick', '~> 1.8.2'
 gem 'yabeda-prometheus-mmap'
+gem "prometheus-client-mmap", "= 1.6.0", :require => false
 gem 'yabeda-sidekiq'
 
 gem 'activemerchant', '~> 1.137'
