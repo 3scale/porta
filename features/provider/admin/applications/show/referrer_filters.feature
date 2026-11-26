@@ -5,6 +5,7 @@ Feature: Provider's application referrer filters
     Given a provider
     And a product "My API"
     And the product uses backend v2
+    And the product does require referrer filters
     And the following application plan:
       | Product | Name |
       | My API  | Free |
@@ -14,17 +15,12 @@ Feature: Provider's application referrer filters
       | Jane  | My App | My API  |
     And the provider logs in
 
-  Rule: Referrer filters not required
-    Background:
-      Given the product does not require referrer filters
-
-    Scenario: Referrer filters not visible
-      When they go to the application's admin page
-      Then they shouldn't be able to see the referrer filters
-
-  Rule: Referrer filters required
-    Background:
-      Given the product does require referrer filters
+    Scenario: Referrer filters card visibility
+      Given they go to the application's admin page
+      Then they should see "Referrer filters"
+      When the product does not require referrer filters
+      And they go to the application's admin page
+      Then they should not see "Referrer filters"
 
     Scenario: List referrer filters
       Given the application has the following referrer filters:

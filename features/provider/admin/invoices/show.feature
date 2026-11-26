@@ -20,7 +20,7 @@ Feature: Show Invoice
   Scenario: Invoice has no transactions
     Given invoice "2011-01-00000001" has no payment transactions
     And they go to invoice "2011-01-00000001" admin portal page
-    Then they should see "No transactions registered for this invoice." within the transactions card
+    Then they should see "No transactions registered for this invoice." within the Transactions card
 
   Scenario: Invoice has some transactions
     Given invoice "2011-01-00000001" has some payment transactions
