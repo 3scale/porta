@@ -26,7 +26,7 @@ class Provider::Admin::ServiceDiscovery::AuthController < Provider::AdminControl
   def referrer_url
     url = params[:referrer]
     if url
-      URI.decode(url)
+      CGI.unescapeURIComponent(url)
     else
       new_admin_service_path
     end
