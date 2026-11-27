@@ -13,11 +13,11 @@ Feature: Invoice line items
     And they go to the invoice admin portal page
 
   Scenario: Adding a new item
-    Given the table should contain the following within the Line items card:
+    Given the table should contain the following within the Line Items card:
       | Name    | Description     | Quantity | Price       | Charged |
       | Bananas | A bunch of them | 1        | EUR 42.0000 |         |
     And the total cost is "EUR 42.00"
-    When they follow "Add" within the Line items card
+    When they follow "Add" within the Line Items card
     And the modal is submitted with:
       | Name        | Refund           |
       | Quantity    | 1                |
@@ -25,14 +25,14 @@ Feature: Invoice line items
       | Cost        | -200             |
     And wait a moment
     Then they should see a toast alert with text "Line item added"
-    And the table should contain the following within the Line items card:
+    And the table should contain the following within the Line Items card:
       | Name    | Description      | Quantity | Price         | Charged |
       | Bananas | A bunch of them  | 1        | EUR 42.0000   |         |
       | Refund  | Very bad service | 1        | EUR -200.0000 |         |
     And the total cost should be "EUR -158.00"
 
   Scenario: Deleting an item
-    Given the table should contain the following within the Line items card:
+    Given the table should contain the following within the Line Items card:
       | Name    | Description     | Quantity | Price       | Charged |
       | Bananas | A bunch of them | 1        | EUR 42.0000 |         |
     When they press "Delete"
