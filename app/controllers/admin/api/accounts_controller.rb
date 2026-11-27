@@ -12,11 +12,11 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
       accounts = accounts.where(:state => state.to_s)
     end
 
-    accounts = accounts.order(:created_at).paginate(pagination_params).to_a
+    accounts = accounts.order(:created_at).paginate(pagination_params)
 
-    return unless stale?(accounts)
+    return unless stale?(ThreeScale::Api::Pagination.load_records(accounts))
 
-    respond_with(preload_to_present(accounts))
+    respond_with(preload_to_present(accounts.to_a))
   end
 
   # Account Find
