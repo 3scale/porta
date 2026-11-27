@@ -109,7 +109,8 @@ module System
                                                           ActionController::Parameters,
                                                           ActiveSupport::TimeWithZone,
                                                           ActiveSupport::TimeZone,
-                                                          ActiveSupport::HashWithIndifferentAccess]
+                                                          ActiveSupport::HashWithIndifferentAccess,
+                                                          'HashWithIndifferentAccess']
 
     config.active_job.queue_adapter = :sidekiq
 
