@@ -1,0 +1,9 @@
+<tr role="row">
+  <td role="cell">
+    <%= h referrer_filter.value %>
+  </td>
+  <td role="cell" class="pf-c-table__action">
+    <%= pf_delete_table_action provider_admin_application_referrer_filter_path(cinstance, referrer_filter),
+                               remote: true %>
+  </td>
+</tr>

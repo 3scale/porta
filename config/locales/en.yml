@@ -778,10 +778,12 @@ en:
             success: The Red Hat Login was linked to the account
 
       referrer_filters:
-        create:
-          success: Referrer filter has been created
-        destroy:
-          success: Referrer filter has been deleted
+        widget:
+          add_filter_placeholder: e.g. *.example.org
+          add_filter: Add filter
+          counter: '%{count} of %{limit}'
+          description: Specify up to %{limit} allowed referrer domains or IP addresses. Wildcards (*.example.org) are supported.
+          title: Referrer filters
 
       service_discovery:
         auth:

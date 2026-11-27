@@ -1,0 +1,2 @@
+window.ThreeScale.hideSpinner(); <%# HACK: original form gets replaced, on ajax:complete is not triggered and spinner keeps spinning %>
+document.getElementById('referrer_filters_widget').innerHTML = <%= render_to_js_string("provider/admin/referrer_filters/widget", cinstance: @cinstance ) %>;

@@ -47,6 +47,6 @@ Feature: Application stats
       | minute   | hits        |       100 |            40 |
     When they go to application "Test App" admin page
     Then they should see "Overview of the current state of this application's limits"
-    And they should see the following table within the current utilization card:
+    And they should see the following table within the Current utilization card:
       | Metric Name | Period     | Values | %    |
       | Hits (hits) | per minute | 40/100 | 40.0 |

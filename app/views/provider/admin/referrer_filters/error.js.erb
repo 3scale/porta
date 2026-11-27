@@ -1,6 +1,9 @@
-(function($) {
-  var form  = $("#referrer_filters").find('form').first();
-  var error = $("<label class=\"error\"><%= escape_javascript(@error) %></label>");
+(function () {
+  const form = document.getElementById('referrer-filters-form');
 
-  form.find('.error').remove().end().append(error);
-})(jQuery);
+  const input = form.querySelector('#referrer_filter');
+  input.ariaInvalid = 'true';
+
+  const helperText = form.querySelector('.pf-c-form__helper-text');
+  helperText.innerText = <%= @error.to_json.html_safe %>;
+})();

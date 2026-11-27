@@ -60,6 +60,10 @@ class ReferrerFilter < ApplicationRecord
     end
   end
 
+  def to_partial_path
+    'provider/admin/referrer_filters/referrer_filter'
+  end
+
   def to_xml(options = {})
     builder = options[:builder] || ThreeScale::XML::Builder.new
 

@@ -1,19 +1,42 @@
-<p>Specify allowed referrer domains or IP addresses. Wildcards (*.example.org) are also accepted.</p>
-
-<%- can_add_filters = cinstance.referrer_filters.can_add? %>
-<div id="referrer-filters-form" <%= "style=display:none;" unless can_add_filters %>>
-  <%= form_tag provider_admin_application_referrer_filters_path(cinstance), remote: true do %>
-    <%= text_field_tag :referrer_filter %>
-    <button type='submit' class='pf-c-button pf-m-primary action next button add'>Add Filter</button>
-  <% end %>
-</div>
-<div id="referrer-filters-limit" <%= "style=display:none;" if can_add_filters %>>
-  <p class="mini_info">At most <%= cinstance.filters_limit %> referrer
-  filters are allowed.</p>
+<div class="pf-c-card__header">
+  <div class="pf-c-card__title pf-u-mr-sm"><%= t('.title') %></div>
+  <div class="pf-c-badge pf-m-read"><%= t('.counter', count: cinstance.referrer_filters.size, limit: cinstance.filters_limit) %></div>
 </div>
 
-<table class="pf-c-table" role="grid">
-  <% cinstance.referrer_filters.each do |filter| %>
-    <%= render 'provider/admin/referrer_filters/item', :cinstance => cinstance, :referrer_filter => filter %>
+<div class="pf-c-card__body pf-u-pt-0">
+  <p class="pf-u-pb-lg"><%= t('.description', limit: cinstance.filters_limit) %></p>
+
+  <table class="pf-c-table pf-m-compact" role="grid">
+    <thead><tr></tr></thead>
+    <%= render cinstance.referrer_filters, cinstance: %>
+  </table>
+</div>
+
+<div class="pf-c-card__body">
+  <% if cinstance.referrer_filters.can_add? %>
+    <%= form_tag provider_admin_application_referrer_filters_path(cinstance), id: 'referrer-filters-form',
+                                                                              remote: true,
+                                                                              class: 'pf-c-form pf-c-inline-edit pf-m-inline-editable' do %>
+      <div class="pf-c-form__group-control">
+        <div class="pf-c-inline-edit__group">
+          <div class="pf-c-inline-edit__input">
+            <%= text_field_tag :referrer_filter, nil, class: 'pf-c-form-control',
+                                                      placeholder: t('.add_filter_placeholder') %>
+          </div>
+
+          <div class="pf-c-inline-edit__group pf-m-action-group pf-m-icon-group">
+            <div class="pf-c-inline-edit__action pf-m-valid">
+              <button class="pf-c-button pf-m-link" type="submit">
+                <span class="pf-c-button__icon pf-m-start">
+                  <i class="fas fa-plus-circle"></i>
+                </span>
+                <%= t('.add_filter') %>
+              </button>
+            </div>
+          </div>
+        </div>
+        <p class="pf-c-form__helper-text pf-m-error"></p>
+      </div>
+    <% end %>
   <% end %>
-</table>
+</div>

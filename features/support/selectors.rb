@@ -75,32 +75,17 @@ module HtmlSelectorsHelper
     #
     # Application
     #
-    when /the API Credentials card/
-      'div#application_keys'
-
     when /^application key "(.*)"$/
       find %(#application_keys .key[data-key="#{$1}"])
 
     when /the application widget/
       '#applications_widget'
 
-    when /the change plan card/
-      '#change_plan_card'
-
-    when /the current utilization card/
-      '#application-utilization'
-
     when /the application details/
       '[aria-label="Application details list"], dl.dl-horizontal'
 
-    when /the account details card/
-      '[aria-label="Account details"], div.dashboard_card'
-
-    when /the referrer filters/
-      '#referrer_filters'
-
     when /the referrer filter "(.*)"/
-      find('#referrer_filters tr[id^="referrer_filter_"] td', text: $1)
+      find('#referrer_filters_widget td, #referrer_filters td', text: $1)
         .sibling('td')
 
     #
@@ -115,9 +100,6 @@ module HtmlSelectorsHelper
     when /feature "(.*)"/
       find('table#features tbody tr', text: $1)
 
-    when /the plan card/
-      '#plan-widget-with-actions'
-
     #
     # Users
     #
@@ -127,17 +109,27 @@ module HtmlSelectorsHelper
     #
     # Finance
     #
-    when 'the line items card'
-      '.pf-c-card#line_items'
-
-    when 'the transactions card'
-      '.pf-c-card .pf-c-table[aria-label="Transactions table"]'
 
     #
     # CMS
     #
     when 'the CMS sidebar'
       '#cms-sidebar'
+    #
+    # Admin portal cards
+    #
+    when 'the change plan card'
+      '#change_plan_card'
+
+    when 'the account details card'
+      '[aria-label="Account details"], div.dashboard_card'
+
+    when 'the plan card'
+      '#plan-widget-with-actions'
+
+    when /^the (.+) card$/ # Must stay last
+      find('.pf-c-card .pf-c-card__title', exact_text: $1)
+        .ancestor('.pf-c-card')
 
     #
     # Dev portal
@@ -148,6 +140,8 @@ module HtmlSelectorsHelper
       'ul.navbar-nav'
     when 'the application keys'
       '#application_keys'
+    when 'the referrer filters'
+      '#referrer_filters'
 
     else
       raise "Can't find mapping from \"#{scope}\" to a selector.\n" \

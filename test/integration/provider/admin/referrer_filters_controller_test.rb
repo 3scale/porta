@@ -4,7 +4,8 @@ require 'test_helper'
 
 class Provider::Admin::ReferrerFiltersControllerTest < ActionDispatch::IntegrationTest
 
-  HEADERS_XHR = {'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'}.freeze
+  HEADERS_XHR = { 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest',
+                  'HTTP_ACCEPT' => 'text/javascript' }.freeze
 
   def setup
     super
@@ -27,7 +28,7 @@ class Provider::Admin::ReferrerFiltersControllerTest < ActionDispatch::Integrati
       post provider_admin_application_referrer_filters_path(application_id: cinstance.to_param, referrer_filter: referrer), headers: HEADERS_XHR
 
       assert_response :success
-      assert_template 'create'
+      assert_template 'refresh_widget'
     end
 
     test 'create with error' do
@@ -45,6 +46,20 @@ class Provider::Admin::ReferrerFiltersControllerTest < ActionDispatch::Integrati
       delete provider_admin_application_referrer_filter_path(application_id: cinstance.to_param, id: id), headers: HEADERS_XHR
 
       assert_response :success
+      assert_template 'refresh_widget'
+    end
+  end
+
+  class NonXhrTest < Provider::Admin::ReferrerFiltersControllerTest
+    def setup
+      super
+      login! provider
+    end
+
+    test 'create rejects non-XHR requests' do
+      post provider_admin_application_referrer_filters_path(application_id: cinstance.to_param, referrer_filter: referrer)
+
+      assert_response :not_acceptable
     end
   end
 
