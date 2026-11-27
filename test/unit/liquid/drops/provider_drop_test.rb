@@ -89,6 +89,13 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
       assert_instance_of Liquid::Drops::ApiSpec, api_spec_drop
       assert_includes %w[accessible service_accessible], api_spec_drop.system_name
     end
-  end
 
+    expression = [
+      '{{ provider.api_specs.accessible.system_name }}',
+      '{{ provider.api_specs.service_deleted.system_name }}',
+      '{{ provider.api_specs.service_accessible.system_name }}'
+    ].join(' - ')
+    rendered = Liquid::Template.parse(expression).render('provider' => @drop)
+    assert_equal "accessible -  - service_accessible", rendered
+  end
 end
